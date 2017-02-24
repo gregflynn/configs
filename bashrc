@@ -87,7 +87,7 @@ function pss_host() {
 function pss_pwd() {
   C0=$'\e[40m'
   C1=$'\e[0;30;46m'
-  C2=$'\e[33m'
+  C2=$'\e[37m'
   C3=$'\e[36m'
   _R=$'\e[30m'
   if [[ ":$PWD" == ":$HOME"* ]]; then
