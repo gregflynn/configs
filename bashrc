@@ -2,7 +2,7 @@ RI=$'\uE0B0'
 RI_LN=$'\uE0B1'
 
 function pss_git() {
-  gitstatus=`git status -s -b --porcelain`
+  gitstatus=`git status -s -b --porcelain 2>/dev/null`
   [[ "$?" -ne 0 ]] && return 0
 
   branch=""
