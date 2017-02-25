@@ -186,6 +186,11 @@ function pss_host() {
   C2=$'\e[3;37m'
   C3=$'\e[34m'
   H=`hostname`
+  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    C1=$'\e[43m'
+    C2=$'\e[3;31m'
+    C3=$'\e[33m'
+  fi
   echo -n "$C1$RI$C2 $H $C3"
 }
 
