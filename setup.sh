@@ -1,13 +1,19 @@
 #! /bin/bash
 
+DOTHOME="~/.sanity"
+
 # protective symlink generation
 function dot_link() {
   SOURCE="$1"
   TARGET="$2"
+  POST=""
+  if [ "$3" != "" ]; then
+    POST="private/"
+  fi
   if [ -e "$TARGET" ]; then
     echo "$TARGET exists"
   else
-    ln -vfs $DOTSANTIY/$SOURCE $TARGET
+    ln -vfs $DOTHOME/$POST$SOURCE $TARGET
   fi
 }
 
@@ -16,12 +22,20 @@ pushd `dirname $0` > /dev/null
 DOTSANTIY=`pwd -P`
 popd > /dev/null
 
+if [ -e "$DOTHOME" ]; then
+  LINK=`readlink -f $DOTHOME`
+  echo "Exists: $DOTHOME -> $LINK"
+else
+  ln -vfs $DOTSANITY $DOTHOME
+fi
+
 dot_link bashrc ~/.bashrc
 
 dot_link vimrc ~/.vimrc
 
-dot_link gitconfig ~/.gitconfig
-
 dot_link gitignore ~/.gitignore
 
-# TODO: i need a way to call into symlinking private data, sorry githubbers
+# if there is a setup in private, call it
+if [ -e "private/setup.sh" ]; then
+  ./private/setup.sh
+fi

@@ -25,8 +25,6 @@ function title() {
   echo -en "\033]0;$1\a"
 }
 
-
-
 #
 # Grep
 #
@@ -41,7 +39,6 @@ function fknd() {
   grep --color --include="*.java" -rli "$1" .
   grep --color --include="*.xml" -rli "$1" .
 }
-
 
 #
 # Git

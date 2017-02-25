@@ -1,8 +1,6 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-
-
 #
 # Fix for terminix sessions, because terminix is dope
 #
@@ -16,8 +14,6 @@ if [[ $TERMINIX_ID ]]; then
     source /etc/profile.d/vte.sh
   fi
 fi
-
-
 
 function sane_import() {
   # first try the local import like we're sourcing inside the repo
@@ -40,19 +36,8 @@ function sane_import() {
 
 sane_import "aliases"
 sane_import "prompt"
-
-
-
-#
-# Setup git completions
-#
-source ~/.git-completion.sh
-
-#
-# Fabric Completion
-#
-source ~/.fabric-completion.bash
-
+sane_import "fabric-completion"
+sane_import "git-completion"
 
 #
 # pyenv
