@@ -1,19 +1,18 @@
 #! /bin/bash
 
-DOTHOME="~/.sanity"
+DOTHOME="$HOME/.sanity"
 
 # protective symlink generation
 function dot_link() {
   SOURCE="$1"
-  TARGET="$2"
   POST=""
   if [ "$3" != "" ]; then
     POST="private/"
   fi
-  if [ -e "$TARGET" ]; then
-    echo "$TARGET exists"
+  if [ -e "$HOME/$2" ]; then
+    echo "$HOME/$2 exists"
   else
-    ln -vfs $DOTHOME/$POST$SOURCE $TARGET
+    ln -vfs $DOTHOME/$POST$SOURCE $HOME/$2
   fi
 }
 
@@ -29,13 +28,13 @@ else
   ln -vfs $DOTSANITY $DOTHOME
 fi
 
-dot_link bashrc ~/.bashrc
+dot_link bashrc .bashrc
 
-dot_link vimrc ~/.vimrc
+dot_link vimrc .vimrc
 
-dot_link gitignore ~/.gitignore
+dot_link gitignore .gitignore
 
 # if there is a setup in private, call it
 if [ -e "private/setup.sh" ]; then
-  ./private/setup.sh
+  source private/setup.sh
 fi
