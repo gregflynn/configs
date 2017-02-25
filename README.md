@@ -1,5 +1,5 @@
 # dotsanity
-this is a medocre at best attempt to keep my configuration files in a managable place
+this is a mediocre at best attempt to keep my configuration files in a manageable place
 
 ## WARNING: Transitional, nothing works yet
 
@@ -10,6 +10,12 @@ this is a medocre at best attempt to keep my configuration files in a managable 
 * setup.sh
   * this script sanely writes the symlinks to the git repo
   * this script finds itself and symlinks absolutely
+
+## Install
+```
+git clone git@github.com:gregflynn/dotsanity.git ~/.sanity
+cd ~/.sanity && ./setup.sh
+```
 
 ## goals
 * never check in package code
