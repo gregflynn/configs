@@ -20,6 +20,9 @@ cd ~/.sanity && ./setup.sh
 features that are planned
 * Atom settings and package list
 * Visual Studio Code settings and package list
+* Terminix settings
+* Stretch: Maybe?
+  * Budgie settings
 
 ## goals
 * never check in package code
