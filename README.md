@@ -1,21 +1,23 @@
 # dotsanity
 this is a mediocre at best attempt to keep my configuration files in a manageable place
 
-## WARNING: Transitional, nothing works yet
+## current features
+* bashrc
+  * supports private variable sourcing
+  * multi file organization
+* vimrc
+* global git ignore
 
-## current files
-* bashrc => ~/.bashrc
-* vimrc => ~/.vimrc
-* gitconfig => ~/.gitconfig
-* setup.sh
-  * this script sanely writes the symlinks to the git repo
-  * this script finds itself and symlinks absolutely
-
-## Install
+## install
 ```
 git clone git@github.com:gregflynn/dotsanity.git ~/.sanity
 cd ~/.sanity && ./setup.sh
 ```
+
+## todo
+features that are planned
+* Atom settings and package list
+* Visual Studio Code settings and package list
 
 ## goals
 * never check in package code
