@@ -24,7 +24,7 @@ function sane_import() {
   fi
 
   # not in the local context, import from system
-  SYSTEM_PATH="~/.sanity/bashrc_helpers/$1.sh"
+  SYSTEM_PATH="$HOME/.sanity/bashrc_helpers/$1.sh"
   if [ -e "$SYSTEM_PATH" ]; then
     source "$SYSTEM_PATH"
     return 0
