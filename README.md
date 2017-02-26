@@ -1,6 +1,8 @@
 # dotsanity
 this is a mediocre at best attempt to keep my configuration files in a manageable place
 
+![Image of dotsanity prompt](dotsanity.png)
+
 ## current features
 * bashrc
   * supports private variable sourcing
