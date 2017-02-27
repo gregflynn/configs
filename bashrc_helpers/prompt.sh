@@ -125,4 +125,4 @@ function pss_ps1() {
 }
 
 PS1=$'$(pss_ps1)
-\[\e[35m\]$RI_OUT\[\e[0m\] '
+\[\e[35m\]$RI_LN\[\e[0m\] '
