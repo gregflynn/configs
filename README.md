@@ -7,6 +7,8 @@ this is a mediocre at best attempt to keep my configuration files in a manageabl
 * bashrc
   * supports private variable sourcing
   * multi file organization
+  * python fabric autocomplete
+  * git autocomplete
 * vimrc
 * global git ignore
 
@@ -21,8 +23,7 @@ features that are planned
 * Atom settings and package list
 * Visual Studio Code settings and package list
 * Terminix settings
-* Stretch: Maybe?
-  * Budgie settings
+* Budgie settings
 
 ## goals
 * never check in package code
