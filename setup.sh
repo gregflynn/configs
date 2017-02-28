@@ -16,6 +16,12 @@ function dot_link() {
   fi
 }
 
+# before anything, make sure we're up to date
+git pull
+if [ -e "private/" ]; then
+  cd private && git pull && cd ..
+fi
+
 # save out where the hell we are
 pushd `dirname $0` > /dev/null
 DOTSANTIY=`pwd -P`
