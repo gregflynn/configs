@@ -29,10 +29,16 @@ else
 fi
 
 dot_link bashrc .bashrc
-
-dot_link vimrc .vimrc
-
 dot_link gitignore .gitignore
+
+#
+# Set up Vim
+#
+dot_link vimrc .vimrc
+if [ ! -e "$HOME/.vim" ]; then
+  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+fi
+vim +PluginInstall +qall
 
 # if there is a setup in private, call it
 if [ -e "private/setup.sh" ]; then

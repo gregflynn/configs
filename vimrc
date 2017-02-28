@@ -34,7 +34,7 @@ let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=0
 
 syntax enable
-colorscheme gruvbox
+:silent! colorscheme gruvbox
 let g:gruvbox_contrast_dark='hard'
 set background=dark
 set number
