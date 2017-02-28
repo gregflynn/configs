@@ -1,6 +1,8 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
+DOTINSTALL="$HOME/.sanity"
+
 #
 # Fix for terminix sessions, because terminix is dope
 #
@@ -24,7 +26,7 @@ function sane_import() {
   fi
 
   # not in the local context, import from system
-  SYSTEM_PATH="$HOME/.sanity/bashrc_helpers/$1.sh"
+  SYSTEM_PATH="$DOTINSTALL/bashrc_helpers/$1.sh"
   if [ -e "$SYSTEM_PATH" ]; then
     source "$SYSTEM_PATH"
     return 0
@@ -48,6 +50,6 @@ if which pyenv 1>/dev/null 2>/dev/null; then
   eval "$(pyenv virtualenv-init -)"
 fi
 
-if [ -e "private/bashrc" ]; then
-  source private/bashrc
+if [ -e "$DOTINSTALL/private/bashrc" ]; then
+  source $DOTINSTALL/private/bashrc
 fi
