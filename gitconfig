@@ -1,0 +1,11 @@
+[include]
+	path = .sanity/private/gitconfig
+[push]
+	default = simple
+[filter "lfs"]
+	clean = git lfs clean %f
+	smudge = git lfs smudge %f
+	required = true
+[core]
+	excludesfile = $HOME/.gitignore
+	editor = /usr/bin/vim

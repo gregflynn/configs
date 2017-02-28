@@ -29,6 +29,7 @@ else
 fi
 
 dot_link bashrc .bashrc
+dot_link gitconfig .gitconfig
 dot_link gitignore .gitignore
 
 #
