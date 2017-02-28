@@ -7,5 +7,5 @@
 	smudge = git lfs smudge %f
 	required = true
 [core]
-	excludesfile = $HOME/.gitignore
+	excludesfile = ~/.gitignore
 	editor = /usr/bin/vim
