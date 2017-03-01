@@ -46,3 +46,9 @@ function fknd() {
 alias gs='git status'
 alias ga='git add'
 alias gaa='git add --all'
+
+#
+# Pacman
+#
+alias pac='sudo pacman'
+
