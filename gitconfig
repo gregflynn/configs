@@ -1,11 +1,23 @@
 [include]
 	path = .sanity/private/gitconfig
+
 [push]
 	default = simple
+
 [filter "lfs"]
 	clean = git lfs clean %f
 	smudge = git lfs smudge %f
 	required = true
+
 [core]
 	excludesfile = ~/.gitignore
 	editor = /usr/bin/vim
+
+[url "https://github.com/"]
+    insteadOf = "gh:"
+[url "git@github.com:"]
+    pushInsteadOf = "gh:"
+
+[url "https://aur.archlinux.org/"]
+    insteadOf = "aur:"
+
