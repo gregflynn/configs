@@ -36,7 +36,7 @@ function fjnd() {
   grep --color --include="*.js" -rli "$1" .
 }
 function fknd() {
-  grep --color --include="*.java" -rli "$1" .
+  grep --color --include="*.java" --exclude="R.java" -rli "$1" .
   grep --color --include="*.xml" -rli "$1" .
 }
 
