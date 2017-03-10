@@ -47,7 +47,9 @@ sane_import "git-completion"
 if which pyenv 1>/dev/null 2>/dev/null; then
   export PYENV_VIRTUALENV_DISABLE_PROMPT=1
   eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  if [ -e "$HOME/.pyenv/plugins/pyenv-virtualenv" ]; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
 fi
 
 if [ -e "$DOTINSTALL/private/bashrc" ]; then
