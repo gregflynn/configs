@@ -9,7 +9,7 @@ export PATH="/home/greg/bin:$PYENV_ROOT/bin:$PATH"
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias df='df -h'
 alias du='du -h'
-alias ls='ls -h --color'
+alias ls='ls -h --color=auto'
 alias ll='ls -l'
 alias proc='ps ax | grep'
 alias xm='xmodmap ~/.Xmodmap'
@@ -24,6 +24,7 @@ function rmpyc() {
 function title() {
   echo -en "\033]0;$1\a"
 }
+alias reload='source ~/.bashrc'
 
 #
 # Grep
@@ -51,4 +52,46 @@ alias gaa='git add --all'
 # Pacman
 #
 alias pac='sudo pacman'
+alias pacs='pacman -Ss'
 
+AUR_HOME="$HOME/aur"
+function aur() {
+  case $1 in
+    "")
+      echo "Usage: aur [update|install] [package_name]"
+    ;;
+    "update")
+      aur_update $2
+    ;;
+    "install")
+      aur_install $2
+    ;;
+  esac
+}
+function aur_update() {
+  for pkg in `ls $AUR_HOME | xargs`; do
+    cd $AUR_HOME/$pkg && git pull
+    cd $AUR_HOME/$pkg && makepkg -si
+  done
+}
+function aur_install() {
+  pkg_name="$1"
+  clone_dir="$AUR_HOME/$pkg_name"
+
+  # make sure that package doesn't exist
+  if [ -e $clone_dir ]; then
+    echo "Package already checked out: $pkg_name"
+    echo "Did you mean?: aur update"
+    return 1
+  fi
+
+  # clone the aur repo
+  cd $AUR_HOME && git clone aur:$pkg_name $clone_dir
+  if [ "$?" != "0" ]; then
+    echo "AUR package not found: $pkg_name"
+    return 1
+  fi
+
+  # run makepkg
+  cd $AUR_HOME/$1 && makepkg -si
+}
