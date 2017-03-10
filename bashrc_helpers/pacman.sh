@@ -116,8 +116,8 @@ function aur_version() {
   if [ ! -e $pkgbuild ]; then
     return 1
   fi
-  ver=`cat $pkgbuild | grep "pkgver=" | sed 's/pkgver=//'`
-  rel=`cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//'`
+  ver=`cat $pkgbuild | grep "pkgver=" | sed 's/pkgver=//' | sed 's/"//g'`
+  rel=`cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//' | sed 's/"//g'`
   echo "$ver-$rel"
 }
 
