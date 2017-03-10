@@ -40,6 +40,7 @@ sane_import "aliases"
 sane_import "prompt"
 sane_import "fabric-completion"
 sane_import "git-completion"
+sane_import "pacman"
 
 #
 # pyenv

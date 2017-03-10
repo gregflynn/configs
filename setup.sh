@@ -19,7 +19,9 @@ function dot_link() {
 # before anything, make sure we're up to date
 git pull
 if [ -e "private/" ]; then
-  cd private && git pull && cd ..
+  pushd private > /dev/null
+  git pull
+  popd > /dev/null
 fi
 
 # save out where the hell we are
