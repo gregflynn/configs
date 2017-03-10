@@ -124,5 +124,6 @@ function pss_ps1() {
   echo -n "$C0$(pss_user)$(pss_host)$(pss_pwd)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
-PS1=$'$(pss_ps1)
+PS1=$'
+$(pss_ps1)
 \[\e[35m\]$RI_LN\[\e[0m\] '
