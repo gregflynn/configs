@@ -39,6 +39,8 @@ fi
 dot_link bashrc .bashrc
 dot_link gitconfig .gitconfig
 dot_link gitignore .gitignore
+dot_link xmodmap .Xmodmap
+dot_link xinitrc .xinitrc
 
 #
 # Set up Vim
