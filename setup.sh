@@ -44,7 +44,7 @@ dot_link xinitrc .xinitrc
 
 # atom's many configs
 dot_link atom/config.cson .atom/config.cson
-dot_line atom/keymap.cson .atom/keymap.cson
+dot_link atom/keymap.cson .atom/keymap.cson
 dot_link atom/snippets.cson .atom/snippets.cson
 dot_link atom/styles.less .atom/styles.less
 
