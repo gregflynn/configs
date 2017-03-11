@@ -41,6 +41,7 @@ sane_import "prompt"
 sane_import "fabric-completion"
 sane_import "git-completion"
 sane_import "pacman"
+sane_import "atom"
 
 #
 # pyenv

@@ -1,0 +1,126 @@
+"*":
+  "atom-beautify":
+    general:
+      _analyticsUserId: "f822b50d-fcc1-475e-b528-b01653ef3622"
+  "atom-material-ui":
+    colors:
+      abaseColor: "#ef5350"
+      accentColor: "#59fcff"
+      paintCursor: true
+      predefinedColor: "Red"
+    fonts:
+      fontSize: 14
+    tabs:
+      compactTabs: true
+    treeView:
+      compactList: true
+    ui:
+      panelContrast: true
+  core:
+    allowPendingPaneItems: false
+    autoHideMenuBar: true
+    closeEmptyWindows: false
+    destroyEmptyPanes: false
+    telemetryConsent: "limited"
+    themes: [
+      "one-dark-ui"
+      "monokai-plus"
+    ]
+  editor:
+    fontFamily: "hack"
+    fontSize: 12
+    preferredLineLength: 79
+    showIndentGuide: true
+  "exception-reporting":
+    userId: "c52a4a57-f1a0-a733-0c63-928ab6b4e1a8"
+  "find-and-replace":
+    projectSearchResultsPaneSplitDirection: "right"
+  "git-plus":
+    general:
+      _analyticsUserId: "d81239eb-642c-4023-99bd-39cf86fb92e1"
+  "gruvbox-plus-syntax":
+    contrast: "Hard"
+  "highlight-line": {}
+  linter:
+    errorPanelHeight: 42
+  "linter-flake8":
+    executablePath: "/home/greg/.pyenv/shims/flake8"
+    flakeErrors: true
+    maxComplexity: 10
+    maxLineLength: 79
+  "linter-pep8":
+    convertAllErrorsToWarnings: false
+    ignoreErrorCodes: [
+      "E402"
+    ]
+    maxLineLength: 79
+    pep8ExecutablePath: "/usr/local/bin/pep8"
+  "linter-python":
+    executablePath: "/usr/local/bin/pylama"
+    ignoreCodes: "E402"
+    lintTrigger: "File saved or modified"
+    withMcCabe: true
+    withPep257: true
+    withPep8: true
+    withPyflakes: true
+    withPylint: true
+  "markdown-preview":
+    useGitHubStyle: true
+  "nord-atom-ui":
+    darkerFormFocusEffect: true
+  "one-dark-ui":
+    layoutMode: "Compact"
+    tabSizing: "Minimum"
+  "one-light-ui":
+    layoutMode: "Compact"
+    tabSizing: "Even"
+  "open-files":
+    collapsable: false
+  "paper-flat-ui":
+    color: "Cyan"
+    useFancyStyle: false
+  "status-bar": {}
+  tabs: {}
+  "terminal-plus":
+    core:
+      autoRunCommand: "bash"
+    style:
+      fontFamily: "hack"
+    toggles:
+      runInsertedText: false
+  "tree-view":
+    alwaysOpenExisting: true
+    focusOnReveal: false
+    hideIgnoredNames: true
+    hideVcsIgnoredFiles: true
+    squashDirectoryNames: true
+  welcome:
+    showOnStartup: false
+".angular.html.text":
+  editor:
+    preferredLineLength: 79
+".handlebars.html.text":
+  editor:
+    preferredLineLength: 79
+".html.jinja.text":
+  editor:
+    preferredLineLength: 79
+".jinja.source":
+  editor:
+    preferredLineLength: 79
+".python.regexp.source":
+  editor:
+    preferredLineLength: 79
+".python.source":
+  editor:
+    preferredLineLength: 79
+    scrollPastEnd: true
+".source.ts":
+  editor:
+    preferredLineLength: 79
+".source.tsx":
+  editor:
+    preferredLineLength: 79
+".source.vala":
+  editor:
+    preferredLineLength: 79
