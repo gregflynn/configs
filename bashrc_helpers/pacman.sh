@@ -15,6 +15,13 @@ function pac() {
       echo "Removing $2..."
       sudo pacman -R $2
     ;;
+    search)
+        echo "Remote Search:"
+        pacman -Ss $2
+        echo "-------------"
+        echo "Local Search:"
+        pacman -Qs $2
+    ;;
     *)
     echo "Usage: pac [update|install|remove] [package_name]"
     ;;
