@@ -11,7 +11,7 @@ alias df='df -h'
 alias du='du -h'
 alias ls='ls -h --color=auto'
 alias ll='ls -l'
-alias proc='ps ax | grep'
+alias proc='ps ax | grep -i --color'
 alias xm='xmodmap ~/.Xmodmap'
 function bl() {
   $@
