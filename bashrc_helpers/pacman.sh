@@ -79,7 +79,7 @@ function aur_update_single() {
 
   home="$AUR_HOME/$1"
   pushd $home > /dev/null
-  git pull
+  git pull > /dev/null
   lver=`installed_version $1`
   aver=`aur_version $1`
 
@@ -89,6 +89,7 @@ function aur_update_single() {
   else
     echo "Already up-to-date: $1: $lver"
   fi
+  popd > /dev/null
 }
 
 function aur_install() {
@@ -135,7 +136,13 @@ function aur_version() {
   fi
   ver=`cat $pkgbuild | grep "pkgver=" | sed 's/pkgver=//' | sed 's/"//g'`
   rel=`cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//' | sed 's/"//g'`
-  echo "$ver-$rel"
+  epo=`cat $pkgbuild | grep "epoch=" | sed 's/epoch=//' | sed 's/"//g'`
+  base_version="$ver-$rel"
+  if [ "$epo" != "" ]; then
+    echo "$epo:$base_version"
+  else
+    echo "$base_version"
+  fi
 }
 
 function installed_version() {

@@ -130,7 +130,7 @@ function pss_ps1() {
 }
 
 if [ `whoami` == "root" ]; then
-  C0=$'\e[35m'
+  C0=$'\e[31m'
 else
   C0=$'\e[32m'
 fi
