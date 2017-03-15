@@ -68,10 +68,15 @@ function pss_git() {
 }
 
 function pss_user() {
-  C1=$'\e[45m'
-  C2=$'\e[3;37m'
-  C3=$'\e[0;35m'
   ME=`whoami`
+  C2=$'\e[3;30m'
+  if [ "$ME" == "root" ]; then
+    C1=$'\e[41m'
+    C3=$'\e[0;31m'
+  else
+    C1=$'\e[42m'
+    C3=$'\e[0;32m'
+  fi
   if [[ $USER_SKIP_RI -gt 0 ]]; then
     RI=""
   fi
@@ -124,6 +129,11 @@ function pss_ps1() {
   echo -n "$C0$(pss_user)$(pss_host)$(pss_pwd)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
-PS1=$'
-$(pss_ps1)
-\[\e[35m\]$RI_LN\[\e[0m\] '
+if [ `whoami` == "root" ]; then
+  C0=$'\e[35m'
+else
+  C0=$'\e[32m'
+fi
+
+PS1=$'$(pss_ps1)
+\[$C0\]$RI_LN\[\e[0m\] '
