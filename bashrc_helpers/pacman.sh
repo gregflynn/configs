@@ -118,6 +118,16 @@ function aur_install() {
   popd > /dev/null
 }
 
+function aur_remove() {
+  if [ "$1" == "" ]; then
+    echo "No package specified for removal"
+    return 1
+  fi
+  sudo pacman -R $1
+  rm -rf "$AUR_HOME/$1"
+  echo "Deleted $AUR_HOME/$1"
+}
+
 function aur_version() {
   pkgbuild="$AUR_HOME/$1/PKGBUILD"
   if [ ! -e $pkgbuild ]; then

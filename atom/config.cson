@@ -28,7 +28,7 @@
     ]
   editor:
     fontFamily: "hack"
-    fontSize: 12
+    fontSize: 13
     preferredLineLength: 79
     showIndentGuide: true
   "exception-reporting":
