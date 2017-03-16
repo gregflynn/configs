@@ -13,6 +13,7 @@ alias ls='ls -h --color=auto'
 alias ll='ls -l'
 alias proc='ps ax | grep -i --color'
 alias xm='xmodmap ~/.Xmodmap'
+alias open='xdg-open'
 function bl() {
   $@
   paplay /usr/share/sounds/gnome/default/alerts/drip.ogg
