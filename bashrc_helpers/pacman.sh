@@ -16,11 +16,29 @@ function pac() {
       sudo pacman -R $2
     ;;
     search)
-        echo "Remote Search:"
-        pacman -Ss $2
-        echo "-------------"
-        echo "Local Search:"
-        pacman -Qs $2
+        echo "Official Repos:"
+        echo "==============="
+        remote=`pacman -Ss $2`
+        if [ "$remote" == "" ]; then
+          echo "Not Found"
+        else
+          echo "$remote"
+        fi
+
+        echo ""
+        echo "Arch User Repository:"
+        echo "====================="
+        aur_search $2
+
+        echo ""
+        echo "Installed Packages:"
+        echo "==================="
+        locals=`pacman -Qs $2`
+        if [ "$locals" == "" ]; then
+          echo "Not Found"
+        else
+          echo "$locals"
+        fi
     ;;
     *)
     echo "Usage: pac [update|install|remove] [package_name]"
@@ -55,8 +73,14 @@ function aur() {
         return 0
       fi
     ;;
+    search)
+      if [ "$2" != "" ]; then
+        aur_search $2
+        return 0
+      fi
+    ;;
   esac
-  echo "Usage: aur [update|install|remove] [package_name]"
+  echo "Usage: aur [update|install|remove|search] [package_name]"
 }
 
 function aur_update() {
@@ -150,4 +174,9 @@ function installed_version() {
   if [ "$?" == "0" ]; then
     echo $pacman_version | awk '{ print $2 }'
   fi
+}
+
+function aur_search() {
+  curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$1" | \
+    python "$HOME/.sanity/bashrc_helpers/aur_search.py"
 }
