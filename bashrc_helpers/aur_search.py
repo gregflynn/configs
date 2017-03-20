@@ -30,7 +30,7 @@ class AurPackage(object):
     def installed(self):
         return self.name in INSTALLED_PACKAGES
 
-    def print(self):
+    def print_description(self):
         print(self.PKG_TEMPLATE.format(
             name=self.name, version=self.version, description=self.description,
             i="[installed]" if self.installed else ""))
@@ -41,6 +41,6 @@ if __name__ == '__main__':
 
     if len(js['results']):
         for j in js['results']:
-            AurPackage(j).print()
+            AurPackage(j).print_description()
     else:
         print('Not Found')
