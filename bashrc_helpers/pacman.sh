@@ -41,7 +41,7 @@ function pac() {
         fi
     ;;
     *)
-    echo "Usage: pac [update|install|remove] [package_name]"
+    echo "Usage: pac [update|install|remove|search] [package_name]"
     ;;
   esac
 }
