@@ -11,8 +11,8 @@ function thick_div {
   C1=$'\e[30m'
   R=$'\e[0m'
   P=''
-  [[ "$1" != "" ]] && P="$1"
   [[ "$2" != "" ]] && C1="$2"
+  [[ "$1" != "" ]] && P="$1"
   echo -n "$INV$C1$RI$R$C1$P$RI"
 }
 
@@ -91,21 +91,21 @@ function pss_basic() {
   C8=$'\e[36m'
   H=`hostname`
   ME=`whoami`
+  D1=$'\e[34m'
+  D2=$'\e[30m'
 
   # check for ssh session
   if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
     C2=$'\e[33m'
+    D1="$C2"
   fi
 
   # check for superuser
-  [[ "$ME" == "root" ]] && C4=$'\e[31m'
+  [[ "$ME" == "root" ]] && C4=$'\e[31m' && D2="$C4"
 
   # replace home dir with tilde
-  if [[ ":$PWD" == ":$HOME"* ]]; then
-    P=`pwd | sed "s:$HOME:/~:"`
-  else
-    P=`pwd`
-  fi
+  if [[ ":$PWD" != ":$HOME"* ]]; then P=`pwd`
+  else P=`pwd | sed "s:$HOME:/~:"`; fi
 
   # magical path shortener, thanks ross!
   # /home/user/foo/bar =>  ~/f/bar
@@ -120,7 +120,7 @@ function pss_basic() {
   if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
   else SP="$SP${F:1}"; fi
 
-  echo -n "$C1$C2 $H $(thick_div $C3 $C2) $C4$ME $(thick_div $C6 $C4)$C7$SP$C8 "
+  echo -n "$C1$C2 $H$(thick_div $C3 $D1) $C4$ME$(thick_div $C6 $D2) $C7$SP$C8 "
 }
 
 function pss_venv() {
