@@ -3,6 +3,9 @@
 RI=$'\uE0B0'
 RI_LN=$'\uE0B1'
 
+# disable default venv PS1 manipulation
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 function pss_git() {
   gitstatus=`git status -s -b --porcelain 2>/dev/null`
   [[ "$?" -ne 0 ]] && return 0
