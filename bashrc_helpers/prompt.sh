@@ -2,9 +2,19 @@
 
 RI=$'\uE0B0'
 RI_LN=$'\uE0B1'
+INV=$'\e[7m'
 
 # disable default venv PS1 manipulation
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+function thick_div {
+  C1=$'\e[30m'
+  R=$'\e[0m'
+  P=''
+  [[ "$1" != "" ]] && P="$1"
+  [[ "$2" != "" ]] && C1="$2"
+  echo -n "$INV$C1$RI$R$C1$P$RI"
+}
 
 function pss_git() {
   gitstatus=`git status -s -b --porcelain 2>/dev/null`
@@ -70,11 +80,15 @@ function pss_git() {
   echo -n "$C1$RI$C2 $branch$E $C3"
 }
 
-function pss_userhost() {
-  C1=$'\e[37;44m'
-  C2=$''
-  C3=$'\e[37m'
-  C4=$'\e[0;34m'
+function pss_basic() {
+  C1=$'\e[44m'
+  C2=$'\e[37m'
+  C3=$'\e[40m'
+  C4=$'\e[36m'
+  C5=$'\e[0;34m'
+  C6=$'\e[46m'
+  C7=$'\e[37m'
+  C8=$'\e[36m'
   H=`hostname`
   ME=`whoami`
 
@@ -84,25 +98,9 @@ function pss_userhost() {
   fi
 
   # check for superuser
-  if [ "$ME" == "root" ]; then
-    C3=$'\e[31m'
-  fi
+  [[ "$ME" == "root" ]] && C4=$'\e[31m'
 
-  echo -n "$C1$C2 $H $RI_LN $C1$C3$ME $C4"
-}
-
-function pss_pwd() {
-  C0=$'\e[40m'
-  C1=$'\e[0;30;46m'
-  C2=$'\e[37m'
-  C3=$'\e[36m'
-  _R=$'\e[30m'
-
-  if [[ `whoami` == "root" ]]; then
-    C0=$'\e[41m'
-    C1=$'\e[0;31;46m'
-  fi
-
+  # replace home dir with tilde
   if [[ ":$PWD" == ":$HOME"* ]]; then
     P=`pwd | sed "s:$HOME:/~:"`
   else
@@ -122,7 +120,7 @@ function pss_pwd() {
   if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
   else SP="$SP${F:1}"; fi
 
-  echo -n "$C0$RI$C1$RI$C2 $SP $C3"
+  echo -n "$C1$C2 $H $(thick_div $C3 $C2) $C4$ME $(thick_div $C6 $C4)$C7$SP$C8 "
 }
 
 function pss_venv() {
@@ -137,7 +135,7 @@ function pss_venv() {
 function pss_ps1() {
   CE=$'\e[49m'
   C_=$'\e[0m'
-  echo -n "$C0$(pss_userhost)$(pss_pwd)$(pss_venv)$(pss_git)$CE$RI$C_"
+  echo -n "$C0$(pss_basic)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 if [ `whoami` == "root" ]; then
