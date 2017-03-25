@@ -67,33 +67,25 @@ function pss_git() {
   echo -n "$C1$RI$C2 $branch$E $C3"
 }
 
-function pss_user() {
-  ME=`whoami`
-  C2=$'\e[3;30m'
-  if [ "$ME" == "root" ]; then
-    C1=$'\e[41m'
-    C3=$'\e[0;31m'
-  else
-    C1=$'\e[42m'
-    C3=$'\e[0;32m'
-  fi
-  if [[ $USER_SKIP_RI -gt 0 ]]; then
-    RI=""
-  fi
-  echo -n "$C1$RI$C2 $ME $C3"
-}
-
-function pss_host() {
-  C1=$'\e[44m'
-  C2=$'\e[3;37m'
-  C3=$'\e[34m'
+function pss_userhost() {
+  C1=$'\e[37;44m'
+  C2=$''
+  C3=$'\e[37m'
+  C4=$'\e[0;34m'
   H=`hostname`
+  ME=`whoami`
+
+  # check for ssh session
   if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    C1=$'\e[43m'
-    C2=$'\e[3;30m'
-    C3=$'\e[33m'
+    C2=$'\e[33m'
   fi
-  echo -n "$C1$RI$C2 $H $C3"
+
+  # check for superuser
+  if [ "$ME" == "root" ]; then
+    C3=$'\e[31m'
+  fi
+
+  echo -n "$C1$C2 $H $RI_LN $C1$C3$ME $C4"
 }
 
 function pss_pwd() {
@@ -102,14 +94,32 @@ function pss_pwd() {
   C2=$'\e[37m'
   C3=$'\e[36m'
   _R=$'\e[30m'
+
+  if [[ `whoami` == "root" ]]; then
+    C0=$'\e[41m'
+    C1=$'\e[0;31;46m'
+  fi
+
   if [[ ":$PWD" == ":$HOME"* ]]; then
-    # P=`pwd | sed "s:$HOME:~:g"  | sed "s/\// $_R$RI_LN$C2 /g"`
-    P=`pwd | sed "s:$HOME:~:g"`
+    P=`pwd | sed "s:$HOME:/~:"`
   else
-    # P=`pwd | cut -c 2- | sed "s/\// $RI_LN /g"`
     P=`pwd`
   fi
-  echo -n "$C0$RI$C1$RI$C2 $P $C3"
+
+  # magical path shortener, thanks ross!
+  # /home/user/foo/bar =>  ~/f/bar
+  # /user/share/lib => /u/s/lib
+  local IFS=/ PS=${P#?} F SP=''
+  for F in $PS; do
+    S='/'
+    [[ ${F::1} == "~" ]] && S=''
+    [[ ${F::1} == "." ]] && SP="$SP$S${F::2}" && continue
+    SP="$SP$S${F::1}"
+  done
+  if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
+  else SP="$SP${F:1}"; fi
+
+  echo -n "$C0$RI$C1$RI$C2 $SP $C3"
 }
 
 function pss_venv() {
@@ -122,17 +132,15 @@ function pss_venv() {
 }
 
 function pss_ps1() {
-  USER_SKIP_RI=1
-  C0=$'\e[30m'
   CE=$'\e[49m'
   C_=$'\e[0m'
-  echo -n "$C0$(pss_user)$(pss_host)$(pss_pwd)$(pss_venv)$(pss_git)$CE$RI$C_"
+  echo -n "$C0$(pss_userhost)$(pss_pwd)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 if [ `whoami` == "root" ]; then
   C0=$'\e[31m'
 else
-  C0=$'\e[32m'
+  C0=$'\e[37m'
 fi
 
 PS1=$'$(pss_ps1)
