@@ -40,7 +40,7 @@ if __name__ == '__main__':
     js = json.load(sys.stdin)
 
     if len(js['results']):
-        for j in js['results']:
+        for j in sorted(js['results'], key=lambda x: x['Name']):
             AurPackage(j).print_description()
     else:
         print('Not Found')
