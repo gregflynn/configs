@@ -20,7 +20,6 @@
     allowPendingPaneItems: false
     autoHideMenuBar: true
     closeEmptyWindows: false
-    destroyEmptyPanes: false
     telemetryConsent: "limited"
     themes: [
       "one-dark-ui"
@@ -41,8 +40,7 @@
   "gruvbox-plus-syntax":
     contrast: "Hard"
   "highlight-line": {}
-  linter:
-    errorPanelHeight: 42
+  linter: {}
   "linter-flake8":
     executablePath: "/home/greg/.pyenv/shims/flake8"
     flakeErrors: true

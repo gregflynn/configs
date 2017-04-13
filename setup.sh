@@ -39,14 +39,23 @@ fi
 dot_link bashrc .bashrc
 dot_link gitconfig .gitconfig
 dot_link gitignore .gitignore
-dot_link xmodmap .Xmodmap
-dot_link xinitrc .xinitrc
+
+if [ type xmodmap > /dev/null 2>&1 ]; then
+  dot_link xmodmap .Xmodmap
+  dot_link xinitrc .xinitrc
+else
+  echo "xmodmap not installed, skipping..."
+fi
 
 # atom's many configs
-dot_link atom/config.cson .atom/config.cson
-dot_link atom/keymap.cson .atom/keymap.cson
-dot_link atom/snippets.cson .atom/snippets.cson
-dot_link atom/styles.less .atom/styles.less
+if [ type atom > /dev/null 2>&1 ]; then
+  dot_link atom/config.cson .atom/config.cson
+  dot_link atom/keymap.cson .atom/keymap.cson
+  dot_link atom/snippets.cson .atom/snippets.cson
+  dot_link atom/styles.less .atom/styles.less
+else
+  echo "atom not installed, skipping..."
+fi
 
 #
 # Set up Vim
