@@ -57,3 +57,6 @@ fi
 if [ -e "$DOTINSTALL/private/bashrc" ]; then
   source $DOTINSTALL/private/bashrc
 fi
+
+# fixes UI scaling in QT applications
+export QT_AUTO_SCREEN_SCALE_FACTOR=1
