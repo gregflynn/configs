@@ -6,7 +6,7 @@ DOTINSTALL="$HOME/.sanity"
 #
 # Fix for terminix sessions, because terminix is dope
 #
-if [[ $TERMINIX_ID ]]; then
+if [ $TERMINIX_ID ] || [ $TILIX_ID ] || [ $VTE_VERSION ]; then
   if [ -e /etc/profile.d/vte-2.91.sh ]; then
     # debian stretch
     source /etc/profile.d/vte-2.91.sh
