@@ -39,23 +39,20 @@ fi
 dot_link bashrc .bashrc
 dot_link gitconfig .gitconfig
 dot_link gitignore .gitignore
-
-if [ type xmodmap > /dev/null 2>&1 ]; then
-  dot_link xmodmap .Xmodmap
-  dot_link xinitrc .xinitrc
-else
-  echo "xmodmap not installed, skipping..."
-fi
+dot_link xmodmap .Xmodmap
+dot_link xprofile .xprofile
 
 # atom's many configs
-if [ type atom > /dev/null 2>&1 ]; then
-  dot_link atom/config.cson .atom/config.cson
-  dot_link atom/keymap.cson .atom/keymap.cson
-  dot_link atom/snippets.cson .atom/snippets.cson
-  dot_link atom/styles.less .atom/styles.less
-else
-  echo "atom not installed, skipping..."
-fi
+mkdir -p ~/.atom
+dot_link atom/config.cson .atom/config.cson
+dot_link atom/keymap.cson .atom/keymap.cson
+dot_link atom/snippets.cson .atom/snippets.cson
+dot_link atom/styles.less .atom/styles.less
+
+# link up awesome configs
+mkdir -p ~/.config/awesome
+dot_link awesome/rc.lua .config/awesome/rc.lua
+dot_link awesome/theme.lua .config/awesome/theme.lua
 
 #
 # Set up Vim
@@ -70,3 +67,4 @@ vim +PluginInstall +qall
 if [ -e "private/setup.sh" ]; then
   source private/setup.sh
 fi
+
