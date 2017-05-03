@@ -178,7 +178,7 @@ local mybattery = lain.widget.bat({
 
 local mytemp = lain.widget.temp {
   settings = function()
-    widget:set_text(coretemp_now.."°C")
+    widget:set_text(coretemp_now.."°C ")
   end,
   tempfile = "/sys/class/thermal/thermal_zone1/temp"
 }
