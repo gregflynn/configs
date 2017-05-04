@@ -55,9 +55,9 @@ function pss_git() {
   # handle stashes
   STASH=$(git stash list 2>/dev/null)
   if ! test -z "$STASH"; then
-    C1=$'\e[41m'
+    C1=$'\e[45m'
     C2=$'\e[37m'
-    C3=$'\e[31m'
+    C3=$'\e[35m'
     echo -n "$C1$RI${C2} s $C3"
   fi
 
@@ -81,27 +81,31 @@ function pss_git() {
 }
 
 function pss_basic() {
-  C1=$'\e[44m'
-  C2=$'\e[37m'
+  C1=$'\e[43m' # start of hostname
+  C2=$'\e[30m'
   C3=$'\e[40m'
-  C4=$'\e[36m'
+  C4=$'\e[32;40m' # start of ME
   C5=$'\e[0;34m'
-  C6=$'\e[46m'
-  C7=$'\e[37m'
-  C8=$'\e[36m'
-  H=`hostname`
+  C6=$'\e[44m'
+  C7=$'\e[30m' # start of path
+  C8=$'\e[34m'
+  H=''
   ME=`whoami`
-  D1=$'\e[34m'
+  D1=$'\e[33m'
   D2=$'\e[30m'
 
   # check for ssh session
-  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    C2=$'\e[33m'
-    D1="$C2"
+  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_DEBUG" ]; then
+    C2=$'\e[30m'
+    # D1="$C2"
+    H=`hostname`
   fi
 
   # check for superuser
-  [[ "$ME" == "root" ]] && C4=$'\e[31m' && D2="$C4"
+  if [[ "$ME" == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
+    C4=$'\e[31;40m'
+    D2="$C4"
+  fi
 
   # replace home dir with tilde
   if [[ ":$PWD" != ":$HOME"* ]]; then P=`pwd`
@@ -120,7 +124,11 @@ function pss_basic() {
   if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
   else SP="$SP${F:1}"; fi
 
-  echo -n "$C1$C2 $H$(thick_div $C3 $D1) $C4$ME$(thick_div $C6 $D2) $C7$SP$C8 "
+  if [ "$H" != "" ]; then
+    echo -n "$C1$C2 $H $D1$C3$RI $C4$ME $C6$D2$RI $C7$SP$C8 "
+  else
+    echo -n "$C4 $ME $D2$C6$RI $C7$SP$C8 "
+  fi
 }
 
 function pss_venv() {
@@ -138,11 +146,10 @@ function pss_ps1() {
   echo -n "$C0$(pss_basic)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
-if [ `whoami` == "root" ]; then
+if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
   C0=$'\e[31m'
 else
-  C0=$'\e[37m'
+  C0=$'\e[32m'
 fi
-
 PS1=$'$(pss_ps1)
-\[$C0\]$RI_LN\[\e[0m\] '
+\[$C0\]$RI\[\e[0m\] '
