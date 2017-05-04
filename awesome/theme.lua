@@ -13,21 +13,12 @@ local theme = {}
 
 theme.font          = "hack 10"
 
--- theme.bg_normal     = "#222222"
--- theme.bg_focus      = "#535d6c"
--- theme.bg_urgent     = "#ff0000"
--- theme.bg_minimize   = "#444444"
--- theme.bg_systray    = theme.bg_normal
 theme.bg_normal     = "#1B1D1E"
 theme.bg_focus      = "#1B1D1E"
 theme.bg_urgent     = "#1B1D1E"
 theme.bg_minimize   = "#1B1D1E"
 theme.bg_systray    = theme.bg_normal
 
--- theme.fg_normal     = "#aaaaaa"
--- theme.fg_focus      = "#ffffff"
--- theme.fg_urgent     = "#ffffff"
--- theme.fg_minimize   = "#ffffff"
 theme.fg_normal     = "#75715E"
 theme.fg_focus      = "#A6E22E"
 theme.fg_urgent     = "#F92672"
@@ -52,15 +43,6 @@ theme.border_marked = "#91231c"
 -- Example:
 --theme.taglist_bg_focus = "#ff0000"
 
--- Generate taglist squares:
-local taglist_square_size = dpi(4)
-theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
-    taglist_square_size, theme.fg_normal
-)
-theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
-    taglist_square_size, theme.fg_normal
-)
-
 -- Variables set for theming notifications:
 -- notification_font
 -- notification_[bg|fg]
@@ -77,7 +59,6 @@ theme.menu_width  = dpi(100)
 -- You can add as many variables as
 -- you wish and access them by using
 -- beautiful.variable in your rc.lua
---theme.bg_widget = "#cc0000"
 
 -- Define the image to load
 theme.titlebar_close_button_normal = themes_path.."default/titlebar/close_normal.png"

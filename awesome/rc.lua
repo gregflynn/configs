@@ -125,6 +125,31 @@ menubar.utils.terminal = terminal
 -- {{{ Wibar
 mytextclock = wibox.widget.textclock()
 
+local bright_notification = nil
+
+local update_bright = function()
+  awful.spawn.easy_async("light", function(stdout, stderr, reason, exit_code)
+    local level = tonumber(stdout)
+    local preset = {
+      title = "Brightness",
+      text = level
+    }
+
+    int = math.modf((level / 100) * awful.screen.focused().mywibox.height)
+    preset.text = string.format("[%s%s]", string.rep("|", int),
+                  string.rep(" ", awful.screen.focused().mywibox.height - int))
+
+    if not bright_notification then
+      bright_notification = naughty.notify {
+        preset  = preset,
+        destroy = function() bright_notification = nil end
+      }
+    else
+      naughty.replace_text(bright_notification, preset.title, preset.text)
+    end
+  end)
+end
+
 local volume = lain.widget.pulsebar {
   settings = function()
   end,
@@ -297,10 +322,7 @@ awful.screen.connect_for_each_screen(function(s)
       mylauncher,
       s.mytaglist
     },
-    --s.mytasklist, -- Middle widget
-    {
-      layout = wibox.layout.fixed.horizontal
-    },
+    wibox.container.margin(s.mytasklist, dpi(7), dpi(7), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
       mymem,
@@ -437,11 +459,13 @@ globalkeys = gears.table.join(
   awful.key({ }, "XF86MonBrightnessDown",
     function ()
       awful.spawn("light -U -p 10")
+      update_bright()
     end
   ),
   awful.key({ }, "XF86MonBrightnessUp",
     function()
       awful.spawn("light -A -p 10")
+      update_bright()
     end
   )
 )
