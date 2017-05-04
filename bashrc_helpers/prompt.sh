@@ -104,7 +104,7 @@ function pss_basic() {
   # check for superuser
   if [[ "$ME" == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
     C4=$'\e[31;40m'
-    D2="$C4"
+    # D2="$C4"
   fi
 
   # replace home dir with tilde
