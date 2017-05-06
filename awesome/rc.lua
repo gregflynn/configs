@@ -43,7 +43,6 @@ beautiful.init(awesomedir.."theme.lua")
 terminal = "tilix"
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
-beautiful.xresources.set_dpi(196)
 modkey = "Mod4"
 altkey = "Mod1"
 
@@ -56,7 +55,7 @@ do
     "enpass",
     "nm-applet",
     "xinput --set-prop 11 283 1",
-    -- "redshift-gtk"
+    "redshift-gtk"
   }
   for _, i in pairs(cmds) do
     awful.spawn(i)
@@ -66,21 +65,13 @@ end
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
   awful.layout.suit.floating,
+  lain.layout.centerwork,
   awful.layout.suit.tile,
   awful.layout.suit.tile.left,
   awful.layout.suit.tile.bottom,
   awful.layout.suit.tile.top,
   awful.layout.suit.fair,
-  awful.layout.suit.fair.horizontal,
-  awful.layout.suit.spiral,
-  awful.layout.suit.spiral.dwindle,
-  awful.layout.suit.max,
-  awful.layout.suit.max.fullscreen,
-  awful.layout.suit.magnifier,
-  awful.layout.suit.corner.nw,
-  -- awful.layout.suit.corner.ne,
-  -- awful.layout.suit.corner.sw,
-  -- awful.layout.suit.corner.se,
+  awful.layout.suit.fair.horizontal
 }
 
 -- {{{ Helper functions
@@ -123,7 +114,9 @@ mylauncher = awful.widget.launcher({
 menubar.utils.terminal = terminal
 
 -- {{{ Wibar
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock(
+  '<span color="'..beautiful.fg_minimize..'"> %a %b %e %l:%M%P </span> '
+)
 
 local bright_notification = nil
 
@@ -151,11 +144,7 @@ local update_bright = function()
 end
 
 local volume = lain.widget.pulsebar {
-  settings = function()
-  end,
   width = dpi(100),
-  ticks = true,
-  ticks_size = 20,
   notification_preset = {
     font = "Hack 10"
   },
@@ -191,19 +180,25 @@ local volumewidget = wibox.container.margin(volumebg, dpi(7), dpi(7), dpi(5), dp
 
 local mybattery = lain.widget.bat({
   settings = function()
+    -- check if we even get battery info back
+    if bat_now.perc == "N/A" then
+      return
+    end
+
     local color = beautiful.fg_focus
     if bat_now.status == "Discharging" then
       color = beautiful.fg_urgent
     end
-    local colorStart = '<span color="'..color..'">'
-    local colorEnd = "</span>"
+    local colorStart = ' <span color="'..color..'">'
+    local colorEnd = "</span> "
     widget:set_markup(colorStart.." "..bat_now.perc.."% "..colorEnd)
   end
 })
 
 local mytemp = lain.widget.temp {
-  settings = function()
-    widget:set_text(coretemp_now.."°C ")
+  settings = function ()
+    local colorStart = ' <span color="'..beautiful.fg_minimize..'">'
+    widget:set_markup(colorStart..coretemp_now.."°C</span> ")
   end,
   tempfile = "/sys/class/thermal/thermal_zone1/temp"
 }
@@ -281,12 +276,12 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- Each screen has its own tag table.
   awful.tag(
-    { "main", "term", "code", "pers", "slck"}, --, "6", "7", "8", "9" },
+    { "main", "code", "term", "slack", "extra" },
     s,
     {
       awful.layout.suit.floating,
-      awful.layout.suit.tile, -- terminals
-      awful.layout.suit.tile, -- code
+      lain.layout.centerwork, -- code
+      lain.layout.centerwork, -- terminals
       awful.layout.suit.floating,
       awful.layout.suit.floating
     }
@@ -326,14 +321,14 @@ awful.screen.connect_for_each_screen(function(s)
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
       mymem,
-      mytemp,
       cpubox,
+      mytemp,
       mybattery.widget,
       wibox.widget.systray(),
       volicon,
       volumewidget,
       mytextclock,
-      s.mylayoutbox
+      -- s.mylayoutbox
     }
   }
 end)
@@ -456,18 +451,32 @@ globalkeys = gears.table.join(
     volume.notify()
   end),
 
-  awful.key({ }, "XF86MonBrightnessDown",
-    function ()
-      awful.spawn("light -U -p 10")
-      update_bright()
-    end
-  ),
-  awful.key({ }, "XF86MonBrightnessUp",
-    function()
-      awful.spawn("light -A -p 10")
-      update_bright()
-    end
-  )
+  awful.key({ }, "XF86MonBrightnessDown", function ()
+    awful.spawn("light -U -p 10")
+    update_bright()
+  end),
+  awful.key({ }, "XF86MonBrightnessUp", function ()
+    awful.spawn("light -A -p 10")
+    update_bright()
+  end),
+
+  -- Window directional movement
+  awful.key({ modkey }, "Down", function ()
+    awful.client.focus.bydirection("down")
+    if client.focus then client.focus:raise() end
+  end),
+  awful.key({ modkey }, "Up", function ()
+      awful.client.focus.bydirection("up")
+      if client.focus then client.focus:raise() end
+    end),
+  awful.key({ modkey }, "Left", function ()
+    awful.client.focus.bydirection("left")
+    if client.focus then client.focus:raise() end
+  end),
+  awful.key({ modkey }, "Right", function ()
+    awful.client.focus.bydirection("right")
+    if client.focus then client.focus:raise() end
+  end)
 )
 
 clientkeys = gears.table.join(
@@ -590,35 +599,39 @@ awful.rules.rules = {
     rule = { name = "Albert" },
     properties = { placement = awful.placement.top }
   },
+  -- Floating clients.
   {
-    rule = { class = "Enpass" },
-    properties = { screen = 1, tag = "pers" }
+    rule_any = {
+      instance = {
+        "DTA",  -- Firefox addon DownThemAll.
+        "copyq",  -- Includes session name in class.
+      },
+      class = {
+        "Arandr",
+        "Gpick",
+        "Kruler",
+        "Sxiv",
+        "Wpa_gui",
+        "pinentry",
+        "veromix",
+        "xtightvncviewer"
+      },
+      name = {
+        "Event Tester",  -- xev.
+      },
+      role = {
+        "AlarmWindow",  -- Thunderbird's calendar.
+        "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
+      }
+    },
+    properties = { floating = true }
   },
-
-    -- Floating clients.
-    { rule_any = {
-        instance = {
-          "DTA",  -- Firefox addon DownThemAll.
-          "copyq",  -- Includes session name in class.
-        },
-        class = {
-          "Arandr",
-          "Gpick",
-          "Kruler",
-          "Sxiv",
-          "Wpa_gui",
-          "pinentry",
-          "veromix",
-          "xtightvncviewer"},
-
-        name = {
-          "Event Tester",  -- xev.
-        },
-        role = {
-          "AlarmWindow",  -- Thunderbird's calendar.
-          "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
-        }
-      }, properties = { floating = true }},
+  {
+    rule_any = {
+      type = { "normal", "dialog" }
+    },
+    properties = { titlebars_enabled = true }
+  },
 }
 
 -- {{{ Signals
@@ -636,12 +649,63 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+-- Add a titlebar if titlebars_enabled is set to true in the rules.
+client.connect_signal("request::titlebars", function(c)
+  -- buttons for the titlebar
+  local buttons = gears.table.join(
+    awful.button({ }, 1, function()
+      client.focus = c
+      c:raise()
+      awful.mouse.client.move(c)
+    end),
+    awful.button({ }, 3, function()
+      client.focus = c
+      c:raise()
+      awful.mouse.client.resize(c)
+    end)
+  )
+
+  awful.titlebar(c) : setup {
+    { -- Left
+      awful.titlebar.widget.iconwidget(c),
+      buttons = buttons,
+      layout  = wibox.layout.fixed.horizontal
+    },
+    { -- Middle
+      { -- Title
+        align  = "center",
+        widget = awful.titlebar.widget.titlewidget(c)
+      },
+      buttons = buttons,
+      layout  = wibox.layout.flex.horizontal
+    },
+    { -- Right
+      awful.titlebar.widget.floatingbutton (c),
+      awful.titlebar.widget.maximizedbutton(c),
+      awful.titlebar.widget.stickybutton   (c),
+      awful.titlebar.widget.ontopbutton    (c),
+      awful.titlebar.widget.closebutton    (c),
+      layout = wibox.layout.fixed.horizontal()
+    },
+    layout = wibox.layout.align.horizontal
+  }
+  awful.titlebar.hide(c)
+end)
+
+client.connect_signal("property::floating", function (c)
+  if c.floating then
+    awful.titlebar.show(c)
+  else
+    awful.titlebar.hide(c)
+  end
+end)
+
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
-    if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-        and awful.client.focus.filter(c) then
-        client.focus = c
-    end
+  if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
+      and awful.client.focus.filter(c) then
+    client.focus = c
+  end
 end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
