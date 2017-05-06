@@ -301,7 +301,6 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- Create a tasklist widget
   s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
-
   -- Create the wibox
   s.mywibox = awful.wibar {
     position = "top",
@@ -324,11 +323,10 @@ awful.screen.connect_for_each_screen(function(s)
       cpubox,
       mytemp,
       mybattery.widget,
-      wibox.widget.systray(),
+      wibox.container.margin(wibox.widget.systray(), dpi(7), dpi(7), dpi(4), dpi(4)),
       volicon,
       volumewidget,
-      mytextclock,
-      -- s.mylayoutbox
+      mytextclock
     }
   }
 end)
@@ -458,6 +456,12 @@ globalkeys = gears.table.join(
   awful.key({ }, "XF86MonBrightnessUp", function ()
     awful.spawn("light -A -p 10")
     update_bright()
+  end),
+
+  -- File manager key
+  awful.key({ }, "XF86Explorer", function ()
+    local home = os.getenv("HOME")
+    awful.spawn("xdg-open "..home)
   end),
 
   -- Window directional movement
