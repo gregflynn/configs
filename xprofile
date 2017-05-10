@@ -12,6 +12,6 @@ compton -b -c
 xinput --set-prop 11 283 1
 
 # setup lightdm locking after 15 minutes
-xautolock -time 15 -locker "dm-tool lock" &
+xautolock -time 15 -locker "i3lock -c 3d3d3d" &
 
 export HOSTNAME=`hostname`

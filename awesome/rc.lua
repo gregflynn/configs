@@ -38,8 +38,8 @@ do
   end)
 end
 
-local awesomedir = "/home/greg/.config/awesome/"
-beautiful.init(awesomedir.."theme.lua")
+local home = os.getenv("HOME")
+beautiful.init(home.."/.config/awesome/theme.lua")
 terminal = "tilix"
 editor = "vim"
 editor_cmd = terminal .. " -e " .. editor
@@ -83,7 +83,7 @@ local function client_menu_toggle_fn()
       instance:hide()
       instance = nil
     else
-      instance = awful.menu.clients({ theme = { width = 250 } })
+      instance = awful.menu.clients({ theme = { width = 500 } }, {})
     end
   end
 end
@@ -263,7 +263,7 @@ local function set_wallpaper(s)
     if type(wallpaper) == "function" then
       wallpaper = wallpaper(s)
     end
-    gears.wallpaper.maximized(wallpaper, s, true)
+    gears.wallpaper.maximized(wallpaper, s, false)
   end
 end
 
