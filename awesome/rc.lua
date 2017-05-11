@@ -55,7 +55,8 @@ do
     "enpass",
     "nm-applet",
     "xinput --set-prop 11 283 1",
-    "redshift-gtk"
+    "redshift-gtk",
+    "dropbox"
   }
   for _, i in pairs(cmds) do
     awful.spawn(i)
@@ -470,9 +471,9 @@ globalkeys = gears.table.join(
     if client.focus then client.focus:raise() end
   end),
   awful.key({ modkey }, "Up", function ()
-      awful.client.focus.bydirection("up")
-      if client.focus then client.focus:raise() end
-    end),
+    awful.client.focus.bydirection("up")
+    if client.focus then client.focus:raise() end
+  end),
   awful.key({ modkey }, "Left", function ()
     awful.client.focus.bydirection("left")
     if client.focus then client.focus:raise() end
@@ -480,6 +481,14 @@ globalkeys = gears.table.join(
   awful.key({ modkey }, "Right", function ()
     awful.client.focus.bydirection("right")
     if client.focus then client.focus:raise() end
+  end),
+
+  -- Screenshots
+  awful.key({ modkey }, "p", function ()
+    awful.spawn("scrot -e 'mv $f ~/Pictures/Screenshots'")
+  end),
+  awful.key({ modkey }, "o", function ()
+    awful.spawn.with_shell("sleep 0.2 && scrot -s -e 'mv $f ~/Pictures/Screenshots'")
   end)
 )
 
