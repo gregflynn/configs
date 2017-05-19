@@ -161,9 +161,9 @@ function aur_version() {
   if [ ! -e $pkgbuild ]; then
     return 1
   fi
-  ver=`cat $pkgbuild | grep "pkgver=" | sed 's/pkgver=//' | sed 's/"//g'`
-  rel=`cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//' | sed 's/"//g'`
-  epo=`cat $pkgbuild | grep "epoch=" | sed 's/epoch=//' | sed 's/"//g'`
+  ver=`cat $pkgbuild | grep "pkgver=" | sed 's/pkgver=//' | sed 's/"//g' | sed "s/'//g"`
+  rel=`cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//' | sed 's/"//g' | sed "s/'//g"`
+  epo=`cat $pkgbuild | grep "epoch=" | sed 's/epoch=//' | sed 's/"//g' | sed "s/'//g"`
   base_version="$ver-$rel"
   if [ "$epo" != "" ]; then
     echo "$epo:$base_version"
