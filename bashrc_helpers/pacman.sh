@@ -1,6 +1,8 @@
 #! /bin/bash
 
 function pac() {
+  pkgs="${@:2}"
+  pkg="$2"
   case $1 in
     update)
       echo "Updating..."
@@ -8,17 +10,17 @@ function pac() {
       sudo pacman -Syu
     ;;
     install)
-      echo "Installing $2..."
-      sudo pacman -S $2
+      echo "Installing $pkgs..."
+      sudo pacman -S "$pkgs"
     ;;
     remove)
-      echo "Removing $2..."
-      sudo pacman -R $2
+      echo "Removing $pkgs..."
+      sudo pacman -R $pkgs
     ;;
     search)
         echo "Official Repos:"
         echo "==============="
-        remote=`pacman -Ss $2`
+        remote=`pacman -Ss $pkg`
         if [ "$remote" == "" ]; then
           echo "Not Found"
         else
@@ -28,12 +30,12 @@ function pac() {
         echo ""
         echo "Arch User Repository:"
         echo "====================="
-        aur_search $2
+        aur_search $pkg
 
         echo ""
         echo "Installed Packages:"
         echo "==================="
-        locals=`pacman -Qs $2`
+        locals=`pacman -Qs $pkg`
         if [ "$locals" == "" ]; then
           echo "Not Found"
         else
