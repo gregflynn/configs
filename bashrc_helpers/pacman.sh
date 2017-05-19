@@ -164,6 +164,18 @@ function aur_version() {
   ver=`cat $pkgbuild | grep "pkgver=" | sed 's/pkgver=//' | sed 's/"//g' | sed "s/'//g"`
   rel=`cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//' | sed 's/"//g' | sed "s/'//g"`
   epo=`cat $pkgbuild | grep "epoch=" | sed 's/epoch=//' | sed 's/"//g' | sed "s/'//g"`
+
+  # needed for lain-git
+  if [[ $ver == *"\$pkgcom"* ]]; then
+    pkgcom=`cat $pkgbuild | grep "pkgcom=" | sed 's/pkgcom=//' | sed 's/"//g' | sed "s/'//g"`
+    ver=$(echo $ver | sed "s/\$pkgcom/$pkgcom/")
+  fi
+
+  if [[ $ver == *"\$pkgsha"* ]]; then
+    pkgsha=`cat $pkgbuild | grep "pkgsha=" | sed 's/pkgsha=//' | sed 's/"//g' | sed "s/'//g"`
+    ver=$(echo $ver | sed "s/\$pkgsha/$pkgsha/")
+  fi
+
   base_version="$ver-$rel"
   if [ "$epo" != "" ]; then
     echo "$epo:$base_version"
