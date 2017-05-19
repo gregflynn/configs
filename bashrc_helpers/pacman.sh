@@ -120,6 +120,7 @@ function aur_update_single() {
 
 function aur_install() {
   pkg_name="$1"
+  mkdir -p "$AUR_HOME"
   clone_dir="$AUR_HOME/$pkg_name"
 
   # make sure that package doesn't exist
