@@ -177,8 +177,7 @@ local mybattery = lain.widget.bat({
       color = beautiful.fg_urgent
     end
     local colorStart = ' <span color="'..color..'">'
-    local colorEnd = "</span> "
-    widget:set_markup(colorStart.." "..bat_now.perc.."% "..colorEnd)
+    widget:set_markup(colorStart.." "..bat_now.perc.."% </span>")
   end
 })
 
@@ -205,9 +204,17 @@ local cpubox = wibox.container.margin(cpubg, dpi(7), dpi(7), dpi(5), dpi(5))
 local mymem = lain.widget.mem {
   settings = function()
     local colorStart = ' <span color="'..beautiful.fg_minimize..'">'
-    local colorEnd = '</span> '
-    local used = math.floor((tonumber(mem_now.used) / 1024) * 100 + 0.5) / 100
-    widget:set_markup(colorStart..used.."G "..mem_now.perc.."% "..colorEnd)
+    local used = math.floor((tonumber(mem_now.used) / 1024) * 10 + 0.5) / 10
+    widget:set_markup(colorStart..used.." GB "..mem_now.perc.."% </span>")
+  end
+}
+
+local diskusage = lain.widget.fs {
+  notify = "off",
+  settings = function()
+    local colorStart = ' <span color="'..beautiful.fg_normal..'">'
+    local pct = fs_info['/ used_p']
+    widget:set_markup(colorStart..fs_now.used_gb..'/'..fs_now.size_gb..' GB '..pct..'%</span> ')
   end
 }
 
@@ -318,6 +325,7 @@ awful.screen.connect_for_each_screen(function(s)
     wibox.container.margin(s.mytasklist, dpi(7), dpi(7), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
+      diskusage,
       mymem,
       cpubox,
       mytemp,
