@@ -11,7 +11,7 @@ function pac() {
     ;;
     install)
       echo "Installing $pkgs..."
-      sudo pacman -S "$pkgs"
+      sudo pacman -S $pkgs
     ;;
     remove)
       echo "Removing $pkgs..."
