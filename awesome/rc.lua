@@ -75,20 +75,6 @@ awful.layout.layouts = {
   awful.layout.suit.fair.horizontal
 }
 
--- {{{ Helper functions
-local function client_menu_toggle_fn()
-  local instance = nil
-
-  return function ()
-    if instance and instance.wibox.visible then
-      instance:hide()
-      instance = nil
-    else
-      instance = awful.menu.clients({ theme = { width = 500 } }, {})
-    end
-  end
-end
-
 -- {{{ Menu
 -- Create a launcher widget and a main menu
 myawesomemenu = {
@@ -247,7 +233,6 @@ local tasklist_buttons = gears.table.join(
       c:raise()
     end
   end),
-  awful.button({ }, 3, client_menu_toggle_fn()),
   awful.button({ }, 4, function ()
     awful.client.focus.byidx(1)
   end),
@@ -270,6 +255,13 @@ end
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
+
+-- Set tasklist items to set width of 200
+local common = require("awful.widget.common")
+local function list_update(w, buttons, label, data, objects)
+  common.list_update(w, buttons, label, data, objects)
+  w:set_max_widget_size(200)
+end
 
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
@@ -301,7 +293,13 @@ awful.screen.connect_for_each_screen(function(s)
   s.mytaglist = awful.widget.taglist(s, awful.widget.taglist.filter.all, taglist_buttons)
 
   -- Create a tasklist widget
-  s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
+  s.mytasklist = awful.widget.tasklist(
+    s,
+    awful.widget.tasklist.filter.currenttags,
+    tasklist_buttons,
+    nil,
+    list_update
+  )
   -- Create the wibox
   s.mywibox = awful.wibar {
     position = "top",
@@ -605,7 +603,8 @@ awful.rules.rules = {
       buttons = clientbuttons,
       screen = awful.screen.preferred,
       placement = awful.placement.centered,
-      titlebars_enabled = false
+      titlebars_enabled = false,
+      border_width = 0,
     }
   },
   {
@@ -616,28 +615,27 @@ awful.rules.rules = {
   {
     rule_any = {
       instance = {
-        "DTA",  -- Firefox addon DownThemAll.
+        "slack",
+        "google-chrome",
         "copyq",  -- Includes session name in class.
       },
       class = {
+        "Steam",
+        "Enpass",
         "Arandr",
-        "Gpick",
-        "Kruler",
-        "Sxiv",
         "Wpa_gui",
-        "pinentry",
-        "veromix",
-        "xtightvncviewer"
       },
       name = {
         "Event Tester",  -- xev.
       },
       role = {
-        "AlarmWindow",  -- Thunderbird's calendar.
         "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
       }
     },
-    properties = { floating = true }
+    properties = {
+      floating = true,
+      border_width = 2,
+    }
   },
   {
     rule_any = {
@@ -693,10 +691,7 @@ client.connect_signal("request::titlebars", function(c)
       layout  = wibox.layout.flex.horizontal
     },
     { -- Right
-      awful.titlebar.widget.floatingbutton (c),
       awful.titlebar.widget.maximizedbutton(c),
-      awful.titlebar.widget.stickybutton   (c),
-      awful.titlebar.widget.ontopbutton    (c),
       awful.titlebar.widget.closebutton    (c),
       layout = wibox.layout.fixed.horizontal()
     },
@@ -710,14 +705,6 @@ client.connect_signal("property::floating", function (c)
     awful.titlebar.show(c)
   else
     awful.titlebar.hide(c)
-  end
-end)
-
--- Enable sloppy focus, so that focus follows mouse.
-client.connect_signal("mouse::enter", function(c)
-  if awful.layout.get(c.screen) ~= awful.layout.suit.magnifier
-      and awful.client.focus.filter(c) then
-    client.focus = c
   end
 end)
 
