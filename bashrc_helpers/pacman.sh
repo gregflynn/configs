@@ -111,6 +111,8 @@ function aur_update_single() {
 
   if [ "$lver" != "$aver" ]; then
     echo "Upgrading $1: $lver => $aver"
+    git checkout master
+    git clean -fd
     makepkg -si
   else
     echo "Already up-to-date: $1: $lver"
