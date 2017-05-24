@@ -267,7 +267,7 @@ screen.connect_signal("property::geometry", set_wallpaper)
 local common = require("awful.widget.common")
 local function list_update(w, buttons, label, data, objects)
   common.list_update(w, buttons, label, data, objects)
-  w:set_max_widget_size(200)
+  w:set_max_widget_size(dpi(200))
 end
 
 awful.screen.connect_for_each_screen(function(s)
