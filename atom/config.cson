@@ -27,7 +27,7 @@
     ]
   editor:
     fontFamily: "hack"
-    fontSize: 13
+    fontSize: 15
     preferredLineLength: 79
     showIndentGuide: true
   "exception-reporting":
@@ -67,7 +67,6 @@
   "nord-atom-ui":
     darkerFormFocusEffect: true
   "one-dark-ui":
-    layoutMode: "Compact"
     tabSizing: "Minimum"
   "one-light-ui":
     layoutMode: "Compact"
