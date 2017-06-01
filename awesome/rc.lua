@@ -276,7 +276,7 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- Each screen has its own tag table.
   awful.tag(
-    { "main", "code", "term", "slack", "extra" },
+    { "main", "alpha", "bravo", "slack", "extra" },
     s,
     {
       awful.layout.suit.floating,
@@ -426,10 +426,10 @@ globalkeys = gears.table.join(
             {description = "increase the number of columns", group = "layout"}),
   awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
             {description = "decrease the number of columns", group = "layout"}),
-  awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
+  awful.key({ modkey, "Shift"   }, "l", function () awful.layout.inc( 1)                end,
             {description = "select next", group = "layout"}),
-  awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
-            {description = "select previous", group = "layout"}),
+  -- awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
+  --           {description = "select previous", group = "layout"}),
 
     awful.key({ modkey, "Control" }, "n",
               function ()
@@ -509,7 +509,7 @@ clientkeys = gears.table.join(
       {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey,           }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
+    awful.key({ modkey, "Shift" }, "f",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
@@ -620,14 +620,14 @@ awful.rules.rules = {
   {
     rule = { name = "Albert" },
     properties = { placement = awful.placement.top }
-  },
-  -- Floating clients.
-  {
+  }, {
     rule_any = {
       instance = {
         "slack",
         "google-chrome",
-        "copyq",  -- Includes session name in class.
+        "pavucontrol",
+        "pcmanfm",
+        "lxappearance"
       },
       class = {
         "Steam",
@@ -707,6 +707,7 @@ client.connect_signal("request::titlebars", function(c)
     },
     layout = wibox.layout.align.horizontal
   }
+
   awful.titlebar.hide(c)
 end)
 
