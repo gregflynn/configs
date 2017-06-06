@@ -1,8 +1,16 @@
 #! /bin/bash
 
 function pac() {
-  pkgs="${@:2}"
-  pkg="$2"
+  if [ "$2" == "-p" ]; then
+    # skip searching the AUR
+    search_aur=false
+    pkgs="${@:3}"
+    pkg="$3"
+  else
+    search_aur=true
+    pkgs="${@:2}"
+    pkg="$2"
+  fi
   case $1 in
     update)
       echo "Updating..."
@@ -27,10 +35,12 @@ function pac() {
           echo "$remote"
         fi
 
-        echo ""
-        echo "Arch User Repository:"
-        echo "====================="
-        aur_search $pkg
+        if $search_aur; then
+          echo ""
+          echo "Arch User Repository:"
+          echo "====================="
+          aur_search $pkg
+        fi
 
         echo ""
         echo "Installed Packages:"
