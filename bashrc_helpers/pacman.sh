@@ -91,6 +91,11 @@ function aur() {
         return 0
       fi
     ;;
+    list)
+      echo "Installed AUR Packages"
+      ls -l $AUR_HOME
+      return 0
+    ;;
   esac
   echo "Usage: aur [update|install|remove|search] [package_name]"
 }
@@ -164,7 +169,9 @@ function aur_remove() {
     return 1
   fi
   sudo pacman -R $1
-  rm -rf "$AUR_HOME/$1"
+  if [ "$?" == "0" ]; then
+    rm -rf "$AUR_HOME/$1"
+  fi
   echo "Deleted $AUR_HOME/$1"
 }
 
