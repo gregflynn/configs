@@ -124,13 +124,17 @@ function aur_update_single() {
   lver=`installed_version $1`
   aver=`aur_version $1`
 
+  C0=$'\e[0m'
+  C1=$'\e[34m'
+  C2=$'\e[31m'
+  C3=$'\e[32m'
   if [ "$lver" != "$aver" ]; then
-    echo "Upgrading $1: $lver => $aver"
+    echo "Upgrading $C1$1$C0: $C2$lver$C0 => $C3$aver$C0"
     git checkout master
     git clean -fd
     makepkg -si
   else
-    echo "Already up-to-date: $1: $lver"
+    echo "Already up-to-date: $C1$1$C0: $C3$lver$C0"
   fi
   popd > /dev/null
 }
