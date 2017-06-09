@@ -333,7 +333,8 @@ awful.screen.connect_for_each_screen(function(s)
       wibox.container.margin(wibox.widget.systray(), dpi(7), dpi(7), dpi(4), dpi(4)),
       volicon,
       volumewidget,
-      mytextclock
+      mytextclock,
+      s.mylayoutbox
     }
   }
 end)
@@ -529,19 +530,7 @@ clientkeys = gears.table.join(
             c.maximized = not c.maximized
             c:raise()
         end ,
-        {description = "(un)maximize", group = "client"}),
-    awful.key({ modkey, "Control" }, "m",
-        function (c)
-            c.maximized_vertical = not c.maximized_vertical
-            c:raise()
-        end ,
-        {description = "(un)maximize vertically", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "m",
-        function (c)
-            c.maximized_horizontal = not c.maximized_horizontal
-            c:raise()
-        end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize", group = "client"})
 )
 
 -- Bind all key numbers to tags.
@@ -615,6 +604,8 @@ awful.rules.rules = {
       placement = awful.placement.centered,
       titlebars_enabled = false,
       border_width = 0,
+      maximized_vertical = false,
+      maximized_horizontal = false
     }
   },
   {
