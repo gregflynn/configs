@@ -630,6 +630,7 @@ awful.rules.rules = {
       },
       name = {
         "Event Tester",  -- xev.
+        "pgAdmin 4"
       },
       role = {
         "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
