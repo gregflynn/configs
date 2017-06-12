@@ -701,7 +701,11 @@ client.connect_signal("request::titlebars", function(c)
     layout = wibox.layout.align.horizontal
   }
 
-  awful.titlebar.hide(c)
+  if c.floating then
+    awful.titlebar.show(c)
+  else
+    awful.titlebar.hide(c)
+  end
 end)
 
 client.connect_signal("property::floating", function (c)
