@@ -707,6 +707,9 @@ client.connect_signal("request::titlebars", function(c)
   else
     awful.titlebar.hide(c)
   end
+
+  c.maximized_vertical = false
+  c.maximized_horizontal = false
 end)
 
 client.connect_signal("property::floating", function (c)
