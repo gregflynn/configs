@@ -56,7 +56,8 @@ do
     "nm-applet",
     "xinput --set-prop 11 283 1",
     "redshift-gtk",
-    "dropbox"
+    "dropbox",
+    "blueberry-tray"
   }
   for _, i in pairs(cmds) do
     awful.spawn(i)
@@ -618,7 +619,8 @@ awful.rules.rules = {
         "google-chrome",
         "pavucontrol",
         "pcmanfm",
-        "lxappearance"
+        "lxappearance",
+        "blueberry"
       },
       class = {
         "Steam",
