@@ -60,7 +60,13 @@ do
     "blueberry-tray"
   }
   for _, i in pairs(cmds) do
-    awful.spawn(i)
+    awful.spawn.easy_async("ps ax | grep "..i.." | wc -l", function(stdout, stderr, reason, exit_code)
+      local processes = tonumber(stdout)
+      if processes < 2 then
+        -- 2 because 1 line will be the grep command above
+        awful.spawn(i)
+      end
+    end)
   end
 end
 
