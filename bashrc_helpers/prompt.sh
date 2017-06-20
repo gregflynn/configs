@@ -143,13 +143,13 @@ function pss_venv() {
 function pss_ps1() {
   CE=$'\e[49m'
   C_=$'\e[0m'
-  echo -n "$C0$(pss_basic)$(pss_venv)$(pss_git)$CE$RI$C_"
+  echo -n "$C_$(pss_basic)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
-  C0=$'\e[31m'
+  CX=$'\e[31m'
 else
-  C0=$'\e[32m'
+  CX=$'\e[32m'
 fi
 PS1=$'$(pss_ps1)
-\[$C0\]$RI\[\e[0m\] '
+\[$CX\]$RI\[\e[0m\] '
