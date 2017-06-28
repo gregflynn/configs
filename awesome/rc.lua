@@ -49,27 +49,6 @@ altkey = "Mod1"
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
-do
-  local cmds = {
-    "albert",
-    "enpass",
-    "nm-applet",
-    "xinput --set-prop 11 283 1",
-    "redshift-gtk",
-    "dropbox",
-    "blueberry-tray"
-  }
-  for _, i in pairs(cmds) do
-    awful.spawn.easy_async("ps ax | grep "..i.." | wc -l", function(stdout, stderr, reason, exit_code)
-      local processes = tonumber(stdout)
-      if processes < 2 then
-        -- 2 because 1 line will be the grep command above
-        awful.spawn(i)
-      end
-    end)
-  end
-end
-
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
   awful.layout.suit.floating,
@@ -620,7 +599,9 @@ awful.rules.rules = {
   },
   {
     rule = { name = "Albert" },
-    properties = { placement = awful.placement.top }
+    properties = { placement = function (c)
+      awful.placement.centered(c, { offset = {y = -200} })
+    end}
   }, {
     rule_any = {
       instance = {
