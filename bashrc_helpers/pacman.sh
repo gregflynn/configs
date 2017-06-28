@@ -23,7 +23,7 @@ function pac() {
     ;;
     remove)
       echo "Removing $pkgs..."
-      sudo pacman -R $pkgs
+      sudo pacman -Rs $pkgs
     ;;
     search)
         echo "Official Repos:"
