@@ -600,7 +600,7 @@ awful.rules.rules = {
   {
     rule = { name = "Albert" },
     properties = { placement = function (c)
-      awful.placement.centered(c, { offset = {y = -200} })
+      awful.placement.centered(c, { offset = {y = -350} })
     end}
   }, {
     rule_any = {
