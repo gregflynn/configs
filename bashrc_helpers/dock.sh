@@ -14,6 +14,9 @@ function dock() {
         bash)
             docker-compose exec "$2" bash
         ;;
+        restart)
+            docker-compose restart "${@:2}"
+        ;;
         purge)
             case $2 in
                 containers)
@@ -32,7 +35,7 @@ function dock() {
             esac
         ;;
         *)
-            echo "Usage: dock [up|down|build|bash] [docker-compose alias]"
+            echo "Usage: dock [up|down|build|bash|restart] [docker-compose alias]"
             echo "       dock purge [containers|images|volumes]"
         ;;
     esac
