@@ -610,7 +610,8 @@ awful.rules.rules = {
         "pavucontrol",
         "pcmanfm",
         "lxappearance",
-        "blueberry"
+        "blueberry",
+        "thunar"
       },
       class = {
         "Steam",
