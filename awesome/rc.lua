@@ -611,7 +611,8 @@ awful.rules.rules = {
         "pcmanfm",
         "lxappearance",
         "blueberry",
-        "thunar"
+        "thunar",
+        "vlc"
       },
       class = {
         "Steam",
