@@ -43,6 +43,7 @@ sane_import "git-completion"
 sane_import "pacman"
 sane_import "atom"
 sane_import "sys"
+sane_import "dock"
 
 #
 # pyenv
@@ -58,6 +59,3 @@ fi
 if [ -e "$DOTINSTALL/private/bashrc" ]; then
   source $DOTINSTALL/private/bashrc
 fi
-
-# fixes UI scaling in QT applications
-#export QT_AUTO_SCREEN_SCALE_FACTOR=1
