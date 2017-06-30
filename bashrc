@@ -44,6 +44,7 @@ sane_import "pacman"
 sane_import "atom"
 sane_import "sys"
 sane_import "dock"
+sane_import "dotsan"
 
 #
 # pyenv
