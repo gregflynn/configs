@@ -88,7 +88,7 @@ menubar.utils.terminal = terminal
 
 -- {{{ Wibar
 mytextclock = wibox.widget.textclock(
-  '<span color="'..beautiful.fg_minimize..'"> %a %b %e %l:%M%P </span> '
+  '<span color="'..beautiful.fg_minimize..'"> %a %b %e %l:%M%P </span>'
 )
 
 local bright_notification = nil
@@ -162,8 +162,8 @@ local mybattery = lain.widget.bat({
     if bat_now.status == "Discharging" then
       color = beautiful.fg_urgent
     end
-    local colorStart = ' <span color="'..color..'">'
-    widget:set_markup(colorStart.." "..bat_now.perc.."% </span>")
+    local colorStart = '<span color="'..color..'">'
+    widget:set_markup(colorStart..bat_now.perc.."% </span>")
   end
 })
 
@@ -200,7 +200,7 @@ local diskusage = lain.widget.fs {
   settings = function()
     local colorStart = ' <span color="'..beautiful.fg_normal..'">'
     local pct = fs_info['/ used_p']
-    widget:set_markup(colorStart..fs_now.used_gb..'/'..fs_now.size_gb..' GB '..pct..'%</span> ')
+    widget:set_markup(colorStart..fs_now.used_gb..' GB '..pct..'%</span> ')
   end
 }
 
@@ -308,7 +308,7 @@ awful.screen.connect_for_each_screen(function(s)
       mylauncher,
       s.mytaglist
     },
-    wibox.container.margin(s.mytasklist, dpi(7), dpi(7), dpi(4), dpi(4)), -- Middle widget
+    wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
       diskusage,
@@ -316,11 +316,10 @@ awful.screen.connect_for_each_screen(function(s)
       cpubox,
       mytemp,
       mybattery.widget,
-      wibox.container.margin(wibox.widget.systray(), dpi(7), dpi(7), dpi(4), dpi(4)),
-      volicon,
+      wibox.container.margin(wibox.widget.systray(), dpi(4), dpi(4), dpi(4), dpi(4)),
       volumewidget,
       mytextclock,
-      s.mylayoutbox
+      wibox.container.margin(s.mylayoutbox, dpi(0), dpi(4), dpi(4), dpi(4))
     }
   }
 end)
@@ -674,7 +673,7 @@ client.connect_signal("request::titlebars", function(c)
 
   awful.titlebar(c) : setup {
     { -- Left
-      awful.titlebar.widget.iconwidget(c),
+      wibox.container.margin(awful.titlebar.widget.iconwidget(c), dpi(4), dpi(4), dpi(4), dpi(4)),
       buttons = buttons,
       layout  = wibox.layout.fixed.horizontal
     },
