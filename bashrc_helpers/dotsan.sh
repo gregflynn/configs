@@ -5,23 +5,11 @@ function dotsan () {
         reload)
             source ~/.bashrc
         ;;
-        diff)
-            pushd $DOTINSTALL > /dev/null
-            git diff --cached
-            git diff
-            git status
-            popd > /dev/null
+        code)
+            code $DOTINSTALL
         ;;
-        commit)
-            pushd $DOTINSTALL > /dev/null
-            git add --all
-            git commit "${@:2}"
-            popd > /dev/null
-        ;;
-        push)
-            pushd $DOTINSTALL > /dev/null
-            git push
-            popd > /dev/null
+        cd)
+            pushd $DOTINSTALL
         ;;
         update)
             pushd $DOTINSTALL > /dev/null
@@ -55,36 +43,35 @@ function dotsan () {
             esac
         ;;
         monitor)
+            XRAND_OUT=$(xrandr | grep " connected")
+            # assume the first monitor is internal
+            INTERNAL=$(echo "$XRAND_OUT" | head -n 1 | awk '{ print $1; }')
+
+            # assume the last monitor is the
+            EXTERNAL=$(echo "$XRAND_OUT" | tail -n 1 | awk '{ print $1; }')
             case $2 in
                 internal)
-                    XRAND_OUT=$(xrandr | grep " connected")
-                    if [[ $(cat "$XRAND_OUT" | wc -l) != 2 ]]; then
+                    if [[ $(echo "$XRAND_OUT" | wc -l) != 2 ]]; then
                         echo "Only 1 monitor detected"
                     else
-                        # assume the first monitor is internal
-                        INTERNAL=$(cat "$XRAND_OUT" | head -n 1 | awk '{ print $1; }')
-
-                        # assume the last monitor is the
-                        EXTERNAL=$(cat "$XRAND_OUT" | tail -n 1 | awk '{ print $1; }')
-
-                        xrandr --ouput $INTERNAL --primary --output $EXTERNAL --off
+                        xrandr --output $INTERNAL --mode 3200x1800 --primary --output $EXTERNAL --off
                     fi
                 ;;
                 external)
                     XRAND_OUT=$(xrandr | grep " connected")
-                    if [[ $(cat "$XRAND_OUT" | wc -l) != 2 ]]; then
+                    if [[ $(echo "$XRAND_OUT" | wc -l) != 2 ]]; then
                         echo "Only 1 monitor detected"
                     else
-                        # assume the first monitor is internal
-                        INTERNAL=$(cat "$XRAND_OUT" | head -n 1 | awk '{ print $1; }')
-
-                        # assume the last monitor is the
-                        EXTERNAL=$(cat "$XRAND_OUT" | tail -n 1 | awk '{ print $1; }')
-
-                        xrandr --ouput $EXTERNAL --primary --output $INTERNAL --off
+                        xrandr --output $EXTERNAL --mode 3440x1440 --primary --output $INTERNAL --off
                     fi
                 ;;
                 *)
+                    if [[ "$INTERNAL" != "" ]]; then
+                        echo "Internal display: $INTERNAL"
+                    fi
+                    if [[ "$EXTERNAL" != "" ]]; then
+                        echo "External display: $EXTERNAL"
+                    fi
                     echo "Usage: dotsan monitor [internal|external]"
                 ;;
 
