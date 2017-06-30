@@ -32,8 +32,10 @@ function dotsan () {
             popd > /dev/null
         ;;
         version)
-            pushd > /dev/null
+            pushd $DOTINSTALL > /dev/null
             git remote update
+            git status -uno
+            popd >/dev/null
         ;;
         dpi)
             case $2 in
