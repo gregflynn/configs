@@ -21,9 +21,37 @@ function dotsan () {
         ;;
         version)
             pushd $DOTINSTALL > /dev/null
+            # shamelessly stolen from https://stackoverflow.com/a/3278427/625802
             git remote update
-            git status -uno
-            popd >/dev/null
+            UPSTREAM=${2:-'@{u}'}
+            LOCAL=$(git rev-parse @)
+            REMOTE=$(git rev-parse "$UPSTREAM")
+            BASE=$(git merge-base @ "$UPSTREAM")
+
+            R=$'\e[31m'
+            G=$'\e[32m'
+            Y=$'\e[33m'
+            B=$'\e[34m'
+            RE=$'\e[0m'
+
+            if [ $LOCAL = $REMOTE ]; then
+                echo "local  $B$LOCAL$RE"
+                echo "remote $B$REMOTE$RE"
+                echo "=> ${G}up to date$RE"
+            elif [ $LOCAL = $BASE ]; then
+                echo "local  $R$LOCAL$RE"
+                echo "remote $G$REMOTE$RE"
+                echo "=> ${B}pull needed"
+            elif [ $REMOTE = $BASE ]; then
+                echo "local  $G$LOCAL$RE"
+                echo "remote $R$REMOTE$RE"
+                echo "=> ${Y}push needed"
+            else
+                echo "local  $R$LOCAL$RE"
+                echo "remote $R$REMOTE$RE"
+                echo "=> ${Y}diverged$RE"
+            fi
+            popd > /dev/null
         ;;
         dpi)
             case $2 in
