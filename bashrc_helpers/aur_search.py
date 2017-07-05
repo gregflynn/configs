@@ -22,7 +22,7 @@ class AurPackage(object):
 
     @property
     def description(self):
-        l = len(self._data['Description'])
+        l = len(self._data['Description'] or [])
         return (self._data['Description']
                 if l < 75 else self._data['Description'][:75] + '...')
 
