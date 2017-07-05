@@ -1,31 +1,53 @@
 #! /bin/bash
+AUR_HOME="$HOME/aur"
 
 function pac() {
-  if [ "$2" == "-p" ]; then
+  if [[ "$2" == "-"* ]]; then
     # skip searching the AUR
-    search_aur=false
+    flag="$2"
     pkgs="${@:3}"
     pkg="$3"
   else
-    search_aur=true
+    flag=""
     pkgs="${@:2}"
     pkg="$2"
   fi
   case $1 in
     update)
-      echo "Updating..."
-      sudo pacman -Syy
-      sudo pacman -Syu
+      if [[ "$flag" == "-aur" ]]; then
+        echo "Updating AUR packages..."
+        aur_update
+      else
+        echo "Updating..."
+        sudo pacman -Syy
+        if [[ "$?" == "0" ]]; then
+          sudo pacman -Syu
+        fi
+      fi
     ;;
     install)
-      echo "Installing $pkgs..."
-      sudo pacman -S $pkgs
+      if [[ "$flag" == "-aur" ]]; then
+        echo "Installing $pkg from the AUR..."
+        aur_install $pkg
+      else
+        echo "Installing $pkgs..."
+        sudo pacman -S $pkgs
+      fi
     ;;
     remove)
       echo "Removing $pkgs..."
       sudo pacman -Rs $pkgs
+      if [[ "$?" == "0" ]]; then
+        for pkg in "$pkgs"; do
+          if [ -e "$AUR_HOME/$pkg" ]; then
+            echo "Deleting $AUR_HOME/$pkg"
+            rm -rf "$AUR_HOME/$pkg"
+          fi
+        done
+      fi
     ;;
     search)
+      if [[ "$flag" != "-l" ]]; then
         echo "Official Repos:"
         echo "==============="
         remote=`pacman -Ss $pkg`
@@ -34,70 +56,51 @@ function pac() {
         else
           echo "$remote"
         fi
+      fi
 
-        if $search_aur; then
-          echo ""
-          echo "Arch User Repository:"
-          echo "====================="
-          aur_search $pkg
-        fi
-
+      if [[ "$flag" != "-p" && "$flag" != "-l" ]]; then
         echo ""
-        echo "Installed Packages:"
-        echo "==================="
-        locals=`pacman -Qs $pkg`
-        if [ "$locals" == "" ]; then
-          echo "Not Found"
-        else
-          echo "$locals"
-        fi
+        echo "Arch User Repository:"
+        echo "====================="
+        aur_search $pkg
+      fi
+
+      echo ""
+      echo "Installed Packages:"
+      echo "==================="
+      locals=`pacman -Qs $pkg`
+      if [ "$locals" == "" ]; then
+        echo "Not Found"
+      else
+        echo "$locals"
+      fi
+    ;;
+    list)
+      case $2 in
+        aur)
+          echo "AUR Installed Packages"
+          echo -n "======================"
+          ll $AUR_HOME | awk '{ print $9}'
+        ;;
+        installed)
+          echo "Explicitly Installed Packages"
+          echo "============================="
+          pacman -Qen
+        ;;
+        orphans)
+          echo "Orphaned Packages"
+          echo "================="
+          pacman -Qtdq
+        ;;
+        *)
+          echo "Usage: pac list [aur|installed|orphans]"
+        ;;
+      esac
     ;;
     *)
     echo "Usage: pac [update|install|remove|search] [package_name]"
     ;;
   esac
-}
-
-AUR_HOME="$HOME/aur"
-
-function aur() {
-  case $1 in
-    update)
-      if [ "$2" == "" ]; then
-        echo "Updating all AUR packages..."
-      else
-        echo "Updating $2 from AUR..."
-      fi
-      aur_update $2
-      return 0
-    ;;
-    install)
-      echo "Installing $2 from AUR..."
-      if [ "$2" != "" ]; then
-        aur_install $2
-        return 0
-      fi
-    ;;
-    remove)
-      echo "Removing $2..."
-      if [ "$2" != "" ]; then
-        aur_remove $2
-        return 0
-      fi
-    ;;
-    search)
-      if [ "$2" != "" ]; then
-        aur_search $2
-        return 0
-      fi
-    ;;
-    list)
-      echo "Installed AUR Packages"
-      ls -l $AUR_HOME
-      return 0
-    ;;
-  esac
-  echo "Usage: aur [update|install|remove|search] [package_name]"
 }
 
 function aur_update() {
@@ -165,18 +168,6 @@ function aur_install() {
   pushd $AUR_HOME/$1 > /dev/null
   makepkg -si
   popd > /dev/null
-}
-
-function aur_remove() {
-  if [ "$1" == "" ]; then
-    echo "No package specified for removal"
-    return 1
-  fi
-  sudo pacman -R $1
-  if [ "$?" == "0" ]; then
-    rm -rf "$AUR_HOME/$1"
-  fi
-  echo "Deleted $AUR_HOME/$1"
 }
 
 function aur_version() {
