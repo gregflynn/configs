@@ -16,7 +16,6 @@ function dotsan () {
             git pull
             bash setup.sh
             # call tilix here to test the new version
-            tilix
             popd > /dev/null
         ;;
         version)
