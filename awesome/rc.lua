@@ -508,6 +508,11 @@ clientkeys = gears.table.join(
             c.maximized_vertical = false
             c.maximized_horizontal = false
             c.maximized = not c.maximized
+            if c.maximized then
+              awful.titlebar.hide(c)
+            elseif c.floating then
+              awful.titlebar.show(c)
+            end
             c:raise()
         end ,
         {description = "(un)maximize", group = "client"})
