@@ -61,20 +61,12 @@ awful.layout.layouts = {
   awful.layout.suit.fair.horizontal
 }
 
--- {{{ Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-  { "hotkeys", function() return false, hotkeys_popup.show_help end},
-  { "manual", terminal .. " -e man awesome" },
-  { "edit config", editor_cmd .. " " .. awesome.conffile },
-  { "restart", awesome.restart },
-  { "quit", function() awesome.quit() end}
-}
-
 mymainmenu = awful.menu({
   items = {
-    {"awesome", myawesomemenu, beautiful.awesome_icon },
-    {"open terminal", terminal}
+    {"albert", "albert"},
+    {"tilix", terminal},
+    {"restart", awesome.restart},
+    {"quit", awesome.quit}
   }
 })
 
@@ -128,7 +120,7 @@ local volume = lain.widget.pulsebar {
   }
 }
 
-volume.bar.paddings = 5
+volume.bar.paddings = dpi(5)
 
 volume.bar:buttons(awful.util.table.join(
   awful.button({}, 1, function() -- left click
