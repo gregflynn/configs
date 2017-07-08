@@ -327,7 +327,7 @@ globalkeys = gears.table.join(
   awful.key({ modkey,           }, "Escape", awful.tag.history.restore,
             {description = "go back", group = "tag"}),
   awful.key({ modkey, "Control" }, "l", function ()
-    awful.spawn("i3lock -c 3d3d3d")
+    awful.spawn("i3lock -c 1B1D1E")
   end),
 
   awful.key({ altkey, "Control" }, "]", function ()
