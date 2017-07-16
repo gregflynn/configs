@@ -10,6 +10,9 @@ xinput --set-prop 11 283 1
 # setup lightdm locking after 15 minutes
 xautolock -time 15 -locker "i3lock -c 1B1D1E" &
 
+# disable gpu LED on desktop
+nvidia-settings --assign GPULogoBrightness=0
+
 # startup applications
 albert&
 nm-applet&
