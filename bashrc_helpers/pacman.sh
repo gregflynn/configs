@@ -3,7 +3,6 @@ AUR_HOME="$HOME/aur"
 
 function pac() {
   if [[ "$2" == "-"* ]]; then
-    # skip searching the AUR
     flag="$2"
     pkgs="${@:3}"
     pkg="$3"
@@ -26,6 +25,11 @@ function pac() {
       fi
     ;;
     install)
+      if [[ "$pkg" == "" ]]; then
+        echo "Usage: pac install [-aur] pkg1 [pkg2...]"
+        return
+      fi
+
       if [[ "$flag" == "-aur" ]]; then
         echo "Installing $pkg from the AUR..."
         aur_install $pkg
@@ -35,6 +39,11 @@ function pac() {
       fi
     ;;
     remove)
+    if [[ "$pkg" == "" ]]; then
+        echo "Usage: pac remove pkg1 [pkg2...]"
+        return
+      fi
+
       echo "Removing $pkgs..."
       sudo pacman -Rs $pkgs
       if [[ "$?" == "0" ]]; then
