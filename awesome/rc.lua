@@ -628,6 +628,9 @@ awful.rules.rules = {
     properties = {
       floating = true,
       border_width = 2,
+      maximized_vertical = false,
+      maximized_horizontal = false,
+      maximized = false
     }
   },
   {
