@@ -39,7 +39,7 @@ function pac() {
       fi
     ;;
     remove)
-    if [[ "$pkg" == "" ]]; then
+      if [[ "$pkg" == "" ]]; then
         echo "Usage: pac remove pkg1 [pkg2...]"
         return
       fi
@@ -56,6 +56,11 @@ function pac() {
       fi
     ;;
     search)
+      if [[ "$pkg" == "" ]]; then
+        echo "Usage: pac search [-l|-p] pkg1"
+        return
+      fi
+
       if [[ "$flag" != "-l" ]]; then
         echo "Official Repos:"
         echo "==============="
@@ -91,6 +96,11 @@ function pac() {
           echo -n "======================"
           ll $AUR_HOME | awk '{ print $9}'
         ;;
+        all)
+          echo "All Installed Packages"
+          echo -n "======================"
+          pacman -Q
+        ;;
         installed)
           echo "Explicitly Installed Packages"
           echo "============================="
@@ -102,12 +112,12 @@ function pac() {
           pacman -Qtdq
         ;;
         *)
-          echo "Usage: pac list [aur|installed|orphans]"
+          echo "Usage: pac list [all|aur|installed|orphans]"
         ;;
       esac
     ;;
     *)
-    echo "Usage: pac [update|install|remove|search] [package_name]"
+    echo "Usage: pac [update|install|remove|search|list] [package_name]"
     ;;
   esac
 }
