@@ -608,7 +608,8 @@ awful.rules.rules = {
         "lxappearance",
         "blueberry",
         "thunar",
-        "vlc"
+        "vlc",
+        "ristretto"
       },
       class = {
         "Steam",
