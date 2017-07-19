@@ -143,7 +143,28 @@ volume.bar:buttons(awful.util.table.join(
 local volumebg = wibox.container.background(volume.bar, beautiful.border_focus, gears.shape.rectangle)
 local volumewidget = wibox.container.margin(volumebg, dpi(7), dpi(7), dpi(5), dpi(5))
 
-local mybattery = lain.widget.bat({
+local myweather = lain.widget.weather {
+  city_id = '4930956',
+  units = 'imperial',
+  utc_offset = function()
+    return -5
+  end,
+  settings = function()
+    current_temp = math.floor(weather_now["main"]["temp"])
+    current_humidity = math.floor(weather_now["main"]["humidity"])
+    widget:set_markup(string.format(' %d°F %d%% ', current_temp, current_humidity))
+  end,
+  notification_text_fun = function(wn)
+    local day = os.date("%a %d", wn["dt"])
+    local tmin = math.floor(wn["temp"]["min"])
+    local tmax = math.floor(wn["temp"]["max"])
+    local desc = wn["weather"][1]["description"]
+
+    return string.format('<b>%s</b>: (%d/%d) %s', day, tmax, tmin, desc)
+  end
+}
+
+local mybattery = lain.widget.bat {
   settings = function()
     -- check if we even get battery info back
     if bat_now.perc == "N/A" then
@@ -157,12 +178,15 @@ local mybattery = lain.widget.bat({
     local colorStart = '<span color="'..color..'">'
     widget:set_markup(colorStart..bat_now.perc.."% </span>")
   end
-})
+}
 
 local mytemp = lain.widget.temp {
   settings = function ()
-    local colorStart = ' <span color="'..beautiful.fg_minimize..'">'
-    widget:set_markup(colorStart..coretemp_now.."°C</span> ")
+    widget:set_markup(string.format(' <span color="%s">🌡️ %s°C</span> ', beautiful.fg_minimize, coretemp_now))
+
+    -- awful.spawn.easy_async("sensors | grep 'Package id 0:' | awk '{ print $4 }' | sed 's/+//g'", function(stdout, stderr, reason, exit_code)
+    --   widget:set_markup(string.format(' <span color="%s">🌡️ %s°C</span> ', beautiful.fg_minimize, stdout))
+    -- end)
   end,
   tempfile = "/sys/class/thermal/thermal_zone1/temp"
 }
@@ -181,9 +205,7 @@ local cpubox = wibox.container.margin(cpubg, dpi(7), dpi(7), dpi(5), dpi(5))
 
 local mymem = lain.widget.mem {
   settings = function()
-    local colorStart = ' <span color="'..beautiful.fg_minimize..'">'
-    local used = math.floor((tonumber(mem_now.used) / 1024) * 10 + 0.5) / 10
-    widget:set_markup(colorStart..used.." GB "..mem_now.perc.."% </span>")
+    widget:set_markup(string.format(' <span color="%s">🐏 %d%%</span> ', beautiful.fg_minimize, mem_now.perc))
   end
 }
 
@@ -192,7 +214,7 @@ local diskusage = lain.widget.fs {
   settings = function()
     local colorStart = ' <span color="'..beautiful.fg_normal..'">'
     local pct = fs_info['/ used_p']
-    widget:set_markup(colorStart..fs_now.used_gb..' GB '..pct..'%</span> ')
+    widget:set_markup(string.format(' 💾 %d%% ', pct))
   end
 }
 
@@ -310,6 +332,8 @@ awful.screen.connect_for_each_screen(function(s)
       mybattery.widget,
       wibox.container.margin(wibox.widget.systray(), dpi(4), dpi(4), dpi(4), dpi(4)),
       volumewidget,
+      myweather.icon,
+      myweather.widget,
       mytextclock,
       wibox.container.margin(s.mylayoutbox, dpi(0), dpi(4), dpi(4), dpi(4))
     }
