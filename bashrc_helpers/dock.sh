@@ -9,7 +9,11 @@ function dock() {
             docker-compose up --build "${@:2}"
         ;;
         down)
-            docker-compose down "${@:2}"
+            if [[ "${@:2}" == "" ]]; then
+                docker-compose down
+            else
+                docker-compose stop "${@:2}"
+            fi
         ;;
         bash)
             docker-compose exec "$2" bash
