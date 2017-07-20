@@ -82,6 +82,16 @@ menubar.utils.terminal = terminal
 mytextclock = wibox.widget.textclock(
   '<span color="'..beautiful.fg_minimize..'"> %a %b %e %l:%M%P </span>'
 )
+local calendar = lain.widget.calendar {
+  attach_to = { mytextclock },
+  icons = ' ',
+  notification_preset = {
+    font = 'Hack',
+    fg = beautiful.fg_normal,
+    bg = beautiful.bg_normal
+  },
+  cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always"
+}
 
 local bright_notification = nil
 
@@ -160,7 +170,9 @@ local myweather = lain.widget.weather {
     local tmax = math.floor(wn["temp"]["max"])
     local desc = wn["weather"][1]["description"]
 
-    return string.format('<b>%s</b>: (%d/%d) %s', day, tmax, tmin, desc)
+    return string.format(
+      '<b>%s</b>: <span color="%s">%d</span>/<span color="%s">%d</span> %s',
+      day, beautiful.fg_urgent, tmax, beautiful.fg_minimize, tmin, desc)
   end
 }
 
@@ -172,24 +184,21 @@ local mybattery = lain.widget.bat {
     end
 
     local color = beautiful.fg_focus
+    local icon = "🔌"
+
     if bat_now.status == "Discharging" then
       color = beautiful.fg_urgent
+      icon = "🔋"
     end
-    local colorStart = '<span color="'..color..'">'
-    widget:set_markup(colorStart..bat_now.perc.."% </span>")
+  
+    widget:set_markup(string.format(' <span color="%s">%s %s%%</span> ', color, icon, bat_now.perc))
   end
 }
 
-local mytemp = lain.widget.temp {
-  settings = function ()
-    widget:set_markup(string.format(' <span color="%s">🌡️ %s°C</span> ', beautiful.fg_minimize, coretemp_now))
-
-    -- awful.spawn.easy_async("sensors | grep 'Package id 0:' | awk '{ print $4 }' | sed 's/+//g'", function(stdout, stderr, reason, exit_code)
-    --   widget:set_markup(string.format(' <span color="%s">🌡️ %s°C</span> ', beautiful.fg_minimize, stdout))
-    -- end)
-  end,
-  tempfile = "/sys/class/thermal/thermal_zone1/temp"
-}
+local mytemp = awful.widget.watch('sensors', 15, function(widget, stdout)
+  local package0 = stdout:match("Package id 0:  %p(%d%d%p%d)")
+  widget:set_markup(string.format(' <span color="%s">🌡️ %s°C</span> ', beautiful.fg_minimize, package0))
+end)
 
 -- CPU flamegraph
 cpuwidget = wibox.widget.graph()
@@ -212,10 +221,13 @@ local mymem = lain.widget.mem {
 local diskusage = lain.widget.fs {
   notify = "off",
   settings = function()
-    local colorStart = ' <span color="'..beautiful.fg_normal..'">'
-    local pct = fs_info['/ used_p']
-    widget:set_markup(string.format(' 💾 %d%% ', pct))
-  end
+    widget:set_markup(string.format(' 💾 %d%% ', fs_info['/ used_p']))
+  end,
+  notification_preset = {
+    font = 'Hack',
+    fg   = beautiful.fg_normal,
+    bg   = beautiful.bg_normal
+}
 }
 
 -- Create a wibox for each screen and add it
