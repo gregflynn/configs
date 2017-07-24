@@ -23,6 +23,11 @@ function dock() {
         ;;
         purge)
             case $2 in
+                all)
+                    dock purge containers
+                    dock purge images
+                    dock purge volumes
+                ;;
                 containers)
                     docker stop $(docker ps -a -q) > /dev/null 2>&1
                     docker rm $(docker ps -a -f status=exited -q)
