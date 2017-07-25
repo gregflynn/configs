@@ -628,10 +628,14 @@ awful.rules.rules = {
   },
   {
     rule = { name = "Albert" },
-    properties = { placement = function (c)
-      awful.placement.centered(c, { offset = {y = -350} })
-    end}
-  }, {
+    properties = {
+      placement = function (c)
+        awful.placement.centered(c, { offset = {y = -350} })
+      end,
+      titlebars_enabled = false,
+    }
+  },
+  {
     rule_any = {
       instance = {
         "slack",
@@ -739,7 +743,7 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 client.connect_signal("property::floating", function (c)
-  if c.floating then
+  if c.floating and c.titlebars_enabled then
     awful.titlebar.show(c)
   else
     awful.titlebar.hide(c)
