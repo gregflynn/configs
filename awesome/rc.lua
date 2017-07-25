@@ -84,7 +84,7 @@ mytextclock = wibox.widget.textclock(
 )
 local calendar = lain.widget.calendar {
   attach_to = { mytextclock },
-  icons = ' ',
+  icon = '',
   notification_preset = {
     font = 'Hack',
     fg = beautiful.fg_normal,
@@ -154,11 +154,8 @@ local volumebg = wibox.container.background(volume.bar, beautiful.border_focus, 
 local volumewidget = wibox.container.margin(volumebg, dpi(7), dpi(7), dpi(5), dpi(5))
 
 local myweather = lain.widget.weather {
-  city_id = '4930956',
+  city_id = 4930956,
   units = 'imperial',
-  utc_offset = function()
-    return -5
-  end,
   settings = function()
     current_temp = math.floor(weather_now["main"]["temp"])
     current_humidity = math.floor(weather_now["main"]["humidity"])
@@ -640,12 +637,13 @@ awful.rules.rules = {
         "slack",
         "google-chrome",
         "pavucontrol",
-        "pcmanfm",
         "lxappearance",
         "blueberry",
         "thunar",
         "vlc",
-        "ristretto"
+        "ristretto",
+        "gimp",
+        'mousepad'
       },
       class = {
         "Steam",
