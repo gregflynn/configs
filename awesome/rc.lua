@@ -79,20 +79,6 @@ mylauncher = awful.widget.launcher({
 menubar.utils.terminal = terminal
 
 -- {{{ Wibar
-mytextclock = wibox.widget.textclock(
-  '<span color="'..beautiful.fg_minimize..'"> %a %b %e %l:%M%P </span>'
-)
-local calendar = lain.widget.calendar {
-  attach_to = { mytextclock },
-  icon = '',
-  notification_preset = {
-    font = 'Hack',
-    fg = beautiful.fg_normal,
-    bg = beautiful.bg_normal
-  },
-  cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always"
-}
-
 local bright_notification = nil
 
 local update_bright = function()
@@ -117,115 +103,6 @@ local update_bright = function()
     end
   end)
 end
-
-local volume = lain.widget.pulsebar {
-  width = dpi(100),
-  notification_preset = {
-    font = "Hack 10"
-  },
-  colors = {
-    background = beautiful.bg_normal,
-    mute = beautiful.fg_urgent,
-    unmute = beautiful.fg_focus
-  }
-}
-
-volume.bar.paddings = dpi(5)
-
-volume.bar:buttons(awful.util.table.join(
-  awful.button({}, 1, function() -- left click
-    awful.spawn("pavucontrol")
-  end),
-  awful.button({}, 3, function() -- right click
-    awful.spawn(string.format("pactl set-sink-mute %d toggle", volume.sink))
-    volume.update()
-  end),
-  awful.button({}, 4, function() -- scroll up
-    awful.spawn(string.format("pactl set-sink-volume %d +1%%", volume.sink))
-    volume.update()
-  end),
-  awful.button({}, 5, function() -- scroll down
-    awful.spawn(string.format("pactl set-sink-volume %d -1%%", volume.sink))
-    volume.update()
-  end)
-))
-
-local volumebg = wibox.container.background(volume.bar, beautiful.border_focus, gears.shape.rectangle)
-local volumewidget = wibox.container.margin(volumebg, dpi(7), dpi(7), dpi(5), dpi(5))
-
-local myweather = lain.widget.weather {
-  city_id = 4930956,
-  units = 'imperial',
-  settings = function()
-    current_temp = math.floor(weather_now["main"]["temp"])
-    current_humidity = math.floor(weather_now["main"]["humidity"])
-    widget:set_markup(string.format(' %d°F %d%% ', current_temp, current_humidity))
-  end,
-  notification_text_fun = function(wn)
-    local day = os.date("%a %d", wn["dt"])
-    local tmin = math.floor(wn["temp"]["min"])
-    local tmax = math.floor(wn["temp"]["max"])
-    local desc = wn["weather"][1]["description"]
-
-    return string.format(
-      '<b>%s</b>: <span color="%s">%d</span>/<span color="%s">%d</span> %s',
-      day, beautiful.fg_urgent, tmax, beautiful.fg_minimize, tmin, desc)
-  end
-}
-
-local mybattery = lain.widget.bat {
-  settings = function()
-    -- check if we even get battery info back
-    if bat_now.perc == "N/A" then
-      return
-    end
-
-    local color = beautiful.fg_focus
-    local icon = "🔌"
-
-    if bat_now.status == "Discharging" then
-      color = beautiful.fg_urgent
-      icon = "🔋"
-    end
-  
-    widget:set_markup(string.format(' <span color="%s">%s %s%%</span> ', color, icon, bat_now.perc))
-  end
-}
-
-local mytemp = awful.widget.watch('sensors', 15, function(widget, stdout)
-  local package0 = stdout:match("Package id 0:  %p(%d%d%p%d)")
-  widget:set_markup(string.format(' <span color="%s">🌡️ %s°C</span> ', beautiful.fg_minimize, package0))
-end)
-
--- CPU flamegraph
-cpuwidget = wibox.widget.graph()
-cpuwidget:set_width(dpi(50))
-cpuwidget:set_background_color(beautiful.bg_normal)
-cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = {
-    { 0, beautiful.fg_urgent },
-    { 1, beautiful.fg_focus }
-}})
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
-local cpubg = wibox.container.background(cpuwidget, beautiful.border_focus, gears.shape.rectangle)
-local cpubox = wibox.container.margin(cpubg, dpi(7), dpi(7), dpi(5), dpi(5))
-
-local mymem = lain.widget.mem {
-  settings = function()
-    widget:set_markup(string.format(' <span color="%s">🐏 %d%%</span> ', beautiful.fg_minimize, mem_now.perc))
-  end
-}
-
-local diskusage = lain.widget.fs {
-  notify = "off",
-  settings = function()
-    widget:set_markup(string.format(' 💾 %d%% ', fs_info['/ used_p']))
-  end,
-  notification_preset = {
-    font = 'Hack',
-    fg   = beautiful.fg_normal,
-    bg   = beautiful.bg_normal
-}
-}
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -279,6 +156,125 @@ local function list_update(w, buttons, label, data, objects)
   w:set_max_widget_size(dpi(200))
 end
 
+--
+-- Widgets
+--
+local diskusage = lain.widget.fs {
+  notify = "off",
+  settings = function()
+    widget:set_markup(string.format('💾 %d%%', fs_info['/ used_p']))
+  end,
+  notification_preset = {
+    font = 'Hack',
+    fg   = beautiful.fg_normal,
+    bg   = beautiful.bg_normal
+  }
+}
+
+local memory = lain.widget.mem {
+  settings = function()
+    widget:set_markup(string.format('<span color="%s">🐏 %d%%</span>', beautiful.fg_minimize, mem_now.perc))
+  end
+}
+
+local cpuwidget = wibox.widget.graph()
+cpuwidget:set_width(dpi(50))
+cpuwidget:set_background_color(beautiful.bg_normal)
+cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = {
+    { 0, beautiful.fg_urgent },
+    { 1, beautiful.fg_focus }
+}})
+vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+local cpu_graph_widget = wibox.container.background(cpuwidget, beautiful.border_focus, gears.shape.rectangle)
+
+local cputemp = awful.widget.watch('sensors', 15, function(widget, stdout)
+  local package0 = stdout:match("Package id 0:  %p(%d%d%p%d)")
+  widget:set_markup(string.format('<span color="%s">🌡️ %s°C</span>', beautiful.fg_minimize, package0))
+end)
+
+local battery = lain.widget.bat {
+  settings = function()
+    if bat_now.perc == "N/A" then
+      return
+    end
+
+    local color = beautiful.fg_focus
+    local icon = "🔌"
+
+    if bat_now.status == "Discharging" then
+      color = beautiful.fg_urgent
+      icon = "🔋"
+    end
+  
+    widget:set_markup(string.format('<span color="%s">%s %s%%</span>', color, icon, bat_now.perc))
+  end
+}
+
+local volume = lain.widget.pulsebar {
+  width = dpi(100),
+  notification_preset = {
+    font = "Hack 10"
+  },
+  colors = {
+    background = beautiful.bg_normal,
+    mute = beautiful.fg_urgent,
+    unmute = beautiful.fg_focus
+  }
+}
+volume.bar.paddings = dpi(5)
+volume.bar:buttons(awful.util.table.join(
+  awful.button({}, 1, function() -- left click
+    awful.spawn("pavucontrol")
+  end),
+  awful.button({}, 3, function() -- right click
+    awful.spawn(string.format("pactl set-sink-mute %d toggle", volume.sink))
+    volume.update()
+  end),
+  awful.button({}, 4, function() -- scroll up
+    awful.spawn(string.format("pactl set-sink-volume %d +1%%", volume.sink))
+    volume.update()
+  end),
+  awful.button({}, 5, function() -- scroll down
+    awful.spawn(string.format("pactl set-sink-volume %d -1%%", volume.sink))
+    volume.update()
+  end)
+))
+local volume_widget = wibox.container.background(volume.bar, beautiful.border_focus, gears.shape.rectangle)
+
+local weather = lain.widget.weather {
+  city_id = 4930956,
+  units = 'imperial',
+  settings = function()
+    current_temp = math.floor(weather_now["main"]["temp"])
+    current_humidity = math.floor(weather_now["main"]["humidity"])
+    widget:set_markup(string.format('%d°F %d%%', current_temp, current_humidity))
+  end,
+  notification_text_fun = function(wn)
+    local day = os.date("%a %d", wn["dt"])
+    local tmin = math.floor(wn["temp"]["min"])
+    local tmax = math.floor(wn["temp"]["max"])
+    local desc = wn["weather"][1]["description"]
+
+    return string.format(
+      '<b>%s</b>: <span color="%s">%d</span>/<span color="%s">%d</span> %s',
+      day, beautiful.fg_urgent, tmax, beautiful.fg_minimize, tmin, desc)
+  end
+}
+
+local clock = wibox.widget.textclock(
+  '<span color="'..beautiful.fg_minimize..'">%a %b %e %l:%M%P</span>'
+)
+lain.widget.calendar {
+  attach_to = { clock },
+  icon = '',
+  notification_preset = {
+    font = 'Hack',
+    fg = beautiful.fg_normal,
+    bg = beautiful.bg_normal
+  },
+  cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always"
+}
+
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
   set_wallpaper(s)
@@ -298,8 +294,8 @@ awful.screen.connect_for_each_screen(function(s)
 
   -- Create an imagebox widget which will contains an icon indicating which layout we're using.
   -- We need one layoutbox per screen.
-  s.mylayoutbox = awful.widget.layoutbox(s)
-  s.mylayoutbox:buttons(gears.table.join(
+  s.layoutbox = awful.widget.layoutbox(s)
+  s.layoutbox:buttons(gears.table.join(
     awful.button({ }, 1, function () awful.layout.inc( 1) end),
     awful.button({ }, 3, function () awful.layout.inc(-1) end),
     awful.button({ }, 4, function () awful.layout.inc( 1) end),
@@ -320,7 +316,7 @@ awful.screen.connect_for_each_screen(function(s)
   s.mywibox = awful.wibar {
     position = "top",
     screen = s,
-    height = dpi(25)
+    height = dpi(24)
   }
 
   -- Add widgets to the wibox
@@ -334,17 +330,18 @@ awful.screen.connect_for_each_screen(function(s)
     wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      diskusage,
-      mymem,
-      cpubox,
-      mytemp,
-      mybattery.widget,
-      wibox.container.margin(wibox.widget.systray(), dpi(4), dpi(4), dpi(4), dpi(4)),
-      volumewidget,
-      myweather.icon,
-      myweather.widget,
-      mytextclock,
-      wibox.container.margin(s.mylayoutbox, dpi(0), dpi(4), dpi(4), dpi(4))
+      wibox.container.margin(diskusage.widget,       dpi(0), dpi(8), dpi(4), dpi(4)),
+      wibox.container.margin(memory.widget,          dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(cpu_graph_widget,       dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(cputemp,                dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(battery.widget,         dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(wibox.widget.systray(), dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(volume_widget,          dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(weather.icon,           dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(weather.widget,         dpi(0), dpi(8), dpi(4), dpi(4)),
+      wibox.container.margin(clock,                  dpi(0), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(s.layoutbox,            dpi(0), dpi(4), dpi(4), dpi(4))
+      --                                              left    right   top     bottom
     }
   }
 end)
@@ -521,7 +518,7 @@ clientkeys = gears.table.join(
     awful.key({ modkey,           }, "q",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
     awful.key({ modkey, }, "a", function(c)
-      awful.client.floating.toggle(c)
+      c.floating = not c.floating
       c.maximized_vertical = false
       c.maximized_horizontal = false
     end, {description = "toggle floating", group = "client"}),
@@ -620,10 +617,12 @@ awful.rules.rules = {
       buttons = clientbuttons,
       screen = awful.screen.preferred,
       placement = awful.placement.centered,
-      titlebars_enabled = false,
-      border_width = 0,
+      titlebars_enabled = true,
       maximized_vertical = false,
-      maximized_horizontal = false
+      maximized_horizontal = false,
+      maximized = false,
+      floating = true,
+      border_width = 2
     }
   },
   {
@@ -632,51 +631,24 @@ awful.rules.rules = {
       placement = function (c)
         awful.placement.centered(c, { offset = {y = -350} })
       end,
-      titlebars_enabled = false,
+      border_width = 0,
+      floating = true
     }
   },
   {
-    rule_any = {
-      instance = {
-        "slack",
-        "google-chrome",
-        "pavucontrol",
-        "lxappearance",
-        "blueberry",
-        "thunar",
-        "vlc",
-        "ristretto",
-        "gimp",
-        'mousepad'
-      },
-      class = {
-        "Steam",
-        "Enpass",
-        "Arandr",
-        "Wpa_gui",
-      },
-      name = {
-        "Event Tester",  -- xev.
-        "pgAdmin 4"
-      },
-      role = {
-        "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
-      }
-    },
+    rule = { instance = "tilix" },
     properties = {
-      floating = true,
-      border_width = 2,
-      maximized_vertical = false,
-      maximized_horizontal = false,
-      maximized = false
+      border_width = 0,
+      floating = false
     }
   },
   {
-    rule_any = {
-      type = { "normal", "dialog" }
-    },
-    properties = { titlebars_enabled = true }
-  },
+    rule = { instance = "code" },
+    properties = {
+      border_width = 0,
+      floating = false
+    }
+  }
 }
 
 -- {{{ Signals
@@ -725,6 +697,7 @@ client.connect_signal("request::titlebars", function(c)
       layout  = wibox.layout.flex.horizontal
     },
     { -- Right
+      awful.titlebar.widget.minimizebutton(c),
       awful.titlebar.widget.maximizedbutton(c),
       awful.titlebar.widget.closebutton    (c),
       layout = wibox.layout.fixed.horizontal()
@@ -732,9 +705,7 @@ client.connect_signal("request::titlebars", function(c)
     layout = wibox.layout.align.horizontal
   }
 
-  if c.floating then
-    awful.titlebar.show(c)
-  else
+  if not c.floating then
     awful.titlebar.hide(c)
   end
 
@@ -743,7 +714,13 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 client.connect_signal("property::floating", function (c)
-  if c.floating and c.titlebars_enabled then
+  -- catch for Albert popup window
+  if c.instance == 'albert' and c.type == 'utility' then
+    awful.titlebar.hide(c)
+    return
+  end
+
+  if c.floating then
     awful.titlebar.show(c)
   else
     awful.titlebar.hide(c)
