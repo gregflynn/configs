@@ -334,7 +334,7 @@ awful.screen.connect_for_each_screen(function(s)
       wibox.container.margin(memory.widget,          dpi(0), dpi(4), dpi(4), dpi(4)),
       wibox.container.margin(cpu_graph_widget,       dpi(0), dpi(4), dpi(4), dpi(4)),
       wibox.container.margin(cputemp,                dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(battery.widget,         dpi(4), dpi(4), dpi(4), dpi(4)),
+      wibox.container.margin(battery.widget,         dpi(0), dpi(4), dpi(4), dpi(4)),
       wibox.container.margin(wibox.widget.systray(), dpi(0), dpi(4), dpi(4), dpi(4)),
       wibox.container.margin(volume_widget,          dpi(0), dpi(4), dpi(4), dpi(4)),
       wibox.container.margin(weather.icon,           dpi(0), dpi(4), dpi(4), dpi(4)),
