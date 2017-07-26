@@ -266,7 +266,7 @@ local clock = wibox.widget.textclock(
 )
 lain.widget.calendar {
   attach_to = { clock },
-  icon = '',
+  icons = '',
   notification_preset = {
     font = 'Hack',
     fg = beautiful.fg_normal,
