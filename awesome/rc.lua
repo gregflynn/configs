@@ -636,14 +636,14 @@ awful.rules.rules = {
     }
   },
   {
-    rule = { instance = "tilix" },
+    rule = { instance = "tilix", type = "normal" },
     properties = {
       border_width = 0,
       floating = false
     }
   },
   {
-    rule = { instance = "code" },
+    rule = { instance = "code", type = "normal"  },
     properties = {
       border_width = 0,
       floating = false
