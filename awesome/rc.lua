@@ -192,9 +192,11 @@ local cputemp = awful.widget.watch('sensors', 15, function(widget, stdout)
   widget:set_markup(string.format('<span color="%s">🌡️ %s°C</span>', beautiful.fg_minimize, package0))
 end)
 
+local battery_enabled = true
 local battery = lain.widget.bat {
   settings = function()
     if bat_now.perc == "N/A" then
+      battery_enabled = false
       return
     end
 
@@ -330,17 +332,22 @@ awful.screen.connect_for_each_screen(function(s)
     wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      wibox.container.margin(diskusage.widget,       dpi(0), dpi(8), dpi(4), dpi(4)),
-      wibox.container.margin(memory.widget,          dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(cpu_graph_widget,       dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(cputemp,                dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(battery.widget,         dpi(4), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(wibox.widget.systray(), dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(volume_widget,          dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(weather.icon,           dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(weather.widget,         dpi(0), dpi(8), dpi(4), dpi(4)),
-      wibox.container.margin(clock,                  dpi(0), dpi(4), dpi(4), dpi(4)),
-      wibox.container.margin(s.layoutbox,            dpi(0), dpi(4), dpi(4), dpi(4))
+      wibox.container.margin(diskusage.widget,       dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(memory.widget,          dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(cpu_graph_widget,       dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(cputemp,                dpi(0), dpi(10), dpi(4), dpi(4)),
+      (function()
+        if battery_enabled then
+          return wibox.container.margin(battery.widget, dpi(0), dpi(10), dpi(4), dpi(4))
+        else return nil
+        end
+      end)(),
+      wibox.container.margin(wibox.widget.systray(), dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(volume_widget,          dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(weather.icon,           dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(weather.widget,         dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(clock,                  dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(s.layoutbox,            dpi(0), dpi(10), dpi(4), dpi(4))
       --                                              left    right   top     bottom
     }
   }
