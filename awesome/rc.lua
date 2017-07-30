@@ -1,21 +1,15 @@
--- Standard awesome library
-local gears = require("gears")
-local awful = require("awful")
-require("awful.autofocus")
--- Widget and layout library
-local wibox = require("wibox")
--- Theme handling library
+local gears     = require("gears")
+local awful     = require("awful")
+local wibox     = require("wibox")
 local beautiful = require("beautiful")
--- Notification library
-local naughty = require("naughty")
-local menubar = require("menubar")
-local hotkeys_popup = require("awful.hotkeys_popup").widget
+local naughty   = require("naughty")
+local menubar   = require("menubar")
+local lain      = require("lain")
 
-local vicious = require("vicious")
-local lain = require("lain")
+require("awful.autofocus")
+beautiful.init(os.getenv("HOME").."/.config/awesome/theme.lua")
 
--- Enable VIM help for hotkeys widget when client with matching name is opened:
-require("awful.hotkeys_popup.keys.vim")
+local dpi = beautiful.xresources.apply_dpi
 
 -- {{{ Error handling
 if awesome.startup_errors then
@@ -38,16 +32,9 @@ do
   end)
 end
 
-local home = os.getenv("HOME")
-beautiful.init(home.."/.config/awesome/theme.lua")
 terminal = "tilix"
-editor = "vim"
-editor_cmd = terminal .. " -e " .. editor
 modkey = "Mod4"
 altkey = "Mod1"
-
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -146,136 +133,38 @@ local function set_wallpaper(s)
   end
 end
 
+-- Make Tab go down a menu
+awful.menu.menu_keys.down = { "Down", "j", "Tab" }
+
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
--- Set tasklist items to set width of 200
-local common = require("awful.widget.common")
 local function list_update(w, buttons, label, data, objects)
-  common.list_update(w, buttons, label, data, objects)
+  awful.widget.common.list_update(w, buttons, label, data, objects)
+  -- Set tasklist items to set width of 200
   w:set_max_widget_size(dpi(200))
 end
 
---
--- Widgets
---
-local diskusage = lain.widget.fs {
-  notify = "off",
-  settings = function()
-    widget:set_markup(string.format('💾 %d%%', fs_info['/ used_p']))
-  end,
-  notification_preset = {
-    font = 'Hack',
-    fg   = beautiful.fg_normal,
-    bg   = beautiful.bg_normal
-  }
-}
+function trim(s)
+   return s:match( "^%s*(.-)%s*$" )
+end
 
-local memory = lain.widget.mem {
-  settings = function()
-    widget:set_markup(string.format('<span color="%s">🐏 %d%%</span>', beautiful.fg_minimize, mem_now.perc))
-  end
-}
-
-local cpuwidget = wibox.widget.graph()
-cpuwidget:set_width(dpi(50))
-cpuwidget:set_background_color(beautiful.bg_normal)
-cpuwidget:set_color({ type = "linear", from = { 0, 0 }, to = { 0, 20 }, stops = {
-    { 0, beautiful.fg_urgent },
-    { 1, beautiful.fg_focus }
-}})
-vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
-local cpu_graph_widget = wibox.container.background(cpuwidget, beautiful.border_focus, gears.shape.rectangle)
-
-local cputemp = awful.widget.watch('sensors', 15, function(widget, stdout)
-  local package0 = stdout:match("Package id 0:  %p(%d%d%p%d)")
-  widget:set_markup(string.format('<span color="%s">🌡️ %s°C</span>', beautiful.fg_minimize, package0))
-end)
-
-local battery_enabled = true
-local battery = lain.widget.bat {
-  settings = function()
-    if bat_now.perc == "N/A" then
-      battery_enabled = false
-      return
+function trunc(str, max_len)
+  if string.len(str) > max_len then
+    local feat_loc   = str:find("[%(%[]")
+    if feat_loc and feat_loc <= max_len then
+      return trim(str:sub(1, feat_loc - 1))
     end
-
-    local color = beautiful.fg_focus
-    local icon = "🔌"
-
-    if bat_now.status == "Discharging" then
-      color = beautiful.fg_urgent
-      icon = "🔋"
-    end
-  
-    widget:set_markup(string.format('<span color="%s">%s %s%%</span>', color, icon, bat_now.perc))
+    return string.sub(str, 0, max_len - 3)..'...'
   end
-}
+  return str
+end
 
-local volume = lain.widget.pulsebar {
-  width = dpi(100),
-  notification_preset = {
-    font = "Hack 10"
-  },
-  colors = {
-    background = beautiful.bg_normal,
-    mute = beautiful.fg_urgent,
-    unmute = beautiful.fg_focus
-  }
-}
-volume.bar.paddings = dpi(5)
-volume.bar:buttons(awful.util.table.join(
-  awful.button({}, 1, function() -- left click
-    awful.spawn("pavucontrol")
-  end),
-  awful.button({}, 3, function() -- right click
-    awful.spawn(string.format("pactl set-sink-mute %d toggle", volume.sink))
-    volume.update()
-  end),
-  awful.button({}, 4, function() -- scroll up
-    awful.spawn(string.format("pactl set-sink-volume %d +1%%", volume.sink))
-    volume.update()
-  end),
-  awful.button({}, 5, function() -- scroll down
-    awful.spawn(string.format("pactl set-sink-volume %d -1%%", volume.sink))
-    volume.update()
-  end)
-))
-local volume_widget = wibox.container.background(volume.bar, beautiful.border_focus, gears.shape.rectangle)
-
-local weather = lain.widget.weather {
-  city_id = 4930956,
-  units = 'imperial',
-  settings = function()
-    current_temp = math.floor(weather_now["main"]["temp"])
-    current_humidity = math.floor(weather_now["main"]["humidity"])
-    widget:set_markup(string.format('%d°F %d%%', current_temp, current_humidity))
-  end,
-  notification_text_fun = function(wn)
-    local day = os.date("%a %d", wn["dt"])
-    local tmin = math.floor(wn["temp"]["min"])
-    local tmax = math.floor(wn["temp"]["max"])
-    local desc = wn["weather"][1]["description"]
-
-    return string.format(
-      '<b>%s</b>: <span color="%s">%d</span>/<span color="%s">%d</span> %s',
-      day, beautiful.fg_urgent, tmax, beautiful.fg_minimize, tmin, desc)
-  end
-}
-
-local clock = wibox.widget.textclock(
-  '<span color="'..beautiful.fg_minimize..'">%a %b %e %l:%M%P</span>'
-)
-lain.widget.calendar {
-  attach_to = { clock },
-  icons = '',
-  notification_preset = {
-    font = 'Hack',
-    fg = beautiful.fg_normal,
-    bg = beautiful.bg_normal
-  },
-  cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always"
-}
+--
+-- Widgets we need references to
+--
+local battery = require('widgets/battery')
+local weather = require('widgets/weather')
 
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
@@ -332,31 +221,30 @@ awful.screen.connect_for_each_screen(function(s)
     wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      wibox.container.margin(diskusage.widget,       dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(memory.widget,          dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(cpu_graph_widget,       dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(cputemp,                dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/gpmdp").widget,       dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/diskusage").widget,   dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/memory").widget,      dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/cpugraph"),           dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/cputemp"),            dpi(0), dpi(10), dpi(4), dpi(4)),
       (function()
-        if battery_enabled then
+        if battery.battery_enabled then
           return wibox.container.margin(battery.widget, dpi(0), dpi(10), dpi(4), dpi(4))
         else return nil
         end
       end)(),
-      wibox.container.margin(wibox.widget.systray(), dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(volume_widget,          dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(weather.icon,           dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(weather.widget,         dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(clock,                  dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(s.layoutbox,            dpi(0), dpi(10), dpi(4), dpi(4))
-      --                                              left    right   top     bottom
+      wibox.container.margin(wibox.widget.systray(),                dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/volume"),             dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(weather.icon,                          dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(weather.widget,                        dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(require("widgets/clock"),              dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(s.layoutbox,                           dpi(0), dpi(10), dpi(4), dpi(4))
+      --                                                             left    right   top     bottom
     }
   }
 end)
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-  awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
-            {description="show help", group="awesome"}),
   awful.key({ altkey, "Control" }, "Left",   awful.tag.viewprev,
             {description = "view previous", group = "tag"}),
   awful.key({ altkey, "Control" }, "Right",  awful.tag.viewnext,
@@ -403,15 +291,18 @@ globalkeys = gears.table.join(
             {description = "focus the previous screen", group = "screen"}),
   awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
             {description = "jump to urgent client", group = "client"}),
-  awful.key({ modkey,           }, "Tab",
-    function ()
-      awful.client.focus.history.previous()
-      if client.focus then
-        client.focus:raise()
-      end
-    end,
-    {description = "go back", group = "client"}
-  ),
+  awful.key({ modkey }, "Tab", function()
+    lain.util.menu_clients_current_tags(
+      {  },
+      {
+        keygrabber = true,
+        coords = {
+          x = (awful.screen.focused().geometry.width / 2) - (beautiful.menu_width / 2),
+          y = (awful.screen.focused().geometry.height / 2) - 350
+        }
+      }
+    )
+  end),
 
   -- Standard program
   awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
@@ -484,8 +375,7 @@ globalkeys = gears.table.join(
 
   -- File manager key
   awful.key({ }, "XF86Explorer", function ()
-    local home = os.getenv("HOME")
-    awful.spawn("xdg-open "..home)
+    awful.spawn("xdg-open "..os.getenv("HOME"))
   end),
 
   -- Window directional movement
@@ -636,7 +526,7 @@ awful.rules.rules = {
     rule = { name = "Albert" },
     properties = {
       placement = function (c)
-        awful.placement.centered(c, { offset = {y = -350} })
+        awful.placement.centered(c, { offset = { y = -350 } })
       end,
       border_width = 0,
       floating = true

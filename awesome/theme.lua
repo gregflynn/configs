@@ -1,10 +1,5 @@
----------------------------
--- Default awesome theme --
----------------------------
-
-local theme_assets = require("beautiful.theme_assets")
-local xresources = require("beautiful.xresources")
-local dpi = xresources.apply_dpi
+local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
@@ -54,8 +49,8 @@ theme.titlebar_fg_focus = theme.fg_minimize
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = themes_path.."default/submenu.png"
-theme.menu_height = dpi(15)
-theme.menu_width  = dpi(100)
+theme.menu_height = dpi(50)
+theme.menu_width  = dpi(500)
 
 -- You can add as many variables as
 -- you wish and access them by using
@@ -117,10 +112,8 @@ theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
 theme.layout_centerhwork = theme.lain_icons .. "centerworkh.png" -- centerwork.horizontal
 
 -- Generate Awesome icon:
-theme.awesome_icon = theme_assets.awesome_icon(
+theme.awesome_icon = beautiful.theme_assets.awesome_icon(
     theme.menu_height, theme.bg_focus, theme.fg_focus
 )
 
 return theme
-
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
