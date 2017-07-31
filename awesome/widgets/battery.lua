@@ -1,6 +1,5 @@
-local lain = require("lain")
+local lain      = require("lain")
 local beautiful = require("beautiful")
-local battery_enabled = true
 
 local battery = {
     battery_enabled = false
