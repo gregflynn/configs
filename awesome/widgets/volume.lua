@@ -1,9 +1,9 @@
-local awful = require("awful")
-local lain = require("lain")
+local awful     = require("awful")
+local lain      = require("lain")
 local beautiful = require("beautiful")
-local wibox = require("wibox")
-local gears = require("gears")
-local dpi = beautiful.xresources.apply_dpi
+local wibox     = require("wibox")
+local gears     = require("gears")
+local dpi       = beautiful.xresources.apply_dpi
 
 local volume = lain.widget.pulsebar {
     width = dpi(100),
@@ -12,8 +12,8 @@ local volume = lain.widget.pulsebar {
     },
     colors = {
         background = beautiful.bg_normal,
-        mute = beautiful.fg_urgent,
-        unmute = beautiful.fg_focus
+        mute       = beautiful.fg_urgent,
+        unmute     = beautiful.fg_focus
     }
 }
 volume.bar.paddings = dpi(5)
@@ -34,5 +34,6 @@ volume.bar:buttons(awful.util.table.join(
         volume.update()
     end)
 ))
+volume.widget = wibox.container.background(volume.bar, beautiful.border_focus, gears.shape.rectangle)
 
-return wibox.container.background(volume.bar, beautiful.border_focus, gears.shape.rectangle)
+return volume
