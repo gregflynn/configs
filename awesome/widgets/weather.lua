@@ -1,4 +1,5 @@
-local lain = require("lain")
+local lain      = require("lain")
+local beautiful = require("beautiful")
 
 local weather = lain.widget.weather {
     city_id = 4930956,
