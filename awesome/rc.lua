@@ -146,7 +146,7 @@ local function list_update(w, buttons, label, data, objects)
 end
 
 function trim(s)
-   return s:match( "^%s*(.-)%s*$" )
+   return s:match("^%s*(.-)%s*$")
 end
 
 function trunc(str, max_len)
