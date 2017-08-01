@@ -1,6 +1,6 @@
 local awful = require("awful")
 
-awful.rules.rules = {
+return {
     {
         rule = { },
         properties = {

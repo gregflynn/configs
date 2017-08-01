@@ -7,7 +7,6 @@ local menubar   = require("menubar")
 local lain      = require("lain")
 
 require("awful.autofocus")
-require("rules")
 
 beautiful.init(os.getenv("HOME").."/.config/awesome/theme.lua")
 
@@ -490,6 +489,8 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
+
+awful.rules.rules = require("rules")
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
