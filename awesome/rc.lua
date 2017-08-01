@@ -7,6 +7,8 @@ local menubar   = require("menubar")
 local lain      = require("lain")
 
 require("awful.autofocus")
+require("rules")
+
 beautiful.init(os.getenv("HOME").."/.config/awesome/theme.lua")
 
 local dpi = beautiful.xresources.apply_dpi
@@ -143,21 +145,6 @@ local function list_update(w, buttons, label, data, objects)
   awful.widget.common.list_update(w, buttons, label, data, objects)
   -- Set tasklist items to set width of 200
   w:set_max_widget_size(dpi(200))
-end
-
-function trim(s)
-   return s:match("^%s*(.-)%s*$")
-end
-
-function trunc(str, max_len)
-  if string.len(str) > max_len then
-    local feat_loc   = str:find("[%(%[]")
-    if feat_loc and feat_loc <= max_len then
-      return trim(str:sub(1, feat_loc - 1))
-    end
-    return string.sub(str, 0, max_len - 3)..'...'
-  end
-  return str
 end
 
 --
@@ -503,51 +490,6 @@ clientbuttons = gears.table.join(
 
 -- Set keys
 root.keys(globalkeys)
-
--- {{{ Rules
-awful.rules.rules = {
-  {
-    rule = { },
-    properties = {
-      focus = awful.client.focus.filter,
-      raise = true,
-      keys = clientkeys,
-      buttons = clientbuttons,
-      screen = awful.screen.preferred,
-      placement = awful.placement.centered,
-      titlebars_enabled = true,
-      maximized_vertical = false,
-      maximized_horizontal = false,
-      maximized = false,
-      floating = true,
-      border_width = 2
-    }
-  },
-  {
-    rule = { name = "Albert" },
-    properties = {
-      placement = function (c)
-        awful.placement.centered(c, { offset = { y = -350 } })
-      end,
-      border_width = 0,
-      floating = true
-    }
-  },
-  {
-    rule = { instance = "tilix", type = "normal" },
-    properties = {
-      border_width = 0,
-      floating = false
-    }
-  },
-  {
-    rule = { instance = "code", type = "normal"  },
-    properties = {
-      border_width = 0,
-      floating = false
-    }
-  }
-}
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.

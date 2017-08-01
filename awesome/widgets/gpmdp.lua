@@ -18,6 +18,21 @@ local gpmdp = {
     current_track = nil
 }
 
+function trim(s)
+   return s:match("^%s*(.-)%s*$"):gsub('&', '&amp;')
+end
+
+function trunc(str, max_len)
+    if string.len(str) > max_len then
+        local feat_loc = str:find("[%(%[]")
+        if feat_loc and feat_loc <= max_len then
+            return trim(str:sub(1, feat_loc - 1))
+        end
+        return string.sub(str, 0, max_len - 3)..'...'
+    end
+    return str
+end
+
 function gpmdp.notification_on()
     local gpm_now = gpmdp.latest
     gpmdp.current_track = gpm_now.title
@@ -57,7 +72,7 @@ gpmdp.widget = awful.widget.watch("pidof 'Google Play Music Desktop Player'", 2,
     local filelines = gpmdp.get_lines(gpmdp.file_location)
     if not filelines then return end -- GPMDP not running?
 
-    gpm_now = { running = stdout ~= '' }
+    local gpm_now = { running = stdout ~= '' }
 
     if not next(filelines) then
         gpm_now.running = false
@@ -73,38 +88,45 @@ gpmdp.widget = awful.widget.watch("pidof 'Google Play Music Desktop Player'", 2,
     end
     gpmdp.latest = gpm_now
 
-    -- customize here
     local text = ""
     local color = beautiful.fg_minimize
 
     if gpm_now.running then
-        if gpm_now.title then
-        local title = trunc(gpm_now.title, 20)
-        local artist = trunc(gpm_now.artist, 20)
+       if gpm_now.title then
+            local title = trim(gpm_now.title)
+            local artist = trim(gpm_now.artist)
+            local album = trim(gpm_now.album)
 
-        text = string.format(
-            "%s %s %s",
-            markup.fg.color(beautiful.fg_focus, '🎵 '..title),
-            markup.italic("by"),
-            markup.fg.color(beautiful.fg_minimize, artist:gsub('&', '&amp;'))
-        )
+            local title_short = trunc(title, 20)
+            local artist_short = trunc(artist, 20)
 
-        gpmdp.notification_preset.text = string.format(
-            "\n%s\n%s\n%s",
-            markup.fg.color(beautiful.fg_focus, markup.big(gpm_now.title)),
-            markup.fg.color(beautiful.fg_minimize, markup.big(gpm_now.artist:gsub('&', '&amp;'))),
-            markup.italic(markup.big(gpm_now.album))
-        )
+            local title_color = beautiful.fg_normal
+            local artist_color = beautiful.fg_normal
+
+            if gpm_now.playing then
+                title_color = beautiful.fg_focus
+                artist_color = beautiful.fg_minimize
+            end
+
+            widget:set_markup(string.format(
+                "%s %s %s",
+                markup.fg.color(title_color, '🎵 '..title_short),
+                markup.italic("by"),
+                markup.fg.color(artist_color, artist_short)
+            ))
+
+            gpmdp.notification_preset.text = string.format(
+                "\n%s\n%s\n%s",
+                markup.fg.color(title_color, markup.big(title)),
+                markup.fg.color(artist_color, markup.big(artist)),
+                markup.italic(markup.big(album))
+            )
+
+            if gpmdp.notify == "on" and gpm_now.title ~= gpmdp.current_track then
+                gpmdp.notification_on()
+            end
         end
-    end
-
-    widget:set_markup(text)
-
-    if gpm_now.playing then
-        if gpmdp.notify == "on" and gpm_now.title ~= gpmdp.current_track then
-        gpmdp.notification_on()
-        end
-    elseif not gpm_now.running then
+    else
         gpmdp.current_track = nil
     end
 end)

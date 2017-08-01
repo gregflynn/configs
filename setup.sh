@@ -53,6 +53,7 @@ dot_link atom/styles.less .atom/styles.less
 mkdir -p ~/.config/awesome
 mkdir -p ~/.config/awesome/widgets
 dot_link awesome/rc.lua .config/awesome/rc.lua
+dot_link awesome/rules.lua .config/awesome/rules.lua
 dot_link awesome/theme.lua .config/awesome/theme.lua
 dot_link awesome/widgets/battery.lua .config/awesome/widgets/battery.lua
 dot_link awesome/widgets/clock.lua .config/awesome/widgets/clock.lua
