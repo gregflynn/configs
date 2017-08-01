@@ -4,7 +4,7 @@
 DOTINSTALL="$HOME/.sanity"
 
 #
-# Fix for terminix sessions, because terminix is dope
+# Fix for tilix sessions, because tilix is dope
 #
 if [ $TERMINIX_ID ] || [ $TILIX_ID ] || [ $VTE_VERSION ]; then
   if [ -e /etc/profile.d/vte-2.91.sh ]; then
@@ -41,7 +41,6 @@ sane_import "prompt"
 sane_import "fabric-completion"
 sane_import "git-completion"
 sane_import "pacman"
-sane_import "atom"
 sane_import "sys"
 sane_import "dock"
 sane_import "dotsan"
