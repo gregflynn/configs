@@ -18,8 +18,16 @@ function dot_link() {
 
 # mirror a dotsan directory in symlinks
 function mirror_link() {
-    # TODO
-    return 0
+    dotsource="$DOTHOME/$1"
+    dstprefix="$HOME/$2"
+    for new_file in $(diff -r $dotsource $dstprefix | grep "Only in $dotsource" | awk '{ print $3$4 }' | sed 's/:/\//g'); do
+        src="$new_file"
+        dst="$dstprefix${src#$dotsource}"
+
+        if [[ -f "$src" ]]; then
+            ln -vfs "$src" "$dst"
+        fi
+    done
 }
 
 dot_link bashrc.sh .bashrc
@@ -31,18 +39,7 @@ dot_link xprofile .xprofile
 # link up awesome configs
 mkdir -p ~/.config/awesome
 mkdir -p ~/.config/awesome/widgets
-dot_link awesome/rc.lua .config/awesome/rc.lua
-dot_link awesome/rules.lua .config/awesome/rules.lua
-dot_link awesome/theme.lua .config/awesome/theme.lua
-dot_link awesome/widgets/battery.lua .config/awesome/widgets/battery.lua
-dot_link awesome/widgets/clock.lua .config/awesome/widgets/clock.lua
-dot_link awesome/widgets/cpugraph.lua .config/awesome/widgets/cpugraph.lua
-dot_link awesome/widgets/cputemp.lua .config/awesome/widgets/cputemp.lua
-dot_link awesome/widgets/diskusage.lua .config/awesome/widgets/diskusage.lua
-dot_link awesome/widgets/gpmdp.lua .config/awesome/widgets/gpmdp.lua
-dot_link awesome/widgets/memory.lua .config/awesome/widgets/memory.lua
-dot_link awesome/widgets/volume.lua .config/awesome/widgets/volume.lua
-dot_link awesome/widgets/weather.lua .config/awesome/widgets/weather.lua
+mirror_link awesome .config/awesome
 
 #
 # Set up Vim
