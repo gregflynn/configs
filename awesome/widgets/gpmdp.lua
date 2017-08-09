@@ -80,11 +80,11 @@ gpmdp.widget = awful.widget.watch("pidof 'Google Play Music Desktop Player'", 2,
     else
         local json = lain.util.dkjson
         dict, pos, err = json.decode(table.concat(filelines), 1, nil)
-        gpm_now.artist    = dict.song.artist
-        gpm_now.album     = dict.song.album
-        gpm_now.title     = dict.song.title
+        gpm_now.artist = dict.song.artist
+        gpm_now.album = dict.song.album
+        gpm_now.title = dict.song.title
         gpm_now.cover_url = dict.song.albumArt
-        gpm_now.playing   = dict.playing
+        gpm_now.playing = dict.playing
     end
     gpmdp.latest = gpm_now
 
