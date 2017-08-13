@@ -7,10 +7,6 @@ DOTINSTALL="$HOME/.sanity"
 # Fix for tilix sessions, because tilix is dope
 #
 if [ $TERMINIX_ID ] || [ $TILIX_ID ] || [ $VTE_VERSION ]; then
-  if [ -e /etc/profile.d/vte-2.91.sh ]; then
-    # debian stretch
-    source /etc/profile.d/vte-2.91.sh
-  fi
   if [ -e /etc/profile.d/vte.sh ]; then
     # Arch
     source /etc/profile.d/vte.sh

@@ -151,5 +151,9 @@ if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
 else
   CX=$'\e[32m'
 fi
-PS1=$'$(pss_ps1)
+
+# only set PS1 in emulated sessions
+if [[ $(tty) == /dev/pts/* ]]; then
+    PS1=$'$(pss_ps1)
 \[$CX\]$RI\[\e[0m\] '
+fi

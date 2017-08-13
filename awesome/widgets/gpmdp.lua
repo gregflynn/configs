@@ -4,6 +4,7 @@ local beautiful = require('beautiful')
 local lain = require("lain")
 local markup = lain.util.markup
 local dpi = beautiful.xresources.apply_dpi
+local io, next, os, string, table = io, next, os, string, table
 
 local gpmdp = {
     notify        = "on",
