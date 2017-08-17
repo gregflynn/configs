@@ -102,17 +102,18 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
             local title_short = trunc(title, 20)
             local artist_short = trunc(artist, 20)
 
-            local title_color = beautiful.fg_normal
-            local artist_color = beautiful.fg_normal
+            local title_color = beautiful.fg_focus
+            local artist_color = beautiful.fg_minimize
+            local icon = ""
 
             if gpm_now.playing then
-                title_color = beautiful.fg_focus
-                artist_color = beautiful.fg_minimize
+                icon = "🎵 "
             end
 
             widget:set_markup(string.format(
-                "%s %s %s",
-                markup.fg.color(title_color, '🎵 '..title_short),
+                "%s%s %s %s",
+                markup.fg.color(title_color, icon),
+                markup.fg.color(title_color, title_short),
                 markup.italic("by"),
                 markup.fg.color(artist_color, artist_short)
             ))
