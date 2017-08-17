@@ -127,6 +127,7 @@ end
 -- Widgets we need references to
 --
 local battery = require('widgets/battery')
+local cputemp = require("widgets/cputemp")
 local volume  = require("widgets/volume")
 local weather = require('widgets/weather')
 
@@ -189,10 +190,15 @@ awful.screen.connect_for_each_screen(function(s)
       wibox.container.margin(require("widgets/diskusage").widget,   dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(require("widgets/memory").widget,      dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(require("widgets/cpugraph"),           dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(require("widgets/cputemp"),            dpi(0), dpi(10), dpi(4), dpi(4)),
+      (function()
+        if cputemp.enabled then
+          return wibox.container.margin(cputemp.widget,             dpi(0), dpi(10), dpi(4), dpi(4))
+        else return nil
+        end
+      end)(),
       (function()
         if battery.battery_enabled then
-          return wibox.container.margin(battery.widget, dpi(0), dpi(10), dpi(4), dpi(4))
+          return wibox.container.margin(battery.widget,             dpi(0), dpi(10), dpi(4), dpi(4))
         else return nil
         end
       end)(),
