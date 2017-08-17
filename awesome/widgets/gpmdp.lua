@@ -70,24 +70,39 @@ function gpmdp.get_lines(file)
     return lines
 end
 
-gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"}, 2, function(widget, stdout)
+function gpmdp.get_now(running)
+    local gpm_now = {
+        running = running,
+        playing = false
+    }
+
     local filelines = gpmdp.get_lines(gpmdp.file_location)
-    if not filelines then return end -- GPMDP not running?
 
-    local gpm_now = { running = stdout ~= '' }
-
-    if not next(filelines) then
-        gpm_now.running = false
-        gpm_now.playing = false
-    else
-        local json = lain.util.dkjson
-        dict, pos, err = json.decode(table.concat(filelines), 1, nil)
-        gpm_now.artist = dict.song.artist
-        gpm_now.album = dict.song.album
-        gpm_now.title = dict.song.title
-        gpm_now.cover_url = dict.song.albumArt
-        gpm_now.playing = dict.playing
+    -- exit early if gpmdp isn't running
+    if not running or not filelines then
+        return gpm_now
     end
+
+    -- parse the json file
+    local json = lain.util.dkjson
+    local dict, pos, err = json.decode(table.concat(filelines), 1, nil)
+
+    -- sometimes dict doesn't parse
+    if not dict then
+        return gpm_now
+    end
+
+    -- pull out all them datas
+    gpm_now.artist = dict.song.artist
+    gpm_now.album = dict.song.album
+    gpm_now.title = dict.song.title
+    gpm_now.cover_url = dict.song.albumArt
+    gpm_now.playing = dict.playing
+    return gpm_now
+end
+
+gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"}, 2, function(widget, stdout)
+    local gpm_now = gpmdp.get_now(stdout ~= '')
     gpmdp.latest = gpm_now
 
     local text = ""
