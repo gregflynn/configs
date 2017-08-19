@@ -12,10 +12,21 @@ function sys() {
         ;;
         *)
             if [ "$#" == "2" ]; then
-                sudo systemctl $2 $1
+                case $2 in
+                    log)
+                        sudo journalctl -xu $1
+                    ;;
+                    start)
+                        sudo systemctl $2 $1
+                        sudo systemctl --no-pager status $1
+                    ;;
+                    *)
+                        sudo systemctl $2 $1
+                    ;;
+                esac
             else
                 echo "Usage: sys log"
-                echo "       [service name] [start|stop|restart|enable|disable]"
+                echo "       [service name] [log|start|stop|restart|enable|disable]"
             fi
         ;;
     esac
