@@ -2,22 +2,25 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 
 local cputemp = {
-    enabled = false
+    enabled = true
 }
 
 cputemp.widget = awful.widget.watch(
     "sensors",
     15,
     function(widget, stdout)
-        local package0 = stdout:match("Package id 0:  %p(%d%d%p%d)")
+        local temp = stdout:match("Package id 0:%s+%p(%d+%p%d)")
+        if not temp then
+            temp = stdout:match("temp1:%s+%p(%d+%p%d)")
+        end
 
-        if package0 then
+        if temp then
             cputemp.enabled = true
             widget:set_markup(
                 string.format(
                     '<span color="%s">🌡️ %s°C</span>',
                     beautiful.fg_minimize,
-                    package0
+                    temp
                 )
             )
         else
