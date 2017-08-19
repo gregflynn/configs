@@ -158,6 +158,7 @@ function aur_update_helper() {
         aur_update_available $pkg
         if [ "$?" == "0" ]; then
             needs_update="$needs_update $pkg"
+            print_version $pkg $(installed_version $pkg) $(aur_version $pkg)
         else
             print_version $pkg $(installed_version $pkg)
         fi
@@ -215,8 +216,8 @@ function aur_makepkg() {
     pushd $AUR_HOME/$1 > /dev/null
 
     # pkg specific hacks
-    if [[ "$1" == "lain-git" && -e 'lain' ]]; then
-        rm -rf lain
+    if [[ "$1" == "lain-git" && -e "src" && -e "src" ]]; then
+        rm -rf lain/ src/
         git checkout -q master
     fi
 
