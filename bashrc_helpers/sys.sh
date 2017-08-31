@@ -10,6 +10,9 @@ function sys() {
         log)
             sudo journalctl -xe
         ;;
+        lastboot)
+            sudo journalctl --boot=-1
+        ;;
         *)
             if [ "$#" == "2" ]; then
                 case $2 in
