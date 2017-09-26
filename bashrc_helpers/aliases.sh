@@ -12,8 +12,9 @@ alias du='du -h'
 alias ls='ls -h --color=auto'
 alias ll='ls -l'
 alias proc='ps ax | grep -i --color'
-alias xm='xmodmap ~/.Xmodmap'
 alias open='xdg-open'
+alias dict='sdcv'
+
 function bl() {
   $@
   paplay /usr/share/sounds/gnome/default/alerts/drip.ogg
