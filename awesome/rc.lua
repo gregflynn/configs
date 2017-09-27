@@ -130,6 +130,7 @@ local battery = require('widgets/battery')
 local cputemp = require("widgets/cputemp")
 local volume  = require("widgets/volume")
 local weather = require('widgets/weather')
+local gpmdp   = require("widgets/gpmdp")
 
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
@@ -187,7 +188,8 @@ awful.screen.connect_for_each_screen(function(s)
     wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)), -- Middle widget
     { -- Right widgets
       layout = wibox.layout.fixed.horizontal,
-      wibox.container.margin(require("widgets/gpmdp").widget,       dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(gpmdp.icon,                            dpi(0), dpi( 5), dpi(4), dpi(4)),
+      wibox.container.margin(gpmdp.widget,                          dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(require("widgets/diskusage").widget,   dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(require("widgets/memory").widget,      dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(require("widgets/cpugraph"),           dpi(0), dpi(10), dpi(4), dpi(4)),
@@ -205,7 +207,7 @@ awful.screen.connect_for_each_screen(function(s)
       end)(),
       wibox.container.margin(wibox.widget.systray(),                dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(volume.widget,                         dpi(0), dpi(10), dpi(4), dpi(4)),
-      wibox.container.margin(weather.icon,                          dpi(0), dpi(10), dpi(4), dpi(4)),
+      wibox.container.margin(weather.icon,                          dpi(0), dpi( 5), dpi(4), dpi(4)),
       wibox.container.margin(weather.widget,                        dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(require("widgets/clock"),              dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(s.layoutbox,                           dpi(0), dpi(10), dpi(4), dpi(4))

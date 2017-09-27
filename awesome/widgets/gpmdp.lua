@@ -1,4 +1,6 @@
 local awful = require("awful")
+local wibox = require("wibox")
+local gears = require("gears")
 local naughty = require("naughty")
 local beautiful = require('beautiful')
 local lain = require("lain")
@@ -114,23 +116,18 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
             local artist = trim(gpm_now.artist)
             local album = trim(gpm_now.album)
 
-            local title_short = trunc(title, 20)
-            local artist_short = trunc(artist, 20)
-
             local title_color = beautiful.fg_focus
             local artist_color = beautiful.fg_minimize
-            local icon = ""
 
-            if gpm_now.playing then
-                icon = "🎵 "
+            if not gpm_now.playing then
+                title_color = beautiful.fg_normal
             end
 
             widget:set_markup(string.format(
-                "%s%s %s %s",
-                markup.fg.color(title_color, icon),
-                markup.fg.color(title_color, title_short),
+                "%s %s %s",
+                markup.fg.color(title_color, trunc(title, 20)),
                 markup.italic("by"),
-                markup.fg.color(artist_color, artist_short)
+                markup.fg.color(artist_color, trunc(artist, 20))
             ))
 
             gpmdp.notification_preset.text = string.format(
@@ -151,5 +148,17 @@ end)
 
 gpmdp.widget:connect_signal("mouse::enter", gpmdp.notification_on)
 gpmdp.widget:connect_signal("mouse::leave", gpmdp.notification_off)
+
+gpmdp.icon = wibox.widget {
+    image  = "/usr/share/pixmaps/gpmdp.png",
+    resize = true,
+    widget = wibox.widget.imagebox
+}
+
+local buttons = gears.table.join(awful.button({ }, 1, function()
+    awful.spawn("gpmdp")
+end))
+gpmdp.widget:buttons(buttons)
+gpmdp.icon:buttons(buttons)
 
 return gpmdp
