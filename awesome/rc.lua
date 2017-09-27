@@ -59,7 +59,7 @@ mymainmenu = awful.menu({
 })
 
 mylauncher = awful.widget.launcher({
-  image = beautiful.awesome_icon,
+  image = '/usr/share/archlinux/icons/archlinux-icon-crystal-32.svg',
   menu = mymainmenu
 })
 
@@ -262,18 +262,6 @@ globalkeys = gears.table.join(
             {description = "focus the previous screen", group = "screen"}),
   awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
             {description = "jump to urgent client", group = "client"}),
-  awful.key({ modkey }, "Tab", function()
-    lain.util.menu_clients_current_tags(
-      {  },
-      {
-        keygrabber = true,
-        coords = {
-          x = (awful.screen.focused().geometry.width / 2) - (beautiful.menu_width / 2),
-          y = (awful.screen.focused().geometry.height / 2) - 350
-        }
-      }
-    )
-  end),
 
   -- Standard program
   awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,

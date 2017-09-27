@@ -1,3 +1,5 @@
+local awful = require("awful")
+local gears = require("gears")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
 local lain = require("lain")
@@ -16,5 +18,12 @@ lain.widget.calendar {
     },
     cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always"
 }
+
+clock:buttons(gears.table.join(
+    -- NOTE: this kills lain's buttons
+    awful.button({ }, 1, function()
+        awful.spawn("google-chrome-stable https://calendar.google.com/")
+    end)
+))
 
 return clock

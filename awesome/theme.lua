@@ -29,6 +29,7 @@ theme.border_marked = "#91231c"
 -- overriding the default one when
 -- defined, the sets are:
 -- taglist_[bg|fg]_[focus|urgent|occupied|empty|volatile]
+theme.taglist_fg_focus = theme.fg_minimize
 -- tasklist_[bg|fg]_[focus|urgent]
 -- titlebar_[bg|fg]_[normal|focus]
 theme.titlebar_fg_focus = theme.fg_minimize
@@ -49,7 +50,7 @@ theme.titlebar_fg_focus = theme.fg_minimize
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = themes_path.."default/submenu.png"
-theme.menu_height = dpi(50)
+theme.menu_height = dpi(20)
 theme.menu_width  = dpi(500)
 
 -- You can add as many variables as

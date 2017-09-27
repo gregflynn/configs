@@ -10,7 +10,7 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'morhetz/gruvbox'
 Plugin 'vim-airline/vim-airline'
 Plugin 'Yggdroot/indentLine'
-Plugin 'scrooloose/syntastic'
+Plugin 'vim-syntastic/syntastic'
 call vundle#end()
 filetype plugin indent on
 
@@ -68,3 +68,5 @@ hi Normal guibg=NONE ctermbg=NONE
 " fix syntastic highlight colors
 hi! link SyntasticError GruvboxRedSign
 hi! link SyntasticWarning GruvboxYellowSign
+
+set cursorline
