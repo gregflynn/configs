@@ -309,21 +309,7 @@ globalkeys = gears.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
-  -- Volume
-  -- Get the default sink index
-  -- pacmd list-sinks | grep -e 'index' | grep \* | awk '{ print $3 }'
-  awful.key({ }, "XF86AudioRaiseVolume", function ()
-    awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
-    volume.notify()
-  end),
-  awful.key({ }, "XF86AudioLowerVolume", function ()
-    awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
-    volume.notify()
-  end),
-  awful.key({ }, "XF86AudioMute", function ()
-    awful.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
-    volume.notify()
-  end),
+  volume.globalkeys,
 
   awful.key({ }, "XF86MonBrightnessDown", function ()
     awful.spawn("light -U -p 10")

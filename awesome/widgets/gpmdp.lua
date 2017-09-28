@@ -124,15 +124,14 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
             end
 
             widget:set_markup(string.format(
-                "%s %s %s",
+                "%s %s",
                 markup.fg.color(title_color, trunc(title, 20)),
-                markup.italic("by"),
                 markup.fg.color(artist_color, trunc(artist, 20))
             ))
 
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
-                markup.fg.color(title_color, markup.big(title)),
+                markup.fg.color(beautiful.fg_focus, markup.big(title)),
                 markup.fg.color(artist_color, markup.big(artist)),
                 markup.italic(markup.big(album))
             )
