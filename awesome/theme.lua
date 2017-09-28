@@ -34,7 +34,7 @@ theme.wibar_opacity = 0.9
 theme.taglist_fg_focus = theme.fg_minimize
 -- tasklist_[bg|fg]_[focus|urgent]
 -- titlebar_[bg|fg]_[normal|focus]
-theme.titlebar_fg_focus = theme.fg_minimize
+theme.titlebar_fg_focus = theme.fg_focus
 -- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
 -- mouse_finder_[color|timeout|animate_timeout|radius|factor]
 -- prompt_[fg|bg|fg_cursor|bg_cursor|font]
