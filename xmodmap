@@ -1,7 +1,13 @@
 keycode 66 = Mode_switch NoSymbol
-keycode 113 = Left Left Home
-keycode 114 = Right Right End
-keycode 111 = Up Up Prior
-keycode 116 = Down Down Next
 keycode 49 = grave asciitilde grave
 keycode 23 = Tab Tab asciitilde
+
+keycode 24 = q Q Prior
+keycode 25 = w W Up
+keycode 26 = e E Next
+keycode 38 = a A Left
+keycode 39 = s S Down
+keycode 40 = d D Right
+keycode 34 = bracketleft braceleft Home
+keycode 35 = bracketright braceright End
+
