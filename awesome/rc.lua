@@ -201,7 +201,7 @@ awful.screen.connect_for_each_screen(function(s)
       end)(),
       (function()
         if battery.battery_enabled then
-          return wibox.container.margin(battery.widget,             dpi(0), dpi(10), dpi(4), dpi(4))
+          return battery.container
         else return nil
         end
       end)(),
