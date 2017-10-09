@@ -1,4 +1,6 @@
 local awful = require("awful")
+local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
 
 return {
     {
@@ -15,7 +17,7 @@ return {
             maximized_horizontal = false,
             maximized = false,
             floating = true,
-            border_width = 2
+            border_width = dpi(1)
         }
     },
     {
@@ -24,21 +26,18 @@ return {
             placement = function (c)
                 awful.placement.centered(c, { offset = { y = -350 } })
             end,
-            border_width = 0,
             floating = true
         }
     },
     {
         rule = { instance = "tilix", type = "normal" },
         properties = {
-            border_width = 0,
             floating = false
         }
     },
     {
         rule = { instance = "code", type = "normal"  },
         properties = {
-            border_width = 0,
             floating = false
         }
     }

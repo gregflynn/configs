@@ -22,7 +22,7 @@ theme.fg_minimize   = "#66D9EF"
 theme.useless_gap   = 10
 theme.border_width  = 0
 theme.border_normal = theme.bg_normal
-theme.border_focus  = theme.bg_normal
+theme.border_focus  = theme.fg_focus
 theme.border_marked = "#91231c"
 
 theme.wibar_opacity = 0.9
