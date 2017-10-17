@@ -195,7 +195,8 @@ function aur_install_helper() {
     # make sure that package doesn't exist already
     if [ -e $AUR_HOME/$1 ]; then
         echo "Package already installed: $1"
-        return 0
+        echo "Checking for updates for: $1"
+        aur_update_helper "$1"
     fi
 
     # clone the aur repo
