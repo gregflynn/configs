@@ -135,7 +135,8 @@ function pss_venv() {
   C1=$'\e[42m'
   C2=$'\e[30m'
   C3=$'\e[32m'
-  if ! test -z $VIRTUAL_ENV; then
+  pyenv local > /dev/null 2>&1
+  if [ "$?" == "0" ]; then
     echo -n "$C1$RI$C2 py $C3"
   fi
 }
