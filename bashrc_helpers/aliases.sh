@@ -50,3 +50,7 @@ alias gs='git status'
 alias ga='git add'
 alias gaa='git add --all'
 alias gc='git checkout'
+function gmb() {
+  date="$(date '+%Y%m')"
+  git checkout -b "${date}_$1"
+}
