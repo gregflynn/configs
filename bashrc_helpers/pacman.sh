@@ -202,7 +202,10 @@ function aur_install_helper() {
     # clone the aur repo
     git clone aur:$1 $AUR_HOME/$1
 
-    if [ "$?" != "0" ]; then
+    if [[ "$?" != "0" || "$(ls $AUR_HOME/$1)" == "" ]]; then
+        if [ -e $AUR_HOME/$1 ]; then
+            rm -rf $AUR_HOME/$1
+        fi
         echo "AUR package not found: $1"
         return 1
     fi
