@@ -18,9 +18,9 @@ cputemp.widget = awful.widget.watch(
             cputemp.enabled = true
             widget:set_markup(
                 string.format(
-                    '<span color="%s">🌡️ %s°C</span>',
+                    '<span color="%s">%s°C</span>',
                     beautiful.fg_minimize,
-                    temp
+                    math.floor(temp)
                 )
             )
         else

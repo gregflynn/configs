@@ -4,7 +4,9 @@ local beautiful = require("beautiful")
 local diskusage = lain.widget.fs {
     notify   = "off",
     settings = function()
-        widget:set_markup(string.format('💾 %d%%', fs_info['/ used_p']))
+        widget:set_markup(
+            string.format('💾 %d%%', fs_info['/ used_p'])
+        )
     end,
     notification_preset = {
         font = 'Hack',

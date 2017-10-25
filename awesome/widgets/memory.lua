@@ -3,7 +3,11 @@ local beautiful = require("beautiful")
 
 local memory = lain.widget.mem {
     settings = function()
-        widget:set_markup(string.format('<span color="%s">🐏 %d%%</span>', beautiful.fg_minimize, mem_now.perc))
+        widget:set_markup(string.format(
+            '<span color="%s">🐏 %d%%</span>',
+            beautiful.fg_minimize,
+            mem_now.perc
+        ))
     end
 }
 
