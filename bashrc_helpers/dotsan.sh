@@ -14,8 +14,12 @@ function dotsan () {
         update)
             pushd $DOTINSTALL > /dev/null
             git pull
+            if [ -e 'private' ]; then
+                pushd private > /dev/null
+                git pull
+                popd > /dev/null
+            fi
             bash setup.sh
-            # call tilix here to test the new version
             popd > /dev/null
         ;;
         version)
