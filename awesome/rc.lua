@@ -173,7 +173,7 @@ awful.screen.connect_for_each_screen(function(s)
   s.mywibox  = awful.wibar {
     position = "top",
     screen   = s,
-    height   = dpi(24)
+    height   = dpi(25)
   }
 
   -- Add widgets to the wibox
@@ -203,7 +203,11 @@ awful.screen.connect_for_each_screen(function(s)
         else return nil
         end
       end)(),
-      wibox.container.margin(wibox.widget.systray(),                dpi(0), dpi( 5), dpi(4), dpi(4)),
+      awful.widget.only_on_screen(
+        wibox.container.margin(wibox.widget.systray(),              dpi(0), dpi( 5), dpi(4), dpi(4)),
+        "primary"
+      ),
+      -- wibox.container.margin(wibox.widget.systray(),                dpi(0), dpi( 5), dpi(4), dpi(4)),
       wibox.container.margin(weather.icon,                          dpi(0), dpi( 5), dpi(4), dpi(4)),
       wibox.container.margin(weather.widget,                        dpi(0), dpi(10), dpi(4), dpi(4)),
       volume.container,
