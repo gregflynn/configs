@@ -8,6 +8,9 @@ local markup = lain.util.markup
 local dpi = beautiful.xresources.apply_dpi
 local io, next, os, string, table = io, next, os, string, table
 
+local gpmdp_icon_loc = "/usr/share/pixmaps/gpmdp.png"
+local gpmdp_album_art_fmt = "/tmp/gpmcover-%s"
+
 local gpmdp = {
     notify        = "on",
     followtag     = false,
@@ -19,7 +22,12 @@ local gpmdp = {
     },
     notification  = nil,
     current_track = nil,
-    album_cover   = "/tmp/gpmcover"
+    current_album_art = nil,
+    icon = wibox.widget {
+        image  = gpmdp_icon_loc,
+        resize = true,
+        widget = wibox.widget.imagebox
+    }
 }
 
 function trim(s)
@@ -38,19 +46,33 @@ function trunc(str, max_len)
 end
 
 function gpmdp.notification_on()
+    local new_album_art = string.format(gpmdp_album_art_fmt, math.random(0, 3894732897))
     local gpm_now = gpmdp.latest
     gpmdp.current_track = gpm_now.title
 
-    if gpmdp.followtag then gpmdp.notification_preset.screen = awful.screen.focused() end
-    awful.spawn.easy_async({"curl", gpm_now.cover_url, "-o", gpmdp.album_cover}, function(stdout)
+    if gpmdp.followtag then
+        gpmdp.notification_preset.screen = awful.screen.focused()
+    end
+
+    awful.spawn.easy_async({"curl", gpm_now.cover_url, "-o", new_album_art}, function(stdout)
         local old_id = nil
-        if gpmdp.notification then old_id = gpmdp.notification.id end
+        gpmdp.icon.image = new_album_art
+
+        if gpmdp.notification then
+            old_id = gpmdp.notification.id
+        end
 
         gpmdp.notification = naughty.notify({
             preset = gpmdp.notification_preset,
-            icon = gpmdp.album_cover,
+            icon = new_album_art,
             replaces_id = old_id
         })
+
+        -- clean up album art
+        if gpmdp.current_album_art then
+            os.remove(gpmdp.current_album_art)
+        end
+        gpmdp.current_album_art = new_album_art
     end)
 end
 
@@ -121,6 +143,9 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
 
             if not gpm_now.playing then
                 title_color = beautiful.fg_normal
+                gpmdp.icon.image = gpmdp_icon_loc
+            else
+                gpmdp.icon.image = gpmdp.current_album_art
             end
 
             widget:set_markup(string.format(
@@ -145,19 +170,17 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
     end
 end)
 
-gpmdp.widget:connect_signal("mouse::enter", gpmdp.notification_on)
-gpmdp.widget:connect_signal("mouse::leave", gpmdp.notification_off)
-
-gpmdp.icon = wibox.widget {
-    image  = "/usr/share/pixmaps/gpmdp.png",
-    resize = true,
-    widget = wibox.widget.imagebox
-}
-
 local buttons = gears.table.join(awful.button({ }, 1, function()
     awful.spawn("gpmdp")
 end))
+
 gpmdp.widget:buttons(buttons)
 gpmdp.icon:buttons(buttons)
+
+gpmdp.container = {
+    layout = wibox.layout.fixed.horizontal,
+    wibox.container.margin(gpmdp.icon,    dpi(0),  dpi(5), dpi(4), dpi(4)),
+    wibox.container.margin(gpmdp.widget,  dpi(0), dpi(10), dpi(4), dpi(4))
+}
 
 return gpmdp
