@@ -207,7 +207,6 @@ awful.screen.connect_for_each_screen(function(s)
         wibox.container.margin(wibox.widget.systray(),              dpi(0), dpi( 5), dpi(4), dpi(4)),
         "primary"
       ),
-      -- wibox.container.margin(wibox.widget.systray(),                dpi(0), dpi( 5), dpi(4), dpi(4)),
       wibox.container.margin(weather.icon,                          dpi(0), dpi( 5), dpi(4), dpi(4)),
       wibox.container.margin(weather.widget,                        dpi(0), dpi(10), dpi(4), dpi(4)),
       volume.container,

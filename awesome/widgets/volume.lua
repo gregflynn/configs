@@ -41,6 +41,24 @@ local volume = lain.widget.pulsebar {
     end
 }
 
+volume.buttons = awful.util.table.join(
+    awful.button({}, 1, function() -- left click
+        awful.spawn("pavucontrol")
+    end),
+    awful.button({}, 3, function() -- right click
+        awful.spawn(string.format("pactl set-sink-mute %d toggle", volume.device))
+        volume.update()
+    end),
+    awful.button({}, 4, function() -- scroll up
+        awful.spawn(string.format("pactl set-sink-volume %d +1%%", volume.device))
+        volume.update()
+    end),
+    awful.button({}, 5, function() -- scroll down
+        awful.spawn(string.format("pactl set-sink-volume %d -1%%", volume.device))
+        volume.update()
+    end)
+)
+
 volume.globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function ()
         awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
@@ -57,23 +75,8 @@ volume.globalkeys = gears.table.join(
 )
 
 volume.bar.paddings = 0
-volume.bar:buttons(awful.util.table.join(
-    awful.button({}, 1, function() -- left click
-        awful.spawn("pavucontrol")
-    end),
-    awful.button({}, 3, function() -- right click
-        awful.spawn(string.format("pactl set-sink-mute %d toggle", volume.device))
-        volume.update()
-    end),
-    awful.button({}, 4, function() -- scroll up
-        awful.spawn(string.format("pactl set-sink-volume %d +1%%", volume.device))
-        volume.update()
-    end),
-    awful.button({}, 5, function() -- scroll down
-        awful.spawn(string.format("pactl set-sink-volume %d -1%%", volume.device))
-        volume.update()
-    end)
-))
+volume.bar:buttons(volume.buttons)
+volume_icon:buttons(volume.buttons)
 
 volume.widget = wibox.widget {
     volume.bar,
