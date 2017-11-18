@@ -5,16 +5,40 @@ local wibox     = require("wibox")
 local gears     = require("gears")
 local dpi       = beautiful.xresources.apply_dpi
 
+-- elementary icons
+local speaker_icon = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back-testing.svg"
+local mute_icon = "/usr/share/icons/elementary/status/48/audio-volume-muted-symbolic.svg"
+
+-- Adwaita icon because elementary doesn't have a headphones icon
+local headphones_icon = "/usr/share/icons/Adwaita/48x48/devices/audio-headphones.png"
+
+local volume_icon = wibox.widget {
+    image = speaker_icon,
+    resize = true,
+    widget = wibox.widget.imagebox
+}
+
 local volume = lain.widget.pulsebar {
-    width = dpi(75),
+    width = dpi(5),
     notification_preset = {
         font = "Hack 10"
     },
     colors = {
-        background = beautiful.bg_normal,
+        background = beautiful.fg_normal,
         mute       = beautiful.fg_urgent,
         unmute     = beautiful.fg_focus
-    }
+    },
+    settings = function()
+        if volume_now.muted == "yes" then
+            volume_icon.image = mute_icon
+        else
+            if volume_now.index ~= "0" then
+                volume_icon.image = headphones_icon
+            else
+                volume_icon.image = speaker_icon
+            end
+        end
+    end
 }
 
 volume.globalkeys = gears.table.join(
@@ -32,7 +56,7 @@ volume.globalkeys = gears.table.join(
     end)
 )
 
-volume.bar.paddings = dpi(5)
+volume.bar.paddings = 0
 volume.bar:buttons(awful.util.table.join(
     awful.button({}, 1, function() -- left click
         awful.spawn("pavucontrol")
@@ -51,8 +75,18 @@ volume.bar:buttons(awful.util.table.join(
     end)
 ))
 
-volume.widget = wibox.container.background(
-    volume.bar, beautiful.fg_normal, gears.shape.rectangle
-)
+volume.widget = wibox.widget {
+    volume.bar,
+    forced_width  = dpi(5),
+    direction     = 'east',
+    layout        = wibox.container.rotate
+}
+
+volume.container = {
+    layout = wibox.layout.fixed.horizontal,
+    voltxt,
+    wibox.container.margin(volume_icon,    dpi(0),  dpi(3), dpi(4), dpi(4)),
+    wibox.container.margin(volume.widget,  dpi(0), dpi(10), dpi(4), dpi(4))
+}
 
 return volume
