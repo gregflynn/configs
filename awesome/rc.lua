@@ -129,7 +129,6 @@ end
 local battery = require('widgets/battery')
 local cputemp = require("widgets/cputemp")
 local volume  = require("widgets/volume")
-local weather = require('widgets/weather')
 
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
@@ -205,8 +204,7 @@ awful.screen.connect_for_each_screen(function(s)
         wibox.container.margin(wibox.widget.systray(),              dpi(0), dpi( 5), dpi(4), dpi(4)),
         "primary"
       ),
-      wibox.container.margin(weather.icon,                          dpi(0), dpi( 5), dpi(4), dpi(4)),
-      wibox.container.margin(weather.widget,                        dpi(0), dpi(10), dpi(4), dpi(4)),
+      require('widgets/weather').container,
       volume.container,
       wibox.container.margin(require("widgets/clock"),              dpi(0), dpi(10), dpi(4), dpi(4)),
       wibox.container.margin(s.layoutbox,                           dpi(0), dpi(10), dpi(4), dpi(4))
