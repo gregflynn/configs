@@ -7,7 +7,7 @@ local dpi       = beautiful.xresources.apply_dpi
 
 -- elementary icons
 local speaker_icon = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back-testing.svg"
-local mute_icon = "/usr/share/icons/elementary/status/48/audio-volume-muted-symbolic.svg"
+local mute_icon = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back.svg"
 
 -- Adwaita icon because elementary doesn't have a headphones icon
 local headphones_icon = "/usr/share/icons/Adwaita/48x48/devices/audio-headphones.png"
