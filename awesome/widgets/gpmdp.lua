@@ -166,6 +166,7 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
             end
         end
     else
+        widget:set_markup('')
         gpmdp.current_track = nil
     end
 end)
