@@ -19,7 +19,7 @@ local volume_icon = wibox.widget {
 }
 
 local volume = lain.widget.pulsebar {
-    width = dpi(5),
+    width = dpi(6),
     notification_preset = {
         font = "Hack 10"
     },
@@ -80,7 +80,7 @@ volume_icon:buttons(volume.buttons)
 
 volume.widget = wibox.widget {
     volume.bar,
-    forced_width  = dpi(5),
+    forced_width  = dpi(6),
     direction     = 'east',
     layout        = wibox.container.rotate
 }
