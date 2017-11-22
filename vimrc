@@ -7,16 +7,18 @@ call vundle#begin()
 " let Vundle manage Vundle
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'morhetz/gruvbox'
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'Yggdroot/indentLine'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'majutsushi/tagbar'
+Plugin 'crusoexia/vim-monokai'
+Plugin 'nvie/vim-flake8'
 call vundle#end()
 filetype plugin indent on
 
 " Airline config options
 let g:airline_powerline_fonts = 1
-let g:airline_theme='gruvbox'
+let g:airline_theme='molokai'
 let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#buffer_nr_show=1
 set laststatus=2
@@ -28,26 +30,24 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\.so$\|\.dat$\|\.DS_Store$\|\.pyc$\|\.gz$\|\.class$'
   \ }
 
-" Syntastic config options
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=0
-
 syntax enable
-:silent! colorscheme gruvbox
-let g:gruvbox_contrast_dark='hard'
+:silent! colorscheme monokai
+set termguicolors
 set background=dark
 set number
 set tabstop=4
 set shiftwidth=4
 set expandtab
 set backspace=indent,eol,start
-set colorcolumn=80
+set colorcolumn=80,120
 
 " Key mappings
+:let mapleader = "\\"
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+nnoremap <C-K><C-K> <C-W><C-W>
 nnoremap <Leader>j :ls<CR>
 nnoremap <Leader>h :bp<CR>
 nnoremap <Leader>l :bn<CR>
@@ -61,12 +61,11 @@ nnoremap <Leader>7 :7b<CR>
 nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
+map <C-D> dd
 map <Leader>p "*p
 map <Leader>y "*y
-" Make background transparent
-hi Normal guibg=NONE ctermbg=NONE
-" fix syntastic highlight colors
-hi! link SyntasticError GruvboxRedSign
-hi! link SyntasticWarning GruvboxYellowSign
+map <C-F> :CtrlPTag<cr>
+map <C-G> :!ctags -R -f tags --exclude=node_modules --exclude=__pycache__ --exclude=dist --exclude=tmp --exclude=bower_components<cr>
+map <Leader>t :TagbarToggle<CR>
 
 set cursorline
