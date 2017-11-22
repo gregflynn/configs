@@ -32,7 +32,8 @@ let g:ctrlp_custom_ignore = {
 
 syntax enable
 :silent! colorscheme monokai
-set termguicolors
+:silent! set t_Co=256
+:silent! set termguicolors
 set background=dark
 set number
 set tabstop=4
