@@ -13,6 +13,8 @@ Plugin 'Yggdroot/indentLine'
 Plugin 'majutsushi/tagbar'
 Plugin 'crusoexia/vim-monokai'
 Plugin 'nvie/vim-flake8'
+Plugin 'tpope/vim-vinegar'
+Plugin 'Valloric/YouCompleteMe'
 call vundle#end()
 filetype plugin indent on
 
@@ -29,6 +31,17 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|public$\|log\|tmp$\|node_modules$',
   \ 'file': '\.so$\|\.dat$\|\.DS_Store$\|\.pyc$\|\.gz$\|\.class$'
   \ }
+
+" youcompleteme
+:let g:ycm_auto_trigger = 0
+:let g:ycm_python_binary_path = 'python'
+:let g:ycm_server_python_interpreter = '/usr/bin/python2'
+
+" netrw config
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_winsize = 20
+map <C-\> :Vexplore<cr>
 
 syntax enable
 :silent! colorscheme monokai
@@ -51,6 +64,7 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-K><C-K> <C-W><C-W>
+nnoremap <Leader>q :bd<CR>
 nnoremap <Leader>j :ls<CR>
 nnoremap <Leader>h :bp<CR>
 nnoremap <Leader>l :bn<CR>
