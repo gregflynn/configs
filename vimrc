@@ -34,6 +34,8 @@ syntax enable
 :silent! colorscheme monokai
 :silent! set t_Co=256
 :silent! set termguicolors
+let g:monokai_term_italic = 1
+let g:monokai_gui_italic = 1
 set background=dark
 set number
 set tabstop=4
@@ -66,7 +68,7 @@ map <C-D> dd
 map <Leader>p "*p
 map <Leader>y "*y
 map <C-F> :CtrlPTag<cr>
-map <C-G> :!ctags -R -f tags --exclude=node_modules --exclude=__pycache__ --exclude=dist --exclude=tmp --exclude=bower_components<cr>
+map <C-G> :!ctags -R -f tags --exclude=node_modules --exclude=__pycache__ --exclude=dist --exclude=tmp --exclude=bower_components --python-kinds=-i<cr>
 map <Leader>t :TagbarToggle<CR>
 
 set cursorline
