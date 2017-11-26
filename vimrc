@@ -41,7 +41,7 @@ let g:ctrlp_custom_ignore = {
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
-map <C-\> :Vexplore<cr>
+map <C-\> :Lexplore<cr>
 
 syntax enable
 :silent! colorscheme monokai
@@ -79,10 +79,10 @@ nnoremap <Leader>8 :8b<CR>
 nnoremap <Leader>9 :9b<CR>
 nnoremap <Leader>0 :10b<CR>
 map <C-D> dd
-map <Leader>p "*p
-map <Leader>y "*y
+map <Leader>p "+p
+map <Leader>y "+y
 map <C-F> :CtrlPTag<cr>
 map <C-G> :!ctags -R -f tags --exclude=node_modules --exclude=__pycache__ --exclude=dist --exclude=tmp --exclude=bower_components --python-kinds=-i<cr>
 map <Leader>t :TagbarToggle<CR>
-
+:nnoremap <silent><expr> <Leader>/ (&hls && v:hlsearch ? ':nohls' : ':set hls')."\n"
 set cursorline
