@@ -55,3 +55,5 @@ fi
 if [ -e "$DOTINSTALL/private/bashrc" ]; then
   source $DOTINSTALL/private/bashrc
 fi
+
+stty -ixon
