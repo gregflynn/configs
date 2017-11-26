@@ -271,24 +271,11 @@ function aur_version() {
     local pkgbuild="$AUR_HOME/$1/PKGBUILD"
     if [ ! -e $pkgbuild ]; then return 1; fi
 
-    local ver=$(cat $pkgbuild | grep "pkgver=" | head -n 1 | sed 's/pkgver=//' | sed 's/"//g' | sed "s/'//g")
-    local rel=$(cat $pkgbuild | grep "pkgrel=" | sed 's/pkgrel=//' | sed 's/"//g' | sed "s/'//g")
-    local epo=$(cat $pkgbuild | grep "epoch=" | sed 's/epoch=//' | sed 's/"//g' | sed "s/'//g")
+    source "$pkgbuild"
 
-    # needed for lain-git
-    if [[ $ver == *"\$pkgcom"* ]]; then
-        local pkgcom=$(cat $pkgbuild | grep "pkgcom=" | sed 's/pkgcom=//' | sed 's/"//g' | sed "s/'//g")
-        ver=$(echo $ver | sed "s/\$pkgcom/$pkgcom/")
-    fi
-
-    if [[ $ver == *"\$pkgsha"* ]]; then
-        local pkgsha=$(cat $pkgbuild | grep "pkgsha=" | sed 's/pkgsha=//' | sed 's/"//g' | sed "s/'//g")
-        ver=$(echo $ver | sed "s/\$pkgsha/$pkgsha/")
-    fi
-
-    local base_version="$ver-$rel"
-    if [ "$epo" != "" ]; then
-        echo "$epo:$base_version"
+    local base_version="$pkgver-$pkgrel"
+    if [ "$epoch" != "" ]; then
+        echo "$epoch:$base_version"
     else
         echo "$base_version"
     fi
