@@ -41,6 +41,10 @@ mkdir -p ~/.config/awesome
 mkdir -p ~/.config/awesome/widgets
 mirror_link awesome .config/awesome
 
+# link up termite
+mkdir -p ~/.config/termite
+dot_link termite .config/termite/config
+
 #
 # Set up Vim
 #

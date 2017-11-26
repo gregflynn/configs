@@ -33,7 +33,7 @@ do
   end)
 end
 
-terminal = "tilix"
+terminal = "termite"
 modkey = "Mod4"
 altkey = "Mod1"
 
@@ -52,7 +52,7 @@ awful.layout.layouts = {
 mymainmenu = awful.menu({
   items = {
     {"albert", "albert"},
-    {"tilix", terminal},
+    {"termite", terminal},
     {"restart", awesome.restart},
     {"quit", awesome.quit}
   }

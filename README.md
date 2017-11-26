@@ -13,6 +13,10 @@ this is a mediocre at best attempt to keep my configuration files in a manageabl
   * git autocomplete
 * global git configuration
 * vimrc
+* Awesome Window Manager
+  * Custom configuration
+  * Compartmentalized Widget
+* Termite config
 
 ## install
 ```
@@ -20,14 +24,8 @@ git clone https://github.com/gregflynn/dotsanity.git ~/.sanity
 bash ~/.sanity/setup.sh
 ```
 
-## todo
-features that are planned
-* Visual Studio Code settings and package list
-* Tilix settings
-
 ## goals
 * never check in package code
-  * just configure package managers
-  * when managing with dropbox, this became a common merge conflict
 * make it easy to apply configs
 * No additional steps beyond `setup.sh`
+* `setup.sh` is rerunable without error

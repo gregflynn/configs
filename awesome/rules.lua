@@ -30,7 +30,7 @@ return {
         }
     },
     {
-        rule = { instance = "tilix", type = "normal" },
+        rule = { instance = "termite", type = "normal" },
         properties = {
             floating = false
         }
