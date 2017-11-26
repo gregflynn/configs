@@ -95,5 +95,9 @@ inoremap <C-Up> <Esc>:m .-2<CR>==gi
 vnoremap <C-Down> :m '>+1<CR>gv=gv
 vnoremap <C-Up> :m '<-2<CR>gv=gv
 
+nnoremap <C-S> :w<CR>
+inoremap <C-S> :w<CR>
+vnoremap <C-S> :w<CR>
+
 set cursorline
 set mouse=a
