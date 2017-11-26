@@ -108,5 +108,9 @@ vnoremap > >gv
 " comment out lines of code
 map <C-_> <leader>c<space>
 
+" fix ctrl left/right in normal mode
+nnoremap <C-Left> b
+nnoremap <C-Right> w
+
 set cursorline
 set mouse=a
