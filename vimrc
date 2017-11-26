@@ -16,6 +16,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-vinegar'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'mustache/vim-mustache-handlebars'
+Plugin 'scrooloose/nerdcommenter'
 call vundle#end()
 filetype plugin indent on
 
@@ -103,6 +104,9 @@ vnoremap <C-S> :w<CR>
 " indent in visual mode like a champ
 vnoremap < <gv
 vnoremap > >gv
+
+" comment out lines of code
+map <C-_> <leader>c<space>
 
 set cursorline
 set mouse=a
