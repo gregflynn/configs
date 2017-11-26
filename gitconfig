@@ -1,17 +1,17 @@
 [include]
-	path = .sanity/private/gitconfig
+    path = .sanity/private/gitconfig
 
 [push]
-	default = current
+    default = current
 
 [filter "lfs"]
-	clean = git lfs clean %f
-	smudge = git lfs smudge %f
-	required = true
+    clean = git lfs clean %f
+    smudge = git lfs smudge %f
+    required = true
 
 [core]
-	excludesfile = ~/.gitignore
-	editor = /usr/bin/vim
+    excludesfile = ~/.gitignore
+    editor = /usr/bin/vim
 
 [url "https://github.com/"]
     insteadOf = "gh:"
@@ -21,3 +21,5 @@
 [url "https://aur.archlinux.org/"]
     insteadOf = "aur:"
 
+[diff]
+    tool = vimdiff
