@@ -66,7 +66,7 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-K><C-K> <C-W><C-W>
-nnoremap <Leader>q :bd<CR>
+nnoremap <Leader>q :bp\|bd #<CR>
 nnoremap <Leader>j :ls<CR>
 nnoremap <Leader>h :bp<CR>
 nnoremap <Leader>l :bn<CR>
@@ -111,6 +111,18 @@ map <C-_> <leader>c<space>
 " fix ctrl left/right in normal mode
 nnoremap <C-Left> b
 nnoremap <C-Right> w
+
+" don't open newly created files from netrw
+" https://stackoverflow.com/questions/45536346/create-a-new-file-but-not-open-a-buffer-in-vim-netrw
+autocmd filetype netrw call Netrw_mappings()
+function! Netrw_mappings()
+  noremap <buffer>% :call CreateInPreview()<cr>
+endfunction
+function! CreateInPreview()
+  let l:filename = input("please enter filename: ")
+  execute 'silent !touch ' . b:netrw_curdir.'/'.l:filename
+  redraw!
+endf
 
 set cursorline
 set mouse=a
