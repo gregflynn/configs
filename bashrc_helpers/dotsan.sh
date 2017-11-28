@@ -5,6 +5,9 @@ function dotsan () {
         reload)
             source ~/.bashrc
         ;;
+        tic)
+            tic -x $DOTINSTALL/termite.terminfo
+        ;;
         code)
             code $DOTINSTALL
         ;;

@@ -4,9 +4,9 @@
 DOTINSTALL="$HOME/.sanity"
 
 #
-# Fix for tilix sessions, because tilix is dope
+# Fix for VTE terminals
 #
-if [ $TERMINIX_ID ] || [ $TILIX_ID ] || [ $VTE_VERSION ]; then
+if [ $VTE_VERSION ]; then
   if [ -e /etc/profile.d/vte.sh ]; then
     # Arch
     source /etc/profile.d/vte.sh
