@@ -1,0 +1,26 @@
+{
+	"class properties": {
+		"prefix": "pp",
+		"body":[
+			"public $1 { get; set; }"
+		]
+	},
+	"class": {
+		"prefix": "cls",
+		"body":[
+			"public class $1",
+			"{",
+			"    $2",
+			"}"
+		]
+	},
+	"namespace": {
+		"prefix": "ns",
+		"body": [
+			"namespace $1",
+			"{",
+			"    $2",
+			"}"
+		]
+	}
+}

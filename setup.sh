@@ -37,13 +37,17 @@ dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 
 # link up awesome configs
-mkdir -p ~/.config/awesome
 mkdir -p ~/.config/awesome/widgets
 mirror_link awesome .config/awesome
 
 # link up termite
 mkdir -p ~/.config/termite
 dot_link termite .config/termite/config
+
+# link up visual studio code
+mkdir -p ~/.config/Code/User/snippets
+mirror_link vscode/User .config/Code/User
+pushd vscode > /dev/null && python sync.py && popd > /dev/null
 
 #
 # Set up Vim

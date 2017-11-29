@@ -1,0 +1,69 @@
+// Place your settings in this file to overwrite the default settings
+{
+    "editor.fontFamily": "'Hack'",
+    "editor.rulers": [79, 120],
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/__pycache__": true,
+        "**/*~": true,
+        "**/node_modules": true,
+        "**/tmp": true,
+        "**/bower_components": true,
+        "**/*.pyc": true,
+        "tags": true,
+        "**/*.log": true,
+        "bin": true,
+        "obj": true,
+        "archived_logs": true,
+        "logs": true,
+        "**/dist": true,
+        "**/build": true,
+        "**/cover": true,
+        "**/.cache": true,
+        "**/htmlcov": true
+    },
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "window.zoomLevel": 0,
+    "git.confirmSync": false,
+    "editor.codeLens": false,
+    "files.insertFinalNewline": true,
+    "workbench.iconTheme": "vscode-icons",
+    "workbench.colorTheme": "Monokai",
+    "window.menuBarVisibility": "hidden",
+    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
+    "sync.host": "",
+    "sync.pathPrefix": "",
+    "explorer.autoReveal": false,
+    "keyboard.dispatch": "keyCode",
+    "[javascript]": {
+        "editor.tabSize": 2
+    },
+    "[html]": {
+        "editor.tabSize": 2
+    },
+    "[handlebars]": {
+        "editor.tabSize": 2
+    },
+    "[python]": {
+        "editor.tabSize": 4
+    },
+    "sync.quietSync": false,
+    "editor.fontSize": 14,
+    "editor.renderIndentGuides": true,
+    "editor.minimap.enabled": false,
+    "python.workspaceSymbols.enabled": true,
+    "workbench.editor.enablePreview": false,
+    "git.enableSmartCommit": true,
+    "atomKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.formatOnPaste": false,
+    "workbench.startupEditor": "newUntitledFile",
+    "markdown.preview.scrollPreviewWithEditorSelection": false,
+    "sync.askGistName": false,
+    "typescript.check.npmIsInstalled": false,
+    "python.linting.maxNumberOfProblems": 100000
+}

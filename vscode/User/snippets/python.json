@@ -1,0 +1,16 @@
+{
+	"ipdb set trace": {
+		"prefix": "ipdb",
+		"body": [
+			"import ipdb; ipdb.set_trace()"
+		],
+		"description": "set a breakpoint with ipdb"
+	},
+	"create logger": {
+		"prefix": "logger",
+		"body": [
+			"logger = logging.getLogger(__name__)"
+		],
+		"description": "create a logger"
+	}
+}
