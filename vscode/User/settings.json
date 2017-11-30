@@ -63,5 +63,6 @@
     "markdown.preview.scrollPreviewWithEditorSelection": false,
     "sync.askGistName": false,
     "typescript.check.npmIsInstalled": false,
-    "python.linting.maxNumberOfProblems": 100000
+    "python.linting.maxNumberOfProblems": 100000,
+    "guides.enabled": false
 }
