@@ -26,7 +26,8 @@ return {
             placement = function (c)
                 awful.placement.centered(c, { offset = { y = -350 } })
             end,
-            floating = true
+            floating = true,
+            border_width = 0
         }
     },
     {

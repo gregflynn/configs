@@ -49,6 +49,10 @@ mkdir -p ~/.config/Code/User/snippets
 mirror_link vscode/User .config/Code/User
 pushd vscode > /dev/null && python sync.py && popd > /dev/null
 
+# link up Albert launcher
+mkdir -p ~/.config/albert/org.albert.frontend.boxmodel.qml
+mirror_link albert .config/albert
+
 #
 # Set up Vim
 #
