@@ -35,6 +35,7 @@ dot_link gitconfig .gitconfig
 dot_link gitignore .gitignore
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
+dot_link ctags .ctags
 
 # link up awesome configs
 mkdir -p ~/.config/awesome/widgets
