@@ -35,8 +35,6 @@
     "workbench.colorTheme": "Monokai",
     "window.menuBarVisibility": "hidden",
     "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
-    "sync.host": "",
-    "sync.pathPrefix": "",
     "explorer.autoReveal": false,
     "keyboard.dispatch": "keyCode",
     "[javascript]": {
