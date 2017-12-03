@@ -76,5 +76,11 @@
         "key": "ctrl+shift+d",
         "command": "editor.action.showHover",
         "when": "editorTextFocus"
+    }, {
+        "key": "ctrl+h",
+        "command": "workbench.action.maximizeEditor"
+    }, {
+        "key": "ctrl+shift+h",
+        "command": "workbench.action.evenEditorWidths"
     }
 ]
