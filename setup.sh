@@ -38,21 +38,45 @@ dot_link xprofile .xprofile
 dot_link ctags .ctags
 
 # link up awesome configs
-mkdir -p ~/.config/awesome/widgets
-mirror_link awesome .config/awesome
+if command -v awesome > /dev/null; then
+    mkdir -p ~/.config/awesome/widgets
+    mirror_link awesome .config/awesome
+else
+    echo "Awesome WM not found, skipping"
+fi
 
 # link up termite
-mkdir -p ~/.config/termite
-dot_link termite .config/termite/config
+if command -v termite > /dev/null; then
+    mkdir -p ~/.config/termite
+    dot_link termite .config/termite/config
+else
+    echo "Termite not found, skipping"
+fi
 
 # link up visual studio code
-mkdir -p ~/.config/Code/User/snippets
-mirror_link vscode/User .config/Code/User
-pushd vscode > /dev/null && python sync.py && popd > /dev/null
+if command -v code > /dev/null; then
+    mkdir -p ~/.config/Code/User/snippets
+    mirror_link vscode/User .config/Code/User
+    pushd vscode > /dev/null && python sync.py && popd > /dev/null
+else
+    echo "Visual Studio Code not found, skipping"
+fi
 
 # link up Albert launcher
-mkdir -p ~/.config/albert/org.albert.frontend.boxmodel.qml
-mirror_link albert .config/albert
+if command -v albert > /dev/null; then
+    mkdir -p ~/.config/albert/org.albert.frontend.boxmodel.qml
+    mirror_link albert .config/albert
+else
+    echo "Albert Launcher not found, skipping"
+fi
+
+# XFCE4 Terminal
+if command -v xfce4-terminal > /dev/null; then
+    mkdir -p ~/.config/xfce4/terminal
+    dot_link xfce4-terminal.rc .config/xfce4/terminal/terminalrc
+else
+    echo "Xfce4 Terminal not found, skipping"
+fi
 
 #
 # Set up Vim
