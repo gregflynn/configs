@@ -38,13 +38,13 @@
     "explorer.autoReveal": false,
     "keyboard.dispatch": "keyCode",
     "[javascript]": {
-        "editor.tabSize": 2
+        "editor.tabSize": 4
     },
     "[html]": {
-        "editor.tabSize": 2
+        "editor.tabSize": 4
     },
     "[handlebars]": {
-        "editor.tabSize": 2
+        "editor.tabSize": 4
     },
     "[python]": {
         "editor.tabSize": 4
