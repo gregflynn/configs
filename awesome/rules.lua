@@ -31,7 +31,7 @@ return {
         }
     },
     {
-        rule = { instance = "termite", type = "normal" },
+        rule = { instance = "xfce4-terminal", type = "normal" },
         properties = {
             floating = false
         }

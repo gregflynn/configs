@@ -33,7 +33,7 @@ do
   end)
 end
 
-terminal = "termite"
+terminal = "xfce4-terminal"
 modkey = "Mod4"
 altkey = "Mod1"
 
@@ -52,7 +52,7 @@ awful.layout.layouts = {
 mymainmenu = awful.menu({
   items = {
     {"albert", "albert"},
-    {"termite", terminal},
+    {"xfce4-terminal", terminal},
     {"restart", awesome.restart},
     {"quit", awesome.quit}
   }

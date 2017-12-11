@@ -45,14 +45,6 @@ else
     echo "Awesome WM not found, skipping"
 fi
 
-# link up termite
-if command -v termite > /dev/null; then
-    mkdir -p ~/.config/termite
-    dot_link termite .config/termite/config
-else
-    echo "Termite not found, skipping"
-fi
-
 # link up visual studio code
 if command -v code > /dev/null; then
     mkdir -p ~/.config/Code/User/snippets
