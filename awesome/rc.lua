@@ -51,7 +51,6 @@ awful.layout.layouts = {
 
 mymainmenu = awful.menu({
   items = {
-    {"albert", "albert"},
     {"xfce4-terminal", terminal},
     {"restart", awesome.restart},
     {"quit", awesome.quit}
@@ -247,8 +246,6 @@ globalkeys = gears.table.join(
     end,
     {description = "focus previous by index", group = "client"}
   ),
-  awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-            {description = "show main menu", group = "awesome"}),
 
   -- Layout manipulation
   awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
@@ -339,7 +336,18 @@ globalkeys = gears.table.join(
   end),
   awful.key({ modkey }, "o", function ()
     awful.spawn.with_shell("sleep 0.2 && scrot -s -e 'mv $f ~/Pictures/Screenshots'")
-  end)
+  end),
+
+    -- rofi keys
+    awful.key({ modkey }, " ", function ()
+        awful.spawn("rofi -show drun")
+    end),
+    awful.key({ modkey }, "w", function ()
+        awful.spawn("rofi -show window")
+    end),
+    awful.key({ modkey }, "s", function ()
+        awful.spawn("rofi -show ssh")
+    end)
 )
 
 clientkeys = gears.table.join(
@@ -506,12 +514,6 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 client.connect_signal("property::floating", function (c)
-  -- catch for Albert popup window
-  if c.instance == 'albert' and c.type == 'utility' then
-    awful.titlebar.hide(c)
-    return
-  end
-
   if c.floating then
     awful.titlebar.show(c)
   else

@@ -54,20 +54,20 @@ else
     echo "Visual Studio Code not found, skipping"
 fi
 
-# link up Albert launcher
-if command -v albert > /dev/null; then
-    mkdir -p ~/.config/albert/org.albert.frontend.boxmodel.qml
-    mirror_link albert .config/albert
-else
-    echo "Albert Launcher not found, skipping"
-fi
-
 # XFCE4 Terminal
 if command -v xfce4-terminal > /dev/null; then
     mkdir -p ~/.config/xfce4/terminal
     dot_link xfce4-terminal.rc .config/xfce4/terminal/terminalrc
 else
     echo "Xfce4 Terminal not found, skipping"
+fi
+
+# rofi
+if command -v rofi > /dev/null; then
+    mkdir -p ~/.config/rofi
+    dot_link rofi.config .config/rofi/config
+else
+    echo "Rofi not found, skipping"
 fi
 
 #

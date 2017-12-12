@@ -16,6 +16,7 @@ this is a mediocre at best attempt to keep my configuration files in a manageabl
 * Awesome Window Manager
   * Custom configuration
   * Compartmentalized Widget
+* Rofi config
 * xfce4-terminal config
 
 ## install

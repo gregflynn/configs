@@ -21,16 +21,6 @@ return {
         }
     },
     {
-        rule = { name = "Albert" },
-        properties = {
-            placement = function (c)
-                awful.placement.centered(c, { offset = { y = -350 } })
-            end,
-            floating = true,
-            border_width = 0
-        }
-    },
-    {
         rule = { instance = "xfce4-terminal", type = "normal" },
         properties = {
             floating = false
