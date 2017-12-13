@@ -128,6 +128,7 @@ end
 local battery = require('widgets/battery')
 local cputemp = require("widgets/cputemp")
 local volume  = require("widgets/volume")
+local screenshot = require("widgets/screenshots")
 
 awful.screen.connect_for_each_screen(function(s)
   -- Wallpaper
@@ -193,6 +194,7 @@ awful.screen.connect_for_each_screen(function(s)
         else return nil
         end
       end)(),
+      screenshot.container,
       (function()
         if battery.battery_enabled then
           return battery.container
@@ -307,6 +309,8 @@ globalkeys = gears.table.join(
 
   brightness.globalkeys,
 
+  screenshot.globalkeys,
+
   -- File manager key
   awful.key({ }, "XF86Explorer", function ()
     awful.spawn("xdg-open "..os.getenv("HOME"))
@@ -328,14 +332,6 @@ globalkeys = gears.table.join(
   awful.key({ modkey }, "Right", function ()
     awful.client.focus.bydirection("right")
     if client.focus then client.focus:raise() end
-  end),
-
-  -- Screenshots
-  awful.key({ modkey }, "p", function ()
-    awful.spawn("scrot -e 'mv $f ~/Pictures/Screenshots'")
-  end),
-  awful.key({ modkey }, "o", function ()
-    awful.spawn.with_shell("sleep 0.2 && scrot -s -e 'mv $f ~/Pictures/Screenshots'")
   end),
 
     -- rofi keys
