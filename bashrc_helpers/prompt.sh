@@ -142,7 +142,7 @@ function pss_path() {
     if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
     else SP="$SP${F:1}"; fi
 
-    echo -n "$C1$RI$C2 $SP$C3"
+    echo -n "$C1$RI$C2 $SP $C3"
 }
 
 function pss_venv() {
