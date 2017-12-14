@@ -14,7 +14,6 @@ Plugin 'majutsushi/tagbar'
 Plugin 'crusoexia/vim-monokai'
 Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-vinegar'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'scrooloose/nerdcommenter'
 call vundle#end()
