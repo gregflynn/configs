@@ -49,7 +49,6 @@
     "[python]": {
         "editor.tabSize": 4
     },
-    "sync.quietSync": false,
     "editor.fontSize": 14,
     "editor.renderIndentGuides": true,
     "editor.minimap.enabled": false,
@@ -59,10 +58,11 @@
     "atomKeymap.promptV3Features": true,
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.formatOnPaste": false,
-    "workbench.startupEditor": "newUntitledFile",
+    "workbench.startupEditor": "none",
     "markdown.preview.scrollPreviewWithEditorSelection": false,
-    "sync.askGistName": false,
     "typescript.check.npmIsInstalled": false,
     "python.linting.maxNumberOfProblems": 100000,
-    "guides.enabled": false
+    "git.autofetch": true,
+    "explorer.openEditors.visible": 1000,
+    "extensions.ignoreRecommendations": true
 }
