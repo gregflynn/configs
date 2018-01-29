@@ -33,14 +33,20 @@ function brightness.update()
 end
 
 brightness.globalkeys = gears.table.join(
-    awful.key({ }, "XF86MonBrightnessDown", function ()
-        awful.spawn("light -U -p 10")
-        brightness.update()
-    end),
-    awful.key({ }, "XF86MonBrightnessUp", function ()
-        awful.spawn("light -A -p 10")
-        brightness.update()
-    end)
+    awful.key(
+        { }, "XF86MonBrightnessDown",
+        function()
+            awful.spawn("light -U -p 10")
+            brightness.update()
+        end
+    ),
+    awful.key(
+        { }, "XF86MonBrightnessUp",
+        function()
+            awful.spawn("light -A -p 10")
+            brightness.update()
+        end
+    )
 )
 
 return brightness

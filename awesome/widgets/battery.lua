@@ -38,9 +38,9 @@ battery.lain_widget = lain.widget.bat {
         elseif bat_now.perc < 90 then status = "good"
         end
 
-        local color = beautiful.fg_focus
+        local color = beautiful.colors.green
         if bat_now.status == "Discharging" then
-            color = beautiful.fg_urgent
+            color = beautiful.colors.red
             battery.adapter.visible = false
             battery.icon.image = string.format(icon_fmt, status)
         else

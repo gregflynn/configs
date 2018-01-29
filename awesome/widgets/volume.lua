@@ -24,9 +24,9 @@ local volume = lain.widget.pulsebar {
         font = "Hack 10"
     },
     colors = {
-        background = beautiful.fg_normal,
-        mute       = beautiful.fg_urgent,
-        unmute     = beautiful.fg_focus
+        background = beautiful.colors.grey,
+        mute       = beautiful.colors.red,
+        unmute     = beautiful.colors.green
     },
     settings = function()
         if volume_now.muted == "yes" then
@@ -60,18 +60,30 @@ volume.buttons = awful.util.table.join(
 )
 
 volume.globalkeys = gears.table.join(
-    awful.key({ }, "XF86AudioRaiseVolume", function ()
-        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
-        volume.notify()
-    end),
-    awful.key({ }, "XF86AudioLowerVolume", function ()
-        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
-        volume.notify()
-    end),
-    awful.key({ }, "XF86AudioMute", function ()
-        awful.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
-        volume.notify()
-    end)
+    awful.key(
+        { }, "XF86AudioRaiseVolume",
+        function()
+            awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
+            volume.notify()
+        end
+        -- {description = "Increase Volume", group = "system"}
+    ),
+    awful.key(
+        { }, "XF86AudioLowerVolume",
+        function()
+            awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
+            volume.notify()
+        end
+        -- {description = "Decrease Volume", group = "system"}
+    ),
+    awful.key(
+        { }, "XF86AudioMute",
+        function()
+            awful.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+            volume.notify()
+        end
+        -- {description = "Mute Volume", group = "system"}
+    )
 )
 
 volume.bar.paddings = 0

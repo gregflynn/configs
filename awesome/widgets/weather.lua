@@ -6,8 +6,8 @@ local dpi       = beautiful.xresources.apply_dpi
 local humidity_bar = wibox.widget {
     max_value        = 100,
     widget           = wibox.widget.progressbar,
-    color            = beautiful.fg_minimize,
-    background_color = beautiful.fg_normal
+    color            = beautiful.colors.blue,
+    background_color = beautiful.colors.grey
 }
 
 local rotated_humidity = wibox.widget {
@@ -34,7 +34,7 @@ local weather = lain.widget.weather {
 
         return string.format(
             '<b>%s</b>: <span color="%s">%d</span>/<span color="%s">%d</span> %s',
-            day, beautiful.fg_urgent, tmax, beautiful.fg_minimize, tmin, desc
+            day, beautiful.colors.red, tmax, beautiful.colors.blue, tmin, desc
         )
     end
 }

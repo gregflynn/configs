@@ -129,20 +129,17 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
     local gpm_now = gpmdp.get_now(stdout ~= '')
     gpmdp.latest = gpm_now
 
-    local text = ""
-    local color = beautiful.fg_minimize
-
     if gpm_now.running then
        if gpm_now.title then
             local title = trim(gpm_now.title)
             local artist = trim(gpm_now.artist)
             local album = trim(gpm_now.album)
 
-            local title_color = beautiful.fg_focus
-            local artist_color = beautiful.fg_minimize
+            local title_color = beautiful.colors.purple
+            local artist_color = beautiful.colors.blue
 
             if not gpm_now.playing then
-                title_color = beautiful.fg_normal
+                title_color = beautiful.colors.grey
                 gpmdp.icon.image = gpmdp_icon_loc
             else
                 gpmdp.icon.image = gpmdp.current_album_art
@@ -156,7 +153,7 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
 
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
-                markup.fg.color(beautiful.fg_focus, markup.big(title)),
+                markup.fg.color(title_color, markup.big(title)),
                 markup.fg.color(artist_color, markup.big(artist)),
                 markup.italic(markup.big(album))
             )

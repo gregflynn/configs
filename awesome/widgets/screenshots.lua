@@ -48,16 +48,24 @@ screenshot_icon:buttons(awful.util.table.join(
 ))
 
 screenshot_icon.globalkeys = gears.table.join(
-    awful.key({ modkey }, "p", function ()
-        awful.spawn(string.format(
-            "scrot -e 'mv $f %s'", screenshots_folder
-        ))
-    end),
-    awful.key({ modkey }, "o", function ()
-        awful.spawn.with_shell(string.format(
-            "sleep 0.2 && scrot -s -e 'mv $f %s'", screenshots_folder
-        ))
-    end)
+    awful.key(
+        { modkey }, "p",
+        function ()
+            awful.spawn(string.format(
+                "scrot -e 'mv $f %s'", screenshots_folder
+            ))
+        end,
+        {description = "take full screen screenshot", group = "screen"}
+    ),
+    awful.key(
+        { modkey }, "o",
+        function ()
+            awful.spawn.with_shell(string.format(
+                "sleep 0.2 && scrot -s -e 'mv $f %s'", screenshots_folder
+            ))
+        end,
+        {description = "take snippet screenshot", group = "screen"}
+    )
 )
 
 screenshot_icon.container = {

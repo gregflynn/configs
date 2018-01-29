@@ -5,7 +5,7 @@ local beautiful = require("beautiful")
 local lain = require("lain")
 
 local clock = wibox.widget.textclock(
-    '<span color="'..beautiful.fg_minimize..'">%a %b %e %l:%M%P</span>'
+    '<span color="'..beautiful.colors.blue..'">%a %b %e %l:%M%P</span>'
 )
 
 -- Calendar widget on hover
@@ -24,7 +24,7 @@ local clock = wibox.widget.textclock(
 clock:buttons(gears.table.join(
     -- NOTE: this kills lain's buttons
     awful.button({ }, 1, function()
-        awful.spawn("google-chrome-stable https://calendar.google.com/")
+        awful.spawn("xdg-open https://calendar.google.com/")
     end)
 ))
 

@@ -12,8 +12,8 @@ cpuwidget:set_color({
     from = { 0, 0 },
     to = { 0, 20 },
     stops = {
-        { 0, beautiful.fg_urgent },
-        { 1, beautiful.fg_focus }
+        { 0, beautiful.colors.red },
+        { 1, beautiful.colors.green }
     }
 })
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1")

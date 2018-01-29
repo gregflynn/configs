@@ -14,20 +14,20 @@ local storage = {
     mem_bar = wibox.widget {
         max_value        = 100,
         widget           = wibox.widget.progressbar,
-        color            = beautiful.fg_minimize,
-        background_color = beautiful.fg_normal
+        color            = beautiful.colors.blue,
+        background_color = beautiful.colors.grey
     },
     root_bar = wibox.widget {
         max_value        = 100,
         widget           = wibox.widget.progressbar,
-        color            = beautiful.fg_urgent,
-        background_color = beautiful.fg_normal
+        color            = beautiful.colors.purple,
+        background_color = beautiful.colors.grey
     },
     boot_bar = wibox.widget {
         max_value        = 100,
         widget           = wibox.widget.progressbar,
-        color            = beautiful.fg_focus,
-        background_color = beautiful.fg_normal
+        color            = beautiful.colors.green,
+        background_color = beautiful.colors.grey
     },
     notification  = nil,
     notification_preset = {
@@ -47,15 +47,15 @@ function storage.notification_on()
     storage.notification_preset.text = markup.big(string.format(
         "\n%s\n%s\n%s",
         markup.fg.color(
-            beautiful.fg_minimize,
+            beautiful.colors.blue,
             string.format("Memory: %s%%", storage.mem_pct)
         ),
         markup.fg.color(
-            beautiful.fg_urgent,
+            beautiful.colors.purple,
             string.format("/     : %s%%", storage.root_pct)
         ),
         markup.fg.color(
-            beautiful.fg_focus,
+            beautiful.colors.green,
             string.format("/boot : %s%%", storage.boot_pct)
         )
     ))

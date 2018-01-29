@@ -5,7 +5,7 @@ local memory = lain.widget.mem {
     settings = function()
         widget:set_markup(string.format(
             '<span color="%s">🐏 %d%%</span>',
-            beautiful.fg_minimize,
+            beautiful.colors.blue,
             mem_now.perc
         ))
     end

@@ -4,20 +4,31 @@ local dpi = beautiful.xresources.apply_dpi
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 
-local theme = {}
+local colors = {
+    background = "#272822",
+    blue       = "#66D9EF",
+    green      = "#A6E22E",
+    grey       = "#75715e",
+    purple     = "#ab9df2",
+    red        = "#F92672",
+    white      = "#F8F8F2"
+}
+
+local theme = {
+    colors = colors
+}
 
 theme.font          = "hack 10"
 
-theme.bg_normal     = "#1B1D1E"
-theme.bg_focus      = "#1B1D1E"
-theme.bg_urgent     = "#1B1D1E"
-theme.bg_minimize   = "#1B1D1E"
-theme.bg_systray    = theme.bg_normal
+theme.bg_normal     = colors.background
+theme.bg_focus      = colors.background
+theme.bg_urgent     = colors.background
+theme.bg_minimize   = colors.background
 
-theme.fg_normal     = "#75715E"
-theme.fg_focus      = "#A6E22E"
-theme.fg_urgent     = "#F92672"
-theme.fg_minimize   = "#66D9EF"
+theme.fg_normal     = colors.grey
+theme.fg_focus      = colors.blue
+theme.fg_urgent     = colors.red
+theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 10
 theme.border_width  = 0
@@ -25,41 +36,21 @@ theme.border_normal = theme.bg_normal
 theme.border_focus  = theme.fg_focus
 theme.border_marked = "#91231c"
 
-theme.wibar_opacity = 0.9
+--
+-- Hotkeys
+--
+theme.hotkeys_font = "hack 14"
+theme.hotkeys_description_font = "hack 12"
+theme.hotkeys_fg = colors.white
+theme.hotkeys_modifiers_fg = colors.blue
 
--- There are other variable sets
--- overriding the default one when
--- defined, the sets are:
--- taglist_[bg|fg]_[focus|urgent|occupied|empty|volatile]
-theme.taglist_fg_focus = theme.fg_minimize
--- tasklist_[bg|fg]_[focus|urgent]
--- titlebar_[bg|fg]_[normal|focus]
-theme.titlebar_fg_focus = theme.fg_focus
--- tooltip_[font|opacity|fg_color|bg_color|border_width|border_color]
--- mouse_finder_[color|timeout|animate_timeout|radius|factor]
--- prompt_[fg|bg|fg_cursor|bg_cursor|font]
--- hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
--- Example:
---theme.taglist_bg_focus = "#ff0000"
-
--- Variables set for theming notifications:
--- notification_font
--- notification_[bg|fg]
--- notification_[width|height|margin]
--- notification_[border_color|border_width|shape|opacity]
-
--- Variables set for theming the menu:
--- menu_[bg|fg]_[normal|focus]
--- menu_[border_color|border_width]
+--
+-- Menus
+--
 theme.menu_submenu_icon = themes_path.."default/submenu.png"
 theme.menu_height = dpi(20)
 theme.menu_width  = dpi(300)
 
--- You can add as many variables as
--- you wish and access them by using
--- beautiful.variable in your rc.lua
-
--- Define the image to load
 theme.titlebar_close_button_normal = themes_path.."zenburn/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = themes_path.."zenburn/titlebar/close_focus.png"
 

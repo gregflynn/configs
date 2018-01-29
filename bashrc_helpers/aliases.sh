@@ -16,15 +16,15 @@ alias open='xdg-open'
 alias dict='sdcv'
 
 function bl() {
-  $@
-  paplay /usr/share/sounds/gnome/default/alerts/drip.ogg
+    $@
+    paplay /usr/share/sounds/gnome/default/alerts/drip.ogg
 }
 function rmpyc() {
-  find . -name '*.pyc' -exec rm -rf {} \;
-  find . -name __pycache__ -exec rm -rf {} \;
+    find . -name '*.pyc' -exec rm -rf {} \;
+    find . -name __pycache__ -exec rm -rf {} \;
 }
 function title() {
-  echo -en "\033]0;$1\a"
+    echo -en "\033]0;$1\a"
 }
 alias colors='for x in {0..8}; do for i in {30..37}; do for a in {40..47}; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo ""'
 
@@ -33,14 +33,14 @@ alias colors='for x in {0..8}; do for i in {30..37}; do for a in {40..47}; do ec
 #
 alias pygrep='grep --color --include="*.py"'
 function fynd() {
-  grep --color --include="*.py" -rli "$1" .
+    grep --color --include="*.py" -rli "$1" .
 }
 function fjnd() {
-  grep --color --include="*.js" -rli "$1" .
+    grep --color --include="*.js" -rli "$1" .
 }
 function fknd() {
-  grep --color --include="*.java" --exclude="R.java" -rli "$1" .
-  grep --color --include="*.xml" -rli "$1" .
+    grep --color --include="*.java" --exclude="R.java" -rli "$1" .
+    grep --color --include="*.xml" -rli "$1" .
 }
 
 #
@@ -51,6 +51,10 @@ alias ga='git add'
 alias gaa='git add --all'
 alias gc='git checkout'
 function gmb() {
-  date="$(date '+%Y%m')"
-  git checkout -b "${date}_$1"
+    if ! [ "$1" ]; then
+        echo "no branch name specified"
+        return 1
+    fi
+    date="$(date '+%Y%m')"
+    git checkout -b "${date}_$1"
 }
