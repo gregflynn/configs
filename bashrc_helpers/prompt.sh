@@ -51,16 +51,6 @@ function pss_git() {
         done
     done <<< "$gitstatus"
 
-
-    # handle stashes
-    STASH=$(git stash list 2>/dev/null)
-    if ! test -z "$STASH"; then
-        C1=$'\e[45m'
-        C2=$'\e[37m'
-        C3=$'\e[35m'
-        echo -n "$C1$RI${C2} s $C3"
-    fi
-
     E=""
     if [ "$staged" = "1" ]; then E="$E +"; fi
 
@@ -70,6 +60,13 @@ function pss_git() {
     if [ "$conflicted" = "1" ]; then E="$E M"; fi
     if [ "$changes" = "1" ]; then E="$E *"; fi
     if [ "$untracked" = "1" ]; then E="$E u"; fi
+
+    # handle stashes
+    STASH=$(git stash list 2>/dev/null)
+    if ! test -z "$STASH"; then
+        C1=$'\e[35m'
+        E="$E$C1 s"
+    fi
 
     IFS="^" read -ra branch_fields <<< "${branch/\#\# }"
     branch="${branch_fields[0]}"
