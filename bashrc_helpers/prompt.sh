@@ -81,7 +81,7 @@ function pss_basic() {
     C1=$'\e[43m' # start of hostname
     C2=$'\e[30m'
     C3=$'\e[40m'
-    C4=$'\e[0;32;40m' # start of ME
+    C4=$'\e[0;34;40m' # start of ME
     C5=$'\e[0;30m'
     
     H=''
@@ -161,11 +161,13 @@ function pss_ps1() {
 if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
     CX=$'\e[31m'
 else
-    CX=$'\e[32m'
+    CX=$'\e[34m'
 fi
 
 # only set PS1 in emulated sessions
 if [[ $(tty) == /dev/pts/* ]]; then
+    normalcol="$(tput sgr0)"
+    trap 'echo -n "$normalcol"' DEBUG
     PS1=$'$(pss_ps1)
-\[$CX\]$RI\[\e[0m\] '
+\[$CX\]$RI '
 fi
