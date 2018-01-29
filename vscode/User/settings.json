@@ -1,7 +1,36 @@
 // Place your settings in this file to overwrite the default settings
 {
+    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
+    "extensions.ignoreRecommendations": true,
+    "keyboard.dispatch": "keyCode",
+    "markdown.preview.scrollPreviewWithEditorSelection": false,
+    "atomKeymap.promptV3Features": true,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "workbench.startupEditor": "none",
+
+    /**
+     * Editor
+     */
     "editor.fontFamily": "'Hack'",
+    "window.zoomLevel": 0,
+    "editor.fontSize": 14,
+    "editor.renderIndentGuides": true,
+    "editor.codeLens": false,
+    "editor.minimap.enabled": false,
     "editor.rulers": [79, 120],
+    "editor.formatOnPaste": false,
+
+    /**
+     * Explorer
+     */
+    "explorer.openEditors.visible": 1000,
+    "explorer.autoReveal": false,
+    "workbench.editor.enablePreview": false,
+
+    /**
+     * Files
+     */
+    "files.insertFinalNewline": true,
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
@@ -25,44 +54,42 @@
         "**/.cache": true,
         "**/htmlcov": true
     },
+    
+    /**
+     * Git
+     */
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "git.enableSmartCommit": false,
+    
+    /**
+     * Python Settings
+     */
+    "python.linting.maxNumberOfProblems": 100000,
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,
-    "window.zoomLevel": 0,
-    "git.confirmSync": false,
-    "editor.codeLens": false,
-    "files.insertFinalNewline": true,
+    "python.workspaceSymbols.enabled": true,
+
+    /**
+     * Terminal customization
+     */
+    "terminal.integrated.fontSize": 15,
+    "workbench.colorCustomizations": {
+        "terminal.background": "#272822",
+        "terminal.foreground": "#f8f8f2",
+        "terminal.ansiRed": "#F92672",
+        "terminal.ansiGreen": "#A6E22E",
+        "terminal.ansiYellow": "#f4bf75",
+        "terminal.ansiBlue": "#66D9EF",
+        "terminal.ansiMagenta": "#ae81ff",
+        "terminal.ansiCyan": "#a1efe4",
+        "terminal.ansiWhite": "#f8f8f2"
+    },
+
+    /**
+     * Theme
+     */
     "workbench.iconTheme": "vscode-icons",
     "workbench.colorTheme": "Monokai",
     "window.menuBarVisibility": "hidden",
-    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
-    "explorer.autoReveal": false,
-    "keyboard.dispatch": "keyCode",
-    "[javascript]": {
-        "editor.tabSize": 4
-    },
-    "[html]": {
-        "editor.tabSize": 4
-    },
-    "[handlebars]": {
-        "editor.tabSize": 4
-    },
-    "[python]": {
-        "editor.tabSize": 4
-    },
-    "editor.fontSize": 14,
-    "editor.renderIndentGuides": true,
-    "editor.minimap.enabled": false,
-    "python.workspaceSymbols.enabled": true,
-    "workbench.editor.enablePreview": false,
-    "git.enableSmartCommit": true,
-    "atomKeymap.promptV3Features": true,
-    "editor.multiCursorModifier": "ctrlCmd",
-    "editor.formatOnPaste": false,
-    "workbench.startupEditor": "none",
-    "markdown.preview.scrollPreviewWithEditorSelection": false,
-    "typescript.check.npmIsInstalled": false,
-    "python.linting.maxNumberOfProblems": 100000,
-    "git.autofetch": true,
-    "explorer.openEditors.visible": 1000,
-    "extensions.ignoreRecommendations": true
 }
