@@ -32,24 +32,33 @@ theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 10
 theme.border_width  = 0
-theme.border_normal = theme.bg_normal
-theme.border_focus  = theme.fg_focus
-theme.border_marked = "#91231c"
+theme.border_normal = colors.background
+theme.border_focus  = colors.blue
+theme.border_marked = colors.red
 
 --
 -- Hotkeys
 --
-theme.hotkeys_font = "hack 14"
+theme.hotkeys_font             = "hack 14"
 theme.hotkeys_description_font = "hack 12"
-theme.hotkeys_fg = colors.white
-theme.hotkeys_modifiers_fg = colors.blue
+theme.hotkeys_fg               = colors.white
+theme.hotkeys_modifiers_fg     = colors.blue
 
 --
 -- Menus
 --
 theme.menu_submenu_icon = themes_path.."default/submenu.png"
-theme.menu_height = dpi(20)
-theme.menu_width  = dpi(300)
+theme.menu_height       = dpi(20)
+theme.menu_width        = dpi(300)
+
+--
+-- Notifications
+--
+theme.notification_opacity      = 0.9
+theme.notification_font         = "Hack 12"
+theme.notification_fg           = colors.white
+theme.notification_border_width = dpi(1)
+theme.notification_border_color = colors.purple
 
 theme.titlebar_close_button_normal = themes_path.."zenburn/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = themes_path.."zenburn/titlebar/close_focus.png"

@@ -2,6 +2,7 @@ local awful     = require("awful")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
+local naughty   = require("naughty")
 local dpi       = beautiful.xresources.apply_dpi
 
 local screenshots_folder = os.getenv("HOME").."/Pictures/Screenshots"
@@ -30,8 +31,17 @@ screenshot_icon:buttons(awful.util.table.join(
                     menu:add({
                         screenshot,
                         function()
-                            awful.spawn(string.format("xdg-open %s", full_path))
-                            awful.spawn(string.format("xclip -selection clipboard -t image/png %s", full_path))
+                            awful.spawn(string.format(
+                                "xclip -selection clipboard -t image/png %s",
+                                full_path
+                            ))
+                            naughty.notify({
+                                preset =  {
+                                    icon_size = dpi(256),
+                                    timeout   = 2
+                                },
+                                icon = full_path,
+                            })
                         end,
                         icon
                     })
