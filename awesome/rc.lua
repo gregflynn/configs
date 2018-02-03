@@ -375,14 +375,14 @@ globalkeys = gears.table.join(
     -- Screen
     --
     awful.key(
-        { altkey, ctlKey }, "]",
+        { modkey, shift  }, "]",
         function()
             lain.util.useless_gaps_resize(5)
         end,
         {description = "Inc. Useless Gap", group = "screen"}
     ),
     awful.key(
-        { altkey, ctlKey }, "[",
+        { modkey, shift  }, "[",
         function()
             lain.util.useless_gaps_resize(-5)
         end,
