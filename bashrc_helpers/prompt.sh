@@ -118,9 +118,9 @@ function pss_screen() {
 }
 
 function pss_path() {
-    C1=$'\e[44m'
+    C1=$'\e[45m'
     C2=$'\e[30m'
-    C3=$'\e[34m'
+    C3=$'\e[35m'
 
     # replace home dir with tilde
     if [[ ":$PWD" != ":$HOME"* ]]; then P=`pwd`

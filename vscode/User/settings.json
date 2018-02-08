@@ -71,10 +71,21 @@
     "python.workspaceSymbols.enabled": true,
 
     /**
-     * Terminal customization
+     * Theme
      */
     "terminal.integrated.fontSize": 15,
     "workbench.colorCustomizations": {
+        "[Monokai]": {
+            "sideBar.background": "#272822",
+            "editorGroupHeader.tabsBackground": "#1e1f1c",
+            "tab.inactiveBackground": "#1e1f1c",
+            "tab.inactiveForeground": "#ae81ff",
+            // "tab.activeForeground": "#1e1f1c",
+            // "tab.activeBackground": "#66D9EF"
+        },
+        /**
+         * Terminal customization
+         */
         "terminal.background": "#272822",
         "terminal.foreground": "#f8f8f2",
         "terminal.ansiRed": "#F92672",
@@ -85,10 +96,6 @@
         "terminal.ansiCyan": "#a1efe4",
         "terminal.ansiWhite": "#f8f8f2"
     },
-
-    /**
-     * Theme
-     */
     "workbench.iconTheme": "vscode-icons",
     "workbench.colorTheme": "Monokai",
     "window.menuBarVisibility": "hidden",
