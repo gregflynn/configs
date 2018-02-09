@@ -107,9 +107,9 @@ function pss_basic() {
 }
 
 function pss_screen() {
-    C1=$'\e[45m'
+    C1=$'\e[44m'
     C2=$'\e[30m'
-    C3=$'\e[35m'
+    C3=$'\e[34m'
 
     if [[ "$STY" != "" ]]; then
         S=$(echo $STY | awk -F "." '{ print $2}')
