@@ -78,12 +78,8 @@
         "[Monokai]": {
             "sideBar.background": "#272822",
             "editorGroupHeader.tabsBackground": "#1e1f1c",
-            "statusBar.background": "#272822",
-            // "statusBar.foreground": "#272822"
-            // "tab.inactiveBackground": "#1e1f1c",
-            // "tab.inactiveForeground": "#ae81ff",
-            // "tab.activeForeground": "#1e1f1c",
-            // "tab.activeBackground": "#66D9EF"
+            "statusBar.background": "#1e1f1c",
+            "editorGutter.background": "#1e1f1c"
         },
         /**
          * Terminal customization
