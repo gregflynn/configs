@@ -249,9 +249,16 @@ globalkeys = gears.table.join(
     awful.key(
         { modkey,        }, "w",
         function()
-            awful.spawn("rofi -show window")
+            awful.spawn("rofi -show windowcd")
         end,
         {description = "Select Window", group = "client"}
+    ),
+    awful.key(
+        { modkey, shift  }, "w",
+        function()
+            awful.spawn("rofi -show window")
+        end,
+        {description = "Select Window (all tags)", group = "client"}
     ),
     awful.key(
         { modkey,        }, "Tab",
