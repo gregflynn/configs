@@ -3,6 +3,7 @@ local beautiful = require("beautiful")
 local wibox = require("wibox")
 local naughty = require("naughty")
 local awful = require("awful")
+local gears = require("gears")
 
 local dpi = beautiful.xresources.apply_dpi
 local markup = lain.util.markup
@@ -11,12 +12,6 @@ local storage = {
     mem_pct = 0,
     root_pct = 0,
     boot_pct = 0,
-    mem_bar = wibox.widget {
-        max_value        = 100,
-        widget           = wibox.widget.progressbar,
-        color            = beautiful.colors.blue,
-        background_color = beautiful.colors.grey
-    },
     root_bar = wibox.widget {
         max_value        = 100,
         widget           = wibox.widget.progressbar,
@@ -32,9 +27,7 @@ local storage = {
     notification  = nil,
     notification_preset = {
         title     = "Storage Usage",
-        icon_size = dpi(128),
         timeout   = 6,
-        icon      = "/usr/share/icons/elementary/devices/128/drive-harddisk.svg"
     }
 }
 
@@ -45,11 +38,7 @@ function storage.notification_on()
 
     -- update notification text
     storage.notification_preset.text = markup.big(string.format(
-        "\n%s\n%s\n%s",
-        markup.fg.color(
-            beautiful.colors.blue,
-            string.format("Memory: %s%%", storage.mem_pct)
-        ),
+        "%s\n%s",
         markup.fg.color(
             beautiful.colors.purple,
             string.format("/     : %s%%", storage.root_pct)
@@ -72,13 +61,6 @@ function storage.notification_off()
     storage.notification = nil
 end
 
-storage.mem_wid = wibox.widget {
-    storage.mem_bar,
-    forced_width  = dpi(5),
-    direction     = 'east',
-    layout        = wibox.container.rotate
-}
-
 storage.root_wid = wibox.widget {
     storage.root_bar,
     forced_width  = dpi(5),
@@ -93,13 +75,6 @@ storage.boot_wid = wibox.widget {
     layout        = wibox.container.rotate
 }
 
-storage.memory = lain.widget.mem {
-    settings = function()
-        storage.mem_pct = mem_now.perc
-        storage.mem_bar:set_value(mem_now.perc)
-    end
-}
-
 storage.disk = lain.widget.fs {
     notify   = "off",
     settings = function()
@@ -112,28 +87,13 @@ storage.disk = lain.widget.fs {
 
 storage.container = {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(storage.mem_wid,   dpi(0), dpi(3), dpi(4), dpi(4)),
     wibox.container.margin(storage.root_wid,  dpi(0), dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(storage.boot_wid,  dpi(0), dpi(10), dpi(4), dpi(4))
+    wibox.container.margin(storage.boot_wid,  dpi(0), dpi(10), dpi(4), dpi(4)),
+    buttons = gears.table.join(
+        awful.button({ }, 1, function()
+            storage.notification_on()
+        end)
+    )
 }
-
-storage.mem_wid:connect_signal(
-    "mouse::enter", storage.notification_on
-)
-storage.mem_wid:connect_signal(
-    "mouse::leave", storage.notification_off
-)
-storage.root_wid:connect_signal(
-    "mouse::enter", storage.notification_on
-)
-storage.root_wid:connect_signal(
-    "mouse::leave", storage.notification_off
-)
-storage.boot_wid:connect_signal(
-    "mouse::enter", storage.notification_on
-)
-storage.boot_wid:connect_signal(
-    "mouse::leave", storage.notification_off
-)
 
 return storage
