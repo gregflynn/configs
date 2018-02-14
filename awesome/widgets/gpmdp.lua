@@ -168,9 +168,14 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
     end
 end)
 
-local buttons = gears.table.join(awful.button({ }, 1, function()
-    awful.spawn("gpmdp")
-end))
+local buttons = gears.table.join(
+    awful.button({ }, 1, function()
+        awful.spawn("gpmdp")
+    end),
+    awful.button({ }, 3, function()
+        gpmdp.notification_on()
+    end)
+)
 
 gpmdp.widget:buttons(buttons)
 gpmdp.icon:buttons(buttons)
