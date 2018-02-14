@@ -412,17 +412,20 @@ globalkeys = gears.table.join(
     screenshot.globalkeys
 )
 
--- Bind all key numbers to tags.
-for i = 1, 5 do
-    local tag_name = taglist[i]
+function add_tag_keys(idx, override)
+    local tag_name = taglist[idx]
+    local key = '#'..(idx + 9)
+    if override then
+        key = '#'..(override + 9)
+    end
 
     globalkeys = gears.table.join(
         globalkeys,
         awful.key(
-            { modkey }, "#" .. i + 9,
+            { modkey }, key,
             function()
                 local screen = awful.screen.focused()
-                local tag = screen.tags[i]
+                local tag = screen.tags[idx]
                 if tag then
                     tag:view_only()
                 end
@@ -430,10 +433,10 @@ for i = 1, 5 do
             {description = "View "..tag_name, group = "tag"}
         ),
         awful.key(
-            { modkey, "Control" }, "#" .. i + 9,
+            { modkey, "Control" }, key,
             function()
                 local screen = awful.screen.focused()
-                local tag = screen.tags[i]
+                local tag = screen.tags[idx]
                 if tag then
                     awful.tag.viewtoggle(tag)
                 end
@@ -441,10 +444,10 @@ for i = 1, 5 do
             {description = "Toggle " .. tag_name, group = "tag"}
         ),
         awful.key(
-            { modkey, "Shift" }, "#" .. i + 9,
+            { modkey, "Shift" }, key,
             function()
                 if client.focus then
-                    local tag = client.focus.screen.tags[i]
+                    local tag = client.focus.screen.tags[idx]
                     if tag then
                         client.focus:move_to_tag(tag)
                     end
@@ -453,6 +456,15 @@ for i = 1, 5 do
             {description = "Move Window to " .. tag_name, group = "tag"}
         )
     )
+end
+
+-- Bind all key numbers to tags.
+for i = 1, 10 do
+    if i < 6 then
+        add_tag_keys(i)
+    else
+        add_tag_keys(i - 5, i)
+    end
 end
 
 --
