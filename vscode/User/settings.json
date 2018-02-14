@@ -98,4 +98,5 @@
     "workbench.colorTheme": "Monokai",
     "window.menuBarVisibility": "hidden",
     "workbench.statusBar.feedback.visible": false,
+    "problems.decorations.enabled": false,
 }
