@@ -21,22 +21,6 @@ altkey = "Mod1"
 ctlKey = "Control"
 shift  = "Shift"
 
---
--- Menus
---
-mymainmenu = awful.menu({
-    items = {
-        {"xfce4-terminal", terminal},
-        {"restart", awesome.restart},
-        {"quit", awesome.quit}
-    }
-})
-
-mylauncher = awful.widget.launcher({
-    image = '/usr/share/archlinux/icons/archlinux-icon-crystal-32.svg',
-    menu = mymainmenu
-})
-
 -- Menubar configuration
 menubar.utils.terminal = terminal
 
@@ -155,7 +139,6 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         {
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
             s.mytaglist
         },
         wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)),
@@ -165,6 +148,7 @@ awful.screen.connect_for_each_screen(function(s)
             wibox.container.margin(
                 require("widgets/cpugraph"), dpi(0), dpi(10), dpi(4), dpi(4)
             ),
+            require("widgets/mempie").container,
             require("widgets/storage").container,
             (function()
                 if cputemp.enabled then
