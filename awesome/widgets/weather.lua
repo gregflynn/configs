@@ -1,6 +1,9 @@
+local awful     = require("awful")
 local lain      = require("lain")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
+local gears     = require("gears")
+
 local dpi       = beautiful.xresources.apply_dpi
 
 local humidity_bar = wibox.widget {
@@ -20,6 +23,7 @@ local rotated_humidity = wibox.widget {
 local weather = lain.widget.weather {
     city_id = 4930956,
     units = 'imperial',
+    showpopup = 'off',
     settings = function()
         current_temp = math.floor(weather_now["main"]["temp"])
         current_humidity = math.floor(weather_now["main"]["humidity"])
@@ -43,7 +47,12 @@ weather.container = {
     layout = wibox.layout.fixed.horizontal,
     wibox.container.margin(weather.icon,     dpi(0),  dpi(3), dpi(4), dpi(4)),
     wibox.container.margin(weather.widget,   dpi(0),  dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(rotated_humidity, dpi(0), dpi(10), dpi(6), dpi(6))
+    wibox.container.margin(rotated_humidity, dpi(0), dpi(10), dpi(6), dpi(6)),
+    buttons = gears.table.join(
+        awful.button({ }, 1, function()
+            weather.show(5)
+        end)
+    )
 }
 
 return weather
