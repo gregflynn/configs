@@ -57,8 +57,14 @@ theme.menu_width        = dpi(300)
 theme.notification_opacity      = 0.9
 theme.notification_font         = "Hack 12"
 theme.notification_fg           = colors.white
-theme.notification_border_width = dpi(1)
+theme.notification_border_width = dpi(2)
 theme.notification_border_color = colors.purple
+
+--
+-- Taglist
+--
+theme.taglist_fg_focus = colors.background
+theme.taglist_bg_focus = colors.blue
 
 theme.titlebar_close_button_normal = themes_path.."zenburn/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = themes_path.."zenburn/titlebar/close_focus.png"

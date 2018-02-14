@@ -17,7 +17,7 @@ return {
             maximized_horizontal = false,
             maximized = false,
             floating = true,
-            border_width = dpi(1)
+            border_width = dpi(2)
         }
     },
     {
