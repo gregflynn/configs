@@ -78,8 +78,8 @@ storage.boot_wid = wibox.widget {
 storage.disk = lain.widget.fs {
     notify   = "off",
     settings = function()
-        storage.root_pct = tonumber(fs_info['/ used_p'])
-        storage.boot_pct = tonumber(fs_info['/boot used_p'])
+        storage.root_pct = tonumber(fs_now['/'].percentage)
+        storage.boot_pct = tonumber(fs_now['/boot'].percentage)
         storage.root_bar:set_value(storage.root_pct)
         storage.boot_bar:set_value(storage.boot_pct)
     end
