@@ -2,7 +2,6 @@ local awful     = require("awful")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
-local naughty   = require("naughty")
 local dpi       = beautiful.xresources.apply_dpi
 local dropdown  = require("widgets/dropdown")
 

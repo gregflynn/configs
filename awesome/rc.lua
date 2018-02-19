@@ -160,6 +160,7 @@ awful.screen.connect_for_each_screen(function(s)
             end)(),
             screenshot.container,
             require("widgets/wallpapers").container,
+            require("widgets/arandr").container,
             (function()
                 if battery.battery_enabled then
                     return battery.container
