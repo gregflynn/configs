@@ -18,7 +18,7 @@ local arandr = dropdown {
     folder = arandr_folder,
     icon = "/usr/share/icons/elementary/devices/48/video-display.svg",
     right_click = "arandr",
-    menu_func = function()
+    menu_func = function(full_path)
         awful.spawn(string.format("bash %s", full_path))
     end
 }
