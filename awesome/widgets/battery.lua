@@ -65,11 +65,16 @@ battery.lain_widget = lain.widget.bat {
 -- so the outside world doesn't need to know how weird the internal
 -- structure of this widget is
 battery.widget = battery.lain_widget.widget
-battery.container = {
-    layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(battery.adapter, dpi(0), dpi(0), dpi(4), dpi(4)),
-    wibox.container.margin(battery.icon,    dpi(0), dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(battery.widget,  dpi(0), dpi(10), dpi(4), dpi(4))
-}
+
+if battery.battery_enabled then
+    battery.container = {
+        layout = wibox.layout.fixed.horizontal,
+        wibox.container.margin(battery.adapter, dpi(0), dpi(0), dpi(4), dpi(4)),
+        wibox.container.margin(battery.icon,    dpi(0), dpi(3), dpi(4), dpi(4)),
+        wibox.container.margin(battery.widget,  dpi(0), dpi(10), dpi(4), dpi(4))
+    }
+else
+    battery.container = nil
+end
 
 return battery

@@ -52,7 +52,11 @@ local function factory(args)
             )
         end),
         awful.button({}, 3, function()
-            awful.spawn(string.format("xdg-open %s", args.folder))
+            if args.right_click then
+                awful.spawn(args.right_click)
+            else
+                awful.spawn(string.format("xdg-open %s", args.folder))
+            end
         end)
     ))
 

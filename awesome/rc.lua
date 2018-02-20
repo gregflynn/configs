@@ -30,8 +30,6 @@ awful.menu.menu_keys.down = { "Down", "j", "Tab" }
 --
 -- Screen setup
 --
-local battery    = require('widgets/battery')
-local cputemp    = require("widgets/cputemp")
 local volume     = require("widgets/volume")
 local screenshot = require("widgets/screenshots")
 
@@ -150,23 +148,11 @@ awful.screen.connect_for_each_screen(function(s)
             ),
             require("widgets/mempie").container,
             require("widgets/storage").container,
-            (function()
-                if cputemp.enabled then
-                    return wibox.container.margin(
-                        cputemp.widget, dpi(0), dpi(10), dpi(4), dpi(4)
-                    )
-                else return nil
-                end
-            end)(),
+            require("widgets/cputemp").container,
             screenshot.container,
             require("widgets/wallpapers").container,
             require("widgets/arandr").container,
-            (function()
-                if battery.battery_enabled then
-                    return battery.container
-                else return nil
-                end
-            end)(),
+            require("widgets/battery").container,
             awful.widget.only_on_screen(
                 wibox.container.margin(wibox.widget.systray(),
                 dpi(0), dpi(5), dpi(4), dpi(4)),

@@ -1,5 +1,7 @@
-local awful = require("awful")
+local awful     = require("awful")
 local beautiful = require("beautiful")
+local wibox     = require("wibox")
+local dpi       = beautiful.xresources.apply_dpi
 
 local cputemp = {
     enabled = true
@@ -28,5 +30,14 @@ cputemp.widget = awful.widget.watch(
         end
     end
 )
+
+if cputemp.enabled then
+    cputemp.container = {
+        layout = wibox.layout.fixed.horizontal,
+        wibox.container.margin(cputemp.widget, dpi(0), dpi(10), dpi(4), dpi(4))
+    }
+else
+    cputemp.container = nil
+end
 
 return cputemp
