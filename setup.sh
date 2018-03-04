@@ -36,6 +36,7 @@ dot_link gitignore .gitignore
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 dot_link ctags .ctags
+dot_link tmux.conf .tmux.conf
 
 # link up awesome configs
 if command -v awesome > /dev/null; then
