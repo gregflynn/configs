@@ -5,7 +5,8 @@
 #
 export LS_COLORS='di=32;10:ln=34;10:so=33;10:pi=33;10:ex=31;10:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="/home/greg/bin:$PYENV_ROOT/bin:$PATH"
+export PATH="/home/$(whoami)/bin:$PYENV_ROOT/bin:$PATH"
+
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias df='df -h'
 alias du='du -h'
@@ -27,6 +28,21 @@ function title() {
     echo -en "\033]0;$1\a"
 }
 alias colors='for x in {0..8}; do for i in {30..37}; do for a in {40..47}; do echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "; done; echo; done; done; echo ""'
+function gradient() {
+    awk 'BEGIN{
+        s="/\\/\\/\\/\\/\\"; s=s s s s s s s s s s s s s s s s s s s s s s s;
+        for (colnum = 0; colnum<256; colnum++) {
+            r = 255-(colnum*255/255);
+            g = (colnum*510/255);
+            b = (colnum*255/255);
+            if (g>255) g = 510-g;
+            printf "\033[48;2;%d;%d;%dm", r,g,b;
+            printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+            printf "%s\033[0m", substr(s,colnum+1,1);
+        }
+        printf "\n";
+    }'
+}
 
 #
 # Grep
