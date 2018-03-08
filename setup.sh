@@ -36,7 +36,6 @@ dot_link gitignore .gitignore
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 dot_link ctags .ctags
-dot_link tmux.conf .tmux.conf
 
 # link up awesome configs
 if command -v awesome > /dev/null; then
@@ -61,6 +60,14 @@ if command -v xfce4-terminal > /dev/null; then
     dot_link xfce4-terminal.rc .config/xfce4/terminal/terminalrc
 else
     echo "Xfce4 Terminal not found, skipping"
+fi
+
+# tmux
+dot_link tmux.conf .tmux.conf
+if [ ! -e ~/.tmux/plugins/tpm ]; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+else
+    echo "tmux TPM already installed, skipping"
 fi
 
 # rofi
