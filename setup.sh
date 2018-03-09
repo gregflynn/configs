@@ -39,7 +39,7 @@ dot_link ctags .ctags
 
 # link up awesome configs
 if command -v awesome > /dev/null; then
-    mkdir -p ~/.config/awesome/widgets
+    mkdir -p "$HOME/.config/awesome/widgets"
     mirror_link awesome .config/awesome
 else
     echo "Awesome WM not found, skipping"
@@ -47,7 +47,7 @@ fi
 
 # link up visual studio code
 if command -v code > /dev/null; then
-    mkdir -p ~/.config/Code/User/snippets
+    mkdir -p "$HOME/.config/Code/User/snippets"
     mirror_link vscode/User .config/Code/User
     pushd vscode > /dev/null && python sync.py && popd > /dev/null
 else
@@ -56,7 +56,7 @@ fi
 
 # XFCE4 Terminal
 if command -v xfce4-terminal > /dev/null; then
-    mkdir -p ~/.config/xfce4/terminal
+    mkdir -p "$HOME/.config/xfce4/terminal"
     dot_link xfce4-terminal.rc .config/xfce4/terminal/terminalrc
 else
     echo "Xfce4 Terminal not found, skipping"
@@ -64,15 +64,15 @@ fi
 
 # tmux
 dot_link tmux.conf .tmux.conf
-if [ ! -e ~/.tmux/plugins/tpm ]; then
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [ ! -e "$HOME/.tmux/plugins/tpm" ]; then
+    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
 else
     echo "tmux TPM already installed, skipping"
 fi
 
 # rofi
 if command -v rofi > /dev/null; then
-    mkdir -p ~/.config/rofi
+    mkdir -p "$HOME/.config/rofi"
     dot_link rofi.config .config/rofi/config
 else
     echo "Rofi not found, skipping"
@@ -83,7 +83,7 @@ fi
 #
 dot_link vimrc .vimrc
 if [ ! -e "$HOME/.vim" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
 fi
 vim +PluginInstall +qall
 
