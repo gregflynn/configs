@@ -19,13 +19,22 @@ clientkeys = gears.table.join(
         {description = "Quit", group = "client"}
     ),
     awful.key(
-        { modkey,        }, "a",
+        { modkey,        }, "c",
+        function(c)
+            awful.placement.centered(c)
+            c.maximized_vertical = false
+            c.maximized_horizontal = false
+        end,
+        {description = "Center client", group = "client"}
+    ),
+    awful.key(
+        { modkey, "Shift" }, "f",
         function(c)
             c.floating = not c.floating
             c.maximized_vertical = false
             c.maximized_horizontal = false
         end,
-        {description = "Floating", group = "client"}
+        {description = "Toggle Floating", group = "client"}
     ),
     awful.key(
         { modkey, shift  }, "m",
