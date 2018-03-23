@@ -60,7 +60,7 @@ awful.layout.layouts = {
     awful.layout.suit.fair.horizontal
 }
 
-local taglist = { "main", "alpha", "bravo", "slack", "extra" }
+local taglist = { "main", "alpha", "bravo", "slack", "music" }
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
@@ -129,7 +129,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox  = awful.wibar {
         position = "top",
         screen   = s,
-        height   = dpi(25)
+        height   = dpi(27)
     }
 
     -- Add widgets to the wibox
