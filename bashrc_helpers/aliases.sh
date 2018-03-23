@@ -5,7 +5,7 @@
 #
 export LS_COLORS='di=32;10:ln=34;10:so=33;10:pi=33;10:ex=31;10:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="/home/$(whoami)/bin:$PYENV_ROOT/bin:$PATH"
+export PATH="$HOME/bin:$PYENV_ROOT/bin:$PATH"
 
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0'
 alias df='df -h'
