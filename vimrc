@@ -33,11 +33,6 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\.so$\|\.dat$\|\.DS_Store$\|\.pyc$\|\.gz$\|\.class$'
   \ }
 
-" youcompleteme
-:let g:ycm_auto_trigger = 0
-:let g:ycm_python_binary_path = 'python'
-:let g:ycm_server_python_interpreter = '/usr/bin/python2'
-
 " netrw config
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
