@@ -3,7 +3,6 @@
     "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
     "extensions.ignoreRecommendations": true,
     "keyboard.dispatch": "keyCode",
-    "markdown.preview.scrollPreviewWithEditorSelection": false,
     "atomKeymap.promptV3Features": true,
     "editor.multiCursorModifier": "ctrlCmd",
     "workbench.startupEditor": "none",
@@ -99,4 +98,5 @@
     "window.menuBarVisibility": "hidden",
     "workbench.statusBar.feedback.visible": false,
     "problems.decorations.enabled": false,
+    "vsicons.dontShowNewVersionMessage": true,
 }
