@@ -66,6 +66,14 @@ theme.notification_border_color = colors.purple
 theme.taglist_fg_focus = colors.background
 theme.taglist_bg_focus = colors.blue
 
+--
+-- Tasklist
+--
+theme.tasklist_fg_focus = colors.background
+theme.tasklist_bg_focus = colors.blue
+theme.tasklist_fg_minimize = colors.purple
+theme.tasklist_plain_task_name = true
+
 theme.titlebar_close_button_normal = themes_path.."zenburn/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = themes_path.."zenburn/titlebar/close_focus.png"
 

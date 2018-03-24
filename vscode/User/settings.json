@@ -1,6 +1,6 @@
 // Place your settings in this file to overwrite the default settings
 {
-    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
+    "window.title": "${dirty} ${rootName}:${activeEditorShort}",
     "extensions.ignoreRecommendations": true,
     "keyboard.dispatch": "keyCode",
     "atomKeymap.promptV3Features": true,

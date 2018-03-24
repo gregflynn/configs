@@ -13,6 +13,7 @@ beautiful.init(os.getenv("HOME").."/.config/awesome/theme.lua")
 
 local dpi = beautiful.xresources.apply_dpi
 local terminal = "xfce4-terminal"
+awesome.set_preferred_icon_size(42)
 
 -- define keys, not local so widgets can use them
 -- yea yea globals bad yea yea
@@ -139,7 +140,8 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             s.mytaglist
         },
-        wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)),
+        s.mytasklist,
+        -- wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)),
         {
             layout = wibox.layout.fixed.horizontal,
             require("widgets/gpmdp").container,
