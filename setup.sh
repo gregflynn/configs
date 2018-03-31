@@ -88,7 +88,7 @@ fi
 vim +PluginInstall +qall
 
 # if there is a setup in private, call it
-if [ -e "private/setup.sh" ]; then
-    source private/setup.sh
+if [ -e "$HOME/private/setup.sh" ]; then
+    source $HOME/private/setup.sh
 fi
 
