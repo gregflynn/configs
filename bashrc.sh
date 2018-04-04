@@ -55,6 +55,9 @@ fi
 if [ -e "$DOTINSTALL/private/bashrc" ]; then
   source $DOTINSTALL/private/bashrc
 fi
+if [ -e "$DOTINSTALL/private/bashrc.sh" ]; then
+  source $DOTINSTALL/private/bashrc.sh
+fi
 
 #
 # Node Version Manager
