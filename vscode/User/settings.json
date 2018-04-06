@@ -95,6 +95,8 @@
     },
     "workbench.iconTheme": "vscode-icons",
     "workbench.colorTheme": "Monokai",
+    "dayNightThemeSwitcher.dayTheme": "Ayu Light",
+    "dayNightThemeSwitcher.nightTheme": "Monokai",
     "window.menuBarVisibility": "hidden",
     "workbench.statusBar.feedback.visible": false,
     "problems.decorations.enabled": false,

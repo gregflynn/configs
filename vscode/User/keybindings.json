@@ -85,5 +85,8 @@
     }, {
         "key": "alt+c",
         "command": "workbench.action.toggleCenteredLayout"
+    }, {
+        "key": "ctrl+shift+r",
+        "command": "python.buildWorkspaceSymbols"
     }
 ]
