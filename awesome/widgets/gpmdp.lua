@@ -155,9 +155,9 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
 
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
-                markup.fg.color(title_color, markup.big(title)),
-                markup.fg.color(artist_color, markup.big(artist)),
-                markup.italic(markup.big(album))
+                markup.fg.color(beautiful.colors.white, markup.big(title)),
+                markup.fg.color(beautiful.colors.purple, markup.big(artist)),
+                markup.fg.color(beautiful.colors.grey, markup.italic(markup.big(album)))
             )
 
             if gpmdp.notify == "on" and gpm_now.title ~= gpmdp.current_track then
