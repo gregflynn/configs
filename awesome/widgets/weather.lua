@@ -43,11 +43,11 @@ local weather = lain.widget.weather {
     end
 }
 
-weather.container = {
+weather.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(weather.icon,     dpi(0),  dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(weather.widget,   dpi(0),  dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(rotated_humidity, dpi(0), dpi(10), dpi(6), dpi(6)),
+    wibox.container.margin(weather.icon, dpi(0), dpi(3)),
+    wibox.container.margin(weather.widget, dpi(0), dpi(0)),
+    -- wibox.container.margin(rotated_humidity, dpi(0), dpi(10)),
     buttons = gears.table.join(
         awful.button({ }, 1, function()
             weather.show(5)

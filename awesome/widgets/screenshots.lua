@@ -48,9 +48,9 @@ screenshot_icon.globalkeys = gears.table.join(
     )
 )
 
-screenshot_icon.container = {
+screenshot_icon.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(screenshot_icon,    dpi(0),  dpi(3), dpi(4), dpi(4)),
+    wibox.container.margin(screenshot_icon, dpi(0), dpi(3)),
 }
 
 return screenshot_icon

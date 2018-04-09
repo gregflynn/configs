@@ -8,12 +8,15 @@ local lain      = require("lain")
 
 require("awful.autofocus")
 require("errors")
+require("signals")
 
 beautiful.init(os.getenv("HOME").."/.config/awesome/theme.lua")
-
-local dpi = beautiful.xresources.apply_dpi
-local terminal = "xfce4-terminal"
 awesome.set_preferred_icon_size(42)
+
+local dpi       = beautiful.xresources.apply_dpi
+local sep       = lain.util.separators
+local colors    = beautiful.colors
+local terminal  = "xfce4-terminal"
 
 -- define keys, not local so widgets can use them
 -- yea yea globals bad yea yea
@@ -60,6 +63,51 @@ awful.layout.layouts = {
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal
 }
+
+local placeholder_icon = wibox.widget {
+    image = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back-testing.svg",
+    resize = true,
+    widget = wibox.widget.imagebox
+}
+
+local function arrow_block(widget, fg, bg, left, right)
+    return {
+        layout = wibox.layout.align.horizontal,
+        sep.arrow_left(fg, bg),
+        wibox.container.background(
+            wibox.container.margin(
+                widget,
+                dpi(left or 5),
+                dpi(left or 5),
+                beautiful.bar_margin,
+                beautiful.bar_margin
+            ),
+            bg
+        )
+    }
+end
+
+--
+-- NOTE: no idea why this function doesn't work at the moment, it only emits
+--    the first three widgets
+--  
+local function arrow_list(blocks)
+    local container = {
+        layout = wibox.layout.align.horizontal,
+    }
+    local last_color = nil
+
+    for i, block in ipairs(blocks) do
+        container[i] = arrow_block(
+            block.widget,
+            last_color or beautiful.colors.background,
+            block.color
+        )
+        last_color = block.color
+    end
+    
+    return container
+end
 
 local taglist = { "main", "alpha", "bravo", "slack", "music" }
 awful.screen.connect_for_each_screen(function(s)
@@ -130,7 +178,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.mywibox  = awful.wibar {
         position = "top",
         screen   = s,
-        height   = dpi(27)
+        height   = beautiful.bar_height
     }
 
     -- Add widgets to the wibox
@@ -144,30 +192,64 @@ awful.screen.connect_for_each_screen(function(s)
         -- wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)),
         {
             layout = wibox.layout.fixed.horizontal,
-            require("widgets/gpmdp").container,
-            wibox.container.margin(
-                require("widgets/cpugraph"), dpi(0), dpi(10), dpi(4), dpi(4)
+
+            -- arrow_list(
+            --     {
+            --         { widget = placeholder_icon, color = colors.blue },
+            --         { widget = placeholder_icon, color = colors.green },
+            --         { widget = placeholder_icon, color = colors.grey },
+            --         { widget = placeholder_icon, color = colors.purple },
+            --         { widget = placeholder_icon, color = colors.red },
+            --         { widget = placeholder_icon, color = colors.white },
+            --         { widget = placeholder_icon, color = colors.background },
+            --     }
+            -- ),
+
+            -- {
+            --     layout = wibox.layout.fixed.horizontal,
+            --     arrow_block(placeholder_icon, colors.background, colors.blue),
+            --     arrow_block(placeholder_icon, colors.blue, colors.green),
+            --     arrow_block(placeholder_icon, colors.green, colors.grey),
+            --     arrow_block(placeholder_icon, colors.grey, colors.purple),
+            --     arrow_block(placeholder_icon, colors.purple, colors.red),
+            --     arrow_block(placeholder_icon, colors.red, colors.white),
+            --     arrow_block(placeholder_icon, colors.white, colors.background),
+            -- },
+            arrow_block(
+                require("widgets/gpmdp").container,
+                colors.background, colors.purple
             ),
-            require("widgets/mempie").container,
-            require("widgets/storage").container,
-            require("widgets/cputemp").container,
-            screenshot.container,
-            require("widgets/wallpapers").container,
-            require("widgets/arandr").container,
-            require("widgets/battery").container,
-            awful.widget.only_on_screen(
-                wibox.container.margin(wibox.widget.systray(),
-                dpi(0), dpi(5), dpi(4), dpi(4)),
-                "primary"
+            arrow_block(
+                wibox.widget {
+                    layout = wibox.layout.fixed.horizontal,
+                    require("widgets/cpugraph"),
+                    require("widgets/mempie").container,
+                    require("widgets/storage").container,
+                    require("widgets/cputemp").container,
+                    require("widgets/battery").container,
+                },
+                colors.purple, colors.background
             ),
-            require('widgets/weather').container,
-            volume.container,
-            wibox.container.margin(
-                require("widgets/clock"), dpi(0), dpi(10), dpi(4), dpi(4)
+            arrow_block(
+                wibox.widget {
+                    layout = wibox.layout.fixed.horizontal,
+                    screenshot.container,
+                    require("widgets/wallpapers").container,
+                    require("widgets/arandr").container,
+                },
+                colors.background, colors.grey
             ),
-            wibox.container.margin(
-                s.layoutbox, dpi(0), dpi(10), dpi(4), dpi(4)
-            )
+            arrow_block(
+                awful.widget.only_on_screen(
+                    wibox.widget.systray(),
+                    "primary"
+                ),
+                colors.grey, colors.background
+            ),
+            arrow_block(volume.container, colors.background, colors.purple),
+            arrow_block(require('widgets/weather').container, colors.purple, colors.background),
+            arrow_block(require("widgets/clock"), colors.background, colors.white),
+            arrow_block(s.layoutbox, colors.white, colors.background)
         }
     }
 end)
@@ -479,85 +561,3 @@ clientbuttons = gears.table.join(
 root.keys(globalkeys)
 
 awful.rules.rules = require("rules")
-
--- {{{ Signals
--- Signal function to execute when a new client appears.
-client.connect_signal("manage", function(c)
-    -- Set the windows at the slave,
-    -- i.e. put it at the end of others instead of setting it master.
-    -- if not awesome.startup then awful.client.setslave(c) end
-    awful.client.setslave(c)
-
-    if awesome.startup and
-        not c.size_hints.user_position
-            and not c.size_hints.program_position then
-        -- Prevent clients from being unreachable after screen count changes.
-        awful.placement.no_offscreen(c)
-    end
-end)
-
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-    -- buttons for the titlebar
-    local buttons = gears.table.join(
-        awful.button({ }, 1, function()
-            client.focus = c
-            c:raise()
-            awful.mouse.client.move(c)
-        end),
-        awful.button({ }, 3, function()
-            client.focus = c
-            c:raise()
-            awful.mouse.client.resize(c)
-        end)
-    )
-
-    awful.titlebar(c) : setup {
-        { -- Left
-            wibox.container.margin(
-                awful.titlebar.widget.iconwidget(c),
-                dpi(4), dpi(4), dpi(4), dpi(4)
-            ),
-            buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
-        },
-        { -- Middle
-            { -- Title
-                align  = "center",
-                widget = awful.titlebar.widget.titlewidget(c)
-            },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
-        },
-        { -- Right
-            awful.titlebar.widget.minimizebutton(c),
-            awful.titlebar.widget.maximizedbutton(c),
-            awful.titlebar.widget.closebutton    (c),
-            layout = wibox.layout.fixed.horizontal()
-        },
-        layout = wibox.layout.align.horizontal
-    }
-
-    if not c.floating then
-        awful.titlebar.hide(c)
-    end
-
-    c.maximized_vertical = false
-    c.maximized_horizontal = false
-end)
-
-client.connect_signal("property::floating", function (c)
-    if c.floating then
-        awful.titlebar.show(c)
-    else
-        awful.titlebar.hide(c)
-    end
-end)
-
-client.connect_signal("focus", function(c)
-    c.border_color = beautiful.border_focus
-end)
-
-client.connect_signal("unfocus", function(c)
-    c.border_color = beautiful.border_normal
-end)

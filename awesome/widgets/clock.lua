@@ -5,7 +5,7 @@ local beautiful = require("beautiful")
 local lain = require("lain")
 
 local clock = wibox.widget.textclock(
-    '<span color="'..beautiful.colors.blue..'">%a %b %e %l:%M%P</span>'
+    '<span color="'..beautiful.colors.background..'">%a %b %d %l:%M%P</span>'
 )
 
 -- Calendar widget on hover

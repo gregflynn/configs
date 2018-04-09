@@ -97,10 +97,10 @@ volume.widget = wibox.widget {
     layout        = wibox.container.rotate
 }
 
-volume.container = {
+volume.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(volume_icon,    dpi(0),  dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(volume.widget,  dpi(0), dpi(10), dpi(4), dpi(4))
+    wibox.container.margin(volume_icon, dpi(0),  dpi(3)),
+    wibox.container.margin(volume.widget, dpi(0), dpi(3))
 }
 
 return volume

@@ -85,10 +85,10 @@ storage.disk = lain.widget.fs {
     end
 }
 
-storage.container = {
+storage.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(storage.root_wid,  dpi(0), dpi(3), dpi(4), dpi(4)),
-    wibox.container.margin(storage.boot_wid,  dpi(0), dpi(10), dpi(4), dpi(4)),
+    wibox.container.margin(storage.root_wid, dpi(0), dpi(3)),
+    wibox.container.margin(storage.boot_wid, dpi(0), dpi(5)),
     buttons = gears.table.join(
         awful.button({ }, 1, function()
             storage.notification_on()

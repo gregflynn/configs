@@ -17,7 +17,7 @@ wallpapers_icon = dropdown {
 
 wallpapers_icon.container = {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(wallpapers_icon, dpi(0), dpi(3), dpi(4), dpi(4)),
+    wibox.container.margin(wallpapers_icon, dpi(0), dpi(3)),
 }
 
 return wallpapers_icon

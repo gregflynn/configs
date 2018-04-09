@@ -17,7 +17,7 @@ return {
             maximized_horizontal = false,
             maximized = false,
             floating = true,
-            border_width = dpi(2)
+            border_width = beautiful.border_width
         }
     },
     {

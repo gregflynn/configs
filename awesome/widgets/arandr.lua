@@ -24,9 +24,9 @@ local arandr = dropdown {
 }
 
 if exists(arandr_folder) then
-    arandr.container = {
+    arandr.container = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        wibox.container.margin(arandr, dpi(0), dpi(3), dpi(4), dpi(4)),
+        wibox.container.margin(arandr, dpi(0), dpi(3)),
     }
 else
     arandr.container = nil

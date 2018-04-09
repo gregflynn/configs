@@ -55,7 +55,7 @@ mempie.widget:buttons(gears.table.join(
 ))
 
 mempie.container = wibox.container.margin(
-    mempie.widget, dpi(0), dpi(10), dpi(4), dpi(4)
+    mempie.widget, dpi(3), dpi(3)
 )
 
 return mempie

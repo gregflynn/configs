@@ -4,6 +4,9 @@ local dpi = beautiful.xresources.apply_dpi
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 
+local lain = require("lain")
+local sep = lain.util.separators
+
 local colors = {
     background = "#272822",
     blue       = "#66D9EF",
@@ -15,8 +18,13 @@ local colors = {
 }
 
 local theme = {
-    colors = colors
+    colors       = colors,
+    bar_height   = dpi(25),
+    bar_margin   = dpi(3),
+    border_width = dpi(2)
 }
+
+sep.width = (theme.bar_height / 2) - 3
 
 theme.font          = "hack 10"
 
@@ -24,14 +32,14 @@ theme.bg_normal     = colors.background
 theme.bg_focus      = colors.background
 theme.bg_urgent     = colors.background
 theme.bg_minimize   = colors.background
+theme.bg_systray    = colors.background
 
-theme.fg_normal     = colors.grey
+theme.fg_normal     = colors.white
 theme.fg_focus      = colors.blue
 theme.fg_urgent     = colors.red
 theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 10
-theme.border_width  = 0
 theme.border_normal = colors.background
 theme.border_focus  = colors.blue
 theme.border_marked = colors.red

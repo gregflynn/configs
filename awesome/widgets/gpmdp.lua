@@ -135,18 +135,20 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
             local artist = trim(gpm_now.artist)
             local album = trim(gpm_now.album)
 
-            local title_color = beautiful.colors.purple
-            local artist_color = beautiful.colors.blue
+            local title_color = beautiful.colors.white
+            local artist_color = beautiful.colors.background
+            local title_text = "%s %s"
 
             if not gpm_now.playing then
                 title_color = beautiful.colors.grey
                 gpmdp.icon.image = gpmdp_icon_loc
             else
+                title_text = markup.italic("%s").." %s"
                 gpmdp.icon.image = gpmdp.current_album_art
             end
 
             widget:set_markup(string.format(
-                "%s %s",
+                title_text,
                 markup.fg.color(title_color, trunc(title, 20)),
                 markup.fg.color(artist_color, trunc(artist, 20))
             ))
@@ -180,10 +182,10 @@ local buttons = gears.table.join(
 gpmdp.widget:buttons(buttons)
 gpmdp.icon:buttons(buttons)
 
-gpmdp.container = {
+gpmdp.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(gpmdp.icon,    dpi(0),  dpi(5), dpi(4), dpi(4)),
-    wibox.container.margin(gpmdp.widget,  dpi(0), dpi(10), dpi(4), dpi(4))
+    wibox.container.margin(gpmdp.icon,    dpi(3),  dpi(3)),
+    wibox.container.margin(gpmdp.widget,  dpi(0), dpi(0))
 }
 
 return gpmdp
