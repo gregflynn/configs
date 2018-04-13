@@ -152,10 +152,18 @@ function pss_venv() {
     fi
 }
 
+function pss_time() {
+    C1=$'\e[44m'
+    C2=$'\e[30m'
+    C3=$'\e[34m'
+    CURRENT=$(date +"%H:%M:%S")
+    echo -n "$C1$RI$C2 $CURRENT $C3"
+}
+
 function pss_ps1() {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(pss_basic)$(pss_screen)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
+    echo -n "$C_$(pss_basic)$(pss_time)$(pss_screen)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
