@@ -80,9 +80,6 @@
             "statusBar.background": "#1e1f1c",
             "editorGutter.background": "#1e1f1c"
         },
-        /**
-         * Terminal customization
-         */
         "terminal.background": "#272822",
         "terminal.foreground": "#f8f8f2",
         "terminal.ansiRed": "#F92672",
@@ -97,6 +94,26 @@
     "workbench.colorTheme": "Monokai",
     "dayNightThemeSwitcher.dayTheme": "Ayu Light",
     "dayNightThemeSwitcher.nightTheme": "Monokai",
+    "dayNightThemeSwitcher.nightThemeCustomizations": {
+        "[Monokai]": {
+            "sideBar.background": "#272822",
+            "editorGroupHeader.tabsBackground": "#1e1f1c",
+            "statusBar.background": "#1e1f1c",
+            "editorGutter.background": "#1e1f1c"
+        },
+        /**
+            * Terminal customization
+            */
+        "terminal.background": "#272822",
+        "terminal.foreground": "#f8f8f2",
+        "terminal.ansiRed": "#F92672",
+        "terminal.ansiGreen": "#A6E22E",
+        "terminal.ansiYellow": "#f4bf75",
+        "terminal.ansiBlue": "#66D9EF",
+        "terminal.ansiMagenta": "#ae81ff",
+        "terminal.ansiCyan": "#a1efe4",
+        "terminal.ansiWhite": "#f8f8f2"
+    },
     "window.menuBarVisibility": "hidden",
     "workbench.statusBar.feedback.visible": false,
     "problems.decorations.enabled": false,

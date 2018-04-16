@@ -24,7 +24,7 @@ local theme = {
     border_width = dpi(2)
 }
 
-sep.width = (theme.bar_height / 2) - 3
+sep.width = dpi(9)
 
 theme.font          = "hack 10"
 
