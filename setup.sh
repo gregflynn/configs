@@ -49,7 +49,7 @@ fi
 if command -v code > /dev/null; then
     mkdir -p "$HOME/.config/Code/User/snippets"
     mirror_link vscode/User .config/Code/User
-    pushd vscode > /dev/null && python sync.py && popd > /dev/null
+    # pushd vscode > /dev/null && python sync.py && popd > /dev/null
 else
     echo "Visual Studio Code not found, skipping"
 fi
