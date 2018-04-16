@@ -17,6 +17,8 @@ local dpi       = beautiful.xresources.apply_dpi
 local sep       = lain.util.separators
 local colors    = beautiful.colors
 local terminal  = "xfce4-terminal"
+local taglist   = { "main", "alpha", "bravo", "slack", "music" }
+local ipairs    = ipairs
 
 -- define keys, not local so widgets can use them
 -- yea yea globals bad yea yea
@@ -70,6 +72,73 @@ local placeholder_icon = wibox.widget {
     widget = wibox.widget.imagebox
 }
 
+--
+-- Shamelessly forked from
+-- https://github.com/awesomeWM/awesome/blob/v4.2/lib/awful/widget/common.lua
+local function list_update(w, buttons, label, data, objects)
+    w:reset()
+    for i, o in ipairs(objects) do
+        local cache = data[o]
+        local ib, tb, bgb, tbm, ibm, l
+
+        if cache then
+            tb = cache.tb
+        else
+            tb = wibox.widget.textbox()
+            tb.forced_width = dpi(100)
+        end
+        local text, bg, bg_image, icon, args = label(o, tb)
+
+        local la = sep.arrow_right(beautiful.colors.grey, bg)
+        local ra = sep.arrow_right(bg, beautiful.colors.grey)
+
+        if cache then
+            ib = cache.ib
+            tbm = cache.tbm
+            ibm = cache.ibm
+        else
+            ib = wibox.widget.imagebox()
+            tbm = wibox.container.margin(tb, dpi(4), dpi(4))
+            ibm = wibox.container.margin(ib, dpi(4))
+
+            data[o] = {
+                ib  = ib,
+                tb  = tb,
+                tbm = tbm,
+                ibm = ibm,
+            }
+        end
+
+        local bgb = wibox.container.background()
+        local l = wibox.layout.fixed.horizontal()
+        l:add(la)
+        l:add(ibm)
+        l:add(tbm)
+        l:add(ra)
+        bgb:set_widget(l)
+        bgb:buttons(awful.widget.common.create_buttons(buttons, o))
+
+        args = args or {}
+
+        -- The text might be invalid, so use pcall.
+        if text == nil or text == "" then
+            tbm:set_margins(0)
+        else
+            if not tb:set_markup_silently(text) then
+                tb:set_markup("<i>&lt;Invalid text&gt;</i>")
+            end
+        end
+        bgb:set_bg(bg)
+        if icon then
+            ib:set_image(icon)
+        else
+            ib:set_image('/usr/share/icons/elementary/apps/48/application-default-icon.svg')
+        end
+
+        w:add(bgb)
+    end
+end
+
 local function arrow_block(widget, fg, bg, left, right)
     return {
         layout = wibox.layout.align.horizontal,
@@ -109,7 +178,6 @@ local function arrow_list(blocks)
     return container
 end
 
-local taglist = { "main", "alpha", "bravo", "slack", "music" }
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
@@ -168,11 +236,8 @@ awful.screen.connect_for_each_screen(function(s)
             end)
         ),
         nil,
-        function(w, buttons, label, data, objects)
-            awful.widget.common.list_update(w, buttons, label, data, objects)
-            -- Set tasklist items to set width of 200
-            w:set_max_widget_size(dpi(200))
-        end
+        list_update,
+        wibox.layout.flex.horizontal()
     )
     -- Create the wibox
     s.mywibox  = awful.wibar {
@@ -188,7 +253,12 @@ awful.screen.connect_for_each_screen(function(s)
             layout = wibox.layout.fixed.horizontal,
             s.mytaglist
         },
-        s.mytasklist,
+        {
+            layout = wibox.layout.fixed.horizontal,
+            sep.arrow_right(beautiful.colors.background, beautiful.colors.grey),
+            s.mytasklist,
+            sep.arrow_right(beautiful.colors.grey, beautiful.colors.background),
+        },
         -- wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)),
         {
             layout = wibox.layout.fixed.horizontal,
