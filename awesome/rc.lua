@@ -66,12 +66,6 @@ awful.layout.layouts = {
     awful.layout.suit.fair.horizontal
 }
 
-local placeholder_icon = wibox.widget {
-    image = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back-testing.svg",
-    resize = true,
-    widget = wibox.widget.imagebox
-}
-
 --
 -- Shamelessly forked from
 -- https://github.com/awesomeWM/awesome/blob/v4.2/lib/awful/widget/common.lua
@@ -156,13 +150,9 @@ local function arrow_block(widget, fg, bg, left, right)
     }
 end
 
---
--- NOTE: no idea why this function doesn't work at the moment, it only emits
---    the first three widgets
---  
 local function arrow_list(blocks)
     local container = {
-        layout = wibox.layout.align.horizontal,
+        layout = wibox.layout.fixed.horizontal,
     }
     local last_color = nil
 
@@ -259,67 +249,39 @@ awful.screen.connect_for_each_screen(function(s)
             s.mytasklist,
             sep.arrow_right(beautiful.colors.grey, beautiful.colors.background),
         },
-        -- wibox.container.margin(s.mytasklist, dpi(4), dpi(4), dpi(4), dpi(4)),
         {
             layout = wibox.layout.fixed.horizontal,
 
-            -- arrow_list(
-            --     {
-            --         { widget = placeholder_icon, color = colors.blue },
-            --         { widget = placeholder_icon, color = colors.green },
-            --         { widget = placeholder_icon, color = colors.grey },
-            --         { widget = placeholder_icon, color = colors.purple },
-            --         { widget = placeholder_icon, color = colors.red },
-            --         { widget = placeholder_icon, color = colors.white },
-            --         { widget = placeholder_icon, color = colors.background },
-            --     }
-            -- ),
-
-            -- {
-            --     layout = wibox.layout.fixed.horizontal,
-            --     arrow_block(placeholder_icon, colors.background, colors.blue),
-            --     arrow_block(placeholder_icon, colors.blue, colors.green),
-            --     arrow_block(placeholder_icon, colors.green, colors.grey),
-            --     arrow_block(placeholder_icon, colors.grey, colors.purple),
-            --     arrow_block(placeholder_icon, colors.purple, colors.red),
-            --     arrow_block(placeholder_icon, colors.red, colors.white),
-            --     arrow_block(placeholder_icon, colors.white, colors.background),
-            -- },
-            arrow_block(
-                require("widgets/gpmdp").container,
-                colors.background, colors.purple
-            ),
-            arrow_block(
-                wibox.widget {
+            arrow_list({
+                { widget = require("widgets/gpmdp").container,
+                  color = colors.blue },
+                { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
                     require("widgets/cpugraph"),
                     require("widgets/mempie").container,
                     require("widgets/storage").container,
                     require("widgets/cputemp").container,
                     require("widgets/battery").container,
-                },
-                colors.purple, colors.background
-            ),
-            arrow_block(
-                wibox.widget {
+                  },
+                  color = colors.background },
+                { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
                     screenshot.container,
                     require("widgets/wallpapers").container,
                     require("widgets/arandr").container,
-                },
-                colors.background, colors.grey
-            ),
-            arrow_block(
-                awful.widget.only_on_screen(
-                    wibox.widget.systray(),
-                    "primary"
-                ),
-                colors.grey, colors.background
-            ),
-            arrow_block(volume.container, colors.background, colors.purple),
-            arrow_block(require('widgets/weather').container, colors.purple, colors.background),
-            arrow_block(require("widgets/clock"), colors.background, colors.white),
-            arrow_block(s.layoutbox, colors.white, colors.background)
+                  }, 
+                  color = colors.grey },
+                { widget = awful.widget.only_on_screen(wibox.widget.systray(), "primary"),
+                  color = colors.background },
+                { widget = volume.container,
+                  color = colors.blue },
+                { widget = require("widgets/weather").container,
+                  color = colors.background },
+                { widget = require("widgets/clock"),
+                  color = colors.yellow },
+                { widget = s.layoutbox,
+                  color = colors.background }
+            })
         }
     }
 end)

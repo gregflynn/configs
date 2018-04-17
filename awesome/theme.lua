@@ -1,6 +1,7 @@
 local beautiful = require("beautiful")
 local dpi = beautiful.xresources.apply_dpi
 
+local gears = require("gears")
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 
@@ -12,16 +13,21 @@ local colors = {
     blue       = "#66D9EF",
     green      = "#A6E22E",
     grey       = "#75715e",
+    orange     = "#FD971F",
     purple     = "#ab9df2",
     red        = "#F92672",
-    white      = "#F8F8F2"
+    white      = "#F8F8F2",
+    yellow     = "#f4bf75"
 }
 
 local theme = {
     colors       = colors,
     bar_height   = dpi(25),
     bar_margin   = dpi(3),
-    border_width = dpi(2)
+    border_width = dpi(2),
+    rounded_rect_shape = function(cr, w, h)
+        gears.shape.rounded_rect(cr, w, h, dpi(10))
+    end
 }
 
 sep.width = dpi(9)
@@ -66,7 +72,8 @@ theme.notification_opacity      = 0.9
 theme.notification_font         = "Hack 12"
 theme.notification_fg           = colors.white
 theme.notification_border_width = dpi(2)
-theme.notification_border_color = colors.purple
+theme.notification_border_color = colors.background
+theme.notification_shape        = theme.rounded_rect_shape
 
 --
 -- Taglist
