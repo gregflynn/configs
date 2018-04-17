@@ -39,6 +39,28 @@ awful.menu.menu_keys.down = { "Down", "j", "Tab" }
 local volume     = require("widgets/volume")
 local screenshot = require("widgets/screenshots")
 
+local function get_screen_type(s)
+    -- Get the screen type based on its geometry [ultrawide, widescreen, square]
+    local ratio = s.geometry.width / s.geometry.height
+    -- > 4/3
+    -- 1.3333333333333
+    -- > 1920/1080
+    -- 1.7777777777778
+    -- > 3440/1440
+    -- 2.3888888888889
+    -- > 1520/1050
+    -- 1.447619047619
+    -- > 2560/1440
+    -- 1.7777777777778
+    if ratio < 1.4 then
+        return 'square'
+    elseif ratio < 1.8 then
+        return 'widescreen'
+    else
+        return 'ultrawide'
+    end
+end
+
 local function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -171,6 +193,7 @@ end
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
+    local screen_type = get_screen_type(s)
 
     -- Each screen has its own tag table.
     awful.tag(
@@ -178,8 +201,8 @@ awful.screen.connect_for_each_screen(function(s)
         s,
         {
             awful.layout.suit.floating,
-            lain.layout.centerwork, -- code
-            lain.layout.centerwork, -- terminals
+            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
+            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,
             awful.layout.suit.floating,
             awful.layout.suit.floating
         }
