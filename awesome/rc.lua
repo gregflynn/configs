@@ -105,8 +105,10 @@ local function list_update(w, buttons, label, data, objects)
         end
         local text, bg, bg_image, icon, args = label(o, tb)
 
-        local la = sep.arrow_right(beautiful.colors.grey, bg)
-        local ra = sep.arrow_right(bg, beautiful.colors.grey)
+        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.grey
+        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.grey
+        local la = sep.arrow_right(left_color, bg)
+        local ra = sep.arrow_right(bg, right_color)
 
         if cache then
             ib = cache.ib
@@ -151,6 +153,48 @@ local function list_update(w, buttons, label, data, objects)
             ib:set_image('/usr/share/icons/elementary/apps/48/application-default-icon.svg')
         end
 
+        w:add(bgb)
+    end
+end
+
+local function taglist_update(w, buttons, label, data, objects)
+    w:reset()
+    for i, o in ipairs(objects) do
+        local cache = data[o]
+        local tb, bgb, tbm, l
+
+        if cache then
+            tb = cache.tb
+        else
+            tb = wibox.widget.textbox()
+        end
+        local text, bg, bg_image, icon, args = label(o, tb)
+
+        local la = sep.arrow_right(beautiful.colors.background, bg)
+        local ra = sep.arrow_right(bg, beautiful.colors.background)
+
+        if cache then
+            tbm = cache.tbm
+        else
+            tbm = wibox.container.margin(tb, dpi(4), dpi(4))
+
+            data[o] = {
+                tb  = tb,
+                tbm = tbm,
+            }
+        end
+
+        local bgb = wibox.container.background()
+        local l = wibox.layout.fixed.horizontal()
+        l:add(la)
+        l:add(tbm)
+        l:add(ra)
+        bgb:set_widget(l)
+        bgb:buttons(awful.widget.common.create_buttons(buttons, o))
+
+        args = args or {}
+        tb:set_markup_silently(text)
+        bgb:set_bg(bg)
         w:add(bgb)
     end
 end
@@ -223,7 +267,9 @@ awful.screen.connect_for_each_screen(function(s)
         awful.widget.taglist.filter.all,
         gears.table.join(
             awful.button({ }, 1, function(t) t:view_only() end)
-        )
+        ),
+        nil,
+        taglist_update
     )
 
     -- Create a tasklist widget
@@ -268,9 +314,7 @@ awful.screen.connect_for_each_screen(function(s)
         },
         {
             layout = wibox.layout.fixed.horizontal,
-            sep.arrow_right(beautiful.colors.background, beautiful.colors.grey),
             s.mytasklist,
-            sep.arrow_right(beautiful.colors.grey, beautiful.colors.background),
         },
         {
             layout = wibox.layout.fixed.horizontal,
@@ -281,9 +325,9 @@ awful.screen.connect_for_each_screen(function(s)
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
                     require("widgets/cpugraph"),
+                    require("widgets/cputemp").container,
                     require("widgets/mempie").container,
                     require("widgets/storage").container,
-                    require("widgets/cputemp").container,
                     require("widgets/battery").container,
                   },
                   color = colors.background },

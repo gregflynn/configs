@@ -79,7 +79,7 @@ theme.notification_shape        = theme.rounded_rect_shape
 -- Taglist
 --
 theme.taglist_fg_focus = colors.background
-theme.taglist_bg_focus = colors.blue
+theme.taglist_bg_focus = colors.purple
 
 --
 -- Tasklist

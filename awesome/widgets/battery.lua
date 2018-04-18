@@ -14,11 +14,6 @@ local battery = {
         image = string.format(icon_fmt, "full"),
         resize = true,
         widget = wibox.widget.imagebox
-    },
-    adapter = wibox.widget {
-        image = string.format(icon_fmt, "ac-adapter"),
-        resize = true,
-        widget = wibox.widget.imagebox
     }
 }
 
@@ -41,15 +36,13 @@ battery.lain_widget = lain.widget.bat {
         local color = beautiful.colors.green
         if bat_now.status == "Discharging" then
             color = beautiful.colors.red
-            battery.adapter.visible = false
             battery.icon.image = string.format(icon_fmt, status)
         else
             if bat_now.status == "Charging" then
                 battery.icon.image = string.format(icon_chg_fmt, status)
             else
-                battery.icon.image = string.format(icon_fmt, "full-charged")
+                battery.icon.image = string.format(icon_fmt, "ac-adapter")
             end
-            battery.adapter.visible = true
         end
 
         widget:set_markup(
@@ -69,7 +62,6 @@ battery.widget = battery.lain_widget.widget
 if battery.battery_enabled then
     battery.container = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        wibox.container.margin(battery.adapter, dpi(0), dpi(0)),
         wibox.container.margin(battery.icon,    dpi(0), dpi(3)),
         wibox.container.margin(battery.widget,  dpi(0), dpi(3))
     }
