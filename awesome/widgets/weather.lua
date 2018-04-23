@@ -13,13 +13,6 @@ local humidity_bar = wibox.widget {
     background_color = beautiful.colors.grey
 }
 
-local rotated_humidity = wibox.widget {
-    humidity_bar,
-    forced_width = dpi(5),
-    direction    = 'east',
-    layout       = wibox.container.rotate
-}
-
 local weather = lain.widget.weather {
     city_id = 4930956,
     units = 'imperial',
@@ -47,10 +40,12 @@ weather.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     wibox.container.margin(weather.icon, dpi(0), dpi(3)),
     wibox.container.margin(weather.widget, dpi(0), dpi(0)),
-    -- wibox.container.margin(rotated_humidity, dpi(0), dpi(10)),
     buttons = gears.table.join(
         awful.button({ }, 1, function()
             weather.show(5)
+        end),
+        awful.button({ }, 3, function()
+            awful.spawn("xdg-open https://www.google.com/search?q=current+weather")
         end)
     )
 }
