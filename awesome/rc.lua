@@ -105,8 +105,8 @@ local function list_update(w, buttons, label, data, objects)
         end
         local text, bg, bg_image, icon, args = label(o, tb)
 
-        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.grey
-        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.grey
+        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.purple
+        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.purple
         local la = sep.arrow_right(left_color, bg)
         local ra = sep.arrow_right(bg, right_color)
 
@@ -158,24 +158,17 @@ local function list_update(w, buttons, label, data, objects)
 end
 
 local function taglist_update(w, buttons, label, data, objects)
+    local last_bg = beautiful.colors.background
     w:reset()
     for i, o in ipairs(objects) do
         local cache = data[o]
-        local tb, bgb, tbm, l
+        local tb, tbm
 
         if cache then
             tb = cache.tb
-        else
-            tb = wibox.widget.textbox()
-        end
-        local text, bg, bg_image, icon, args = label(o, tb)
-
-        local la = sep.arrow_right(beautiful.colors.background, bg)
-        local ra = sep.arrow_right(bg, beautiful.colors.background)
-
-        if cache then
             tbm = cache.tbm
         else
+            tb = wibox.widget.textbox()
             tbm = wibox.container.margin(tb, dpi(4), dpi(4))
 
             data[o] = {
@@ -184,18 +177,23 @@ local function taglist_update(w, buttons, label, data, objects)
             }
         end
 
-        local bgb = wibox.container.background()
         local l = wibox.layout.fixed.horizontal()
-        l:add(la)
+        local text, bg, bg_image, icon, args = label(o, tb)
+        tb:set_markup_silently(text)
+        
+        bg = bg or beautiful.colors.background
+        l:add(sep.arrow_right(last_bg, bg))
         l:add(tbm)
-        l:add(ra)
+        if i == #objects then
+            l:add(sep.arrow_right(bg, beautiful.colors.background))
+        end
+        
+        local bgb = wibox.container.background()
         bgb:set_widget(l)
         bgb:buttons(awful.widget.common.create_buttons(buttons, o))
-
-        args = args or {}
-        tb:set_markup_silently(text)
         bgb:set_bg(bg)
         w:add(bgb)
+        last_bg = bg
     end
 end
 
@@ -337,7 +335,7 @@ awful.screen.connect_for_each_screen(function(s)
                     require("widgets/wallpapers").container,
                     require("widgets/arandr").container,
                   }, 
-                  color = colors.grey },
+                  color = colors.purple },
                 { widget = awful.widget.only_on_screen(wibox.widget.systray(), "primary"),
                   color = colors.background },
                 { widget = volume.container,
@@ -345,7 +343,7 @@ awful.screen.connect_for_each_screen(function(s)
                 { widget = require("widgets/weather").container,
                   color = colors.background },
                 { widget = require("widgets/clock"),
-                  color = colors.yellow },
+                  color = colors.blue },
                 { widget = s.layoutbox,
                   color = colors.background }
             })

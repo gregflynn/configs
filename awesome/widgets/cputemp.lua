@@ -34,7 +34,7 @@ cputemp.widget = awful.widget.watch(
 if cputemp.enabled then
     cputemp.container = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        wibox.container.margin(cputemp.widget, dpi(0), dpi(2))
+        wibox.container.margin(cputemp.widget, dpi(2), dpi(2))
     }
 else
     cputemp.container = nil
