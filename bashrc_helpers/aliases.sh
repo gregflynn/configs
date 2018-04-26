@@ -74,3 +74,10 @@ function gmb() {
     date="$(date '+%Y%m')"
     git checkout -b "${date}_$1"
 }
+function ydb() {
+    if ! [ "$1" ]; then
+        echo "no feature name given"
+        return 1
+    fi
+    gmb "yo_dawg_i_heard_you_like_$1"
+}
