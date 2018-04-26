@@ -2,6 +2,8 @@
 [[ "$-" != *i* ]] && return
 
 DOTINSTALL="$HOME/.sanity"
+export HISTCONTROL=ignoreboth
+export HISTSIZE=5000
 
 #
 # Fix for VTE terminals
