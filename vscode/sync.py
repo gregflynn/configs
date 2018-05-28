@@ -12,11 +12,11 @@ class VisualStudioCodeConnector:
 
     @classmethod
     def install_extension(cls, extension):
-        call(['code', '--install-extenion', extension])
+        call(['code', '--install-extension', extension])
 
     @classmethod
     def uninstall_extension(cls, extension):
-        call(['code', '--uninstall-extenion', extension])
+        call(['code', '--uninstall-extension', extension])
 
 
 def get_dotsanity_extensions():
