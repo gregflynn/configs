@@ -19,7 +19,7 @@ function pac() {
         # update from either pacman or AUR
         update)
             if [ "$flag" == "-aur" ]; then
-                echo "Updating AUR packages..."
+                echo "Updating AUR caches..."
                 # if packages aren't specified, update all
                 if [ "$pkgs" == "" ]; then
                     pkgs=$(ls $AUR_HOME | xargs)
@@ -130,6 +130,10 @@ function pac() {
             esac
         ;;
 
+        clean)
+            aur_clean $2
+        ;;
+
         *)
             echo "Usage: pac [update|install|remove|search|list] [package_name]"
         ;;
@@ -156,11 +160,14 @@ function aur_update_helper() {
         popd > /dev/null
 
         aur_update_available $pkg
-        if [ "$?" == "0" ]; then
+        aur_rc="$?"
+        if [ "${aur_rc}" == "0" ]; then
             needs_update="$needs_update $pkg"
             print_version $pkg $(installed_version $pkg) $(aur_version $pkg)
-        else
+        elif [ "${aur_rc}" == "1" ]; then
             print_version $pkg $(installed_version $pkg)
+        elif [ "${aur_rc}" == "2" ]; then
+            continue
         fi
     done
 
@@ -177,11 +184,20 @@ function aur_update_helper() {
     done
 
     # prompt to continue
-    read -p "Install updates? [y/n] " -n 1 -r
-    echo # just skips a line
+    echo
+    read -p "Install updates? [y/n] " -r
+    echo
+
     if [[ $REPLY =~ ^[Yy]$ ]]; then
+        built_pkgs=""
+
         for pkg in $needs_update; do
-            aur_makepkg $pkg
+            aur_make ${pkg}
+            built_pkgs="${build_pkgs} ${pkg}"
+        done
+
+        for pkg in ${built_pkgs}; do
+            aur_install ${pkg}
         done
     fi
 }
@@ -194,13 +210,13 @@ function aur_install_helper() {
 
     # make sure that package doesn't exist already
     if [ -e $AUR_HOME/$1 ]; then
-        echo "Package already installed: $1"
-        echo "Checking for updates for: $1"
-        aur_update_helper "$1"
+        pushd $AUR_HOME/$1 > /dev/null
+        git pull -q > /dev/null
+        popd > /dev/null
+    else
+        # clone the aur repo
+        git clone aur:$1 $AUR_HOME/$1
     fi
-
-    # clone the aur repo
-    git clone aur:$1 $AUR_HOME/$1
 
     if [[ "$?" != "0" || "$(ls $AUR_HOME/$1)" == "" ]]; then
         if [ -e $AUR_HOME/$1 ]; then
@@ -210,13 +226,14 @@ function aur_install_helper() {
         return 1
     fi
 
-    aur_makepkg $1
+    aur_make $1
+    aur_install $1
 }
 
 #
-# Build and install the given package
+# Build the given AUR package
 #
-function aur_makepkg() {
+function aur_make() {
     pushd $AUR_HOME/$1 > /dev/null
 
     # pkg specific hacks
@@ -224,9 +241,31 @@ function aur_makepkg() {
         rm -rf lain/ src/
         git checkout -q master
     fi
+    makepkg
+    mk_rc="$?"
 
-    makepkg -si
     popd > /dev/null
+    return ${mk_rc}
+}
+
+#
+# Build and install the given package
+#
+function aur_install() {
+    pushd $AUR_HOME/$1 > /dev/null
+    pkg_path=$(ls -la | grep "tar.xz" | tail -n 1 | awk '{print $9}')
+    sudo pacman -U $pkg_path
+    popd > /dev/null
+}
+
+function aur_clean() {
+    if [ ! -e "${AUR_HOME}/${1}" ]; then
+        echo "$1 was not found in the AUR cache"
+    else
+        pushd ${AUR_HOME}/${1} > /dev/null
+        git clean -f
+        popd > /dev/null
+    fi
 }
 
 #
@@ -241,9 +280,14 @@ function aur_search() {
 # Check if $1 has an update remotely
 # $? == 1 Up to date
 # $? == 0 Update available
+# $? == 2 Partial install
 #
 function aur_update_available() {
     local installed=$(installed_version $1)
+    if [ "${installed}" == "" ]; then
+        return 2
+    fi
+
     local remote=$(aur_version $1)
     if [ "$installed" != "$remote" ]; then
         return 0
@@ -257,7 +301,7 @@ function aur_update_available() {
 # stdout > version reported by pacman
 #
 function installed_version() {
-    local pacman_version=$(pacman -Q $1)
+    local pacman_version=$(pacman -Q $1 2>/dev/null)
     if [ "$?" == "0" ]; then
         echo $pacman_version | awk '{ print $2 }'
     fi
