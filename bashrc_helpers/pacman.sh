@@ -193,7 +193,7 @@ function aur_update_helper() {
 
         for pkg in $needs_update; do
             aur_make ${pkg}
-            built_pkgs="${build_pkgs} ${pkg}"
+            built_pkgs="${built_pkgs} ${pkg}"
         done
 
         for pkg in ${built_pkgs}; do
