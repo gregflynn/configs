@@ -5,7 +5,7 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=1
 compton -b -c
 
 # setup lightdm locking after 15 minutes
-xautolock -time 15 -locker "i3lock -c 1B1D1E" &
+xautolock -time 15 -locker "betterlockscreen -l" &
 
 # disable gpu LED on desktop
 nvidia-settings --assign GPULogoBrightness=0

@@ -393,7 +393,7 @@ globalkeys = gears.table.join(
     awful.key(
         { modkey,        }, "i",
         function()
-            awful.spawn("i3lock -c 272822")
+            awful.spawn("betterlockscreen -l")
         end,
         {description = "Lock Screen", group = "awesome"}
     ),
@@ -658,3 +658,6 @@ clientbuttons = gears.table.join(
 root.keys(globalkeys)
 
 awful.rules.rules = require("rules")
+
+-- Cache i3lock-color's blur background image
+awful.spawn("betterlockscreen -u "..beautiful.wallpaper.." -b 0.5")
