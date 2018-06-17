@@ -7,15 +7,6 @@ INV=$'\e[7m'
 # disable default venv PS1 manipulation
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-function thick_div {
-    C1=$'\e[30m'
-    R=$'\e[0m'
-    P=''
-    [[ "$2" != "" ]] && C1="$2"
-    [[ "$1" != "" ]] && P="$1"
-    echo -n "$INV$C1$RI$R$C1$P$RI"
-}
-
 function pss_git() {
     gitstatus=`git status -s -b --porcelain 2>/dev/null`
     [[ "$?" -ne 0 ]] && return 0
@@ -169,7 +160,7 @@ function pss_ps1() {
 if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
     CX=$'\e[31m'
 else
-    CX=$'\e[34m'
+    CX=$'\e[32m'
 fi
 
 # only set PS1 in emulated sessions

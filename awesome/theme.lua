@@ -7,6 +7,9 @@ local themes_path = gfs.get_themes_dir()
 
 local lain = require("lain")
 local sep = lain.util.separators
+local home = os.getenv("HOME")
+local dotsanity = home.."/.sanity"
+local assets = dotsanity.."/awesome-assets"
 
 local colors = {
     background = "#272822",
@@ -24,15 +27,15 @@ local theme = {
     colors       = colors,
     bar_height   = dpi(25),
     bar_margin   = dpi(3),
-    border_width = dpi(2),
+    border_width = dpi(0),
+    font         = "hack 10",
+    wallpaper    = "/home/greg/Dropbox/Wallpapers/sky_mirror_UltraHD.jpg",
     rounded_rect_shape = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(10))
-    end
+    end,
 }
 
 sep.width = dpi(9)
-
-theme.font          = "hack 10"
 
 theme.bg_normal     = colors.background
 theme.bg_focus      = colors.background
@@ -89,35 +92,40 @@ theme.tasklist_bg_focus = colors.blue
 theme.tasklist_fg_minimize = colors.purple
 theme.tasklist_plain_task_name = true
 
-theme.titlebar_close_button_normal = themes_path.."zenburn/titlebar/close_normal.png"
-theme.titlebar_close_button_focus  = themes_path.."zenburn/titlebar/close_focus.png"
+--
+-- Titlebar buttons
+--
+theme.titlebar_close_button_normal = assets.."/button_normal.png"
+theme.titlebar_close_button_normal_hover = assets.."/close_hover.png"
+theme.titlebar_close_button_normal_press = assets.."/close_press.png"
+theme.titlebar_close_button_focus = assets.."/close_focus.png"
+theme.titlebar_close_button_focus_hover = assets.."/close_hover.png"
+theme.titlebar_close_button_focus_press = assets.."/close_press.png"
 
-theme.titlebar_minimize_button_normal = themes_path.."zenburn/titlebar/ontop_normal_inactive.png"
-theme.titlebar_minimize_button_focus  = themes_path.."zenburn/titlebar/ontop_focus_inactive.png"
+theme.titlebar_maximized_button_normal = assets.."/button_normal.png"
+theme.titlebar_maximized_button_normal_active = assets.."/button_normal.png"
+theme.titlebar_maximized_button_normal_active_hover = assets.."/maximize_hover.png"
+theme.titlebar_maximized_button_normal_active_press = assets.."/maximize_press.png"
+theme.titlebar_maximized_button_normal_inactive = assets.."/button_normal.png"
+theme.titlebar_maximized_button_normal_inactive_hover = assets.."/maximize_hover.png"
+theme.titlebar_maximized_button_normal_inactive_press = assets.."/maximize_press.png"
+theme.titlebar_maximized_button_focus = assets.."/maximize_focus.png"
+theme.titlebar_maximized_button_focus_active = assets.."/maximize_hover.png"
+theme.titlebar_maximized_button_focus_active_hover = assets.."/maximize_hover.png"
+theme.titlebar_maximized_button_focus_active_press = assets.."/maximize_press.png"
+theme.titlebar_maximized_button_focus_inactive = assets.."/maximize_focus.png"
+theme.titlebar_maximized_button_focus_inactive_hover = assets.."/maximize_hover.png"
+theme.titlebar_maximized_button_focus_inactive_press = assets.."/maximize_press.png"
 
-theme.titlebar_ontop_button_normal_inactive = themes_path.."zenburn/titlebar/ontop_normal_inactive.png"
-theme.titlebar_ontop_button_focus_inactive  = themes_path.."zenburn/titlebar/ontop_focus_inactive.png"
-theme.titlebar_ontop_button_normal_active = themes_path.."zenburn/titlebar/ontop_normal_active.png"
-theme.titlebar_ontop_button_focus_active  = themes_path.."zenburn/titlebar/ontop_focus_active.png"
+theme.titlebar_minimize_button_normal = assets.."/button_normal.png"
+theme.titlebar_minimize_button_normal_hover = assets.."/minimize_hover.png"
+theme.titlebar_minimize_button_normal_press = assets.."/minimize_press.png"
+theme.titlebar_minimize_button_focus = assets.."/minimize_focus.png"
+theme.titlebar_minimize_button_focus_hover = assets.."/minimize_hover.png"
+theme.titlebar_minimize_button_focus_press = assets.."/minimize_press.png"
 
-theme.titlebar_sticky_button_normal_inactive = themes_path.."zenburn/titlebar/sticky_normal_inactive.png"
-theme.titlebar_sticky_button_focus_inactive  = themes_path.."zenburn/titlebar/sticky_focus_inactive.png"
-theme.titlebar_sticky_button_normal_active = themes_path.."zenburn/titlebar/sticky_normal_active.png"
-theme.titlebar_sticky_button_focus_active  = themes_path.."zenburn/titlebar/sticky_focus_active.png"
 
-theme.titlebar_floating_button_normal_inactive = themes_path.."zenburn/titlebar/floating_normal_inactive.png"
-theme.titlebar_floating_button_focus_inactive  = themes_path.."zenburn/titlebar/floating_focus_inactive.png"
-theme.titlebar_floating_button_normal_active = themes_path.."zenburn/titlebar/floating_normal_active.png"
-theme.titlebar_floating_button_focus_active  = themes_path.."zenburn/titlebar/floating_focus_active.png"
 
-theme.titlebar_maximized_button_normal_inactive = themes_path.."zenburn/titlebar/maximized_normal_inactive.png"
-theme.titlebar_maximized_button_focus_inactive  = themes_path.."zenburn/titlebar/maximized_focus_inactive.png"
-theme.titlebar_maximized_button_normal_active = themes_path.."zenburn/titlebar/maximized_normal_active.png"
-theme.titlebar_maximized_button_focus_active  = themes_path.."zenburn/titlebar/maximized_focus_active.png"
-
-theme.wallpaper = "/home/greg/Dropbox/Wallpapers/sky_mirror_UltraHD.jpg"
-
--- You can use your own layout icons like this:
 theme.layout_fairh = themes_path.."zenburn/layouts/fairh.png"
 theme.layout_fairv = themes_path.."zenburn/layouts/fairv.png"
 theme.layout_floating  = themes_path.."zenburn/layouts/floating.png"
@@ -142,10 +150,5 @@ theme.layout_cascade     = theme.lain_icons .. "cascade.png"
 theme.layout_cascadetile = theme.lain_icons .. "cascadetile.png" -- cascade.tile
 theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
 theme.layout_centerhwork = theme.lain_icons .. "centerworkh.png" -- centerwork.horizontal
-
--- Generate Awesome icon:
-theme.awesome_icon = beautiful.theme_assets.awesome_icon(
-    theme.menu_height, theme.bg_focus, theme.fg_focus
-)
 
 return theme

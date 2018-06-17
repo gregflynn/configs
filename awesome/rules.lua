@@ -1,5 +1,6 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
+local gears = require("gears")
 local dpi = beautiful.xresources.apply_dpi
 
 return {
@@ -8,8 +9,12 @@ return {
         properties = {
             focus = awful.client.focus.filter,
             raise = true,
-            keys = clientkeys,
-            buttons = clientbuttons,
+            keys = require("clientkeys"),
+            buttons = gears.table.join(
+                awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
+                awful.button({ modkey }, 1, awful.mouse.client.move),
+                awful.button({ modkey }, 3, awful.mouse.client.resize)
+            ),
             screen = awful.screen.preferred,
             placement = awful.placement.centered,
             titlebars_enabled = true,
@@ -28,6 +33,12 @@ return {
     },
     {
         rule = { instance = "code", type = "normal"  },
+        properties = {
+            floating = false
+        }
+    },
+    {
+        rule = { class = "jetbrains-pycharm", type = "normal" },
         properties = {
             floating = false
         }

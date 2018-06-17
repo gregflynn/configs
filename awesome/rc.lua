@@ -10,7 +10,7 @@ require("awful.autofocus")
 require("errors")
 require("signals")
 local home = os.getenv("HOME")
-local dosanity = home.."/.sanity"
+local dotsanity = home.."/.sanity"
 
 beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
@@ -34,6 +34,7 @@ menubar.utils.terminal = terminal
 
 -- Make Tab go down a menu
 awful.menu.menu_keys.down = { "Down", "j", "Tab" }
+awful.rules.rules = require("rules")
 
 --
 -- Screen setup
@@ -395,7 +396,7 @@ globalkeys = gears.table.join(
     awful.key(
         { modkey,        }, "i",
         function()
-            awful.spawn({"bash", dosanity.."/i3lock.sh"})
+            awful.spawn({"bash", dotsanity.."/i3lock.sh"})
         end,
         {description = "Lock Screen", group = "awesome"}
     ),
@@ -645,21 +646,5 @@ for i = 1, 10 do
     end
 end
 
---
--- Client keys
---
-clientkeys = require("clientkeys")
-
-clientbuttons = gears.table.join(
-    awful.button({ }, 1, function(c) client.focus = c; c:raise() end),
-    awful.button({ modkey }, 1, awful.mouse.client.move),
-    awful.button({ modkey }, 3, awful.mouse.client.resize)
-)
-
 -- Set keys
 root.keys(globalkeys)
-
-awful.rules.rules = require("rules")
-
--- Cache i3lock-color's blur background image
-awful.spawn("betterlockscreen -u "..beautiful.wallpaper.." -b 0.5")
