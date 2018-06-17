@@ -9,8 +9,10 @@ local lain      = require("lain")
 require("awful.autofocus")
 require("errors")
 require("signals")
+local home = os.getenv("HOME")
+local dosanity = home.."/.sanity"
 
-beautiful.init(os.getenv("HOME").."/.config/awesome/theme.lua")
+beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
 
 local dpi       = beautiful.xresources.apply_dpi
@@ -386,14 +388,14 @@ globalkeys = gears.table.join(
     awful.key(
         {                }, "XF86Explorer",
         function()
-            awful.spawn("xdg-open "..os.getenv("HOME"))
+            awful.spawn("xdg-open "..home)
         end
         -- {description = "Home Directory", group = "programs"}
     ),
     awful.key(
         { modkey,        }, "i",
         function()
-            awful.spawn("betterlockscreen -l")
+            awful.spawn({"bash", dosanity.."/i3lock.sh"})
         end,
         {description = "Lock Screen", group = "awesome"}
     ),

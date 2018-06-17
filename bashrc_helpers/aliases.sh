@@ -43,6 +43,9 @@ function gradient() {
         printf "\n";
     }'
 }
+function lock() {
+    bash ${DOTINSTALL}/i3lock.sh
+}
 
 #
 # Grep
