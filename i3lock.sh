@@ -2,7 +2,7 @@
 
 i3lock \
     --ignore-empty-password \
-    --blur=5 \
+    --blur \
     --indicator \
     --indpos="x+w/2:y+2*h/3" \
     --ring-width=20 \
