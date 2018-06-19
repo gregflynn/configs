@@ -24,12 +24,13 @@ local colors = {
 }
 
 local theme = {
-    colors       = colors,
-    bar_height   = dpi(25),
-    bar_margin   = dpi(3),
-    border_width = dpi(2),
-    font         = "hack 10",
-    wallpaper    = "/home/greg/Dropbox/Wallpapers/sky_mirror_UltraHD.jpg",
+    colors        = colors,
+    bar_height    = dpi(25),
+    bar_margin    = dpi(3),
+    border_width  = dpi(2),
+    border_radius = dpi(5),
+    font          = "hack 10",
+    wallpaper     = "/home/greg/Dropbox/Wallpapers/sky_mirror_UltraHD.jpg",
     rounded_rect_shape = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(10))
     end,
