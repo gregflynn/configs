@@ -27,7 +27,7 @@ local theme = {
     colors       = colors,
     bar_height   = dpi(25),
     bar_margin   = dpi(3),
-    border_width = dpi(0),
+    border_width = dpi(2),
     font         = "hack 10",
     wallpaper    = "/home/greg/Dropbox/Wallpapers/sky_mirror_UltraHD.jpg",
     rounded_rect_shape = function(cr, w, h)
@@ -50,7 +50,7 @@ theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 10
 theme.border_normal = colors.background
-theme.border_focus  = colors.blue
+theme.border_focus  = colors.background
 theme.border_marked = colors.red
 
 --

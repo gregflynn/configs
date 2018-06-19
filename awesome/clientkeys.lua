@@ -4,7 +4,7 @@ local awful = require("awful")
 
 clientkeys = gears.table.join(
     awful.key(
-        { modkey,        }, "f",
+        { modkey, shift  }, "f",
         function(c)
             c.fullscreen = not c.fullscreen
             c:raise()
@@ -30,7 +30,7 @@ clientkeys = gears.table.join(
         {description = "Center client", group = "client"}
     ),
     awful.key(
-        { modkey, "Shift" }, "f",
+        { modkey,        }, "f",
         function(c)
             c.floating = not c.floating
             c.maximized_vertical = false

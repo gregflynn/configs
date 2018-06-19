@@ -36,11 +36,5 @@ return {
         properties = {
             floating = false
         }
-    },
-    {
-        rule = { class = "jetbrains-pycharm", type = "normal" },
-        properties = {
-            floating = false
-        }
     }
 }
