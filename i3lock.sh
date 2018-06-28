@@ -1,8 +1,11 @@
 #! /bin/bash
 
+WALLPAPERS_HOME="${HOME}/Dropbox/Wallpapers"
+RAND_WALLPAPER=$(ls ${WALLPAPERS_HOME} | grep -v "^total" | sort -R | head -n 1)
+
 i3lock \
     --ignore-empty-password \
-    --blur \
+    --image="${WALLPAPERS_HOME}/${RAND_WALLPAPER}" \
     --indicator \
     --indpos="x+w/2:y+2*h/3" \
     --ring-width=20 \
