@@ -12,7 +12,7 @@
      */
     "editor.fontFamily": "'Hack'",
     "window.zoomLevel": 0,
-    "editor.fontSize": 14,
+    "editor.fontSize": 15,
     "editor.renderIndentGuides": true,
     "editor.codeLens": false,
     "editor.minimap.enabled": false,

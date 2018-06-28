@@ -254,7 +254,7 @@ function aur_make() {
 function aur_install() {
     pushd $AUR_HOME/$1 > /dev/null
     pkg_path=$(ls -la | grep "tar.xz" | tail -n 1 | awk '{print $9}')
-    sudo pacman -U $pkg_path
+    sudo pacman -U $pkg_path --needed --noconfirm
     popd > /dev/null
 }
 

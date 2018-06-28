@@ -28,13 +28,7 @@ return {
     {
         rule = { instance = "xfce4-terminal", type = "normal" },
         properties = {
-            floating = false
-        }
-    },
-    {
-        rule = { instance = "code", type = "normal"  },
-        properties = {
-            floating = false
+            border_width = beautiful.border_width * 2
         }
     }
 }
