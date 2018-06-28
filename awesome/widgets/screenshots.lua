@@ -11,6 +11,7 @@ local screenshots_folder = os.getenv("HOME").."/Pictures/Screenshots"
 
 local screenshot_icon = dropdown {
     folder = screenshots_folder,
+    reverse = true,
     icon = "/usr/share/icons/elementary/apps/48/accessories-screenshot.svg",
     menu_func = function(full_path)
         awful.spawn(string.format(

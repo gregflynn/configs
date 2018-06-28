@@ -18,9 +18,7 @@ client.connect_signal("manage", function(c)
         awful.placement.no_offscreen(c)
     end
 
-    c.shape = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, beautiful.border_radius)
-    end
+    c.shape = beautiful.border_shape
 end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
@@ -84,8 +82,10 @@ end)
 client.connect_signal("property::maximized", function(client)
     if client.maximized then
         client.border_width = 0
+        client.shape = nil
     else
         client.border_width = beautiful.border_width
+        client.shape = beautiful.border_shape
     end
 end)
 

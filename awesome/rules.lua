@@ -22,13 +22,19 @@ return {
             maximized_horizontal = false,
             maximized = false,
             floating = true,
-            border_width = beautiful.border_width
+            border_width = beautiful.border_width,
+            size_hints_honor = false
         }
     },
     {
         rule = { instance = "xfce4-terminal", type = "normal" },
         properties = {
-            border_width = beautiful.border_width * 2,
+            floating = false
+        }
+    },
+    {
+        rule = { instance = "code", type = "normal"  },
+        properties = {
             floating = false
         }
     }

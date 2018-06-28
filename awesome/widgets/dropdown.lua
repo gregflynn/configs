@@ -14,9 +14,15 @@ local function factory(args)
         widget = wibox.widget.imagebox
     }
 
+    local rev = ''
+    if args.reverse then
+        rev = '-r'
+    end
+
     local command = string.format(
-        "ls -l %s | awk '{print $9}' | tail -n 20 | sort -r",
-        args.folder
+        "ls -l %s | awk '{print $9}' | tail -n 35 | sort %s",
+        args.folder,
+        rev
     )
 
     new_dropdown:buttons(gears.table.join(

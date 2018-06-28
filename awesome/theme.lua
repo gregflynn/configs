@@ -27,12 +27,11 @@ local theme = {
     colors        = colors,
     bar_height    = dpi(25),
     bar_margin    = dpi(3),
-    border_width  = dpi(2),
-    border_radius = dpi(5),
+    border_width  = dpi(3),
     font          = "hack 10",
     wallpaper     = "/home/greg/Dropbox/Wallpapers/sky_mirror_UltraHD.jpg",
-    rounded_rect_shape = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, dpi(10))
+    border_shape  = function(cr, w, h)
+        gears.shape.rounded_rect(cr, w, h, dpi(5))
     end,
 }
 
@@ -77,7 +76,7 @@ theme.notification_font         = "Hack 12"
 theme.notification_fg           = colors.white
 theme.notification_border_width = dpi(2)
 theme.notification_border_color = colors.background
-theme.notification_shape        = theme.rounded_rect_shape
+theme.notification_shape        = theme.border_shape
 
 --
 -- Taglist
