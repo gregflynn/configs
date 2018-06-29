@@ -5,7 +5,7 @@ RAND_WALLPAPER=$(ls ${WALLPAPERS_HOME} | grep -v "^total" | sort -R | head -n 1)
 
 i3lock \
     --ignore-empty-password \
-    --image="${WALLPAPERS_HOME}/${RAND_WALLPAPER}" \
+    --image="${WALLPAPERS_HOME}/close_to_the_sun_UltraHD.jpg" \
     --tiling \
     --indicator \
     --indpos="x+w/2:y+2*h/3" \
@@ -28,10 +28,10 @@ i3lock \
     --keyhlcolor=A6E22EFF \
     --bshlcolor=F92672FF \
     --timestr="%l:%M%P" \
-    --timepos="w*15/16+x:y+h/8" \
+    --timepos="w*15/16+x:y+h*3/16" \
     --time-align 2 \
     --timecolor=66D9EFFF \
     --time-font="Hack" \
-    --timesize=72 \
+    --timesize=102 \
     --datestr=" " \
     ;
