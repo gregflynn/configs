@@ -13,7 +13,6 @@ nvidia-settings --assign GPULogoBrightness=0
 # startup applications
 nm-applet&
 redshift-gtk&
-dropbox&
 blueberry-tray&
 
 export HOSTNAME=`hostname`
