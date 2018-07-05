@@ -414,6 +414,13 @@ globalkeys = gears.table.join(
         end,
         {description = "Open SSH", group = "awesome"}
     ),
+    awful.key(
+        { modkey,  }, "u",
+        function()
+            awful.spawn("rofi-pass")
+        end,
+        {description = "Open Passwords", group = "awesome"}
+    ),
 
     --
     -- Client

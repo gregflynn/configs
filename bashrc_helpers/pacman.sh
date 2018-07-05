@@ -241,7 +241,7 @@ function aur_make() {
         rm -rf lain/ src/
         git checkout -q master
     fi
-    makepkg
+    makepkg -s
     mk_rc="$?"
 
     popd > /dev/null
