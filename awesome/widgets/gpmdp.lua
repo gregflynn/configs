@@ -137,7 +137,7 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
 
             local title_color = beautiful.colors.background
             local artist_color = beautiful.colors.background
-            local title_text = markup.italic("%s").." / %s"
+            local title_text = markup.italic(" %s").." / %s"
 
             if not gpm_now.playing then
                 title_color = beautiful.colors.grey

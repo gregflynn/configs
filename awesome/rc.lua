@@ -322,7 +322,7 @@ awful.screen.connect_for_each_screen(function(s)
 
             arrow_list({
                 { widget = require("widgets/gpmdp").container,
-                  color = colors.blue },
+                  color = colors.yellow },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
                     require("widgets/cpugraph"),
@@ -334,6 +334,7 @@ awful.screen.connect_for_each_screen(function(s)
                   color = colors.background },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
+                    require("widgets/caffeine").container,
                     screenshot.container,
                     require("widgets/wallpapers").container,
                     require("widgets/arandr").container,
@@ -342,7 +343,7 @@ awful.screen.connect_for_each_screen(function(s)
                 { widget = awful.widget.only_on_screen(wibox.widget.systray(), "primary"),
                   color = colors.background },
                 { widget = volume.container,
-                  color = colors.blue },
+                  color = colors.grey },
                 { widget = require("widgets/weather").container,
                   color = colors.background },
                 { widget = require("widgets/clock"),
