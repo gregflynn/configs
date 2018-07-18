@@ -334,6 +334,7 @@ awful.screen.connect_for_each_screen(function(s)
                   color = colors.background },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
+                    require("widgets/blinky").container,
                     require("widgets/caffeine").container,
                     screenshot.container,
                     require("widgets/wallpapers").container,
