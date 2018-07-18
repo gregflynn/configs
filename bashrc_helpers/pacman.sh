@@ -103,31 +103,42 @@ function pac() {
         ;;
 
         list)
+            local OUTPUT=""
+            local SEARCH="$3"
+
             case $2 in
                 aur)
                     echo "AUR Installed Packages"
-                    echo -n "======================"
-                    ll $AUR_HOME | awk '{ print $9}'
+                    OUTPUT=$(ll $AUR_HOME | awk '{ print $9}')
                 ;;
                 all)
                     echo "All Installed Packages"
-                    echo -n "======================"
-                    pacman -Q
+                    OUTPUT=$(pacman -Q)
                 ;;
                 installed)
                     echo "Explicitly Installed Packages"
-                    echo "============================="
-                    pacman -Qen
+                    OUTPUT=$(pacman -Qen)
                 ;;
                 orphans)
                     echo "Orphaned Packages"
-                    echo "================="
-                    pacman -Qtdq
+                    OUTPUT=$(pacman -Qtdq)
                 ;;
                 *)
-                    echo "Usage: pac list [all|aur|installed|orphans]"
+                    # this case is now for `pac list search_term`
+                    echo "All Installed Packages"
+                    OUTPUT=$(pacman -Q)
+                    SEARCH="$2"
                 ;;
             esac
+
+            if [ "$SEARCH" != "" ]; then
+                # case where we had filtering and a search term
+                echo "Filter: ${SEARCH}"
+                OUTPUT=$(echo "${OUTPUT}" | grep -i ${SEARCH})
+            fi
+
+            echo
+            echo "$OUTPUT"
         ;;
 
         clean)
