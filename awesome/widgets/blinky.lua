@@ -8,12 +8,21 @@ local command = "blinky"
 local enabled_icon = "/usr/share/icons/elementary/places/48/user-bookmarks.svg"
 local disabled_icon = "/usr/share/icons/elementary/places/48/bookmark-missing.svg"
 
+-- shameless
+-- https://stackoverflow.com/questions/1340230/check-if-directory-exists-in-lua/21637668#21637668
+function exists(name)
+    if type(name)~="string" then return false end
+    return os.rename(name,name) and true or false
+end
+
+-- disable LEDs to be in a consistent state
+awful.spawn({command, "--off"})
+
 local blinky = wibox.widget {
-    blinky_installed = false,
-    image   = enabled_icon,
+    image   = disabled_icon,
     resize  = true,
     widget  = wibox.widget.imagebox,
-    enabled = true,
+    enabled = false,
 }
 
 function blinky.toggle()
@@ -36,26 +45,13 @@ blinky:buttons(gears.table.join(
     end)
 ))
 
-blinky.container = {
-    layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(blinky, dpi(0), dpi(3)),
-}
-
--- check if blinky is installed on this computer and set the initial state
-awful.spawn.easy_async({command, "--status"}, function(stdout)
-    local trimmed_output = stdout:match("^%s*(.-)%s*$")
-    if trimmed_output == "#000000" then
-        -- leds are disabled
-        blinky.enabled = true
-        blinky:toggle()
-    elseif trimmed_output:sub(1, 1) == "#" then
-        -- leds are enabled
-        blink.enabled = false
-        blinky:toggle()
-    else
-        -- blinky isn't installed on this machine
-        blinky.container = nil
-    end
-end)
+if exists("/usr/bin/blinky") then
+    blinky.container = {
+        layout = wibox.layout.fixed.horizontal,
+        wibox.container.margin(blinky, dpi(0), dpi(3)),
+    }
+else
+    blinky.container = nil
+end
 
 return blinky
