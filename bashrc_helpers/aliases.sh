@@ -70,6 +70,7 @@ alias ga='git add'
 alias gaa='git add --all'
 alias gc='git checkout'
 alias pull='git pull'
+alias undo='git reset HEAD~'
 function gmb() {
     if ! [ "$1" ]; then
         echo "no branch name specified"
