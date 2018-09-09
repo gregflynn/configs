@@ -17,10 +17,10 @@ local colors = {
     green      = "#A6E22E",
     grey       = "#75715e",
     orange     = "#FD971F",
-    purple     = "#ab9df2",
+    purple     = "#AE81FF",
     red        = "#F92672",
     white      = "#F8F8F2",
-    yellow     = "#f4bf75"
+    yellow     = "#f4bf75" -- sometimes #E6DB74
 }
 
 local theme = {
