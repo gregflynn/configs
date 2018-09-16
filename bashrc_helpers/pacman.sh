@@ -274,7 +274,7 @@ function aur_clean() {
         echo "$1 was not found in the AUR cache"
     else
         pushd ${AUR_HOME}/${1} > /dev/null
-        git clean -f
+        git clean -fdx
         popd > /dev/null
     fi
 }
