@@ -12,6 +12,7 @@
 [core]
     excludesfile = ~/.gitignore
     editor = /usr/bin/vim
+    autocrlf = input
 
 [url "https://github.com/"]
     insteadOf = "gh:"
