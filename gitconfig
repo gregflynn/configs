@@ -24,3 +24,6 @@
 
 [diff]
     tool = vimdiff
+
+[alias]
+    tree = log --graph --pretty='format:%C(yellow)%h%C(reset): %C(blue)%an%C(reset), %ar%C(auto)%d%n    %s'
