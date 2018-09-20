@@ -175,7 +175,7 @@ function _aur_update() {
             sudo echo "Granted"
             if [ "$?" != "0" ]; then
                 echo "Failed to elevate privileges, exiting"
-                exit 1
+                return 1
             fi
             for pkg in ${built_pkgs}; do
                 _aur_install_pkg ${pkg}
