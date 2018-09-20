@@ -1,13 +1,9 @@
-import os
 import sys
 import json
 
 
-INSTALLED_PACKAGES = set(os.listdir(os.environ['HOME'] + '/aur'))
-
-
 class AurPackage(object):
-    PKG_TEMPLATE = "aur/{name} {version} {i}\n    {description}"
+    PKG_TEMPLATE = "aur/{name} {version}\n    {description}"
 
     def __init__(self, data):
         self._data = data
@@ -22,18 +18,14 @@ class AurPackage(object):
 
     @property
     def description(self):
-        l = len(self._data['Description'] or [])
+        desc_len = len(self._data['Description'] or [])
         return (self._data['Description']
-                if l < 75 else self._data['Description'][:75] + '...')
-
-    @property
-    def installed(self):
-        return self.name in INSTALLED_PACKAGES
+                if desc_len < 75 else self._data['Description'][:75] + '...')
 
     def print_description(self):
         print(self.PKG_TEMPLATE.format(
-            name=self.name, version=self.version, description=self.description,
-            i="[installed]" if self.installed else ""))
+            name=self.name, version=self.version, description=self.description
+        ))
 
 
 if __name__ == '__main__':

@@ -1,5 +1,9 @@
+#! /bin/bash
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
+
+_WARN=$'\e[33m'
+_RESE=$'\e[0m'
 
 DOTINSTALL="$HOME/.sanity"
 export HISTCONTROL=ignoreboth
@@ -39,6 +43,7 @@ sane_import "prompt"
 sane_import "fabric-completion"
 sane_import "git-completion"
 sane_import "pass-completion"
+sane_import "aur"
 sane_import "pacman"
 sane_import "sys"
 sane_import "dock"
