@@ -62,6 +62,13 @@ else
     echo "Xfce4 Terminal not found, skipping"
 fi
 
+# Tilix Terminal
+if command -v tilix > /dev/null; then
+    dconf load /com/gexperts/Tilix/ < tilix.dconf
+else
+    echo "Tilix not found, skipping"
+fi
+
 # tmux
 dot_link tmux.conf .tmux.conf
 if [ ! -e "$HOME/.tmux/plugins/tpm" ]; then

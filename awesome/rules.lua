@@ -33,6 +33,12 @@ return {
         }
     },
     {
+        rule = { instance = "tilix", type = "normal" },
+        properties = {
+            floating = false
+        }
+    },
+    {
         rule = { instance = "code", type = "normal"  },
         properties = {
             floating = false

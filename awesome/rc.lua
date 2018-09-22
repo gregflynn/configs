@@ -18,7 +18,7 @@ awesome.set_preferred_icon_size(42)
 local dpi       = beautiful.xresources.apply_dpi
 local sep       = lain.util.separators
 local colors    = beautiful.colors
-local terminal  = "xfce4-terminal"
+local terminal  = "tilix"
 local taglist   = { "main", "alpha", "bravo", "slack", "music" }
 local ipairs    = ipairs
 
