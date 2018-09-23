@@ -6,7 +6,7 @@ local dpi       = beautiful.xresources.apply_dpi
 local dropdown  = require("widgets/dropdown")
 
 wallpapers_icon = dropdown {
-    folder = os.getenv("HOME").."/Dropbox/Wallpapers",
+    folder = os.getenv("HOME").."/.sanity/private/wallpapers",
     icon = "/usr/share/icons/elementary/apps/48/multimedia-photo-viewer.svg",
     menu_func = function(full_path)
         awful.screen.connect_for_each_screen(function(s)
