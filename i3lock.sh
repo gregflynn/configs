@@ -1,11 +1,11 @@
 #! /bin/bash
 
-WALLPAPERS_HOME="${HOME}/Dropbox/Wallpapers"
+WALLPAPERS_HOME="${HOME}/.sanity/private/wallpapers"
 RAND_WALLPAPER=$(ls ${WALLPAPERS_HOME} | grep -v "^total" | sort -R | head -n 1)
 
 i3lock \
     --ignore-empty-password \
-    --image="${WALLPAPERS_HOME}/close_to_the_sun_UltraHD.jpg" \
+    --image="${WALLPAPERS_HOME}/close_to_the_sun.jpg" \
     --tiling \
     --indicator \
     --indpos="x+w/2:y+2*h/3" \

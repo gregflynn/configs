@@ -29,7 +29,7 @@ local theme = {
     bar_margin    = dpi(3),
     border_width  = dpi(3),
     font          = "hack 10",
-    wallpaper     = "/home/greg/Dropbox/Wallpapers/close_to_the_sun_UltraHD.jpg",
+    wallpaper     = dotsanity.."/private/wallpapers/close_to_the_sun.jpg",
     border_shape  = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(5))
     end,
