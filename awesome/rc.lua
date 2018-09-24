@@ -423,6 +423,13 @@ globalkeys = gears.table.join(
         end,
         {description = "Open Passwords", group = "awesome"}
     ),
+    awful.key(
+        { modkey,  }, "c",
+        function()
+            awful.spawn("rofi -show calc -modi calc -no-show-match -no-sort")
+        end,
+        {description = "Open Passwords", group = "awesome"}
+    ),
 
     --
     -- Client

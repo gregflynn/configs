@@ -19,7 +19,7 @@ clientkeys = gears.table.join(
         {description = "Quit", group = "client"}
     ),
     awful.key(
-        { modkey,        }, "c",
+        { modkey, shift  }, "c",
         function(c)
             if not c.maximized then
                 awful.placement.centered(c)
