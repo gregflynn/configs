@@ -54,14 +54,6 @@ else
     echo "Visual Studio Code not found, skipping"
 fi
 
-# XFCE4 Terminal
-if command -v xfce4-terminal > /dev/null; then
-    mkdir -p "$HOME/.config/xfce4/terminal"
-    dot_link xfce4-terminal.rc .config/xfce4/terminal/terminalrc
-else
-    echo "Xfce4 Terminal not found, skipping"
-fi
-
 # Tilix Terminal
 if command -v tilix > /dev/null; then
     dconf load /com/gexperts/Tilix/ < tilix.dconf

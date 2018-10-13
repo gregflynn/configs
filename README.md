@@ -17,7 +17,7 @@ this is a mediocre at best attempt to keep my configuration files in a manageabl
   * Custom configuration
   * Compartmentalized Widget
 * Rofi config
-* xfce4-terminal config
+* Tilix config
 
 ## install
 ```

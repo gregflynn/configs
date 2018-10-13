@@ -27,12 +27,6 @@ return {
         }
     },
     {
-        rule = { instance = "xfce4-terminal", type = "normal" },
-        properties = {
-            floating = false
-        }
-    },
-    {
         rule = { instance = "tilix", type = "normal" },
         properties = {
             floating = false
