@@ -1,11 +1,17 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-WALLPAPERS_HOME="${HOME}/.sanity/private/wallpapers"
-RAND_WALLPAPER=$(ls ${WALLPAPERS_HOME} | grep -v "^total" | sort -R | head -n 1)
+icon="/usr/share/icons/elementary/status/48/locked.svg"
+screen="/tmp/screen.png"
+
+# take screenshot
+scrot "$screen"
+
+# pixelate
+convert "$screen" -scale 10% -scale 1000% "$screen"
 
 i3lock \
     --ignore-empty-password \
-    --image="${WALLPAPERS_HOME}/close_to_the_sun.jpg" \
+    --image="$screen" \
     --tiling \
     --indicator \
     --indpos="x+w/2:y+2*h/3" \
@@ -35,3 +41,5 @@ i3lock \
     --timesize=102 \
     --datestr=" " \
     ;
+
+rm "$screen"
