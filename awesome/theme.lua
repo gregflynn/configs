@@ -8,7 +8,7 @@ local themes_path = gfs.get_themes_dir()
 local lain = require("lain")
 local sep = lain.util.separators
 local home = os.getenv("HOME")
-local assets = home..".config/awesome/assets"
+local assets = home.."/.config/awesome/assets"
 
 local colors = {
     background = "#272822",
