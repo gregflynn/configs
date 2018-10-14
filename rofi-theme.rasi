@@ -1,0 +1,112 @@
+* {
+    background: #272822;
+    blue      : #66D9EF;
+    green     : #A6E22E;
+    grey      : #75715e;
+    orange    : #FD971F;
+    purple    : #AE81FF;
+    red       : #F92672;
+    white     : #F8F8F2;
+    yellow    : #f4bf75;
+    black     : #000000;
+}
+
+window {
+    background-color: @background;
+    padding: 0;
+}
+
+mainbox {
+    background-color: @background;
+    padding: 0;
+}
+
+//
+// TOP / Query
+//
+inputbar {
+    background-color: @background;
+    padding: 20px;
+    border: 0 0 2px 0;
+    border-color: @green;
+    children: [textbox-prompt-colon, entry, prompt];
+}
+
+prompt {
+    background-color: @background;
+    text-color: @purple;
+}
+
+entry {
+    background-color: @background;
+    text-color: @green;
+}
+
+textbox-prompt-colon {
+    background-color: @background;
+    expand:     false;
+    str:        ">";
+    margin:     0 0.2em 0 0;
+    text-color: @green;
+}
+
+//
+// Middle / Message
+//
+message {
+    // Used to show result of rofi-calc queries
+    background-color: @background;
+    text-color: @blue;
+    padding:    20px;
+}
+
+textbox {
+    // Actual text of the rofi-calc response
+    background-color: @background;
+    text-color: @blue;
+}
+
+//
+// Bottom / Results
+//
+listview {
+    // List of items to choose from, or history in rofi-calc
+    background-color: @background;
+    text-color: @white;
+    fixed-height: false;
+    spacing: 2px ;
+    padding: 0 20px 20px 20px;
+    dynamic: true;
+    lines: 5;
+}
+
+element {
+    // A single item in the listview
+    background-color: @background;
+    padding: 10px ;
+}
+
+element.normal.normal, element.alternate.normal {
+    background-color: @background;
+    text-color: @white;
+}
+
+element.selected.normal {
+    text-color: @purple;
+}
+
+element.normal.active, element.alternate.active {
+    text-color: @green;
+}
+element.selected.active {
+    background-color: @background;
+    text-color: @purple;
+}
+
+element.normal.urgent, element.alternate.urgent {
+    text-color: @red;
+}
+element.selected.urgent {
+    background-color: @red;
+    text-color: @white;
+}

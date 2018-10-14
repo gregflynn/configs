@@ -356,6 +356,29 @@ awful.screen.connect_for_each_screen(function(s)
     }
 end)
 
+
+local function rofi(method)
+    if method == "pass" then
+        awful.spawn("rofi-pass")
+        return
+    end
+
+    local show = ""
+    if method == "run" then
+        show = "drun"
+    elseif method == "ssh" then
+        show = "ssh"
+    elseif method == "calc" then
+        show = "calc -modi calc -no-show-match -no-sort"
+    elseif method == "windows" then
+        show = "windowcd"
+    elseif method == "allwindows" then
+        show = "window"
+    end
+
+    awful.spawn("rofi -show "..show.." -scroll-method 1 -matching fuzzy")
+end
+
 --
 -- Keybindings
 --
@@ -403,31 +426,23 @@ globalkeys = gears.table.join(
         {description = "Lock Screen", group = "awesome"}
     ),
     awful.key(
-        { modkey,        }, " ",
-        function()
-            awful.spawn("rofi -show drun")
-        end,
+        {modkey}, " ",
+        function() rofi("run") end,
         {description = "Launch Program", group = "awesome"}
     ),
     awful.key(
-        { modkey, shift  }, " ",
-        function()
-            awful.spawn("rofi -show ssh")
-        end,
+        {modkey, shift}, " ",
+        function() rofi("ssh") end,
         {description = "Open SSH", group = "awesome"}
     ),
     awful.key(
-        { modkey,  }, "u",
-        function()
-            awful.spawn("rofi-pass")
-        end,
+        {modkey}, "u",
+        function() rofi("pass") end,
         {description = "Open Passwords", group = "awesome"}
     ),
     awful.key(
-        { modkey,  }, "c",
-        function()
-            awful.spawn("rofi -show calc -modi calc -no-show-match -no-sort")
-        end,
+        {modkey}, "c",
+        function() rofi("calc") end,
         {description = "Open Passwords", group = "awesome"}
     ),
 
@@ -435,17 +450,13 @@ globalkeys = gears.table.join(
     -- Client
     --
     awful.key(
-        { modkey,        }, "w",
-        function()
-            awful.spawn("rofi -show windowcd")
-        end,
+        {modkey}, "w",
+        function() rofi("windows") end,
         {description = "Select Window", group = "client"}
     ),
     awful.key(
-        { modkey, shift  }, "w",
-        function()
-            awful.spawn("rofi -show window")
-        end,
+        {modkey, shift}, "w",
+        function() rofi("allwindows") end,
         {description = "Select Window (all tags)", group = "client"}
     ),
     awful.key(
