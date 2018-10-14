@@ -96,4 +96,8 @@ end)
 client.connect_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
 end)
-    
+
+client.connect_signal("request::activate", function(c, context, hints)
+    c.minimized = false
+    awful.ewmh.activate(c, context, hints)
+end)
