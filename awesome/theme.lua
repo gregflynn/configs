@@ -8,8 +8,7 @@ local themes_path = gfs.get_themes_dir()
 local lain = require("lain")
 local sep = lain.util.separators
 local home = os.getenv("HOME")
-local dotsanity = home.."/.sanity"
-local assets = dotsanity.."/awesome-assets"
+local assets = home..".config/awesome/assets"
 
 local colors = {
     background = "#272822",
@@ -29,7 +28,7 @@ local theme = {
     bar_margin    = dpi(3),
     border_width  = dpi(3),
     font          = "hack 10",
-    wallpaper     = dotsanity.."/private/wallpapers/close_to_the_sun.jpg",
+    wallpaper     = home.."/.sanity/private/wallpapers/close_to_the_sun.jpg",
     border_shape  = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(5))
     end,

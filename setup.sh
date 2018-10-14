@@ -40,6 +40,7 @@ dot_link ctags .ctags
 # link up awesome configs
 if command -v awesome > /dev/null; then
     mkdir -p "$HOME/.config/awesome/widgets"
+    mkdir -p "$HOME/.config/awesome/assets"
     mirror_link awesome .config/awesome
 else
     echo "Awesome WM not found, skipping"
