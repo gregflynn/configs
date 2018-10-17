@@ -1,6 +1,11 @@
 #! /bin/bash
 
-DOTHOME="$HOME/.sanity"
+
+__dotsan__home="$HOME/.sanity"
+DOTHOME="$__dotsan__home"
+
+source "$__dotsan__home/colors.sh"
+
 
 # protective symlink generation
 function dot_link() {
@@ -16,6 +21,26 @@ function dot_link() {
     fi
 }
 
+# protective symlink generation
+function __dotsan__link() {
+    module="$1"
+    source="$2"
+    link_loc="$HOME/$3"
+    link_target="$__dotsan__home/$module/$source"
+
+    if [ -e "$link_loc" ]; then
+        __dotsan__info "$link_loc exists"
+        existing_link_target=$(readlink ${link_loc})
+
+        if [ "$existing_link_target" == "$link_target" ]; then
+            __dotsan__info "$link_loc target is identical"
+            return
+        fi
+    fi
+
+    ln -vfs "$link_target" "$link_loc"
+}
+
 # mirror a dotsan directory in symlinks
 function mirror_link() {
     dotsource="$DOTHOME/$1"
@@ -29,6 +54,42 @@ function mirror_link() {
         fi
     done
 }
+
+#
+# Module Support
+#
+# modules are initialized as such:
+# $ source ./[module_name]/init.sh
+# $ __dotsan__[module_name]__init check
+# $ __dotsan__[module_name]__init build
+# $ __dotsan__[module_name]__init install
+#
+for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
+    init_func_name="__dotsan__${module_name}__init"
+
+    if [ -e "$__dotsan__home/$module_name/init.sh" ]; then
+        __dotsan__info "Loading $module_name"
+        source "$module_name/init.sh"
+
+        if ! eval "${init_func_name}" check; then
+            __dotsan__warn "${module_name} Skipped"
+            continue
+        fi
+
+        if eval "${init_func_name}" build; then
+
+            if eval "${init_func_name}" install; then
+                __dotsan__success "${module_name} Installed"
+            else
+                __dotsan__error "${module_name} Install Failed"
+                exit 1
+            fi
+        else
+            __dotsan__error "${module_name} Build Failed"
+            exit 1
+        fi
+    fi
+done
 
 dot_link bashrc.sh .bashrc
 dot_link gitconfig .gitconfig
