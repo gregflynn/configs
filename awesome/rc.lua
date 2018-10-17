@@ -55,7 +55,9 @@ local function get_screen_type(s)
     -- 1.447619047619
     -- > 2560/1440
     -- 1.7777777777778
-    if ratio < 1.4 then
+    if ratio < 1. then
+        return 'tall'
+    elseif ratio < 1.4 then
         return 'square'
     elseif ratio < 1.8 then
         return 'widescreen'
@@ -108,8 +110,8 @@ local function list_update(w, buttons, label, data, objects)
         end
         local text, bg, bg_image, icon, args = label(o, tb)
 
-        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.purple
-        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.purple
+        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.grey
+        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.grey
         local la = sep.arrow_right(left_color, bg)
         local ra = sep.arrow_right(bg, right_color)
 
@@ -218,10 +220,8 @@ local function arrow_block(widget, fg, bg, left, right)
 end
 
 local function arrow_list(blocks)
-    local container = {
-        layout = wibox.layout.fixed.horizontal,
-    }
-    local last_color = nil
+    local container = {layout = wibox.layout.fixed.horizontal}
+    local last_color
 
     for i, block in ipairs(blocks) do
         container[i] = arrow_block(
@@ -242,8 +242,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Each screen has its own tag table.
     awful.tag(
-        taglist,
-        s,
+        taglist, s,
         {
             awful.layout.suit.floating,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
@@ -253,7 +252,7 @@ awful.screen.connect_for_each_screen(function(s)
         }
     )
 
-    -- Create an imagebox widget which will contains an icon indicating which
+    -- Create an imagebox widget which will contain an icon indicating which
     -- layout we're using. We need one layoutbox per screen.
     s.layoutbox = awful.widget.layoutbox(s)
     s.layoutbox:buttons(gears.table.join(
