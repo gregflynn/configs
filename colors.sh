@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
 
+__dotsan__hex__background='272822'
+__dotsan__hex__black='000000'
+__dotsan__hex__blue='66D9EF'
+__dotsan__hex__cyan='A1EFE4'
+__dotsan__hex__green='A6E22E'
+__dotsan__hex__gray='75715E'
+__dotsan__hex__orange='FD971F'
+__dotsan__hex__purple='AE81FF'
+__dotsan__hex__red='F92672'
+__dotsan__hex__white='F8F8F2'
+__dotsan__hex__yellow='F4BF75'
+__dotsan__hex__yellow__text='E6DB74'
+
+
 function __dotsan__color__mapper {
     case $1 in
         black) echo '0' ;;
@@ -79,4 +93,26 @@ function __dotsan__info {
 
 function __dotsan__success {
     __dotsan__echo "$1" 'green'
+}
+
+function __dotsan__inject__colors {
+    infile="$1"
+    outfile="$2"
+
+    __dotsan__info "Injecting Color: $infile => $outfile"
+    cat ${infile} \
+        | sed "s;{DS_BACKGROUND};${__dotsan__hex__background};g" \
+        | sed "s;{DS_BLACK};${__dotsan__hex__black};g" \
+        | sed "s;{DS_BLUE};${__dotsan__hex__blue};g" \
+        | sed "s;{DS_CYAN};${__dotsan__hex__cyan};g" \
+        | sed "s;{DS_GREEN};${__dotsan__hex__green};g" \
+        | sed "s;{DS_GREY};${__dotsan__hex__gray};g" \
+        | sed "s;{DS_GRAY};${__dotsan__hex__gray};g" \
+        | sed "s;{DS_ORANGE};${__dotsan__hex__orange};g" \
+        | sed "s;{DS_PURPLE};${__dotsan__hex__purple};g" \
+        | sed "s;{DS_RED};${__dotsan__hex__red};g" \
+        | sed "s;{DS_WHITE};${__dotsan__hex__white};g" \
+        | sed "s;{DS_YELLOW};${__dotsan__hex__yellow};g" \
+        | sed "s;{DS_YELLOW_TEXT};${__dotsan__hex__yellow__text};g" \
+        > ${outfile}
 }

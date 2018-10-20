@@ -1,7 +1,6 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
 local gears = require("gears")
-local dpi = beautiful.xresources.apply_dpi
 
 return {
     {
@@ -37,5 +36,11 @@ return {
         properties = {
             floating = false
         }
-    }
+    },
+    {
+        rule = { class = "Alacritty" },
+        properties = {
+            floating = false
+        }
+    },
 }

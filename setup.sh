@@ -29,12 +29,13 @@ function __dotsan__link() {
     link_target="$__dotsan__home/$module/$source"
 
     if [ -e "$link_loc" ]; then
-        __dotsan__info "$link_loc exists"
         existing_link_target=$(readlink ${link_loc})
 
         if [ "$existing_link_target" == "$link_target" ]; then
-            __dotsan__info "$link_loc target is identical"
+            echo "$link_loc target is identical"
             return
+        else
+            echo "$link_loc overwriting target"
         fi
     fi
 
@@ -55,6 +56,11 @@ function mirror_link() {
     done
 }
 
+function __dotsan__is__installed {
+    pacman -Q | grep "^${1} " > /dev/null
+    return $?
+}
+
 #
 # Module Support
 #
@@ -68,10 +74,29 @@ for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
     init_func_name="__dotsan__${module_name}__init"
 
     if [ -e "$__dotsan__home/$module_name/init.sh" ]; then
+        echo
         __dotsan__info "Loading $module_name"
         source "$module_name/init.sh"
 
-        if ! eval "${init_func_name}" check; then
+        # get required and suggested packages from the module
+        required=$(eval "${init_func_name}" check required)
+        suggested=$(eval "${init_func_name}" check suggested)
+
+        missing=""
+        for pkg in ${required}; do
+            if ! __dotsan__is__installed ${pkg}; then
+                __dotsan__error "${pkg} is not installed"
+                missing="$missing $pkg"
+            fi
+        done
+
+        for pkg in ${suggested}; do
+            if ! __dotsan__is__installed ${pkg}; then
+                __dotsan__warn "${pkg} is not installed"
+            fi
+        done
+
+        if [ "$missing" != "" ]; then
             __dotsan__warn "${module_name} Skipped"
             continue
         fi
@@ -79,13 +104,13 @@ for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
         if eval "${init_func_name}" build; then
 
             if eval "${init_func_name}" install; then
-                __dotsan__success "${module_name} Installed"
+                __dotsan__success "Installed ${module_name}"
             else
-                __dotsan__error "${module_name} Install Failed"
+                __dotsan__error "Install Failed ${module_name}"
                 exit 1
             fi
         else
-            __dotsan__error "${module_name} Build Failed"
+            __dotsan__error "Build Failed ${module_name}"
             exit 1
         fi
     fi

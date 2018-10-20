@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #{DS_BACKGROUND};
+                padding: 3em;
+            }
+
+            div {
+                color: #{DS_WHITE};
+                text-align: center;
+                font-size: 24pt;
+                padding: 1em;
+                width: 90%;
+            }
+
+            div.blue {
+                background-color: #{DS_BLUE};
+            }
+
+            div.cyan {
+                background-color: #{DS_CYAN};
+            }
+
+            div.green {
+                background-color: #{DS_GREEN};
+            }
+
+            div.gray {
+                background-color: #{DS_GRAY};
+            }
+
+            div.orange {
+                background-color: #{DS_ORANGE};
+            }
+
+            div.purple {
+                background-color: #{DS_PURPLE};
+            }
+
+            div.red {
+                background-color: #{DS_RED};
+            }
+
+            div.white {
+                color: #{DS_BACKGROUND};
+                background-color: #{DS_WHITE};
+            }
+
+            div.yellow {
+                background-color: #{DS_YELLOW};
+            }
+        </style>
+    </head>
+    <body>
+        <div>{DS_BACKGROUND}</div>
+        <div class="blue">{DS_BLUE}</div>
+        <div class="cyan">{DS_CYAN}</div>
+        <div class="green">{DS_GREEN}</div>
+        <div class="gray">{DS_GRAY}</div>
+        <div class="orange">{DS_ORANGE}</div>
+        <div class="purple">{DS_PURPLE}</div>
+        <div class="red">{DS_RED}</div>
+        <div class="white">{DS_WHITE}</div>
+        <div class="yellow">{DS_YELLOW}</div>
+        <div class="background">
+            <span style="color: #{DS_YELLOW};">I'm Yellow</span>
+            <span style="color: #{DS_YELLOW_TEXT};">And I'm Yellow <i>Text</i></span>
+        </div>
+    </body>
+</html>

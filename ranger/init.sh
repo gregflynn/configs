@@ -8,12 +8,10 @@ devicons_loc="${__dotsan__home}/ranger/${devicons_folder}"
 function __dotsan__ranger__init {
     case $1 in
         check)
-            if command -v awesome > /dev/null; then
-                return 0
-            else
-                echo 'ranger not installed'
-                return 1
-            fi
+            case $2 in
+                required) echo "ranger" ;;
+                suggested) echo "nerd-fonts-hack w3m" ;;
+            esac
             ;;
         build)
             if [ ! -e "$devicons_loc" ]; then

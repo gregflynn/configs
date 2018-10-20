@@ -19,7 +19,8 @@ local colors = {
     purple     = "#AE81FF",
     red        = "#F92672",
     white      = "#F8F8F2",
-    yellow     = "#f4bf75" -- sometimes #E6DB74
+    yellow     = "#f4bf75",
+    yellow_txt = "#E6DB74",
 }
 
 local theme = {
