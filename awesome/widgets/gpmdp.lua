@@ -6,7 +6,7 @@ local beautiful = require('beautiful')
 local lain = require("lain")
 local markup = lain.util.markup
 local dpi = beautiful.xresources.apply_dpi
-local io, next, os, string, table = io, next, os, string, table
+local io, os, string, table = io, os, string, table
 
 local gpmdp_icon_loc = "/usr/share/pixmaps/gpmdp.png"
 local gpmdp_album_art_fmt = "/tmp/gpmcover-%s"
@@ -38,7 +38,7 @@ function trunc(str, max_len)
     if string.len(str) > max_len then
         local feat_loc = str:find("[%(%[]")
         if feat_loc and feat_loc <= max_len then
-            return trim(str:sub(1, feat_loc - 1))
+            return str:sub(1, feat_loc - 1)
         end
         return string.sub(str, 0, max_len - 3)..'...'
     end
@@ -55,7 +55,7 @@ function gpmdp.notification_on()
     end
 
     awful.spawn.easy_async({"curl", gpm_now.cover_url, "-o", new_album_art}, function(stdout)
-        local old_id = nil
+        local old_id
         gpmdp.icon.image = new_album_art
 
         if gpmdp.notification then
