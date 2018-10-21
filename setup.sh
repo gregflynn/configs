@@ -117,8 +117,6 @@ for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
 done
 
 dot_link bashrc.sh .bashrc
-dot_link gitconfig .gitconfig
-dot_link gitignore .gitignore
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 dot_link ctags .ctags
