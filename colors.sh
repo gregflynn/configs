@@ -96,10 +96,22 @@ function __dotsan__success {
 }
 
 function __dotsan__inject__colors {
-    infile="$1"
-    outfile="$2"
+    module="$1"
+    dist="$__dotsan__home/$module/dist"
+    infile="$__dotsan__home/$module/$2"
 
-    __dotsan__info "Injecting Color: $infile => $outfile"
+    if [ "$3" == "" ]; then
+        outfile="$dist/$2"
+    else
+        outfile="$dist/$3"
+    fi
+
+    mkdir -p ${dist}
+
+    infile_short=$(echo ${infile} | sed "s;${HOME};~;g")
+    outfile_short=$(echo ${outfile} | sed "s;${HOME};~;g")
+
+    __dotsan__info "Injecting Color: $infile_short => $outfile_short"
     cat ${infile} \
         | sed "s;{DS_BACKGROUND};${__dotsan__hex__background};g" \
         | sed "s;{DS_BLACK};${__dotsan__hex__black};g" \

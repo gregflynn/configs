@@ -156,15 +156,6 @@ else
     echo "tmux TPM already installed, skipping"
 fi
 
-# rofi
-if command -v rofi > /dev/null; then
-    mkdir -p "$HOME/.config/rofi"
-    dot_link rofi.config .config/rofi/config
-    dot_link rofi-theme.rasi .config/rofi/dotsanity.rasi
-else
-    echo "Rofi not found, skipping"
-fi
-
 #
 # Set up Vim
 #

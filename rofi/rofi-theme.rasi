@@ -1,14 +1,13 @@
 * {
-    background: #272822;
-    blue      : #66D9EF;
-    green     : #A6E22E;
-    grey      : #75715e;
-    orange    : #FD971F;
-    purple    : #AE81FF;
-    red       : #F92672;
-    white     : #F8F8F2;
-    yellow    : #f4bf75;
-    black     : #000000;
+    background: #{DS_BACKGROUND};
+    blue      : #{DS_BLUE};
+    green     : #{DS_GREEN};
+    grey      : #{DS_GRAY};
+    orange    : #{DS_ORANGE};
+    purple    : #{DS_PURPLE};
+    red       : #{DS_RED};
+    white     : #{DS_WHITE};
+    yellow    : #{DS_YELLOW};
 }
 
 window {

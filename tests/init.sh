@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
 
-__tests__home="$__dotsan__home/tests"
-
-
 function __dotsan__tests__init {
     case $1 in
         check)
@@ -13,9 +10,7 @@ function __dotsan__tests__init {
             esac
             ;;
         build)
-            mkdir -p "$__tests__home/dist"
-            # template our color viewer
-            __dotsan__inject__colors "$__tests__home/index.html" "$__tests__home/dist/index.html"
+            __dotsan__inject__colors tests index.html
             ;;
         install)
             ;;

@@ -413,7 +413,7 @@ globalkeys = gears.table.join(
     awful.key(
         {                }, "XF86Explorer",
         function()
-            awful.spawn("xdg-open "..home)
+            awful.spawn("thunar "..home)
         end
         -- {description = "Home Directory", group = "programs"}
     ),
