@@ -12,6 +12,7 @@ function __dotsan__alacritty__init {
             __dotsan__inject__colors alacritty alacritty.yml
             ;;
         install)
+            mkdir -p ${HOME}/.config/alacritty
             __dotsan__link alacritty dist/alacritty.yml \
                     .config/alacritty/alacritty.yml
             ;;
