@@ -1,14 +1,13 @@
 #! /bin/bash
-AUR_HOME="$HOME/.aur"
 
 
-function aur() {
+function aur {
     local pkgs="${@:2}"
 
     case $1 in
         update)
             if [ "${pkgs}" == "" ]; then
-                pkgs=$(ls ${AUR_HOME} | xargs)
+                pkgs=$(ls ${__aur__home} | xargs)
             fi
             _aur_update "${pkgs}"
         ;;
@@ -26,13 +25,13 @@ function aur() {
             fi
 
             for pkg in ${pkgs}; do
-                if _aur_is_aur_pkg ${pkg}; then
+                if __pac__is__aur__pkg ${pkg}; then
                     sudo pacman -Rs ${pkg}
                     if [ "$?" == "0" ]; then
-                        rm -rf "${AUR_HOME}/${pkg}"
+                        rm -rf "${__aur__home}/${pkg}"
                     fi
                 else
-                    echo "${_WARN}[SKIP] ${pkg} not an AUR package${_RESE}"
+                    __dotsan__warn "${pkg} not an AUR package"
                 fi
             done
         ;;
@@ -44,16 +43,16 @@ function aur() {
             _aur_search "${pkgs}"
         ;;
         list)
-            ll ${AUR_HOME} | awk '{ print $9}'
+            ll ${__aur__home} | awk '{ print $9}'
         ;;
         clean)
             _aur_clean ${pkgs}
         ;;
         inspect)
-            if _aur_is_aur_pkg ${pkgs}; then
+            if __pac__is__aur__pkg ${pkgs}; then
                 _aur_pushd ${pkgs}
             else
-                echo "${_WARN} ${pkgs} is not installed from the AUR${_RESE}"
+                __dotsan__warn "${pkgs} is not installed from the AUR"
             fi
         ;;
         *)
@@ -62,16 +61,8 @@ function aur() {
     esac
 }
 
-function _aur_is_aur_pkg() {
-    if [ -e "${AUR_HOME}/${1}" ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-function _aur_pushd() {
-    pushd ${AUR_HOME}/$1 > /dev/null
+function _aur_pushd {
+    pushd ${__aur__home}/$1 > /dev/null
 }
 
 function _aur_popd() {
@@ -81,23 +72,23 @@ function _aur_popd() {
 #
 # Install a package from the AUR
 #
-function _aur_install() {
+function _aur_install {
     local pkgs="$1"
-    mkdir -p "${AUR_HOME}"
+    mkdir -p "${__aur__home}"
 
     for pkg in ${pkgs}; do
-        if _aur_is_aur_pkg ${pkg}; then
+        if __pac__is__aur__pkg ${pkg}; then
             _aur_update ${pkg}
         else
-            local aur_path="${AUR_HOME}/${pkg}"
+            local aur_path="${__aur__home}/${pkg}"
 
             git clone aur:${pkg} ${aur_path}
 
             if [[ "$?" != "0" || "$(ls ${aur_path})" == "" ]]; then
-                if _aur_is_aur_pkg ${pkg}; then
+                if __pac__is__aur__pkg ${pkg}; then
                     rm -rf ${aur_path}
                 fi
-                echo "${_WARN}[SKIP] ${pkg} not found on the AUR${_RESE}"
+                __dotsan__warn "${pkg} not found on the AUR"
                 continue
             fi
 
@@ -105,7 +96,7 @@ function _aur_install() {
             if [ "$?" == "0" ]; then
                 _aur_install_pkg $1
             else
-                echo "${_WARN}[SKIP] ${pkg} failed to build${_RESE}"
+                __dotsan__warn "${pkg} failed to build"
             fi
         fi
     done
@@ -114,12 +105,12 @@ function _aur_install() {
 #
 # Updates a list of packages from the AUR
 #
-function _aur_update() {
+function _aur_update {
     local pkgs="$1"
     local needs_update=""
 
     for pkg in ${pkgs}; do
-        if _aur_is_aur_pkg ${pkg}; then
+        if __pac__is__aur__pkg ${pkg}; then
             _aur_pushd ${pkg}
             git checkout master > /dev/null 2>&1
             git pull -q > /dev/null
@@ -138,7 +129,7 @@ function _aur_update() {
                 ;;
             esac
         else
-            echo "${_WARN}[SKIP] ${pkg} not installed via AUR${_RESE}"
+            __dotsan__warn "${pkg} not installed via AUR"
         fi
     done
 
@@ -166,7 +157,7 @@ function _aur_update() {
             if [ "$?" == "0" ]; then
                 built_pkgs="${built_pkgs} ${pkg}"
             else
-                echo "${_WARN}[SKIP] ${pkg} failed to build${_RESE}"
+                __dotsan__warn "${pkg} failed to build"
             fi
         done
 
@@ -190,7 +181,7 @@ function _aur_update() {
 # $? == 0 Update available
 # $? == 2 Partial install
 #
-function _aur_needs_update() {
+function _aur_needs_update {
     local installed=$(_aur_local_ver $1)
     if [ "${installed}" == "" ]; then
         return 2
@@ -208,7 +199,7 @@ function _aur_needs_update() {
 # Print a colored version number printout to the terminal
 # print_version (pkg name) (installed version) [remote version]
 #
-function _aur_print_version() {
+function _aur_print_version {
     local C0=$'\e[0m'
     local C1=$'\e[34m'
     local C2=$'\e[33m'
@@ -225,7 +216,7 @@ function _aur_print_version() {
 # Retrieve the locally installed version of $1
 # stdout > version reported by pacman
 #
-function _aur_local_ver() {
+function _aur_local_ver {
     local pacman_version=$(pacman -Q $1 2>/dev/null)
     if [ "$?" == "0" ]; then
         echo ${pacman_version} | awk '{ print $2 }'
@@ -236,8 +227,8 @@ function _aur_local_ver() {
 # Get the version number of an AUR package describe in PKGBUILD for $1
 # stdout > AUR PKGBUILD version
 #
-function _aur_remote_ver() {
-    local pkgbuild="${AUR_HOME}/$1/PKGBUILD"
+function _aur_remote_ver {
+    local pkgbuild="${__aur__home}/$1/PKGBUILD"
     if [ ! -e ${pkgbuild} ]; then return 1; fi
 
     source "$pkgbuild"
@@ -253,7 +244,7 @@ function _aur_remote_ver() {
 #
 # Build the given AUR package
 #
-function _aur_build() {
+function _aur_build {
     _aur_pushd $1
     makepkg -s
     mk_rc="$?"
@@ -264,7 +255,7 @@ function _aur_build() {
 #
 # Build and install the given package
 #
-function _aur_install_pkg() {
+function _aur_install_pkg {
     _aur_pushd $1
     remote_version=$(_aur_remote_ver $1)
     pkg_path=$(ls -la | grep "${remote_version}" | head -n 1 | awk '{print $9}')
@@ -275,22 +266,22 @@ function _aur_install_pkg() {
 #
 # Search the AUR for $1
 #
-function _aur_search() {
+function _aur_search {
     curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$1" | \
         python "$HOME/.sanity/bashrc_helpers/aur_search.py"
 }
 
-function _aur_clean() {
+function _aur_clean {
     local pkgs="$1"
     for pkg in ${pkgs}; do
-        if _aur_is_aur_pkg ${pkg}; then
+        if __pac__is__aur__pkg ${pkg}; then
             _aur_pushd ${pkg}
             pwd
             git checkout master
             git clean -fdx
             _aur_popd
         else
-            echo "${_WARN}[SKIP] ${pkg} was not found in the AUR cache${_RESE}"
+            __dotsan__warn "${pkg} was not found in the AUR cache"
         fi
     done
 }

@@ -1,18 +1,22 @@
+#!/usr/bin/env bash
+
+
 alias reload='dotsan reload'
 
-function dotsan () {
+
+function dotsan {
     case $1 in
         reload)
-            source ~/.bashrc
+            source ${HOME}/.bashrc
         ;;
         code)
-            code $DOTINSTALL
+            code ${__dotsan__home}
         ;;
         cd)
-            pushd $DOTINSTALL
+            pushd ${__dotsan__home}
         ;;
         update)
-            pushd $DOTINSTALL > /dev/null
+            pushd ${__dotsan__home} > /dev/null
             git pull
             if [ -e 'private' ]; then
                 pushd private > /dev/null
@@ -23,7 +27,7 @@ function dotsan () {
             popd > /dev/null
         ;;
         version)
-            pushd $DOTINSTALL > /dev/null
+            pushd ${__dotsan__home} > /dev/null
             # shamelessly stolen from https://stackoverflow.com/a/3278427/625802
             git remote update
             UPSTREAM=${2:-'@{u}'}
@@ -71,41 +75,6 @@ function dotsan () {
                 *)
                     cat ~/.Xresources
                 ;;
-            esac
-        ;;
-        monitor)
-            XRAND_OUT=$(xrandr | grep " connected")
-            # assume the first monitor is internal
-            INTERNAL=$(echo "$XRAND_OUT" | head -n 1 | awk '{ print $1; }')
-
-            # assume the last monitor is the
-            EXTERNAL=$(echo "$XRAND_OUT" | tail -n 1 | awk '{ print $1; }')
-            case $2 in
-                internal)
-                    if [[ $(echo "$XRAND_OUT" | wc -l) != 2 ]]; then
-                        echo "Only 1 monitor detected"
-                    else
-                        xrandr --output $INTERNAL --mode 3200x1800 --primary --output $EXTERNAL --off
-                    fi
-                ;;
-                external)
-                    XRAND_OUT=$(xrandr | grep " connected")
-                    if [[ $(echo "$XRAND_OUT" | wc -l) != 2 ]]; then
-                        echo "Only 1 monitor detected"
-                    else
-                        xrandr --output $EXTERNAL --mode 3440x1440 --primary --output $INTERNAL --off
-                    fi
-                ;;
-                *)
-                    if [[ "$INTERNAL" != "" ]]; then
-                        echo "Internal display: $INTERNAL"
-                    fi
-                    if [[ "$EXTERNAL" != "" ]]; then
-                        echo "External display: $EXTERNAL"
-                    fi
-                    echo "Usage: dotsan monitor [internal|external]"
-                ;;
-
             esac
         ;;
         *)

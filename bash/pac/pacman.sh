@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-function pac() {
+function pac {
     local pkgs="${@:2}"
 
     case $1 in
@@ -25,8 +25,8 @@ function pac() {
             fi
 
             for pkg in "$pkgs"; do
-                if _aur_is_aur_pkg ${pkg}; then
-                    echo "${_WARN}[SKIP] ${pkg} is installed via the AUR${_RESE}"
+                if __pac__is__aur__pkg ${pkg}; then
+                    __dotsan__warn "${pkg} is installed via the AUR"
                 else
                     sudo pacman -Rs ${pkg}
                 fi

@@ -5,11 +5,12 @@
 # order of parameters to `systemctl`
 #
 
-function sys() {
+function sys {
     case $1 in
         log)
             sudo journalctl -xe
         ;;
+        lastlog) ;&
         lastboot)
             sudo journalctl --boot=-1
         ;;
@@ -28,8 +29,8 @@ function sys() {
                     ;;
                 esac
             else
-                echo "Usage: sys log"
-                echo "       [service name] [log|start|stop|restart|enable|disable]"
+                echo "Usage: sys [log|lastlog|lastboot]"
+                echo "       sys [service name] [log|start|stop|restart|enable|disable]"
             fi
         ;;
     esac

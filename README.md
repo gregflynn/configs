@@ -36,7 +36,7 @@ function __dotsan__MODULE__init {
         check)
             case $2 in
                 required) echo "linux" ;; # echo required packages
-                suggested) echo "bash" ;; # echo suggested packages 
+                suggested) echo "bash" ;; # echo suggested packages
             esac
             ;;
         build)

@@ -1,7 +1,8 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
 
 __dotsan__home="$HOME/.sanity"
+__dotsan__modules=$(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}')
 DOTHOME="$__dotsan__home"
 
 source "$__dotsan__home/colors.sh"
@@ -21,11 +22,10 @@ function dot_link() {
     fi
 }
 
-# protective symlink generation
-function __dotsan__link() {
+function __dotsan__syslink() {
     module="$1"
     source="$2"
-    link_loc="$HOME/$3"
+    link_loc="$3"
     link_target="$__dotsan__home/$module/$source"
 
     if [ -e "$link_loc" ]; then
@@ -40,6 +40,13 @@ function __dotsan__link() {
     fi
 
     ln -vfs "$link_target" "$link_loc"
+}
+
+function __dotsan__link() {
+    module="$1"
+    source="$2"
+    link_loc="$HOME/$3"
+    __dotsan__syslink ${module} ${source} ${link_loc}
 }
 
 # mirror a dotsan directory in symlinks
@@ -57,20 +64,46 @@ function mirror_link() {
 }
 
 function __dotsan__is__installed {
-    pacman -Q | grep "^${1} " > /dev/null
-    return $?
+    if command -v pacman > /dev/null; then
+        pacman -Q | grep "^${1} " > /dev/null
+        return $?
+    else
+        # always fallback to a debian based distribution
+        dpkg -l | grep " ${1} " > /dev/null
+        return $?
+    fi
+}
+
+function __dotsan__requirements {
+    init_func_name="$1"
+    missing=""
+
+    # get required and suggested packages from the module
+    required=$(eval "${init_func_name}" check required)
+    suggested=$(eval "${init_func_name}" check suggested)
+
+    for pkg in ${required}; do
+        if ! __dotsan__is__installed ${pkg}; then
+            __dotsan__error "${pkg} is not installed"
+            missing="$missing $pkg"
+        fi
+    done
+
+    for pkg in ${suggested}; do
+        if ! __dotsan__is__installed ${pkg}; then
+            __dotsan__warn "${pkg} is not installed"
+        fi
+    done
+
+    if [ "$missing" != "" ]; then
+        return 1
+    fi
 }
 
 #
 # Module Support
 #
-# modules are initialized as such:
-# $ source ./[module_name]/init.sh
-# $ __dotsan__[module_name]__init check
-# $ __dotsan__[module_name]__init build
-# $ __dotsan__[module_name]__init install
-#
-for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
+for module_name in ${__dotsan__modules}; do
     init_func_name="__dotsan__${module_name}__init"
 
     if [ -e "$__dotsan__home/$module_name/init.sh" ]; then
@@ -78,25 +111,8 @@ for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
         __dotsan__info "Loading $module_name"
         source "$module_name/init.sh"
 
-        # get required and suggested packages from the module
-        required=$(eval "${init_func_name}" check required)
-        suggested=$(eval "${init_func_name}" check suggested)
-
-        missing=""
-        for pkg in ${required}; do
-            if ! __dotsan__is__installed ${pkg}; then
-                __dotsan__error "${pkg} is not installed"
-                missing="$missing $pkg"
-            fi
-        done
-
-        for pkg in ${suggested}; do
-            if ! __dotsan__is__installed ${pkg}; then
-                __dotsan__warn "${pkg} is not installed"
-            fi
-        done
-
-        if [ "$missing" != "" ]; then
+        __dotsan__requirements ${init_func_name}
+        if [ "$?" != "0" ]; then
             __dotsan__warn "${module_name} Skipped"
             continue
         fi
@@ -116,7 +132,6 @@ for module_name in $(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}'); do
     fi
 done
 
-dot_link bashrc.sh .bashrc
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 dot_link ctags .ctags
@@ -162,10 +177,3 @@ if [ ! -e "$HOME/.vim" ]; then
     git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
 fi
 vim +PluginInstall +qall
-
-# if there is a setup in private, call it
-if [ -e "$DOTHOME/private/setup.sh" ]; then
-    echo 'Running private setup...'
-    source $DOTHOME/private/setup.sh
-fi
-

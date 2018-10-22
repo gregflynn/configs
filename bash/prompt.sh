@@ -1,5 +1,6 @@
 #! /bin/bash
 
+
 RI=$'\uE0B0'
 RI_LN=$'\uE0B1'
 INV=$'\e[7m'
@@ -7,7 +8,8 @@ INV=$'\e[7m'
 # disable default venv PS1 manipulation
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-function pss_git() {
+
+function pss_git {
     gitstatus=`git status -s -b --porcelain 2>/dev/null`
     [[ "$?" -ne 0 ]] && return 0
 
@@ -68,7 +70,7 @@ function pss_git() {
     echo -n "$C1$RI$C2 $branch$E $C3"
 }
 
-function pss_basic() {
+function pss_basic {
     C1=$'\e[43m' # start of hostname
     C2=$'\e[30m'
     C3=$'\e[40m'
@@ -97,7 +99,7 @@ function pss_basic() {
     echo -n "$C4 $ME $C5"
 }
 
-function pss_screen() {
+function pss_screen {
     C1=$'\e[44m'
     C2=$'\e[30m'
     C3=$'\e[34m'
@@ -108,7 +110,7 @@ function pss_screen() {
     fi
 }
 
-function pss_path() {
+function pss_path {
     C1=$'\e[45m'
     C2=$'\e[30m'
     C3=$'\e[35m'
@@ -133,7 +135,7 @@ function pss_path() {
     echo -n "$C1$RI$C2 $SP $C3"
 }
 
-function pss_venv() {
+function pss_venv {
     C1=$'\e[42m'
     C2=$'\e[30m'
     C3=$'\e[32m'
@@ -143,7 +145,7 @@ function pss_venv() {
     fi
 }
 
-function pss_time() {
+function pss_time {
     C1=$'\e[44m'
     C2=$'\e[30m'
     C3=$'\e[34m'
@@ -151,7 +153,7 @@ function pss_time() {
     echo -n "$C1$RI$C2 $CURRENT $C3"
 }
 
-function pss_ps1() {
+function pss_ps1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
     echo -n "$C_$(pss_basic)$(pss_time)$(pss_screen)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"

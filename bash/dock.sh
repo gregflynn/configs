@@ -1,6 +1,6 @@
 #! /bin/bash
 
-function dock() {
+function dock {
     case $1 in
         up)
             docker-compose up "${@:2}"
