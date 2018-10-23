@@ -10,7 +10,7 @@ function __dotsan__tests__init {
             esac
             ;;
         build)
-            __dotsan__inject__colors tests index.html
+            __dotsan__inject tests index.html
             ;;
         install)
             ;;

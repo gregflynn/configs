@@ -9,7 +9,7 @@ function __dotsan__awesome__init {
             esac
             ;;
         build)
-            __dotsan__inject__colors awesome theme.lua
+            __dotsan__inject awesome theme.lua
             ;;
         install)
             __dotsan__mirror__link awesome mirror .config/awesome

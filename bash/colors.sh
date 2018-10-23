@@ -94,37 +94,3 @@ function __dotsan__info {
 function __dotsan__success {
     __dotsan__echo "$1" 'green'
 }
-
-function __dotsan__inject__colors {
-    module="$1"
-    dist="$__dotsan__home/$module/dist"
-    infile="$__dotsan__home/$module/$2"
-
-    if [ "$3" == "" ]; then
-        outfile="$dist/$2"
-    else
-        outfile="$dist/$3"
-    fi
-
-    mkdir -p ${dist}
-
-    infile_short=$(echo ${infile} | sed "s;${HOME};~;g")
-    outfile_short=$(echo ${outfile} | sed "s;${HOME};~;g")
-
-    __dotsan__info "Injecting Color: $infile_short => $outfile_short"
-    cat ${infile} \
-        | sed "s;{DS_HOME};${__dotsan__home};g" \
-        | sed "s;{DS_BACKGROUND};${__dotsan__hex__background};g" \
-        | sed "s;{DS_BLACK};${__dotsan__hex__black};g" \
-        | sed "s;{DS_BLUE};${__dotsan__hex__blue};g" \
-        | sed "s;{DS_CYAN};${__dotsan__hex__cyan};g" \
-        | sed "s;{DS_GREEN};${__dotsan__hex__green};g" \
-        | sed "s;{DS_GRAY};${__dotsan__hex__gray};g" \
-        | sed "s;{DS_ORANGE};${__dotsan__hex__orange};g" \
-        | sed "s;{DS_PURPLE};${__dotsan__hex__purple};g" \
-        | sed "s;{DS_RED};${__dotsan__hex__red};g" \
-        | sed "s;{DS_WHITE};${__dotsan__hex__white};g" \
-        | sed "s;{DS_YELLOW};${__dotsan__hex__yellow};g" \
-        | sed "s;{DS_YELLOW_TEXT};${__dotsan__hex__yellow__text};g" \
-        > ${outfile}
-}

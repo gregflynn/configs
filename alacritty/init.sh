@@ -9,7 +9,7 @@ function __dotsan__alacritty__init {
             esac
             ;;
         build)
-            __dotsan__inject__colors alacritty alacritty.yml
+            __dotsan__inject alacritty alacritty.yml
             ;;
         install)
             mkdir -p ${HOME}/.config/alacritty

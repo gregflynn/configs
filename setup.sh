@@ -5,8 +5,42 @@ __dotsan__home="$HOME/.sanity"
 __dotsan__modules=$(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}')
 DOTHOME="$__dotsan__home"
 
-source "$__dotsan__home/colors.sh"
+source "$__dotsan__home/bash/colors.sh"
 
+
+function __dotsan__inject {
+    module="$1"
+    dist="$__dotsan__home/$module/dist"
+    infile="$__dotsan__home/$module/$2"
+
+    if [ "$3" == "" ]; then
+        outfile="$dist/$2"
+    else
+        outfile="$dist/$3"
+    fi
+
+    mkdir -p ${dist}
+
+    infile_short=$(echo ${infile} | sed "s;${HOME};~;g")
+    outfile_short=$(echo ${outfile} | sed "s;${HOME};~;g")
+
+    __dotsan__info "Injecting Color: $infile_short => $outfile_short"
+    cat ${infile} \
+        | sed "s;{DS_HOME};${__dotsan__home};g" \
+        | sed "s;{DS_BACKGROUND};${__dotsan__hex__background};g" \
+        | sed "s;{DS_BLACK};${__dotsan__hex__black};g" \
+        | sed "s;{DS_BLUE};${__dotsan__hex__blue};g" \
+        | sed "s;{DS_CYAN};${__dotsan__hex__cyan};g" \
+        | sed "s;{DS_GREEN};${__dotsan__hex__green};g" \
+        | sed "s;{DS_GRAY};${__dotsan__hex__gray};g" \
+        | sed "s;{DS_ORANGE};${__dotsan__hex__orange};g" \
+        | sed "s;{DS_PURPLE};${__dotsan__hex__purple};g" \
+        | sed "s;{DS_RED};${__dotsan__hex__red};g" \
+        | sed "s;{DS_WHITE};${__dotsan__hex__white};g" \
+        | sed "s;{DS_YELLOW};${__dotsan__hex__yellow};g" \
+        | sed "s;{DS_YELLOW_TEXT};${__dotsan__hex__yellow__text};g" \
+        > ${outfile}
+}
 
 # protective symlink generation
 function dot_link() {
@@ -22,7 +56,7 @@ function dot_link() {
     fi
 }
 
-function __dotsan__syslink() {
+function __dotsan__syslink {
     module="$1"
     source="$2"
     link_loc="$3"
@@ -42,7 +76,7 @@ function __dotsan__syslink() {
     ln -vfs "$link_target" "$link_loc"
 }
 
-function __dotsan__link() {
+function __dotsan__link {
     link_loc="$HOME/$3"
     __dotsan__syslink ${1} ${2} ${link_loc}
 }
@@ -189,15 +223,6 @@ done
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 dot_link ctags .ctags
-
-# link up visual studio code
-if command -v code > /dev/null; then
-    mkdir -p "$HOME/.config/Code/User/snippets"
-    mirror_link vscode/User .config/Code/User
-    # pushd vscode > /dev/null && python sync.py && popd > /dev/null
-else
-    echo "Visual Studio Code not found, skipping"
-fi
 
 # Tilix Terminal
 if command -v tilix > /dev/null; then

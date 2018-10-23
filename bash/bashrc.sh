@@ -10,8 +10,6 @@ __bash__home="$__dotsan__home/bash"
 export HISTCONTROL=ignoreboth
 export HISTSIZE=5000
 
-source ${__dotsan__home}/colors.sh
-
 
 #
 # Fix for VTE terminals
@@ -33,6 +31,7 @@ function __bash__import {
     fi
 }
 
+__bash__import colors
 __bash__import aliases
 __bash__import completions/completions
 __bash__import dock

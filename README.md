@@ -52,8 +52,8 @@ function __dotsan__MODULE__init {
 ### Module Globals
 - `__dotsan__link` $module $module_file_path $home_relative_path
     - Link a configuration file from the module directory
-- `__dotsan__inject__colors` $module $template [$output]
-    - Template a configuration file with the color constants defined in `colors.sh`
+- `__dotsan__inject` $module $template [$output]
+    - Template a configuration file with the color constants defined in `setup.sh`
 
 ## goals
 * never check in package code
