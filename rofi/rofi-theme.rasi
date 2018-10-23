@@ -2,7 +2,7 @@
     background: #{DS_BACKGROUND};
     blue      : #{DS_BLUE};
     green     : #{DS_GREEN};
-    grey      : #{DS_GRAY};
+    gray      : #{DS_GRAY};
     orange    : #{DS_ORANGE};
     purple    : #{DS_PURPLE};
     red       : #{DS_RED};

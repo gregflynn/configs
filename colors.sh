@@ -113,12 +113,12 @@ function __dotsan__inject__colors {
 
     __dotsan__info "Injecting Color: $infile_short => $outfile_short"
     cat ${infile} \
+        | sed "s;{DS_HOME};${__dotsan__home};g" \
         | sed "s;{DS_BACKGROUND};${__dotsan__hex__background};g" \
         | sed "s;{DS_BLACK};${__dotsan__hex__black};g" \
         | sed "s;{DS_BLUE};${__dotsan__hex__blue};g" \
         | sed "s;{DS_CYAN};${__dotsan__hex__cyan};g" \
         | sed "s;{DS_GREEN};${__dotsan__hex__green};g" \
-        | sed "s;{DS_GREY};${__dotsan__hex__gray};g" \
         | sed "s;{DS_GRAY};${__dotsan__hex__gray};g" \
         | sed "s;{DS_ORANGE};${__dotsan__hex__orange};g" \
         | sed "s;{DS_PURPLE};${__dotsan__hex__purple};g" \

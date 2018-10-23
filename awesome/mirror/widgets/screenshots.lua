@@ -7,7 +7,7 @@ local dropdown  = require("widgets/dropdown")
 local dpi       = beautiful.xresources.apply_dpi
 
 
-local screenshots_folder = os.getenv("HOME").."/Pictures/Screenshots"
+local screenshots_folder = beautiful.home.."/Pictures/Screenshots"
 
 local screenshot_icon = dropdown {
     folder = screenshots_folder,

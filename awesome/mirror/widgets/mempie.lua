@@ -13,7 +13,7 @@ local mempie = {
         max_value = 1,
         thickness = dpi(4),
         start_angle = 0,
-        bg = beautiful.colors.grey,
+        bg = beautiful.colors.gray,
         colors = { beautiful.colors.blue },
         widget = wibox.container.arcchart
     },

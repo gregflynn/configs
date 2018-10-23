@@ -10,10 +10,10 @@ require("awful.autofocus")
 require("errors")
 require("signals")
 local home = os.getenv("HOME")
-local dotsanity = home.."/.sanity"
 
 beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
+local dotsan_home = beautiful.dotsan_home
 
 local dpi       = beautiful.xresources.apply_dpi
 local sep       = lain.util.separators
@@ -110,8 +110,8 @@ local function list_update(w, buttons, label, data, objects)
         end
         local text, bg, bg_image, icon, args = label(o, tb)
 
-        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.grey
-        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.grey
+        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.gray
+        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.gray
         local la = sep.arrow_right(left_color, bg)
         local ra = sep.arrow_right(bg, right_color)
 
@@ -343,7 +343,7 @@ awful.screen.connect_for_each_screen(function(s)
                 { widget = awful.widget.only_on_screen(wibox.widget.systray(), "primary"),
                   color = colors.background },
                 { widget = volume.container,
-                  color = colors.grey },
+                  color = colors.gray },
                 { widget = require("widgets/weather").container,
                   color = colors.background },
                 { widget = require("widgets/clock"),
@@ -420,7 +420,7 @@ globalkeys = gears.table.join(
     awful.key(
         { modkey,        }, "i",
         function()
-            awful.spawn({"bash", dotsanity.."/i3lock.sh"})
+            awful.spawn({"bash", dotsan_home.."/i3lock.sh"})
         end,
         {description = "Lock Screen", group = "awesome"}
     ),

@@ -2,7 +2,7 @@ local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
 local naughty = require("naughty")
-local beautiful = require('beautiful')
+local beautiful = require("beautiful")
 local lain = require("lain")
 local markup = lain.util.markup
 local dpi = beautiful.xresources.apply_dpi
@@ -14,7 +14,7 @@ local gpmdp_album_art_fmt = "/tmp/gpmcover-%s"
 local gpmdp = {
     notify        = "on",
     followtag     = false,
-    file_location = os.getenv("HOME") .. "/.config/Google Play Music Desktop Player/json_store/playback.json",
+    file_location = beautiful.home.."/.config/Google Play Music Desktop Player/json_store/playback.json",
     notification_preset = {
         title     = "Now playing",
         icon_size = dpi(128),
@@ -140,8 +140,8 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
             local title_text = markup.italic(" %s").." / %s"
 
             if not gpm_now.playing then
-                title_color = beautiful.colors.grey
-                artist_color = beautiful.colors.grey
+                title_color = beautiful.colors.gray
+                artist_color = beautiful.colors.gray
                 gpmdp.icon.image = gpmdp_icon_loc
             else
                 gpmdp.icon.image = gpmdp.current_album_art

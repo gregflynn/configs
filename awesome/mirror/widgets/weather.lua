@@ -10,7 +10,7 @@ local humidity_bar = wibox.widget {
     max_value        = 100,
     widget           = wibox.widget.progressbar,
     color            = beautiful.colors.blue,
-    background_color = beautiful.colors.grey
+    background_color = beautiful.colors.gray
 }
 
 local weather = lain.widget.weather {
@@ -18,8 +18,8 @@ local weather = lain.widget.weather {
     units = 'imperial',
     showpopup = 'off',
     settings = function()
-        current_temp = math.floor(weather_now["main"]["temp"])
-        current_humidity = math.floor(weather_now["main"]["humidity"])
+        local current_temp = math.floor(weather_now["main"]["temp"])
+        local current_humidity = math.floor(weather_now["main"]["humidity"])
         humidity_bar:set_value(current_humidity)
         widget:set_markup(string.format('%d°F', current_temp))
     end,

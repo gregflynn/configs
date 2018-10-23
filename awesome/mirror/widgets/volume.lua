@@ -24,7 +24,7 @@ local volume = lain.widget.pulsebar {
         font = "Hack 10"
     },
     colors = {
-        background = beautiful.colors.grey,
+        background = beautiful.colors.gray,
         mute       = beautiful.colors.red,
         unmute     = beautiful.colors.green
     },

@@ -12,7 +12,7 @@ function exists(name)
     return os.rename(name,name) and true or false
 end
 
-local arandr_folder = os.getenv("HOME").."/.screenlayout/"
+local arandr_folder = beautiful.home.."/.screenlayout/"
 
 local arandr = dropdown {
     folder = arandr_folder,

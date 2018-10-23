@@ -10,7 +10,7 @@ function __dotsan__rofi__init {
             esac
             ;;
         build)
-             __dotsan__inject__colors rofi rofi-theme.rasi
+            __dotsan__inject__colors rofi rofi-theme.rasi
             ;;
         install)
             mkdir -p "$HOME/.config/rofi"

@@ -32,10 +32,10 @@ function __dotsan__syslink() {
         existing_link_target=$(readlink ${link_loc})
 
         if [ "$existing_link_target" == "$link_target" ]; then
-            echo "$link_loc target is identical"
+#            echo "$link_loc target is identical"
             return
         else
-            echo "$link_loc overwriting target"
+            echo "$link_loc: updated target"
         fi
     fi
 
@@ -43,10 +43,63 @@ function __dotsan__syslink() {
 }
 
 function __dotsan__link() {
-    module="$1"
-    source="$2"
     link_loc="$HOME/$3"
-    __dotsan__syslink ${module} ${source} ${link_loc}
+    __dotsan__syslink ${1} ${2} ${link_loc}
+}
+
+function __dotsan__mirror__syslink {
+    module=${1}
+    mirror=${2}
+    target_dir=${3}
+    clean=${4}
+
+    source_dir="$__dotsan__home/$module/$mirror"
+    diff_result=$(diff -r ${source_dir} ${target_dir} 2>&1)
+    broken_links=$(echo -e "$diff_result" \
+        | grep "No such file or directory" \
+        | awk '{ print $2 }' \
+        | sed 's;:;;g')
+
+    # clear out broken links
+    for broken_link in ${broken_links}; do
+        rm ${broken_link}
+    done
+
+    if [ "$broken_links" != "" ]; then
+        diff_result=$(diff -r ${source_dir} ${target_dir} 2>&1)
+    fi
+
+    missing_links=$(echo -e "$diff_result" \
+        | grep "Only in $source_dir" \
+        | awk '{ print $3$4 }' \
+        | sed 's;:;\/;g')
+
+    for new_link in ${missing_links}; do
+        # new_link if the full system path of the file being linked to in
+        # __dotsan__home
+        if [ -d ${new_link} ]; then
+            # create missing directories
+            mkdir -p ${new_link}
+        else
+            local_link="${new_link#$source_dir}"
+            __dotsan__syslink ${module} "$mirror$local_link" "$target_dir$local_link"
+        fi
+    done
+
+    if [ "$clean" == "clean" ]; then
+        untracked_files=$(echo -e "$diff_result" \
+            | grep "Only in $target_dir" \
+            | awk '{ print $3$4 }' \
+            | sed 's/:/\//g')
+        for untracked in ${untracked_files}; do
+            rm ${untracked}
+        done
+    fi
+}
+
+function __dotsan__mirror__link {
+    target_dir=${HOME}/${3}
+    __dotsan__mirror__syslink ${1} ${2} ${target_dir}
 }
 
 # mirror a dotsan directory in symlinks
@@ -104,12 +157,13 @@ function __dotsan__requirements {
 # Module Support
 #
 for module_name in ${__dotsan__modules}; do
+    init_file="$__dotsan__home/$module_name/init.sh"
     init_func_name="__dotsan__${module_name}__init"
 
-    if [ -e "$__dotsan__home/$module_name/init.sh" ]; then
+    if [ -e "$init_file" ]; then
         echo
         __dotsan__info "Loading $module_name"
-        source "$module_name/init.sh"
+        source "$init_file"
 
         __dotsan__requirements ${init_func_name}
         if [ "$?" != "0" ]; then
@@ -135,15 +189,6 @@ done
 dot_link xmodmap .Xmodmap
 dot_link xprofile .xprofile
 dot_link ctags .ctags
-
-# link up awesome configs
-if command -v awesome > /dev/null; then
-    mkdir -p "$HOME/.config/awesome/widgets"
-    mkdir -p "$HOME/.config/awesome/assets"
-    mirror_link awesome .config/awesome
-else
-    echo "Awesome WM not found, skipping"
-fi
 
 # link up visual studio code
 if command -v code > /dev/null; then

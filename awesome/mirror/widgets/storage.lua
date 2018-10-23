@@ -16,13 +16,13 @@ local storage = {
         max_value        = 100,
         widget           = wibox.widget.progressbar,
         color            = beautiful.colors.purple,
-        background_color = beautiful.colors.grey
+        background_color = beautiful.colors.gray
     },
     boot_bar = wibox.widget {
         max_value        = 100,
         widget           = wibox.widget.progressbar,
         color            = beautiful.colors.green,
-        background_color = beautiful.colors.grey
+        background_color = beautiful.colors.gray
     },
     notification  = nil,
     notification_preset = {
@@ -33,7 +33,7 @@ local storage = {
 
 function storage.notification_on()
     storage.notification_preset.screen = awful.screen.focused()
-    local old_id = nil
+    local old_id
     if storage.notification then old_id = storage.notification.id end
 
     -- update notification text

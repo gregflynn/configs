@@ -8,28 +8,31 @@ local themes_path = gfs.get_themes_dir()
 local lain = require("lain")
 local sep = lain.util.separators
 local home = os.getenv("HOME")
+local dotsan_home = "{DS_HOME}"
 local assets = home.."/.config/awesome/assets"
 
 local colors = {
-    background = "#272822",
-    blue       = "#66D9EF",
-    green      = "#A6E22E",
-    grey       = "#75715e",
-    orange     = "#FD971F",
-    purple     = "#AE81FF",
-    red        = "#F92672",
-    white      = "#F8F8F2",
-    yellow     = "#f4bf75",
-    yellow_txt = "#E6DB74",
+    background = "#{DS_BACKGROUND}",
+    blue       = "#{DS_BLUE}",
+    green      = "#{DS_GREEN}",
+    gray       = "#{DS_GRAY}",
+    orange     = "#{DS_ORANGE}",
+    purple     = "#{DS_PURPLE}",
+    red        = "#{DS_RED}",
+    white      = "#{DS_WHITE}",
+    yellow     = "#{DS_YELLOW}",
+    yellow_txt = "#{DS_YELLOW_TEXT}",
 }
 
 local theme = {
+    home          = home,
+    dotsan_home   = dotsan_home,
     colors        = colors,
     bar_height    = dpi(25),
     bar_margin    = dpi(3),
     border_width  = dpi(3),
     font          = "hack 10",
-    wallpaper     = home.."/.sanity/private/wallpapers/close_to_the_sun.jpg",
+    wallpaper     = dotsan_home.."/private/wallpapers/close_to_the_sun.jpg",
     border_shape  = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(5))
     end,
