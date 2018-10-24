@@ -57,7 +57,7 @@ function gradient {
 }
 
 function lock {
-    bash ${__dotsan__home}/i3lock.sh
+    bash ${__dotsan__home}/x11/dist/i3lock.sh
 }
 
 #

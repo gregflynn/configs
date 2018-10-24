@@ -420,7 +420,7 @@ globalkeys = gears.table.join(
     awful.key(
         { modkey,        }, "i",
         function()
-            awful.spawn({"bash", dotsan_home.."/i3lock.sh"})
+            awful.spawn({"bash", dotsan_home.."/x11/dist/i3lock.sh"})
         end,
         {description = "Lock Screen", group = "awesome"}
     ),

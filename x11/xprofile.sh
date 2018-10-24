@@ -2,7 +2,7 @@
 
 compton -b -c
 
-xautolock -time 15 -locker "bash {DS_HOME}/x11/i3lock.sh" &
+xautolock -time 15 -locker "bash {DS_HOME}/x11/dist/i3lock.sh" &
 
 # disable gpu LED on desktop
 if command -v nvidia-settings > /dev/null; then
