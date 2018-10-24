@@ -19,19 +19,22 @@ Plugin 'scrooloose/nerdcommenter'
 call vundle#end()
 filetype plugin indent on
 
-" Airline config options
-let g:airline_powerline_fonts = 1
-let g:airline_theme='molokai'
-let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#buffer_nr_show=1
-set laststatus=2
-
 " CtrlP config options
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\.git$\|public$\|log\|tmp$\|node_modules$',
   \ 'file': '\.so$\|\.dat$\|\.DS_Store$\|\.pyc$\|\.gz$\|\.class$'
   \ }
+map <C-P> :CtrlP<cr>
+map <C-B> :CtrlPBuffer<cr>
+map <C-F> :CtrlPTag<cr>
+
+" Airline config options
+let g:airline_powerline_fonts=1
+"let g:airline_theme='molokai'
+"let g:airline#extensions#tabline#enabled=1
+"let g:airline#extensions#tabline#buffer_nr_show=1
+set laststatus=2
 
 " netrw config
 let g:netrw_liststyle = 3
@@ -77,7 +80,6 @@ nnoremap <Leader>0 :10b<CR>
 map <C-D> dd
 map <Leader>p "+p
 map <Leader>y "+y
-map <C-F> :CtrlPTag<cr>
 map <C-G> :!ctags -R -f tags --exclude=node_modules --exclude=__pycache__ --exclude=dist --exclude=tmp --exclude=bower_components --python-kinds=-i<cr>
 map <Leader>t :TagbarToggle<CR>
 :nnoremap <silent><expr> <Leader>/ (&hls && v:hlsearch ? ':nohls' : ':set hls')."\n"

@@ -222,12 +222,3 @@ if [ ! -e "$HOME/.tmux/plugins/tpm" ]; then
 else
     echo "tmux TPM already installed, skipping"
 fi
-
-#
-# Set up Vim
-#
-dot_link vimrc .vimrc
-if [ ! -e "$HOME/.vim" ]; then
-    git clone https://github.com/VundleVim/Vundle.vim.git "$HOME/.vim/bundle/Vundle.vim"
-fi
-vim +PluginInstall +qall
