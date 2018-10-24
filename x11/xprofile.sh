@@ -22,6 +22,9 @@ if command -v blueberry-tray > /dev/null; then
     blueberry-tray&
 fi
 
-if [[ command -v xmodmap > /dev/null && -f ~/.Xmodmap ]]; then
-    xmodmap '{DS_HOME}/x11/xmodmap'
+if command -v xmodmap > /dev/null; then
+    if [ -f '{DS_HOME}/x11/xmodmap' ]; then
+        xmodmap '{DS_HOME}/x11/xmodmap'
+    fi
 fi
+
