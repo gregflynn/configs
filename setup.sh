@@ -2,6 +2,7 @@
 
 
 __dotsan__home="$HOME/.sanity"
+__dotsan__lock="$__dotsan__home/x11/dist/i3lock.sh"
 __dotsan__modules=$(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}')
 DOTHOME="$__dotsan__home"
 
@@ -27,6 +28,7 @@ function __dotsan__inject {
     __dotsan__info "Injecting Color: $infile_short => $outfile_short"
     cat ${infile} \
         | sed "s;{DS_HOME};${__dotsan__home};g" \
+        | sed "s;{DS_LOCK};${__dotsan__lock};g" \
         | sed "s;{DS_BACKGROUND};${__dotsan__hex__background};g" \
         | sed "s;{DS_BLACK};${__dotsan__hex__black};g" \
         | sed "s;{DS_BLUE};${__dotsan__hex__blue};g" \

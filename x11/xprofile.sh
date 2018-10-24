@@ -2,7 +2,7 @@
 
 compton -b -c
 
-xautolock -time 15 -locker "bash {DS_HOME}/x11/dist/i3lock.sh" &
+xautolock -time 15 -locker "bash {DS_LOCK}" &
 
 # disable gpu LED on desktop
 if command -v nvidia-settings > /dev/null; then
@@ -23,8 +23,9 @@ if command -v blueberry-tray > /dev/null; then
 fi
 
 if command -v xmodmap > /dev/null; then
-    if [ -f '{DS_HOME}/x11/xmodmap' ]; then
-        xmodmap '{DS_HOME}/x11/xmodmap'
+    xmodmap_loc='{DS_HOME}/x11/xmodmap'
+    if [ -f ${xmodmap_loc} ]; then
+        xmodmap ${xmodmap_loc}
     fi
 fi
 

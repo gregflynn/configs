@@ -9,6 +9,7 @@ local lain = require("lain")
 local sep = lain.util.separators
 local home = os.getenv("HOME")
 local dotsan_home = "{DS_HOME}"
+local lock_script = "{DS_LOCK}"
 local assets = home.."/.config/awesome/assets"
 
 local colors = {
@@ -27,6 +28,7 @@ local colors = {
 local theme = {
     home          = home,
     dotsan_home   = dotsan_home,
+    lock_script   = lock_script,
     colors        = colors,
     bar_height    = dpi(25),
     bar_margin    = dpi(3),

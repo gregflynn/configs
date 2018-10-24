@@ -56,10 +56,6 @@ function gradient {
     }'
 }
 
-function lock {
-    bash ${__dotsan__home}/x11/dist/i3lock.sh
-}
-
 #
 # Grep
 #

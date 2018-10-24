@@ -13,7 +13,6 @@ local home = os.getenv("HOME")
 
 beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
-local dotsan_home = beautiful.dotsan_home
 
 local dpi       = beautiful.xresources.apply_dpi
 local sep       = lain.util.separators
@@ -420,7 +419,7 @@ globalkeys = gears.table.join(
     awful.key(
         { modkey,        }, "i",
         function()
-            awful.spawn({"bash", dotsan_home.."/x11/dist/i3lock.sh"})
+            awful.spawn({"bash", beautiful.lock_script})
         end,
         {description = "Lock Screen", group = "awesome"}
     ),
