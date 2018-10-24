@@ -133,21 +133,7 @@ function __dotsan__mirror__syslink {
 
 function __dotsan__mirror__link {
     target_dir=${HOME}/${3}
-    __dotsan__mirror__syslink ${1} ${2} ${target_dir}
-}
-
-# mirror a dotsan directory in symlinks
-function mirror_link() {
-    dotsource="$DOTHOME/$1"
-    dstprefix="$HOME/$2"
-    for new_file in $(diff -r $dotsource $dstprefix | grep "Only in $dotsource" | awk '{ print $3$4 }' | sed 's/:/\//g'); do
-        src="$new_file"
-        dst="$dstprefix${src#$dotsource}"
-
-        if [[ -f "$src" ]]; then
-            ln -vfs "$src" "$dst"
-        fi
-    done
+    __dotsan__mirror__syslink ${1} ${2} ${target_dir} ${4}
 }
 
 function __dotsan__is__installed {
@@ -219,10 +205,6 @@ for module_name in ${__dotsan__modules}; do
         fi
     fi
 done
-
-dot_link xmodmap .Xmodmap
-dot_link xprofile .xprofile
-dot_link ctags .ctags
 
 # Tilix Terminal
 if command -v tilix > /dev/null; then

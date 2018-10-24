@@ -14,6 +14,7 @@ function __dotsan__vscode__init {
         install)
             mkdir -p "$HOME/.config/Code/User/snippets"
             __dotsan__mirror__link vscode User .config/Code/User
+            __dotsan__link vscode ctags .ctags
             # pushd vscode > /dev/null && python sync.py && popd > /dev/null
             ;;
     esac

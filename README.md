@@ -50,10 +50,16 @@ function __dotsan__MODULE__init {
 ```
 
 ### Module Globals
-- `__dotsan__link` $module $module_file_path $home_relative_path
-    - Link a configuration file from the module directory
 - `__dotsan__inject` $module $template [$output]
-    - Template a configuration file with the color constants defined in `setup.sh`
+    - Template a configuration file with constants defined in `setup.sh`
+- `__dotsan__syslink` $module $source $link_location
+    - Symlink from anywhere on the system to the dotsanity repo
+- `__dotsan__link` $module $source $home_link_location
+    - Symlink from anywhere in the user's home directory to the dotsanity repo
+- `__dotsan__mirror__syslink` $module $mirror_directory $target_directory $clean
+    - Symlink recursively from the target directory to the dotsanity repo
+- `__dotsan__mirror__link` $module $mirror_directory $target_directory $clean
+    - Symlink recursively from the target directory in the user's home to the dotsanity repo
 
 ## goals
 * never check in package code
