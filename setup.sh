@@ -4,8 +4,6 @@
 __dotsan__home="$HOME/.sanity"
 __dotsan__lock="$__dotsan__home/x11/dist/i3lock.sh"
 __dotsan__modules=$(ls -l "$__dotsan__home" | grep ^d | awk '{ print $9}')
-DOTHOME="$__dotsan__home"
-
 source "$__dotsan__home/bash/colors.sh"
 
 
@@ -44,20 +42,6 @@ function __dotsan__inject {
         > ${outfile}
 }
 
-# protective symlink generation
-function dot_link() {
-    SOURCE="$1"
-    POST=""
-    if [ "$3" != "" ]; then
-        POST="private/"
-    fi
-    if [ -e "$HOME/$2" ]; then
-        echo "$HOME/$2 exists"
-    else
-        ln -vfs $DOTHOME/$POST$SOURCE $HOME/$2
-    fi
-}
-
 function __dotsan__syslink {
     module="$1"
     source="$2"
@@ -68,7 +52,6 @@ function __dotsan__syslink {
         existing_link_target=$(readlink ${link_loc})
 
         if [ "$existing_link_target" == "$link_target" ]; then
-#            echo "$link_loc target is identical"
             return
         else
             echo "$link_loc: updated target"
@@ -207,18 +190,3 @@ for module_name in ${__dotsan__modules}; do
         fi
     fi
 done
-
-# Tilix Terminal
-if command -v tilix > /dev/null; then
-    dconf load /com/gexperts/Tilix/ < tilix.dconf
-else
-    echo "Tilix not found, skipping"
-fi
-
-# tmux
-dot_link tmux.conf .tmux.conf
-if [ ! -e "$HOME/.tmux/plugins/tpm" ]; then
-    git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-else
-    echo "tmux TPM already installed, skipping"
-fi
