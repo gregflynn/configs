@@ -23,6 +23,7 @@ font:
   normal:
     family: Hack
     style: Regular
+  scale_with_dpi: false
 
 custom_cursor_colors: true
 
