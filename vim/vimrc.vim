@@ -16,6 +16,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'tpope/vim-vinegar'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'airblade/vim-gitgutter'
 call vundle#end()
 filetype plugin indent on
 
@@ -29,12 +30,21 @@ map <C-P> :CtrlP<cr>
 map <C-B> :CtrlPBuffer<cr>
 map <C-F> :CtrlPTag<cr>
 
+" Git Gutter
+let g:gitgutter_override_sign_column_highlight = 0
+map <Leader>d :GitGutterLineHighlightsToggle<cr>
+hi link GitGutterAdd Function
+hi link GitGutterChange String
+hi link GitGutterDelete Define
+hi link GitGutterChangeDelete Define
+let g:gitgutter_sign_modified = '>'
+let g:gitgutter_sign_modified_removed = '>'
+
 " Airline config options
-let g:airline_powerline_fonts=1
-"let g:airline_theme='molokai'
-"let g:airline#extensions#tabline#enabled=1
-"let g:airline#extensions#tabline#buffer_nr_show=1
-set laststatus=2
+let g:airline_powerline_fonts = 1
+let g:airline_section_y = ''
+let g:airline_section_z = ''
+let g:airline_theme='molokai'
 
 " netrw config
 let g:netrw_liststyle = 3
@@ -63,20 +73,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-K><C-K> <C-W><C-W>
-nnoremap <Leader>q :bp\|bd #<CR>
-nnoremap <Leader>j :ls<CR>
-nnoremap <Leader>h :bp<CR>
-nnoremap <Leader>l :bn<CR>
-nnoremap <Leader>1 :1b<CR>
-nnoremap <Leader>2 :2b<CR>
-nnoremap <Leader>3 :3b<CR>
-nnoremap <Leader>4 :4b<CR>
-nnoremap <Leader>5 :5b<CR>
-nnoremap <Leader>6 :6b<CR>
-nnoremap <Leader>7 :7b<CR>
-nnoremap <Leader>8 :8b<CR>
-nnoremap <Leader>9 :9b<CR>
-nnoremap <Leader>0 :10b<CR>
 map <C-D> dd
 map <Leader>p "+p
 map <Leader>y "+y
@@ -92,10 +88,12 @@ inoremap <C-Up> <Esc>:m .-2<CR>==gi
 vnoremap <C-Down> :m '>+1<CR>gv=gv
 vnoremap <C-Up> :m '<-2<CR>gv=gv
 
+map <C-K><C-W> :bufdo bwipeout<CR>
+
 " save file
-nnoremap <C-S> :w<CR>
-inoremap <C-S> :w<CR>
-vnoremap <C-S> :w<CR>
+nnoremap <C-S> <Esc>:w<CR>
+inoremap <C-S> <Esc>:w<CR>
+vnoremap <C-S> <Esc>:w<CR>
 
 " indent in visual mode like a champ
 vnoremap < <gv

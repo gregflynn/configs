@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-compton -b -c
+compton -b -c --backend glx --paint-on-overlay --vsync opengl-swc
 
 xautolock -time 15 -locker "bash {DS_LOCK}" &
 
