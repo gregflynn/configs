@@ -268,7 +268,7 @@ function _aur_install_pkg {
 #
 function _aur_search {
     curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$1" | \
-        python "$HOME/.sanity/bashrc_helpers/aur_search.py"
+        python "$__dotsan__home/bash/pac/aur_search.py"
 }
 
 function _aur_clean {
