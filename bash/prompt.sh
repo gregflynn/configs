@@ -99,16 +99,16 @@ function pss_basic {
     echo -n "$C4 $ME $C5"
 }
 
-function pss_screen {
-    C1=$'\e[44m'
-    C2=$'\e[30m'
-    C3=$'\e[34m'
+#function pss_screen {
+    #C1=$'\e[44m'
+    #C2=$'\e[30m'
+    #C3=$'\e[34m'
 
-    if [[ "$STY" != "" ]]; then
-        S=$(echo $STY | awk -F "." '{ print $2}')
-        echo -n "$C1$RI $C2$S$C3 "
-    fi
-}
+    #if [[ "$STY" != "" ]]; then
+        #S=$(echo $STY | awk -F "." '{ print $2}')
+        #echo -n "$C1$RI $C2$S$C3 "
+    #fi
+#}
 
 function pss_path {
     C1=$'\e[45m'
@@ -156,7 +156,7 @@ function pss_time {
 function pss_ps1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(pss_basic)$(pss_time)$(pss_screen)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
+    echo -n "$C_$(pss_basic)$(pss_time)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
