@@ -79,7 +79,7 @@ hide_cursor_when_typing: false
 cursor_style: Underline
 
 shell:
-  program: bash
+  program: tmux
 
 key_bindings:
   - { key: V,        mods: Control|Shift,    action: Paste               }
