@@ -6,8 +6,8 @@ window:
     columns: 120
     lines: 36
   padding:
-    x: 0
-    y: 0
+    x: 2
+    y: 2
   decorations: none
 
 scrolling:
@@ -19,7 +19,7 @@ scrolling:
 tabspaces: 8
 
 font:
-  size: 10
+  size: 12
   normal:
     family: Hack
     style: Regular
