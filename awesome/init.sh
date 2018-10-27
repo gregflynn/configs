@@ -12,6 +12,8 @@ function __dotsan__awesome__init {
             __dotsan__inject awesome theme.lua
             ;;
         install)
+            mkdir -p .config/awesome/util
+            mkdir -p .config/awesome/widgets
             __dotsan__mirror__link awesome mirror .config/awesome
             __dotsan__link awesome dist/theme.lua .config/awesome/theme.lua
             ;;

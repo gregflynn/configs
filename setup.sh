@@ -97,8 +97,8 @@ function __dotsan__mirror__syslink {
         # new_link if the full system path of the file being linked to in
         # __dotsan__home
         if [ -d ${new_link} ]; then
-            # create missing directories
-            mkdir -p ${new_link}
+            # don't create directories
+            continue
         else
             local_link="${new_link#$source_dir}"
             __dotsan__syslink ${module} "$mirror$local_link" "$target_dir$local_link"
