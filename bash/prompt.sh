@@ -125,14 +125,12 @@ function __prompt__time {
     echo -e -n "\e[34m$CURRENT"
 }
 
-function __prompt__right {
-    printf "%${COLUMNS}s" "$(__prompt__time)"
-}
-
 function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
+    printf "%${COLUMNS}s\r%s" \
+        "$(__prompt__time)" \
+        "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 function __prompt__line2 {
@@ -155,7 +153,6 @@ if [[ $(tty) == /dev/pts/* ]]; then
         prompt_color=$'\e[33m'
     fi
 
-    PS1=$'$(__prompt__right)
-$(__prompt__line1)
+    PS1=$'$(__prompt__line1)
 \[$prompt_color\]$(__prompt__line2) '
 fi
