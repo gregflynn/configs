@@ -14,12 +14,8 @@ if command -v nm-applet > /dev/null; then
     nm-applet&
 fi
 
-if command -v redshift-gtk > /dev/null; then
-    redshift-gtk -l 42.4:-71&
-fi
-
-if command -v blueberry-tray > /dev/null; then
-    blueberry-tray&
+if command -v redshift > /dev/null; then
+    redshift&
 fi
 
 if command -v xmodmap > /dev/null; then
