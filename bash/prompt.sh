@@ -1,6 +1,9 @@
 #! /bin/bash
 
 
+__right=$'\uE0B0'
+__right__line=$'\uE0B1'
+__left=$'\uE0B2'
 RI=$'\uE0B0'
 RI_LN=$'\uE0B1'
 INV=$'\e[7m'
@@ -70,45 +73,17 @@ function pss_git {
     echo -n "$C1$RI$C2 $branch$E $C3"
 }
 
-function pss_basic {
-    C1=$'\e[43m' # start of hostname
-    C2=$'\e[30m'
-    C3=$'\e[40m'
-    C4=$'\e[0;34;40m' # start of ME
-    C5=$'\e[0;30m'
-
-    H=''
-    ME=`whoami`
-    D1=$'\e[33m'
-    D2=$'\e[30m'
-
-    # check for ssh session
-    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_DEBUG" ]; then
-        C2=$'\e[30m'
-        H=`hostname`
-    fi
+function __prompt__user {
+    C1=$'\e[0;34;40m' # start of ME
+    C2=$'\e[0;30m'
 
     # check for superuser
-    if [[ "$ME" == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
-        C4=$'\e[31;40m'
+    if [[ "$ME" == "root" ]]; then
+        C2=$'\e[31;40m'
     fi
 
-    if [ "$H" != "" ]; then
-        echo -n "$C1$C2 $H $D1$C3$RI"
-    fi
-    echo -n "$C4 $ME $C5"
+    echo -n "$C1 $ME $C2"
 }
-
-#function pss_screen {
-    #C1=$'\e[44m'
-    #C2=$'\e[30m'
-    #C3=$'\e[34m'
-
-    #if [[ "$STY" != "" ]]; then
-        #S=$(echo $STY | awk -F "." '{ print $2}')
-        #echo -n "$C1$RI $C2$S$C3 "
-    #fi
-#}
 
 function pss_path {
     C1=$'\e[45m'
@@ -145,30 +120,42 @@ function pss_venv {
     fi
 }
 
-function pss_time {
-    C1=$'\e[44m'
-    C2=$'\e[30m'
-    C3=$'\e[34m'
+function __prompt__time {
     CURRENT=$(date +"%H:%M:%S")
-    echo -n "$C1$RI$C2 $CURRENT $C3"
+    echo -e -n "\e[34m$CURRENT"
 }
 
-function pss_ps1 {
+function __prompt__right {
+    printf "%${COLUMNS}s" "$(__prompt__time)"
+}
+
+function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(pss_basic)$(pss_time)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
+    echo -n "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
-if [[ `whoami` == "root" ]] || [[ -n "$ME_DEBUG" ]]; then
-    CX=$'\e[31m'
-else
-    CX=$'\e[33m'
-fi
+function __prompt__line2 {
+    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+        echo -n -e "${HOSTNAME} "
+    fi
+    echo "${__right__line}"
+}
+
 
 # only set PS1 in emulated sessions
 if [[ $(tty) == /dev/pts/* ]]; then
+    ME="$(whoami)"
     normalcol="$(tput sgr0)"
     trap 'echo -n "$normalcol"' DEBUG
-    PS1=$'$(pss_ps1)
-\[$CX\]$RI_LN '
+
+    if [ "$ME" == "root" ]; then
+        prompt_color=$'\e[31m'
+    else
+        prompt_color=$'\e[33m'
+    fi
+
+    PS1=$'$(__prompt__right)
+$(__prompt__line1)
+\[$prompt_color\]$(__prompt__line2) '
 fi
