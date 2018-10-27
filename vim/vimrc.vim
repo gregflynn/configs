@@ -90,6 +90,11 @@ vnoremap <C-Up> :m '<-2<CR>gv=gv
 
 map <C-K><C-W> :bufdo bwipeout<CR>
 
+" quit
+nnoremap <C-Q> <Esc>:q<CR>
+inoremap <C-Q> <Esc>:q<CR>
+vnoremap <C-Q> <Esc>:q<CR>
+
 " save file
 nnoremap <C-S> <Esc>:w<CR>
 inoremap <C-S> <Esc>:w<CR>
