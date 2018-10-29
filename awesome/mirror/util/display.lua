@@ -4,8 +4,9 @@ local beautiful = require("beautiful")
 local gears     = require("gears")
 local lain      = require("lain")
 
-local bar        = require("util/bar")
 local listupdate = require("util/listupdate")
+
+local dpi = beautiful.xresources.apply_dpi
 
 
 local display = {}
@@ -82,7 +83,7 @@ function display.create_layout_widget(screen)
         awful.button({ }, 5, function() awful.layout.inc(-1) end)
     ))
 
-    return bar.margin(widget, 2, 2)
+    return wibox.container.margin(widget, dpi(3), dpi(3), dpi(4), dpi(4))
 end
 
 function display.create_windowlist_widget(screen)
