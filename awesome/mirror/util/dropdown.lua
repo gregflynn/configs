@@ -78,36 +78,36 @@ local function right_click(dropdown)
 end
 
 local function factory(args)
-    local new_dropdown
+    local Dropdown
     if args.icon then
-        new_dropdown = wibox.widget {
+        Dropdown = wibox.widget {
             image  = args.icon,
             resize = true,
             widget = wibox.widget.imagebox
         }
-        new_dropdown.args = args
+        Dropdown.args = args
     else
-        new_dropdown = FontIcon {}
-        new_dropdown.args = args
-        close_dropdown(new_dropdown)
+        Dropdown = FontIcon {}
+        Dropdown.args = args
+        close_dropdown(Dropdown)
     end
 
-    new_dropdown.command = string.format(
+    Dropdown.command = string.format(
         "ls -l %s | awk '{print $9}' | tail -n 35 | sort %s",
         args.folder,
         args.reverse and "-r" or ""
     )
 
-    new_dropdown:buttons(gears.table.join(
+    Dropdown:buttons(gears.table.join(
         awful.button({}, 1, function()
-            left_click(new_dropdown)
+            left_click(Dropdown)
         end),
         awful.button({}, 3, function()
-            right_click(new_dropdown)
+            right_click(Dropdown)
         end)
     ))
 
-    return new_dropdown
+    return Dropdown
 end
 
 return factory

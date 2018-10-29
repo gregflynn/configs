@@ -4,14 +4,14 @@ local wibox     = require("wibox")
 local gears     = require("gears")
 local naughty   = require("naughty")
 
-local dropdown = require("util/dropdown")
+local Dropdown = require("util/dropdown")
 
 local dpi = beautiful.xresources.apply_dpi
 
 
 local screenshots_folder = beautiful.home.."/Pictures/Screenshots"
 
-local screenshot_icon = dropdown {
+local screenshot_icon = Dropdown {
     folder    = screenshots_folder,
     reverse   = true,
     font_icon = "\u{f793}",

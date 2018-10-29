@@ -3,12 +3,12 @@ local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
 
-local dropdown = require("util/dropdown")
+local Dropdown = require("util/dropdown")
 
 local dpi    = beautiful.xresources.apply_dpi
 
 
-wallpapers_icon = dropdown {
+wallpapers_icon = Dropdown {
     folder    = beautiful.dotsan_home.."/private/wallpapers",
     font_icon = "\u{f878}",
     menu_func = function(full_path)

@@ -3,13 +3,13 @@ local wibox     = require("wibox")
 local beautiful = require("beautiful")
 local dpi       = beautiful.xresources.apply_dpi
 
-local dropdown = require("util/dropdown")
+local Dropdown = require("util/dropdown")
 local file     = require("util/file")
 
 
 local arandr_folder = beautiful.home.."/.screenlayout/"
 
-local arandr = dropdown {
+local arandr = Dropdown {
     folder = arandr_folder,
     font_icon = "\u{f879}",
     right_click = "arandr",

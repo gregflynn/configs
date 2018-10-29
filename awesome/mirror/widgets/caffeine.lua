@@ -1,7 +1,7 @@
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 
-local toggle = require("util/toggle")
+local Toggle = require("util/toggle")
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
@@ -9,7 +9,7 @@ local dpi    = beautiful.xresources.apply_dpi
 
 local command = "xautolock"
 
-local caffeine = toggle {
+local caffeine = Toggle {
     font_icon_enabled        = "\u{f456}",
     font_icon_enabled_color  = colors.white,
     font_icon_disabled       = "\u{f09c}",

@@ -5,45 +5,45 @@ local FontIcon = require("util/fonticon")
 
 
 local function factory(args)
-    local new_toggle = FontIcon {}
+    local Toggle = FontIcon {}
 
-    function new_toggle.enable()
-        new_toggle:update(args.font_icon_enabled, args.font_icon_enabled_color)
+    function Toggle.enable()
+        Toggle:update(args.font_icon_enabled, args.font_icon_enabled_color)
         awful.spawn(args.command_enable)
     end
 
-    function new_toggle.disable()
-        new_toggle:update(args.font_icon_disabled, args.font_icon_disabled_color)
+    function Toggle.disable()
+        Toggle:update(args.font_icon_disabled, args.font_icon_disabled_color)
         awful.spawn(args.command_disable)
     end
 
-    function new_toggle.toggle()
-        if new_toggle.enabled then
-            new_toggle:disable()
+    function Toggle:toggle()
+        if Toggle.enabled then
+            Toggle:disable()
         else
-            new_toggle:enable()
+            Toggle:enable()
         end
-        new_toggle.enabled = not new_toggle.enabled
+        Toggle.enabled = not Toggle.enabled
     end
 
-    new_toggle:buttons(gears.table.join(
+    Toggle:buttons(gears.table.join(
         awful.button({}, 1, function()
-            new_toggle:toggle()
+            Toggle:toggle()
         end),
         awful.button({}, 3, function()
-            new_toggle:toggle()
+            Toggle:toggle()
         end)
     ))
 
     if args.default_enabled then
-        new_toggle.enabled = true
-        new_toggle:enable()
+        Toggle.enabled = true
+        Toggle:enable()
     else
-        new_toggle.enabled = false
-        new_toggle:disable()
+        Toggle.enabled = false
+        Toggle:disable()
     end
 
-    return new_toggle
+    return Toggle
 end
 
 return factory
