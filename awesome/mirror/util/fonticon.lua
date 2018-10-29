@@ -1,7 +1,7 @@
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 
-local dpi       = beautiful.xresources.apply_dpi
+local dpi = beautiful.xresources.apply_dpi
 
 
 local fonticon_font = "Hack Nerd Font Mono 20"

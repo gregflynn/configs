@@ -59,5 +59,30 @@ function text.trunc(str, max_len, trim_char, use_ellipsis)
     end
 end
 
+function text.split(str, delimiter)
+    local delimiter = delimiter or " "
+    local result = {};
+    for match in (str..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
+
+function text.pad(str, width, char, right)
+    local str = tostring(str) or ""
+    local pad = width - str:len()
+    local char = char or " "
+
+    if pad > 0 then
+        local padding = string.rep(char, pad)
+        if right then
+            return str..padding
+        else
+            return padding..str
+        end
+    end
+
+    return str
+end
 
 return text

@@ -19,7 +19,6 @@ awesome.set_preferred_icon_size(42)
 local colors    = beautiful.colors
 local terminal  = "alacritty"
 local taglist   = { "main", "alpha", "bravo", "slack", "music" }
-local ipairs    = ipairs
 
 -- define keys, not local so widgets can use them
 -- yea yea globals bad yea yea
@@ -38,7 +37,6 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
-local registered_widgets = {}
 local volume     = require("widgets/volume")
 local screenshot = require("widgets/screenshots")
 
@@ -54,11 +52,6 @@ awful.layout.layouts = {
     awful.layout.suit.fair.horizontal
 }
 
--- register all the widgets
---for idx, widget in ipairs(registered_widgets) do
---
---end
-
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
     screen.mytaglist = display.create_taglist_widget(taglist, screen)
@@ -67,7 +60,6 @@ awful.screen.connect_for_each_screen(function(screen)
     screen.mytasklist = display.create_windowlist_widget(screen)
 
     -- Create the wibox
---    screen.mywibar = display.create_wibar(screen)
     screen.mywibar = display.create_wibar(
         screen,
         {

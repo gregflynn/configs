@@ -1,61 +1,55 @@
-local awful = require('awful')
-local lain = require("lain")
-local wibox = require("wibox")
+local awful     = require('awful')
+local lain      = require("lain")
+local wibox     = require("wibox")
 local beautiful = require("beautiful")
-local naughty = require("naughty")
-local gears = require("gears")
 
-local dpi = beautiful.xresources.apply_dpi
+local number = require("util/number")
+local Pie    = require("util/pie")
+local text   = require("util/text")
+
+local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
 local markup = lain.util.markup
 
-local mempie = {
-    widget = wibox.widget {
-        max_value = 1,
-        thickness = dpi(6),
-        start_angle = 0,
-        bg = beautiful.colors.gray,
-        colors = { beautiful.colors.blue },
-        widget = wibox.container.arcchart
-    },
-    notification_preset = {
-        title     = 'Memory Used',
-        timeout   = 6
-    },
-}
 
-function mempie.notification_on()
-    local old_id
-
-    if mempie.notification then
-        old_id = mempie.notification.id
-    end
-
-    mempie.notification = naughty.notify({
-        preset = mempie.notification_preset,
-        replaces_id = old_id
-    })
+function pi_notif_row(label, bytes, color, pct)
+    return string.format(
+        "%s: %s %s\n",
+        markup.bold(text.pad(label, 5)),
+        markup.fg.color(color, text.pad(number.human_bytes(bytes), 7)),
+        pct and string.format("(%s%%)", pct) or ""
+    )
 end
 
-mempie.memory = lain.widget.mem {
-    settings = function()
-        mempie.widget.value = mem_now.perc / 100
-        mempie.notification_preset.text = markup.big(
-            markup.fg.color(
-                beautiful.colors.blue,
-                string.format('%s%%', mem_now.perc)
-            )
-        )
+local pi = Pie {
+    notification_title = "Memory",
+    command = {
+        awful.util.shell, "-c", "free -b | grep Mem | awk '{ print $2,$3,$4 }'"
+    },
+    parse_command = function(stdout)
+        local split = text.split(stdout)
+        local total_bytes = tonumber(split[1])
+        local used_bytes = tonumber(split[2])
+        local free_bytes = tonumber(split[3])
+
+        local used_raw_pct = used_bytes / total_bytes
+        local pct_used = number.round(used_raw_pct * 100, 1)
+        local pct_free = number.round(100 * free_bytes / total_bytes, 1)
+
+        return {
+            pct = used_raw_pct,
+            tooltip = string.format("Memory: %s%% Used", pct_used),
+            notification_preset = {
+                text = (
+                    pi_notif_row("Free", free_bytes, colors.green, pct_free)
+                    ..pi_notif_row("Used", used_bytes, colors.red, pct_used)
+                    ..pi_notif_row("Total", total_bytes, colors.blue)
+                )
+            }
+        }
     end
 }
 
-mempie.widget:buttons(gears.table.join(
-    awful.button({ }, 1, function()
-        mempie.notification_on()
-    end)
-))
+pi.container = wibox.container.margin(pi, dpi(3), dpi(3))
 
-mempie.container = wibox.container.margin(
-    mempie.widget, dpi(3), dpi(3)
-)
-
-return mempie
+return pi
