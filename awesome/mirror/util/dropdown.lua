@@ -12,6 +12,20 @@ local backup_font_icon = "\u{f54a}"
 local close_font_icon = "\u{f562}"
 local close_font_icon_color = colors.red
 
+local function close_dropdown(dropdown)
+    if dropdown.prevmenu then
+        dropdown.prevmenu:hide()
+        dropdown.prevmenu = nil
+    end
+
+    if not dropdown.args.icon then
+        dropdown:update(
+        dropdown.args.font_icon or backup_font_icon,
+        dropdown.args.font_icon_color
+        )
+    end
+end
+
 local function open_dropdown(dropdown)
     if not dropdown.args.icon then
         -- update icon to indicate close action
@@ -34,7 +48,7 @@ local function open_dropdown(dropdown)
                     item,
                     function()
                         dropdown.args.menu_func(full_path)
-                        dropdown.prevmenu = nil
+                        close_dropdown(dropdown)
                     end,
                     -- full_path -- icon
                 })
@@ -44,20 +58,6 @@ local function open_dropdown(dropdown)
             dropdown.prevmenu = menu
         end
     )
-end
-
-local function close_dropdown(dropdown)
-    if dropdown.prevmenu then
-        dropdown.prevmenu:hide()
-        dropdown.prevmenu = nil
-    end
-
-    if not dropdown.args.icon then
-        dropdown:update(
-            dropdown.args.font_icon or backup_font_icon,
-            dropdown.args.font_icon_color
-        )
-    end
 end
 
 local function left_click(dropdown)
