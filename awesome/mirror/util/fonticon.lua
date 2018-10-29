@@ -1,31 +1,24 @@
 local wibox  = require("wibox")
 
 
-local fonticon = {
-    font = "Hack Nerd Font Mono 20"
-}
+local fonticon_font = "Hack Nerd Font Mono 20"
 
--- Update the given fonticon widget with the given unicode char
--- @param widget fonticon to update
--- @param unicode string of the format "\u{abcd}"
--- @returns the given widget
-function fonticon.update(widget, unicode, color)
-    local prefix = string.format(
-        "<span font='%s'%s>", fonticon.font,
-        color and string.format(" color='%s'", color) or ""
-    )
-    local suffix = "</span>"
-    widget:set_markup(prefix..unicode..suffix)
-    return widget
-end
+function factory(args)
+    local FontIcon = wibox.widget.textbox()
 
--- Create a textbox with the given unicode icon
--- @param unicode string of the format "\u{abcd}"
--- @returns a new fonticon widget
-function fonticon.create(unicode, color)
-    local widget = wibox.widget.textbox()
-    return fonticon.update(widget, unicode or "", color)
+    function FontIcon:update(icon, color)
+        local prefix = string.format(
+            "<span font='%s'%s>", fonticon_font,
+            color and string.format(" color='%s'", color) or ""
+        )
+        local suffix = "</span>"
+        FontIcon:set_markup(prefix..icon..suffix)
+    end
+
+    FontIcon:update(args.icon or "", args.color)
+
+    return FontIcon
 end
 
 
-return fonticon
+return factory

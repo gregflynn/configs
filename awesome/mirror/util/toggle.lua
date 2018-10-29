@@ -1,19 +1,19 @@
 local awful = require("awful")
 local gears = require("gears")
 
-local fonticon = require("util/fonticon")
+local FontIcon = require("util/fonticon")
 
 
 local function factory(args)
-    local new_toggle = fonticon.create()
+    local new_toggle = FontIcon {}
 
     function new_toggle.enable()
-        fonticon.update(new_toggle, args.font_icon_enabled, args.font_icon_enabled_color)
+        new_toggle:update(args.font_icon_enabled, args.font_icon_enabled_color)
         awful.spawn(args.command_enable)
     end
 
     function new_toggle.disable()
-        fonticon.update(new_toggle, args.font_icon_disabled, args.font_icon_disabled_color)
+        new_toggle:update(args.font_icon_disabled, args.font_icon_disabled_color)
         awful.spawn(args.command_disable)
     end
 

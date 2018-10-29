@@ -8,7 +8,7 @@ local wibox     = require("wibox")
 local lain      = require("lain")
 
 local text      = require("util/text")
-local fonticon = require("util/fonticon")
+local FontIcon = require("util/fonticon")
 
 local markup    = lain.util.markup
 local dpi       = beautiful.xresources.apply_dpi
@@ -31,7 +31,7 @@ local gpmdp = {
     notification  = nil,
     current_track = nil,
     current_album_art = nil,
-    font_icon = fonticon.create(gpmdp_default_icon, colors.background)
+    font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.background}
 }
 
 function trunc(str, max_len)
@@ -140,7 +140,7 @@ gpmdp.widget = awful.widget.watch(
                 artist_color = colors.gray
             end
 
-            fonticon.update(gpmdp.font_icon, font_icon, icon_color)
+            gpmdp.font_icon:update(font_icon, icon_color)
             widget:set_markup(string.format(
                 title_text,
                 markup.fg.color(title_color, trunc(title, 20)),
@@ -158,7 +158,7 @@ gpmdp.widget = awful.widget.watch(
                 gpmdp.notification_on()
             end
         else
-            fonticon.update(gpmdp.font_icon, gpmdp_default_icon, colors.background)
+            gpmdp.font_icon:update(gpmdp_default_icon, colors.background)
             widget:set_markup("")
             gpmdp.current_track = nil
         end

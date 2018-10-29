@@ -3,7 +3,7 @@ local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
 
-local fonticon = require("util/fonticon")
+local FontIcon = require("util/fonticon")
 
 local colors = beautiful.colors
 
@@ -15,8 +15,8 @@ local close_font_icon_color = colors.red
 local function open_dropdown(dropdown)
     if not dropdown.args.icon then
         -- update icon to indicate close action
-        fonticon.update(
-            dropdown, close_font_icon,
+        dropdown:update(
+            close_font_icon,
             dropdown.args.font_icon_color_open or close_font_icon_color
         )
     end
@@ -53,8 +53,7 @@ local function close_dropdown(dropdown)
     end
 
     if not dropdown.args.icon then
-        fonticon.update(
-            dropdown,
+        dropdown:update(
             dropdown.args.font_icon or backup_font_icon,
             dropdown.args.font_icon_color
         )
@@ -88,7 +87,7 @@ local function factory(args)
         }
         new_dropdown.args = args
     else
-        new_dropdown = fonticon.create()
+        new_dropdown = FontIcon {}
         new_dropdown.args = args
         close_dropdown(new_dropdown)
     end

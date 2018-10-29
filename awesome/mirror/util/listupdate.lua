@@ -6,7 +6,7 @@ local beautiful = require("beautiful")
 local lain      = require("lain")
 
 local bar      = require("util/bar")
-local fonticon = require("util/fonticon")
+local FontIcon = require("util/fonticon")
 local text     = require("util/text")
 
 local dpi = beautiful.xresources.apply_dpi
@@ -59,9 +59,9 @@ function listupdate.windows(window_list, buttons, label, data, clients)
             -- no true icon or we've overridden it
             local unicode = icon_override or window_icon_fallback
             if ib then
-                fonticon.update(ib, unicode, fg_color)
+                ib:update(unicode, fg_color)
             else
-                ib = fonticon.create(unicode, fg_color)
+                ib = FontIcon {icon = unicode, color = fg_color}
             end
         elseif not ib then
             -- going with the real app icon here, display the imagebox

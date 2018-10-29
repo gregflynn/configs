@@ -2,7 +2,7 @@ local beautiful = require("beautiful")
 local lain      = require("lain")
 local wibox     = require("wibox")
 
-local fonticon = require("util/fonticon")
+local FontIcon = require("util/fonticon")
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
@@ -39,7 +39,7 @@ function battery.get_status()
     return "full"
 end
 
-battery.font_icon = fonticon.create()
+battery.font_icon = FontIcon {}
 
 battery.lain_widget = lain.widget.bat {
     settings = function()
@@ -59,7 +59,7 @@ battery.lain_widget = lain.widget.bat {
             color = colors.red
         end
 
-        fonticon.update(battery.font_icon, font_icon, color)
+        battery.font_icon:update(font_icon, color)
 
         widget:set_markup(
             string.format(
