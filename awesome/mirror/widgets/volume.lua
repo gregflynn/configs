@@ -16,7 +16,7 @@ local font_icon_low = "\u{f026}"
 local font_icon_med = "\u{f027}"
 local font_icon_high = "\u{f028}"
 
-local volume_font_icon = FontIcon {}
+local volume_font_icon = FontIcon()
 
 local volume = lain.widget.pulsebar {
     width = dpi(60),
@@ -89,7 +89,7 @@ volume_font_icon:buttons(volume.buttons)
 
 volume.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(volume_font_icon, dpi(0),  dpi(3)),
+    volume_font_icon,
     wibox.container.margin(volume.bar, dpi(0), dpi(3), dpi(3), dpi(3))
 }
 

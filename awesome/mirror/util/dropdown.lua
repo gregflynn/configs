@@ -78,6 +78,7 @@ local function right_click(dropdown)
 end
 
 local function factory(args)
+    local args = args or {}
     local Dropdown
     if args.icon then
         Dropdown = wibox.widget {
@@ -87,9 +88,16 @@ local function factory(args)
         }
         Dropdown.args = args
     else
-        Dropdown = FontIcon {}
+        Dropdown = FontIcon()
         Dropdown.args = args
         close_dropdown(Dropdown)
+    end
+
+    if args.tooltip_text then
+        awful.tooltip {
+            objects = {Dropdown},
+            text = args.tooltip_text
+        }
     end
 
     Dropdown.command = string.format(

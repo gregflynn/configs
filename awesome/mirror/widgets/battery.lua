@@ -39,7 +39,7 @@ function battery.get_status()
     return "full"
 end
 
-battery.font_icon = FontIcon {}
+battery.font_icon = FontIcon()
 
 battery.lain_widget = lain.widget.bat {
     settings = function()
@@ -78,7 +78,7 @@ battery.widget = battery.lain_widget.widget
 if battery.battery_enabled then
     battery.container = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        wibox.container.margin(battery.font_icon, dpi(0), dpi(3)),
+        battery.font_icon,
         wibox.container.margin(battery.widget,    dpi(0), dpi(3))
     }
 else

@@ -7,12 +7,12 @@ local naughty   = require("naughty")
 local wibox     = require("wibox")
 local lain      = require("lain")
 
-local text      = require("util/text")
+local text     = require("util/text")
 local FontIcon = require("util/fonticon")
 
-local markup    = lain.util.markup
-local dpi       = beautiful.xresources.apply_dpi
-local colors    = beautiful.colors
+local markup = lain.util.markup
+local dpi    = beautiful.xresources.apply_dpi
+local colors = beautiful.colors
 
 
 local gpmdp_album_art_fmt = "/tmp/gpmcover-%s"
@@ -178,7 +178,7 @@ gpmdp.widget:buttons(buttons)
 
 gpmdp.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(gpmdp.font_icon, dpi(3), dpi(3)),
+    gpmdp.font_icon,
     wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
 }
 

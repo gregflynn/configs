@@ -15,6 +15,7 @@ local screenshot_icon = Dropdown {
     folder    = screenshots_folder,
     reverse   = true,
     font_icon = "\u{f793}",
+    tooltip_text = "Screenshots",
     menu_func = function(full_path)
         awful.spawn(string.format(
             "xclip -selection clipboard -t image/png %s",
@@ -52,8 +53,7 @@ screenshot_icon.globalkeys = gears.table.join(
 )
 
 screenshot_icon.container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(screenshot_icon, dpi(0), dpi(3)),
+    layout = wibox.layout.fixed.horizontal, screenshot_icon
 }
 
 

@@ -5,7 +5,15 @@ local FontIcon = require("util/fonticon")
 
 
 local function factory(args)
-    local Toggle = FontIcon {}
+    local args = args or {}
+    local Toggle = FontIcon()
+
+    if args.tooltip_text then
+        awful.tooltip {
+            objects = {Toggle},
+            text = args.tooltip_text
+        }
+    end
 
     function Toggle.enable()
         Toggle:update(args.font_icon_enabled, args.font_icon_enabled_color)

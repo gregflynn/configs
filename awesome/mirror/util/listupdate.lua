@@ -20,7 +20,8 @@ local window_icon_overrides = {
     ["Firefox"]                          = "\u{f269}",
     ["jetbrains-pycharm"]                = "\u{e73c}",
     ["Google Play Music Desktop Player"] = "\u{f001}",
-    ["Slack"]                            = "\u{f198}"
+    ["Slack"]                            = "\u{f198}",
+    ["Thunar"]                           = "\u{f413}"
 }
 local window_icon_fallback = "\u{fb13}"
 
@@ -40,13 +41,11 @@ function listupdate.windows(window_list, buttons, label, data, clients)
             tb  = cache.tb
             ib  = cache.ib
             tbm = cache.tbm
-            ibm = cache.ibm
         else
             tb = wibox.widget.textbox()
             -- ib is defined below
             tb.forced_width = dpi(100)
             tbm = bar.margin(tb, 0, 6)
-            -- ibm is defined below
         end
 
         local title, bg, _, icon = label(client, tb)
@@ -68,10 +67,7 @@ function listupdate.windows(window_list, buttons, label, data, clients)
             -- we assume icon doesn't change
             ib = wibox.widget.imagebox()
             ib:set_image(icon)
-        end
-
-        if not ibm then
-            ibm = bar.margin(ib, 6, 0)
+            ib = bar.margin(ib, 6, 0)
         end
 
         if not cache then
@@ -79,7 +75,7 @@ function listupdate.windows(window_list, buttons, label, data, clients)
 
             -- create the tooltip only once
             awful.tooltip {
-                objects = {ibm, tbm},
+                objects = {ib, tbm},
                 text = client.class
             }
 
@@ -88,7 +84,6 @@ function listupdate.windows(window_list, buttons, label, data, clients)
                 fi  = fi,
                 tb  = tb,
                 tbm = tbm,
-                ibm = ibm,
                 an  = an
             }
         end
@@ -104,7 +99,7 @@ function listupdate.windows(window_list, buttons, label, data, clients)
         -- create the window item container
         local bgb = wibox.container.background()
         local l = wibox.layout.fixed.horizontal()
-        l:add(la, ibm, tbm, ra)
+        l:add(la, ib, tbm, ra)
         bgb:set_widget(l)
         bgb:buttons(awful.widget.common.create_buttons(buttons, client))
         bgb:set_bg(bg)
