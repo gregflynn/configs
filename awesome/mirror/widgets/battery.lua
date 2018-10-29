@@ -1,21 +1,45 @@
-local lain = require("lain")
 local beautiful = require("beautiful")
-local wibox = require("wibox")
+local lain      = require("lain")
+local wibox     = require("wibox")
 
-local dpi = beautiful.xresources.apply_dpi
+local fonticon = require("util/fonticon")
 
--- NOTE: only tested with elementary icon pack
-local icon_fmt = "/usr/share/icons/elementary/status/48/battery-%s.svg"
-local icon_chg_fmt = "/usr/share/icons/elementary/status/48/battery-%s-charging.svg"
+local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
+
+
+local battery_icons = {
+    plug    = "\u{f1e6}",
+    full    = "\u{f240}",
+    good    = "\u{f241}",
+    low     = "\u{f242}",
+    caution = "\u{f243}",
+    empty   = "\u{f244}",
+}
 
 local battery = {
     battery_enabled = false,
-    icon = wibox.widget {
-        image = string.format(icon_fmt, "full"),
-        resize = true,
-        widget = wibox.widget.imagebox
-    }
 }
+
+function battery.get_status()
+    local pct = bat_now.perc or 0
+    local bt_status = bat_now.status
+    local ac_status = bat_now.ac_status
+
+    if ac_status == "1" and (bt_status == "Charging" or bt_status == "Full") then
+        return "plug"
+    end
+
+    if     pct < 5  then return "empty"
+    elseif pct < 20 then return "caution"
+    elseif pct < 50 then return "low"
+    elseif pct < 90 then return "good"
+    end
+
+    return "full"
+end
+
+battery.font_icon = fonticon.create()
 
 battery.lain_widget = lain.widget.bat {
     settings = function()
@@ -26,24 +50,16 @@ battery.lain_widget = lain.widget.bat {
             battery.battery_enabled = true
         end
 
-        local status = "full"
-        if bat_now.perc < 5 then status = "empty"
-        elseif bat_now.perc < 20 then status = "caution"
-        elseif bat_now.perc < 50 then status = "low"
-        elseif bat_now.perc < 90 then status = "good"
+        local status = battery:get_status()
+        local font_icon = battery_icons[status]
+        local color = colors.green
+        if status == "low" then
+            color = colors.yellow
+        elseif status == "empty" or status == "caution" then
+            color = colors.red
         end
 
-        local color = beautiful.colors.green
-        if bat_now.status == "Discharging" then
-            color = beautiful.colors.red
-            battery.icon.image = string.format(icon_fmt, status)
-        else
-            if bat_now.status == "Charging" then
-                battery.icon.image = string.format(icon_chg_fmt, status)
-            else
-                battery.icon.image = string.format(icon_fmt, "ac-adapter")
-            end
-        end
+        fonticon.update(battery.font_icon, font_icon, color)
 
         widget:set_markup(
             string.format(
@@ -62,11 +78,12 @@ battery.widget = battery.lain_widget.widget
 if battery.battery_enabled then
     battery.container = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        wibox.container.margin(battery.icon,    dpi(0), dpi(3)),
-        wibox.container.margin(battery.widget,  dpi(0), dpi(3))
+        wibox.container.margin(battery.font_icon, dpi(0), dpi(3)),
+        wibox.container.margin(battery.widget,    dpi(0), dpi(3))
     }
 else
     battery.container = nil
 end
+
 
 return battery

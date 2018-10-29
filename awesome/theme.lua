@@ -11,6 +11,7 @@ local home = os.getenv("HOME")
 local dotsan_home = "{DS_HOME}"
 local lock_script = "{DS_LOCK}"
 local assets = home.."/.config/awesome/assets"
+local font_name = "Hack Nerd Font Mono"
 
 local colors = {
     background = "#{DS_BACKGROUND}",
@@ -33,7 +34,8 @@ local theme = {
     bar_height    = dpi(26),
     bar_margin    = dpi(2),
     border_width  = dpi(2),
-    font          = "hack 10",
+    font          = font_name.." 10",
+    font_name     = font_name,
     wallpaper     = dotsan_home.."/private/wallpapers/close_to_the_sun.jpg",
     border_shape  = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(5))
@@ -61,8 +63,8 @@ theme.border_marked = colors.red
 --
 -- Hotkeys
 --
-theme.hotkeys_font             = "hack 14"
-theme.hotkeys_description_font = "hack 12"
+theme.hotkeys_font             = font_name.." 14"
+theme.hotkeys_description_font = font_name.." 12"
 theme.hotkeys_fg               = colors.white
 theme.hotkeys_modifiers_fg     = colors.blue
 
@@ -77,7 +79,7 @@ theme.menu_width        = dpi(300)
 -- Notifications
 --
 theme.notification_opacity      = 0.9
-theme.notification_font         = "Hack 12"
+theme.notification_font         = font_name.." 12"
 theme.notification_fg           = colors.white
 theme.notification_border_width = dpi(2)
 theme.notification_border_color = colors.background

@@ -3,39 +3,50 @@ local lain      = require("lain")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
-local dpi       = beautiful.xresources.apply_dpi
 
--- elementary icons
-local speaker_icon = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back-testing.svg"
-local mute_icon = "/usr/share/icons/elementary/devices/48/audio-speaker-left-back.svg"
+local bar = require("util/bar")
+local fonticon = require("util/fonticon")
 
--- Adwaita icon because elementary doesn't have a headphones icon
-local headphones_icon = "/usr/share/icons/Adwaita/48x48/devices/audio-headphones.png"
+local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
 
-local volume_icon = wibox.widget {
-    image = speaker_icon,
-    resize = true,
-    widget = wibox.widget.imagebox
-}
+
+local font_icon_headphones = "\u{f7ca}"
+local font_icon_mute = "\u{fc5d}"
+local font_icon_low = "\u{f026}"
+local font_icon_med = "\u{f027}"
+local font_icon_high = "\u{f028}"
+
+local volume_font_icon = fonticon.create()
 
 local volume = lain.widget.pulsebar {
-    width = dpi(6),
+    width = dpi(60),
+    ticks = true,
+    tick_size = dpi(5),
     notification_preset = {
         font = "Hack 10"
     },
     colors = {
-        background = beautiful.colors.gray,
-        mute       = beautiful.colors.red,
+        background = beautiful.colors.background,
+        mute       = beautiful.colors.blue,
         unmute     = beautiful.colors.green
     },
     settings = function()
         if volume_now.muted == "yes" then
-            volume_icon.image = mute_icon
+            fonticon.update(volume_font_icon, font_icon_mute, colors.blue)
         else
             if volume_now.index ~= "0" then
-                volume_icon.image = headphones_icon
+                fonticon.update(volume_font_icon, font_icon_headphones, colors.purple)
             else
-                volume_icon.image = speaker_icon
+                local level = tonumber(volume_now.left)
+
+                if level < 30 then
+                    fonticon.update(volume_font_icon, font_icon_low, colors.green)
+                elseif level < 60 then
+                    fonticon.update(volume_font_icon, font_icon_med, colors.green)
+                else
+                    fonticon.update(volume_font_icon, font_icon_high, colors.green)
+                end
             end
         end
     end
@@ -60,47 +71,27 @@ volume.buttons = awful.util.table.join(
 )
 
 volume.globalkeys = gears.table.join(
-    awful.key(
-        { }, "XF86AudioRaiseVolume",
-        function()
-            awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
-            volume.notify()
-        end
-        -- {description = "Increase Volume", group = "system"}
-    ),
-    awful.key(
-        { }, "XF86AudioLowerVolume",
-        function()
-            awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
-            volume.notify()
-        end
-        -- {description = "Decrease Volume", group = "system"}
-    ),
-    awful.key(
-        { }, "XF86AudioMute",
-        function()
-            awful.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
-            volume.notify()
-        end
-        -- {description = "Mute Volume", group = "system"}
-    )
+    awful.key({ }, "XF86AudioRaiseVolume", function()
+        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
+        volume.notify()
+    end),
+    awful.key({ }, "XF86AudioLowerVolume", function()
+        awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%")
+        volume.notify()
+    end),
+    awful.key({ }, "XF86AudioMute", function()
+        awful.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+        volume.notify()
+    end)
 )
 
-volume.bar.paddings = 0
 volume.bar:buttons(volume.buttons)
-volume_icon:buttons(volume.buttons)
-
-volume.widget = wibox.widget {
-    volume.bar,
-    forced_width  = dpi(6),
-    direction     = 'east',
-    layout        = wibox.container.rotate
-}
+volume_font_icon:buttons(volume.buttons)
 
 volume.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(volume_icon, dpi(0),  dpi(3)),
-    wibox.container.margin(volume.widget, dpi(0), dpi(3))
+    wibox.container.margin(volume_font_icon, dpi(0),  dpi(3)),
+    wibox.container.margin(volume.bar, dpi(0), dpi(3), dpi(3), dpi(3))
 }
 
 return volume

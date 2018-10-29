@@ -25,7 +25,8 @@ function rmpyc {
 }
 
 function title {
-    echo -en "\033]0;$1\a"
+    export __DOTSAN__TITLE="$1"
+#    echo -en "\033]0;$1\a"
 }
 
 function colors {

@@ -3,16 +3,18 @@ local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
 local naughty   = require("naughty")
-local dropdown  = require("widgets/dropdown")
-local dpi       = beautiful.xresources.apply_dpi
+
+local dropdown = require("util/dropdown")
+
+local dpi = beautiful.xresources.apply_dpi
 
 
 local screenshots_folder = beautiful.home.."/Pictures/Screenshots"
 
 local screenshot_icon = dropdown {
-    folder = screenshots_folder,
-    reverse = true,
-    icon = "/usr/share/icons/elementary/apps/48/accessories-screenshot.svg",
+    folder    = screenshots_folder,
+    reverse   = true,
+    font_icon = "\u{f793}",
     menu_func = function(full_path)
         awful.spawn(string.format(
             "xclip -selection clipboard -t image/png %s",
@@ -53,5 +55,6 @@ screenshot_icon.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     wibox.container.margin(screenshot_icon, dpi(0), dpi(3)),
 }
+
 
 return screenshot_icon

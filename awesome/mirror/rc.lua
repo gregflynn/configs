@@ -2,9 +2,11 @@ local gears     = require("gears")
 local awful     = require("awful")
 local wibox     = require("wibox")
 local beautiful = require("beautiful")
-local naughty   = require("naughty")
 local menubar   = require("menubar")
 local lain      = require("lain")
+
+local bar        = require("util/bar")
+local display    = require("util/display")
 
 require("awful.autofocus")
 require("errors")
@@ -14,8 +16,6 @@ local home = os.getenv("HOME")
 beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
 
-local dpi       = beautiful.xresources.apply_dpi
-local sep       = lain.util.separators
 local colors    = beautiful.colors
 local terminal  = "alacritty"
 local taglist   = { "main", "alpha", "bravo", "slack", "music" }
@@ -38,47 +38,9 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
+local registered_widgets = {}
 local volume     = require("widgets/volume")
 local screenshot = require("widgets/screenshots")
-
-local function get_screen_type(s)
-    -- Get the screen type based on its geometry [ultrawide, widescreen, square]
-    local ratio = s.geometry.width / s.geometry.height
-    -- > 4/3
-    -- 1.3333333333333
-    -- > 1920/1080
-    -- 1.7777777777778
-    -- > 3440/1440
-    -- 2.3888888888889
-    -- > 1520/1050
-    -- 1.447619047619
-    -- > 2560/1440
-    -- 1.7777777777778
-    if ratio < 1. then
-        return 'tall'
-    elseif ratio < 1.4 then
-        return 'square'
-    elseif ratio < 1.8 then
-        return 'widescreen'
-    else
-        return 'ultrawide'
-    end
-end
-
-local function set_wallpaper(s)
-    -- Wallpaper
-    if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
-        end
-        gears.wallpaper.maximized(wallpaper, s, false)
-    end
-end
-    
--- Re-set wallpaper when a screen's geometry changes
-screen.connect_signal("property::geometry", set_wallpaper)
 
 -- screen layout cycle list
 awful.layout.layouts = {
@@ -92,233 +54,31 @@ awful.layout.layouts = {
     awful.layout.suit.fair.horizontal
 }
 
+-- register all the widgets
+--for idx, widget in ipairs(registered_widgets) do
 --
--- Shamelessly forked from
--- https://github.com/awesomeWM/awesome/blob/v4.2/lib/awful/widget/common.lua
-local function list_update(w, buttons, label, data, objects)
-    w:reset()
-    for i, o in ipairs(objects) do
-        local cache = data[o]
-        local ib, tb, bgb, tbm, ibm, l
+--end
 
-        if cache then
-            tb = cache.tb
-        else
-            tb = wibox.widget.textbox()
-            tb.forced_width = dpi(100)
-        end
-        local text, bg, bg_image, icon, args = label(o, tb)
-
-        local left_color = i == 1 and beautiful.colors.background or beautiful.colors.gray
-        local right_color = i == #objects and beautiful.colors.background or beautiful.colors.gray
-        local la = sep.arrow_right(left_color, bg)
-        local ra = sep.arrow_right(bg, right_color)
-
-        if cache then
-            ib = cache.ib
-            tbm = cache.tbm
-            ibm = cache.ibm
-        else
-            ib = wibox.widget.imagebox()
-            tbm = wibox.container.margin(tb, dpi(4), dpi(4))
-            ibm = wibox.container.margin(ib, dpi(4))
-
-            data[o] = {
-                ib  = ib,
-                tb  = tb,
-                tbm = tbm,
-                ibm = ibm,
-            }
-        end
-
-        local bgb = wibox.container.background()
-        local l = wibox.layout.fixed.horizontal()
-        l:add(la)
-        l:add(ibm)
-        l:add(tbm)
-        l:add(ra)
-        bgb:set_widget(l)
-        bgb:buttons(awful.widget.common.create_buttons(buttons, o))
-
-        args = args or {}
-
-        -- The text might be invalid, so use pcall.
-        if text == nil or text == "" then
-            tbm:set_margins(0)
-        else
-            if not tb:set_markup_silently(text) then
-                tb:set_markup("<i>&lt;Invalid text&gt;</i>")
-            end
-        end
-        bgb:set_bg(bg)
-        if icon then
-            ib:set_image(icon)
-        else
-            ib:set_image('/usr/share/icons/elementary/apps/48/application-default-icon.svg')
-        end
-
-        w:add(bgb)
-    end
-end
-
-local function taglist_update(w, buttons, label, data, objects)
-    local last_bg = beautiful.colors.background
-    w:reset()
-    for i, o in ipairs(objects) do
-        local cache = data[o]
-        local tb, tbm
-
-        if cache then
-            tb = cache.tb
-            tbm = cache.tbm
-        else
-            tb = wibox.widget.textbox()
-            tbm = wibox.container.margin(tb, dpi(4), dpi(4))
-
-            data[o] = {
-                tb  = tb,
-                tbm = tbm,
-            }
-        end
-
-        local l = wibox.layout.fixed.horizontal()
-        local text, bg, bg_image, icon, args = label(o, tb)
-        tb:set_markup_silently(text)
-        
-        bg = bg or beautiful.colors.background
-        l:add(sep.arrow_right(last_bg, bg))
-        l:add(tbm)
-        if i == #objects then
-            l:add(sep.arrow_right(bg, beautiful.colors.background))
-        end
-        
-        local bgb = wibox.container.background()
-        bgb:set_widget(l)
-        bgb:buttons(awful.widget.common.create_buttons(buttons, o))
-        bgb:set_bg(bg)
-        w:add(bgb)
-        last_bg = bg
-    end
-end
-
-local function arrow_block(widget, fg, bg, left, right)
-    return {
-        layout = wibox.layout.align.horizontal,
-        sep.arrow_left(fg, bg),
-        wibox.container.background(
-            wibox.container.margin(
-                widget,
-                dpi(left or 5),
-                dpi(left or 5),
-                beautiful.bar_margin,
-                beautiful.bar_margin
-            ),
-            bg
-        )
-    }
-end
-
-local function arrow_list(blocks)
-    local container = {layout = wibox.layout.fixed.horizontal}
-    local last_color
-
-    for i, block in ipairs(blocks) do
-        container[i] = arrow_block(
-            block.widget,
-            last_color or beautiful.colors.background,
-            block.color
-        )
-        last_color = block.color
-    end
-    
-    return container
-end
-
-awful.screen.connect_for_each_screen(function(s)
-    -- Wallpaper
-    set_wallpaper(s)
-    local screen_type = get_screen_type(s)
-
-    -- Each screen has its own tag table.
-    awful.tag(
-        taglist, s,
-        {
-            awful.layout.suit.floating,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,
-            awful.layout.suit.floating,
-            awful.layout.suit.floating
-        }
-    )
-
-    -- Create an imagebox widget which will contain an icon indicating which
-    -- layout we're using. We need one layoutbox per screen.
-    s.layoutbox = awful.widget.layoutbox(s)
-    s.layoutbox:buttons(gears.table.join(
-        awful.button({ }, 1, function() awful.layout.inc( 1) end),
-        awful.button({ }, 3, function() awful.layout.inc(-1) end),
-        awful.button({ }, 4, function() awful.layout.inc( 1) end),
-        awful.button({ }, 5, function() awful.layout.inc(-1) end)
-    ))
-    -- Create a taglist widget
-    s.mytaglist = awful.widget.taglist(
-        s,
-        awful.widget.taglist.filter.all,
-        gears.table.join(
-            awful.button({ }, 1, function(t) t:view_only() end)
-        ),
-        nil,
-        taglist_update
-    )
+awful.screen.connect_for_each_screen(function(screen)
+    display.set_wallpaper(screen)
+    screen.mytaglist = display.create_taglist_widget(taglist, screen)
 
     -- Create a tasklist widget
-    s.mytasklist = awful.widget.tasklist(
-        s,
-        awful.widget.tasklist.filter.currenttags,
-        gears.table.join(
-            awful.button({ }, 1, function(c)
-                if c == client.focus then
-                    c.minimized = true
-                else
-                    -- Without this, the following
-                    -- :isvisible() makes no sense
-                    c.minimized = false
-                    if not c:isvisible() and c.first_tag then
-                        c.first_tag:view_only()
-                    end
-                    -- This will also un-minimize
-                    -- the client, if needed
-                    client.focus = c
-                    c:raise()
-                end
-            end)
-        ),
-        nil,
-        list_update,
-        wibox.layout.flex.horizontal()
-    )
+    screen.mytasklist = display.create_windowlist_widget(screen)
+
     -- Create the wibox
-    s.mywibox  = awful.wibar {
-        position = "top",
-        screen   = s,
-        height   = beautiful.bar_height
-    }
-
-    -- Add widgets to the wibox
-    s.mywibox:setup {
-        layout = wibox.layout.align.horizontal,
+--    screen.mywibar = display.create_wibar(screen)
+    screen.mywibar = display.create_wibar(
+        screen,
         {
-            layout = wibox.layout.fixed.horizontal,
-            s.mytaglist
+            screen.mytaglist,
+            display.create_layout_widget(screen)
         },
         {
-            layout = wibox.layout.fixed.horizontal,
-            s.mytasklist,
+            screen.mytasklist,
         },
         {
-            layout = wibox.layout.fixed.horizontal,
-
-            arrow_list({
+            bar.arrow_left_list({
                 { widget = require("widgets/gpmdp").container,
                   color = colors.yellow },
                 { widget = wibox.widget {
@@ -337,21 +97,16 @@ awful.screen.connect_for_each_screen(function(s)
                     screenshot.container,
                     require("widgets/wallpapers").container,
                     require("widgets/arandr").container,
-                  }, 
+                  },
                   color = colors.purple },
-                { widget = awful.widget.only_on_screen(wibox.widget.systray(), "primary"),
-                  color = colors.background },
                 { widget = volume.container,
                   color = colors.gray },
                 { widget = require("widgets/weather").container,
                   color = colors.background },
                 { widget = require("widgets/clock"),
                   color = colors.blue },
-                { widget = s.layoutbox,
-                  color = colors.background }
             })
-        }
-    }
+        })
 end)
 
 

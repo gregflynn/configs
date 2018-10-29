@@ -1,20 +1,28 @@
-local awful = require("awful")
-local wibox = require("wibox")
-local gears = require("gears")
-local naughty = require("naughty")
-local beautiful = require("beautiful")
-local lain = require("lain")
-local markup = lain.util.markup
-local dpi = beautiful.xresources.apply_dpi
 local io, os, string, table = io, os, string, table
 
-local gpmdp_icon_loc = "/usr/share/pixmaps/gpmdp.png"
+local awful     = require("awful")
+local beautiful = require("beautiful")
+local gears     = require("gears")
+local naughty   = require("naughty")
+local wibox     = require("wibox")
+local lain      = require("lain")
+
+local text      = require("util/text")
+local fonticon = require("util/fonticon")
+
+local markup    = lain.util.markup
+local dpi       = beautiful.xresources.apply_dpi
+local colors    = beautiful.colors
+
+
 local gpmdp_album_art_fmt = "/tmp/gpmcover-%s"
+local gpmdp_json = beautiful.home.."/.config/Google Play Music Desktop Player/json_store/playback.json"
+local gpmdp_default_icon = "\u{f001}"
 
 local gpmdp = {
     notify        = "on",
     followtag     = false,
-    file_location = beautiful.home.."/.config/Google Play Music Desktop Player/json_store/playback.json",
+    file_location = gpmdp_json,
     notification_preset = {
         title     = "Now playing",
         icon_size = dpi(128),
@@ -23,26 +31,11 @@ local gpmdp = {
     notification  = nil,
     current_track = nil,
     current_album_art = nil,
-    icon = wibox.widget {
-        image  = gpmdp_icon_loc,
-        resize = true,
-        widget = wibox.widget.imagebox
-    }
+    font_icon = fonticon.create(gpmdp_default_icon, colors.background)
 }
 
-function trim(s)
-   return s:match("^%s*(.-)%s*$"):gsub('&', '&amp;')
-end
-
 function trunc(str, max_len)
-    if string.len(str) > max_len then
-        local feat_loc = str:find("[%(%[]")
-        if feat_loc and feat_loc <= max_len then
-            return str:sub(1, feat_loc - 1)
-        end
-        return string.sub(str, 0, max_len - 3)..'...'
-    end
-    return str
+    return text.trunc(str, max_len, '(', true)
 end
 
 function gpmdp.notification_on()
@@ -54,9 +47,8 @@ function gpmdp.notification_on()
         gpmdp.notification_preset.screen = awful.screen.focused()
     end
 
-    awful.spawn.easy_async({"curl", gpm_now.cover_url, "-o", new_album_art}, function(stdout)
+    awful.spawn.easy_async({"curl", gpm_now.cover_url, "-o", new_album_art}, function()
         local old_id
-        gpmdp.icon.image = new_album_art
 
         if gpmdp.notification then
             old_id = gpmdp.notification.id
@@ -109,7 +101,7 @@ function gpmdp.get_now(running)
 
     -- parse the json file
     local json = lain.util.dkjson
-    local dict, pos, err = json.decode(table.concat(filelines), 1, nil)
+    local dict, _, _ = json.decode(table.concat(filelines), 1, nil)
 
     -- sometimes dict doesn't parse
     if not dict then
@@ -125,28 +117,30 @@ function gpmdp.get_now(running)
     return gpm_now
 end
 
-gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"}, 2, function(widget, stdout)
-    local gpm_now = gpmdp.get_now(stdout ~= '')
-    gpmdp.latest = gpm_now
+gpmdp.widget = awful.widget.watch(
+    {"pidof", "Google Play Music Desktop Player"}, 2,
+    function(widget, stdout)
+        local gpm_now = gpmdp.get_now(stdout ~= '')
+        gpmdp.latest = gpm_now
 
-    if gpm_now.running then
-       if gpm_now.title then
-            local title = trim(gpm_now.title)
-            local artist = trim(gpm_now.artist)
-            local album = trim(gpm_now.album)
+        if gpm_now.running and gpm_now.title then
+            local font_icon = gpmdp_default_icon
+            local title = text.trim(gpm_now.title)
+            local artist = text.trim(gpm_now.artist)
+            local album = text.trim(gpm_now.album)
 
-            local title_color = beautiful.colors.background
-            local artist_color = beautiful.colors.background
+            local icon_color = colors.background
+            local title_color = colors.background
+            local artist_color = colors.background
             local title_text = markup.italic(" %s").." / %s"
 
             if not gpm_now.playing then
-                title_color = beautiful.colors.gray
-                artist_color = beautiful.colors.gray
-                gpmdp.icon.image = gpmdp_icon_loc
-            else
-                gpmdp.icon.image = gpmdp.current_album_art
+                font_icon = "\u{f04c}"
+                title_color = colors.gray
+                artist_color = colors.gray
             end
 
+            fonticon.update(gpmdp.font_icon, font_icon, icon_color)
             widget:set_markup(string.format(
                 title_text,
                 markup.fg.color(title_color, trunc(title, 20)),
@@ -155,20 +149,21 @@ gpmdp.widget = awful.widget.watch({"pidof", "Google Play Music Desktop Player"},
 
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
-                markup.fg.color(beautiful.colors.white, markup.big(title)),
-                markup.fg.color(beautiful.colors.purple, markup.big(artist)),
-                markup.fg.color(beautiful.colors.blue, markup.italic(markup.big(album)))
+                markup.fg.color(colors.white, markup.big(title)),
+                markup.fg.color(colors.purple, markup.big(artist)),
+                markup.fg.color(colors.blue, markup.italic(markup.big(album)))
             )
 
             if gpmdp.notify == "on" and gpm_now.title ~= gpmdp.current_track then
                 gpmdp.notification_on()
             end
+        else
+            fonticon.update(gpmdp.font_icon, gpmdp_default_icon, colors.background)
+            widget:set_markup("")
+            gpmdp.current_track = nil
         end
-    else
-        widget:set_markup('')
-        gpmdp.current_track = nil
     end
-end)
+)
 
 local buttons = gears.table.join(
     awful.button({ }, 1, function()
@@ -180,12 +175,11 @@ local buttons = gears.table.join(
 )
 
 gpmdp.widget:buttons(buttons)
-gpmdp.icon:buttons(buttons)
 
 gpmdp.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(gpmdp.icon,    dpi(3),  dpi(3)),
-    wibox.container.margin(gpmdp.widget,  dpi(0), dpi(0))
+    wibox.container.margin(gpmdp.font_icon, dpi(3), dpi(3)),
+    wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
 }
 
 return gpmdp

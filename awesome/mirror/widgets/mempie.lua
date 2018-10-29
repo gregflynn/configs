@@ -11,7 +11,7 @@ local markup = lain.util.markup
 local mempie = {
     widget = wibox.widget {
         max_value = 1,
-        thickness = dpi(4),
+        thickness = dpi(6),
         start_angle = 0,
         bg = beautiful.colors.gray,
         colors = { beautiful.colors.blue },
@@ -24,7 +24,7 @@ local mempie = {
 }
 
 function mempie.notification_on()
-    local old_id = nil
+    local old_id
 
     if mempie.notification then
         old_id = mempie.notification.id

@@ -36,6 +36,11 @@ local weather = lain.widget.weather {
     end
 }
 
+awful.tooltip {
+    objects = {weather.icon, weather.widget},
+    text    = "Show Weather / Open Weather"
+}
+
 weather.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     wibox.container.margin(weather.icon, dpi(0), dpi(3)),

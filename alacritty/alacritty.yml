@@ -72,7 +72,7 @@ mouse:
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
-dynamic_title: true
+dynamic_title: false
 
 hide_cursor_when_typing: false
 
