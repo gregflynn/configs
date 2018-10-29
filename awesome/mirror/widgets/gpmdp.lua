@@ -174,6 +174,7 @@ local buttons = gears.table.join(
     end)
 )
 
+gpmdp.font_icon:buttons(buttons)
 gpmdp.widget:buttons(buttons)
 
 gpmdp.container = wibox.widget {
