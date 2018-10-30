@@ -1,4 +1,4 @@
-local awful     = require('awful')
+local awful     = require("awful")
 local lain      = require("lain")
 local wibox     = require("wibox")
 local beautiful = require("beautiful")
@@ -14,7 +14,7 @@ local markup = lain.util.markup
 
 function pi_notif_row(label, bytes, color, pct)
     return string.format(
-        "%s: %s %s\n",
+        "%s: %s %s",
         markup.bold(text.pad(label, 5)),
         markup.fg.color(color, text.pad(number.human_bytes(bytes), 7)),
         pct and string.format("(%s%%)", pct) or ""
@@ -40,10 +40,11 @@ local pi = Pie {
             pct = used_raw_pct,
             tooltip = string.format("Memory: %s%% Used", pct_used),
             notification_preset = {
-                text = (
-                    pi_notif_row("Free", free_bytes, colors.green, pct_free)
-                    ..pi_notif_row("Used", used_bytes, colors.red, pct_used)
-                    ..pi_notif_row("Total", total_bytes, colors.blue)
+                text = string.format(
+                    "%s\n%s\n%s",
+                    pi_notif_row("Free", free_bytes, colors.green, pct_free),
+                    pi_notif_row("Used", used_bytes, colors.red, pct_used),
+                    pi_notif_row("Total", total_bytes, colors.blue)
                 )
             }
         }
