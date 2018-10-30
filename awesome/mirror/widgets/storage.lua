@@ -1,99 +1,76 @@
-local lain = require("lain")
 local beautiful = require("beautiful")
-local wibox = require("wibox")
-local naughty = require("naughty")
-local awful = require("awful")
-local gears = require("gears")
+local lain      = require("lain")
+local wibox     = require("wibox")
 
-local dpi = beautiful.xresources.apply_dpi
+local FontIcon = require("util/fonticon")
+local number   = require("util/number")
+local Pie      = require("util/pie")
+local text     = require("util/text")
+
+local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
 local markup = lain.util.markup
 
-local storage = {
-    mem_pct = 0,
-    root_pct = 0,
-    boot_pct = 0,
-    root_bar = wibox.widget {
-        max_value        = 100,
-        widget           = wibox.widget.progressbar,
-        color            = beautiful.colors.purple,
-        background_color = beautiful.colors.gray
-    },
-    boot_bar = wibox.widget {
-        max_value        = 100,
-        widget           = wibox.widget.progressbar,
-        color            = beautiful.colors.green,
-        background_color = beautiful.colors.gray
-    },
-    notification  = nil,
-    notification_preset = {
-        title     = "Storage Usage",
-        timeout   = 6,
+
+local storage = {}
+
+local function create_storage_command(grep)
+    return string.format("df -B1 %s | tail -n 1 | awk '{ print $2,$3,$4 }'", grep)
+end
+
+local function notif_row(label, bytes, color, pct)
+    return string.format(
+        "%s: %s %s",
+        markup.bold(text.pad(label, 5)),
+        markup.fg.color(color, text.pad(number.human_bytes(bytes), 7)),
+        pct and string.format("(%s%%)", pct) or ""
+    )
+end
+
+local function parse_command(stdout)
+    local split = text.split(stdout)
+    local total_bytes = tonumber(split[1])
+    local used_bytes = tonumber(split[2])
+    local free_bytes = tonumber(split[3])
+
+    local used_raw_pct = used_bytes / total_bytes
+    local pct_used = number.round(used_raw_pct * 100, 1)
+    local pct_free = number.round(100 * free_bytes / total_bytes, 1)
+    return {
+        pct = used_raw_pct,
+        tooltip = string.format("root: %s%% Used", pct_used),
+        notification_preset = {
+            text = string.format(
+                "%s\n%s\n%s",
+                notif_row("Free", free_bytes, colors.green, pct_free),
+                notif_row("Used", used_bytes, colors.red, pct_used),
+                notif_row("Total", total_bytes, colors.blue)
+            )
+        }
     }
-}
-
-function storage.notification_on()
-    storage.notification_preset.screen = awful.screen.focused()
-    local old_id
-    if storage.notification then old_id = storage.notification.id end
-
-    -- update notification text
-    storage.notification_preset.text = markup.big(string.format(
-        "%s\n%s",
-        markup.fg.color(
-            beautiful.colors.purple,
-            string.format("/     : %s%%", storage.root_pct)
-        ),
-        markup.fg.color(
-            beautiful.colors.green,
-            string.format("/boot : %s%%", storage.boot_pct)
-        )
-    ))
-
-    storage.notification = naughty.notify({
-        preset = storage.notification_preset,
-        replaces_id = old_id
-    })
 end
 
-function storage.notification_off()
-    if not storage.notification then return end
-    naughty.destroy(storage.notification)
-    storage.notification = nil
-end
-
-storage.root_wid = wibox.widget {
-    storage.root_bar,
-    forced_width  = dpi(5),
-    direction     = 'east',
-    layout        = wibox.container.rotate
+local boot_pie = Pie {
+    notification_title = "boot partition",
+    command = create_storage_command("/boot"),
+    parse_command = parse_command,
+    colors = {colors.green}
 }
 
-storage.boot_wid = wibox.widget {
-    storage.boot_bar,
-    forced_width  = dpi(5),
-    direction     = 'east',
-    layout        = wibox.container.rotate
+local root_pie = Pie {
+    notification_title = "root partition",
+    command = create_storage_command("/"),
+    parse_command = parse_command,
+    colors = {colors.purple}
 }
 
-storage.disk = lain.widget.fs {
-    notify   = "off",
-    settings = function()
-        storage.root_pct = tonumber(fs_now['/'].percentage)
-        storage.boot_pct = tonumber(fs_now['/boot'].percentage)
-        storage.root_bar:set_value(storage.root_pct)
-        storage.boot_bar:set_value(storage.boot_pct)
-    end
-}
+local icon = FontIcon {icon = "\u{f7c9}", color = colors.white}
 
 storage.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin(storage.root_wid, dpi(0), dpi(3)),
-    wibox.container.margin(storage.boot_wid, dpi(0), dpi(5)),
-    buttons = gears.table.join(
-        awful.button({ }, 1, function()
-            storage.notification_on()
-        end)
-    )
+    icon,
+    wibox.container.margin(root_pie, dpi(3), dpi(3)),
+    wibox.container.margin(boot_pie, dpi(3), dpi(3)),
 }
 
 return storage

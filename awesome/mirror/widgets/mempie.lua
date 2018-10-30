@@ -1,4 +1,3 @@
-local awful     = require("awful")
 local lain      = require("lain")
 local wibox     = require("wibox")
 local beautiful = require("beautiful")
@@ -23,9 +22,7 @@ end
 
 local pi = Pie {
     notification_title = "Memory",
-    command = {
-        awful.util.shell, "-c", "free -b | grep Mem | awk '{ print $2,$3,$4 }'"
-    },
+    command = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
     parse_command = function(stdout)
         local split = text.split(stdout)
         local total_bytes = tonumber(split[1])
