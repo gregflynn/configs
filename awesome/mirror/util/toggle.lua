@@ -6,23 +6,33 @@ local FontIcon = require("util/fonticon")
 
 local function factory(args)
     local args = args or {}
+
+    local default_enabled          = args.default_enabled
+    local tooltip_text             = args.tooltip_text
+    local font_icon_enabled        = args.font_icon_enabled
+    local font_icon_enabled_color  = args.font_icon_enabled_color
+    local command_enable           = args.command_enable
+    local font_icon_disabled       = args.font_icon_disabled
+    local font_icon_disabled_color = args.font_icon_disabled_color
+    local command_disable          = args.command_disable
+
     local Toggle = FontIcon()
 
-    if args.tooltip_text then
+    if tooltip_text then
         awful.tooltip {
             objects = {Toggle},
-            text = args.tooltip_text
+            text = tooltip_text
         }
     end
 
-    function Toggle.enable()
-        Toggle:update(args.font_icon_enabled, args.font_icon_enabled_color)
-        awful.spawn(args.command_enable)
+    function Toggle:enable()
+        Toggle:update(font_icon_enabled, font_icon_enabled_color)
+        awful.spawn(command_enable)
     end
 
-    function Toggle.disable()
-        Toggle:update(args.font_icon_disabled, args.font_icon_disabled_color)
-        awful.spawn(args.command_disable)
+    function Toggle:disable()
+        Toggle:update(font_icon_disabled, font_icon_disabled_color)
+        awful.spawn(command_disable)
     end
 
     function Toggle:toggle()
@@ -43,7 +53,7 @@ local function factory(args)
         end)
     ))
 
-    if args.default_enabled then
+    if default_enabled then
         Toggle.enabled = true
         Toggle:enable()
     else

@@ -4,12 +4,16 @@ local wibox     = require("wibox")
 local dpi = beautiful.xresources.apply_dpi
 
 
-local fonticon_font = "Hack Nerd Font Mono 20"
+local fonticon_font = "Hack Nerd Font Mono 19"
 local margin_h = dpi(4)
 local margin_v = dpi(2)
 
 function factory(args)
     local args = args or {}
+
+    local icon = args.icon or "F"
+    local color = args.color
+
     local FontIcon = wibox.widget.textbox()
 
     function FontIcon:update(icon, color)
@@ -21,7 +25,7 @@ function factory(args)
         FontIcon:set_markup(prefix..icon..suffix)
     end
 
-    FontIcon:update(args.icon or "", args.color)
+    FontIcon:update(icon, color)
 
     local container = wibox.container.margin(
         FontIcon, margin_h, margin_h, margin_v, margin_v
