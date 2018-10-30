@@ -12,73 +12,7 @@ local backup_font_icon = "\u{f54a}"
 local close_font_icon = "\u{f562}"
 local close_font_icon_color = colors.red
 
-local function close_dropdown(dropdown)
-    if dropdown.prevmenu then
-        dropdown.prevmenu:hide()
-        dropdown.prevmenu = nil
-    end
-
-    if not dropdown.args.icon then
-        dropdown:update(
-        dropdown.args.font_icon or backup_font_icon,
-        dropdown.args.font_icon_color
-        )
-    end
-end
-
-local function open_dropdown(dropdown)
-    if not dropdown.args.icon then
-        -- update icon to indicate close action
-        dropdown:update(
-            close_font_icon,
-            dropdown.args.font_icon_color_open or close_font_icon_color
-        )
-    end
-
-    awful.spawn.easy_async_with_shell(
-        dropdown.command,
-        function(stdout)
-            local menu = awful.menu()
-
-            for item in stdout:gmatch("%S+") do
-                local full_path = string.format(
-                    "%s/%s", dropdown.args.folder, item
-                )
-                menu:add({
-                    item,
-                    function()
-                        dropdown.args.menu_func(full_path)
-                        close_dropdown(dropdown)
-                    end,
-                    -- full_path -- icon
-                })
-            end
-
-            menu:show()
-            dropdown.prevmenu = menu
-        end
-    )
-end
-
-local function left_click(dropdown)
-    if dropdown.prevmenu then
-        close_dropdown(dropdown)
-        return
-    end
-
-    open_dropdown(dropdown)
-end
-
-local function right_click(dropdown)
-    if args.right_click then
-        awful.spawn(args.right_click)
-    else
-        awful.spawn(string.format("xdg-open %s", dropdown.args.folder))
-    end
-end
-
-local function factory(args)
-    local args = args or {}
+local function create_dropdown(args)
     local Dropdown
     if args.icon then
         Dropdown = wibox.widget {
@@ -86,34 +20,88 @@ local function factory(args)
             resize = true,
             widget = wibox.widget.imagebox
         }
-        Dropdown.args = args
     else
         Dropdown = FontIcon()
-        Dropdown.args = args
-        close_dropdown(Dropdown)
     end
+    return Dropdown
+end
 
-    if args.tooltip_text then
-        awful.tooltip {
-            objects = {Dropdown},
-            text = args.tooltip_text
-        }
-    end
+local function factory(args)
+    local args = args or {}
+    local Dropdown = create_dropdown(args)
+    local is_font_icon = args.icon == nil
 
-    Dropdown.command = string.format(
+    local command = string.format(
         "ls -l %s | awk '{print $9}' | tail -n 35 | sort %s",
         args.folder,
         args.reverse and "-r" or ""
     )
 
+    if args.tooltip_text then
+        Dropdown.tooltip = awful.tooltip {
+            objects = {Dropdown},
+            text = args.tooltip_text
+        }
+    end
+
+    function Dropdown:close()
+        if Dropdown.prevmenu then
+            Dropdown.prevmenu:hide()
+            Dropdown.prevmenu = nil
+        end
+
+        if is_font_icon then
+            Dropdown:update(args.font_icon or backup_font_icon, args.font_icon_color)
+        end
+    end
+
+    function Dropdown:open()
+        if is_font_icon then
+            -- update icon to indicate close action
+            Dropdown:update(
+                close_font_icon,
+                args.font_icon_color_open or close_font_icon_color
+            )
+        end
+
+        awful.spawn.easy_async_with_shell(command, function(stdout)
+            local menu = awful.menu()
+
+            for item in stdout:gmatch("%S+") do
+                local full_path = string.format("%s/%s", args.folder, item)
+                menu:add({
+                    item,
+                    function()
+                        args.menu_func(full_path)
+                        Dropdown:close()
+                    end,
+                    -- full_path -- icon
+                })
+            end
+
+            menu:show()
+            Dropdown.prevmenu = menu
+        end)
+    end
+
     Dropdown:buttons(gears.table.join(
         awful.button({}, 1, function()
-            left_click(Dropdown)
+            if Dropdown.prevmenu then
+                Dropdown:close()
+            else
+                Dropdown:open()
+            end
         end),
         awful.button({}, 3, function()
-            right_click(Dropdown)
+            if args.right_click then
+                awful.spawn(args.right_click)
+            else
+                awful.spawn(string.format("xdg-open %s", args.folder))
+            end
         end)
     ))
+
+    Dropdown:close()
 
     return Dropdown
 end
