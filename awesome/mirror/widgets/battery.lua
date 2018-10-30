@@ -1,3 +1,4 @@
+local awful     = require("awful")
 local beautiful = require("beautiful")
 local lain      = require("lain")
 local wibox     = require("wibox")
@@ -17,16 +18,25 @@ local battery_icons = {
     empty   = "\u{f244}",
 }
 
-local battery = {
-    battery_enabled = false,
+local battery_colors = {
+    plug    = colors.green,
+    full    = colors.green,
+    good    = colors.green,
+    low     = colors.yellow,
+    caution = colors.red,
+    empty   = colors.red,
 }
 
-function battery.get_status()
-    local pct = bat_now.perc or 0
-    local bt_status = bat_now.status
-    local ac_status = bat_now.ac_status
+local battery = {
+    battery_enabled = false,
+    font_icon = FontIcon(),
+    tooltip = awful.tooltip {}
+}
 
-    if ac_status == "1" and (bt_status == "Charging" or bt_status == "Full") then
+function battery:get_status()
+    local pct = bat_now.perc or 0
+
+    if bat_now.ac_status == "1" and (bat_now.status == "Charging" or bat_now.status == "Full") then
         return "plug"
     end
 
@@ -39,51 +49,40 @@ function battery.get_status()
     return "full"
 end
 
-battery.font_icon = FontIcon()
-
 battery.lain_widget = lain.widget.bat {
     settings = function()
         if bat_now.perc == "N/A" then
-            battery.battery_enabled = false
+            battery.font_icon:update(battery_icons["empty"], colors.gray)
+            widget:set_markup(string.format("<span color='%s'>N/A</span>", colors.gray))
             return
+        end
+
+        if bat_now.status == "Full" then
+            battery.tooltip.text = "Full"
+        elseif bat_now.status == "Charging" then
+            battery.tooltip.text = bat_now.time.." Until Full"
+        elseif bat_now.status == "Discharging" then
+            battery.tooltip.text = bat_now.time.." Until Empty"
         else
-            battery.battery_enabled = true
+            battery.tooltip.text = "N/A"
         end
 
         local status = battery:get_status()
-        local font_icon = battery_icons[status]
-        local color = colors.green
-        if status == "low" then
-            color = colors.yellow
-        elseif status == "empty" or status == "caution" then
-            color = colors.red
-        end
+        local color = battery_colors[status]
+        battery.font_icon:update(battery_icons[status], color)
+        widget:set_markup(string.format(
+            '<span color="%s">%s%%</span>', color, bat_now.perc
+        ))
 
-        battery.font_icon:update(font_icon, color)
-
-        widget:set_markup(
-            string.format(
-                '<span color="%s">%s%%</span>',
-                color,
-                bat_now.perc
-            )
-        )
+        bat_notification_charged_preset = nil
     end
 }
 
--- so the outside world doesn't need to know how weird the internal
--- structure of this widget is
-battery.widget = battery.lain_widget.widget
-
-if battery.battery_enabled then
-    battery.container = wibox.widget {
-        layout = wibox.layout.fixed.horizontal,
-        battery.font_icon,
-        wibox.container.margin(battery.widget,    dpi(0), dpi(3))
-    }
-else
-    battery.container = nil
-end
-
+battery.container = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    battery.font_icon,
+    wibox.container.margin(battery.lain_widget.widget, dpi(0), dpi(3))
+}
+battery.tooltip:add_to_object(battery.container)
 
 return battery
