@@ -4,6 +4,8 @@ local gears     = require("gears")
 local naughty   = require("naughty")
 local wibox     = require("wibox")
 
+local number   = require("util/number")
+
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
 
@@ -20,6 +22,7 @@ function factory(args)
     local notification_title   = args.notification_title
     local notification_timeout = args.notification_timeout
     local right_click          = args.right_click
+    local max_value            = args.max_value or 1
 
     local tooltip = awful.tooltip {}
 
@@ -28,9 +31,16 @@ function factory(args)
         time,
         function(widget, stdout)
             local pie_data = parse_command(stdout)
+            local tooltip_pct = pie_data.used_pct
+            if not tooltip_pct then
+                tooltip_pct = pie_data.values[1]
+            end
 
-            tooltip:set_text(pie_data.tooltip)
-            widget.value = pie_data.pct
+            tooltip:set_text(string.format("%s: %s%% Used",
+                notification_title,
+                number.round(tooltip_pct * 100, 1)
+            ))
+            widget.values = pie_data.values
 
             local preset = pie_data.notification_preset
             widget.notification_preset = {
@@ -40,7 +50,7 @@ function factory(args)
             }
         end,
         wibox.widget {
-            max_value = 1,
+            max_value = max_value,
             thickness = dpi(thickness),
             start_angle = 0,
             bg = bg_color,

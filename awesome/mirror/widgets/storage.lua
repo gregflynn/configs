@@ -37,8 +37,7 @@ local function parse_command(stdout)
     local pct_used = number.round(used_raw_pct * 100, 1)
     local pct_free = number.round(100 * free_bytes / total_bytes, 1)
     return {
-        pct = used_raw_pct,
-        tooltip = string.format("root: %s%% Used", pct_used),
+        values = {used_raw_pct},
         notification_preset = {
             text = string.format(
                 "%s\n%s\n%s",
@@ -51,24 +50,21 @@ local function parse_command(stdout)
 end
 
 local boot_pie = Pie {
-    notification_title = "boot partition",
+    notification_title = "boot",
     command = create_storage_command("/boot"),
     parse_command = parse_command,
     colors = {colors.green}
 }
 
 local root_pie = Pie {
-    notification_title = "root partition",
+    notification_title = "root",
     command = create_storage_command("/"),
     parse_command = parse_command,
     colors = {colors.purple}
 }
 
-local icon = FontIcon {icon = "\u{f7c9}", color = colors.white}
-
 storage.container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    icon,
     wibox.container.margin(root_pie, dpi(3), dpi(3)),
     wibox.container.margin(boot_pie, dpi(3), dpi(3)),
 }
