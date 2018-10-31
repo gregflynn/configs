@@ -2,7 +2,6 @@ local beautiful = require("beautiful")
 local lain      = require("lain")
 local wibox     = require("wibox")
 
-local FontIcon = require("util/fonticon")
 local number   = require("util/number")
 local Pie      = require("util/pie")
 local text     = require("util/text")

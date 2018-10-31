@@ -1,8 +1,8 @@
-local gears     = require("gears")
 local awful     = require("awful")
-local wibox     = require("wibox")
 local beautiful = require("beautiful")
-local menubar   = require("menubar")
+local gears     = require("gears")
+local wibox     = require("wibox")
+
 local lain      = require("lain")
 
 local bar        = require("util/bar")
@@ -16,19 +16,18 @@ local home = os.getenv("HOME")
 beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
 
-local colors    = beautiful.colors
-local terminal  = "alacritty"
-local taglist   = { "main", "alpha", "bravo", "slack", "music" }
+local colors   = beautiful.colors
+local terminal = "alacritty"
+local taglist  = { "main", "alpha", "bravo", "slack", "music" }
+
+-- disable "AeroSnap" like feature
+awful.mouse.snap.edge_enabled = false
 
 -- define keys, not local so widgets can use them
--- yea yea globals bad yea yea
 modkey = "Mod4"
 altkey = "Mod1"
 ctlKey = "Control"
 shift  = "Shift"
-
--- Menubar configuration
-menubar.utils.terminal = terminal
 
 -- Make Tab go down a menu
 awful.menu.menu_keys.down = { "Down", "j", "Tab" }
@@ -37,20 +36,9 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
-local volume     = require("widgets/volume")
+local rofi       = require("widgets/rofi")
 local screenshot = require("widgets/screenshots")
-
--- screen layout cycle list
-awful.layout.layouts = {
-    awful.layout.suit.floating,
-    lain.layout.centerwork,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal
-}
+local volume     = require("widgets/volume")
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
@@ -71,17 +59,15 @@ awful.screen.connect_for_each_screen(function(screen)
         },
         {
             bar.arrow_left_list({
-                { widget = require("widgets/gpmdp").container,
-                  color = colors.yellow },
+                { widget = require("widgets/gpmdp").container },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
                     require("widgets/cpugraph"),
                     require("widgets/cputemp").container,
                     require("widgets/mempie").container,
-                    require("widgets/storage").container,
-                    require("widgets/battery").container,
-                  },
-                  color = colors.background },
+                    require("widgets/storage").container
+                  }},
+                { widget = require("widgets/battery").container },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
                     require("widgets/blinky").container,
@@ -101,28 +87,6 @@ awful.screen.connect_for_each_screen(function(screen)
         })
 end)
 
-
-local function rofi(method)
-    if method == "pass" then
-        awful.spawn("rofi-pass")
-        return
-    end
-
-    local show = ""
-    if method == "run" then
-        show = "drun"
-    elseif method == "ssh" then
-        show = "ssh"
-    elseif method == "calc" then
-        show = "calc -modi calc -no-show-match -no-sort"
-    elseif method == "windows" then
-        show = "windowcd"
-    elseif method == "allwindows" then
-        show = "window"
-    end
-
-    awful.spawn("rofi -show "..show.." -scroll-method 1 -matching fuzzy")
-end
 
 --
 -- Keybindings
@@ -170,40 +134,10 @@ globalkeys = gears.table.join(
         end,
         {description = "Lock Screen", group = "awesome"}
     ),
-    awful.key(
-        {modkey}, " ",
-        function() rofi("run") end,
-        {description = "Launch Program", group = "awesome"}
-    ),
-    awful.key(
-        {modkey, shift}, " ",
-        function() rofi("ssh") end,
-        {description = "Open SSH", group = "awesome"}
-    ),
-    awful.key(
-        {modkey}, "u",
-        function() rofi("pass") end,
-        {description = "Open Passwords", group = "awesome"}
-    ),
-    awful.key(
-        {modkey}, "c",
-        function() rofi("calc") end,
-        {description = "Open Passwords", group = "awesome"}
-    ),
 
     --
     -- Client
     --
-    awful.key(
-        {modkey}, "w",
-        function() rofi("windows") end,
-        {description = "Select Window", group = "client"}
-    ),
-    awful.key(
-        {modkey, shift}, "w",
-        function() rofi("allwindows") end,
-        {description = "Select Window (all tags)", group = "client"}
-    ),
     awful.key(
         { modkey,        }, "Tab",
         function ()
@@ -358,9 +292,10 @@ globalkeys = gears.table.join(
     ),
 
     -- Widget keys
-    volume.globalkeys,
     brightness.globalkeys,
-    screenshot.globalkeys
+    rofi.globalkeys,
+    screenshot.globalkeys,
+    volume.globalkeys
 )
 
 function add_tag_keys(idx, override)

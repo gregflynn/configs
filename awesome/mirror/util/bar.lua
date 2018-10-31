@@ -2,8 +2,8 @@ local wibox     = require("wibox")
 local beautiful = require("beautiful")
 local lain      = require("lain")
 
-local dpi       = beautiful.xresources.apply_dpi
-local sep       = lain.util.separators
+local dpi = beautiful.xresources.apply_dpi
+local sep = lain.util.separators
 
 
 local bar = {}

@@ -129,9 +129,9 @@ gpmdp.widget = awful.widget.watch(
             local artist = text.trim(gpm_now.artist)
             local album = text.trim(gpm_now.album)
 
-            local icon_color = colors.background
-            local title_color = colors.background
-            local artist_color = colors.background
+            local icon_color = colors.orange
+            local title_color = colors.orange
+            local artist_color = colors.orange
             local title_text = markup.italic(" %s").." / %s"
 
             if not gpm_now.playing then

@@ -74,6 +74,17 @@ function display.create_taglist_widget(taglist, screen)
 end
 
 function display.create_layout_widget(screen)
+    awful.layout.layouts = {
+        awful.layout.suit.floating,
+        lain.layout.centerwork,
+        awful.layout.suit.tile,
+        awful.layout.suit.tile.left,
+        awful.layout.suit.tile.bottom,
+        awful.layout.suit.tile.top,
+        awful.layout.suit.fair,
+        awful.layout.suit.fair.horizontal
+    }
+
     local widget = awful.widget.layoutbox(screen)
 
     widget:buttons(gears.table.join(
