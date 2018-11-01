@@ -1,6 +1,6 @@
-local awful = require("awful")
+local awful     = require("awful")
 local beautiful = require("beautiful")
-local gears = require("gears")
+local gears     = require("gears")
 
 return {
     {

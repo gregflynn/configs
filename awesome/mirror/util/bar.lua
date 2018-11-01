@@ -2,11 +2,14 @@ local wibox     = require("wibox")
 local beautiful = require("beautiful")
 local lain      = require("lain")
 
-local dpi = beautiful.xresources.apply_dpi
-local sep = lain.util.separators
+local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
+local sep    = lain.util.separators
 
 
 local bar = {}
+local default_fg = colors.white
+local default_bg = colors.background
 
 function bar.margin(widget, left, right)
     return wibox.container.margin(
@@ -18,7 +21,7 @@ end
 function bar.arrow_left_block(widget, fg, bg)
     return {
         layout = wibox.layout.align.horizontal,
-        sep.arrow_left(fg, bg),
+        sep.arrow_left(fg or default_fg, bg or default_bg),
         wibox.container.background(bar.margin(widget, 5, 5), bg)
     }
 end
@@ -28,7 +31,7 @@ function bar.arrow_right_block(widget, fg, bg)
     return {
         layout = wibox.layout.align.horizontal,
         wibox.container.background(bar.margin(widget, 5, 5), bg),
-        sep.arrow_right(fg, bg)
+        sep.arrow_right(fg or default_fg, bg or default_bg)
     }
 end
 
@@ -44,7 +47,7 @@ function bar.arrow_list(blocks, direction)
     for i, block in ipairs(blocks) do
         container[i] = block_fn(
             block.widget,
-            last_color or beautiful.colors.background,
+            last_color or colors.background,
             block.color
         )
         last_color = block.color

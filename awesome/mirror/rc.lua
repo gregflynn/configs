@@ -1,5 +1,10 @@
-local awful     = require("awful")
+-- Global bootstrapping
 local beautiful = require("beautiful")
+local home      = os.getenv("HOME")
+beautiful.init(home.."/.config/awesome/theme.lua")
+
+-- The Rest
+local awful     = require("awful")
 local gears     = require("gears")
 local wibox     = require("wibox")
 
@@ -11,9 +16,7 @@ local display    = require("util/display")
 require("awful.autofocus")
 require("errors")
 require("signals")
-local home = os.getenv("HOME")
 
-beautiful.init(home.."/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(42)
 
 local colors   = beautiful.colors
@@ -36,6 +39,7 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
+local brightness = require("widgets/brightness")
 local rofi       = require("widgets/rofi")
 local screenshot = require("widgets/screenshots")
 local volume     = require("widgets/volume")
@@ -91,7 +95,6 @@ end)
 --
 -- Keybindings
 --
-local brightness = require("brightness")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 
 globalkeys = gears.table.join(

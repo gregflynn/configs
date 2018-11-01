@@ -5,11 +5,6 @@ local gears     = require("gears")
 local rofi = {}
 
 function rofi:show(method)
-    if method == "pass" then
-        awful.spawn("rofi-pass")
-        return
-    end
-
     local show = ""
     if method == "run" then
         show = "drun"
@@ -23,7 +18,7 @@ function rofi:show(method)
         show = "window"
     end
 
-    awful.spawn("rofi -show "..show.." -scroll-method 1 -matching fuzzy")
+    awful.spawn("rofi -show "..show.." -scroll-method 1 -matching normal")
 end
 
 rofi.globalkeys = gears.table.join(
@@ -39,7 +34,7 @@ rofi.globalkeys = gears.table.join(
     ),
     awful.key(
         {modkey}, "u",
-        function() rofi:show("pass") end,
+        function() awful.spawn("rofi-pass") end,
         {description = "Open Passwords", group = "awesome"}
     ),
     awful.key(

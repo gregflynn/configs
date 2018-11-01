@@ -1,4 +1,4 @@
-local naughty   = require("naughty")
+local naughty = require("naughty")
 
 -- Handle startup errors
 if awesome.startup_errors then
