@@ -1,5 +1,5 @@
 local number = {
-    byte_units = {"B", "KiB", "MiB", "GiB", "TiB", "PiB"}
+    byte_units = {"B", "K", "M", "G", "T", "P"},
 }
 
 function number.round(num, places)
@@ -7,20 +7,19 @@ function number.round(num, places)
     return tonumber(string.format("%."..places.."f", num))
 end
 
-function number.human_bytes(bytes, places)
+function number.human_bytes(bytes, places, floor_unit_idx)
+    local human_bytes = tonumber(bytes)
     local places = places or 0
-    local unit_idx = 1
-    local human_bytes = bytes
+    local floor_unit_idx = floor_unit_idx or 1
 
-    while human_bytes >= 1024 do
+    local unit_idx = 1
+    while human_bytes >= 1024 or unit_idx < floor_unit_idx do
         human_bytes = human_bytes / 1024
         unit_idx = unit_idx + 1
     end
 
     return string.format(
-        "%s %s",
-        number.round(human_bytes, places),
-        number.byte_units[unit_idx]
+        "%s %s", number.round(human_bytes, places), number.byte_units[unit_idx]
     )
 end
 

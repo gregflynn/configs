@@ -63,6 +63,7 @@ awful.screen.connect_for_each_screen(function(screen)
         },
         {
             bar.arrow_left_list({
+                { widget = require("widgets/net") },
                 { widget = require("widgets/gpmdp").container },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
@@ -128,7 +129,6 @@ globalkeys = gears.table.join(
         function()
             awful.spawn("thunar "..home)
         end
-        -- {description = "Home Directory", group = "programs"}
     ),
     awful.key(
         { modkey,        }, "i",

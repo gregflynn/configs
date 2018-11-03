@@ -31,7 +31,7 @@ local gpmdp = {
     notification  = nil,
     current_track = nil,
     current_album_art = nil,
-    font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.background}
+    font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.orange}
 }
 
 function trunc(str, max_len)
@@ -158,7 +158,7 @@ gpmdp.widget = awful.widget.watch(
                 gpmdp.notification_on()
             end
         else
-            gpmdp.font_icon:update(gpmdp_default_icon, colors.background)
+            gpmdp.font_icon:update(gpmdp_default_icon, colors.orange)
             widget:set_markup("")
             gpmdp.current_track = nil
         end

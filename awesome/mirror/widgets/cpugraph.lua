@@ -1,8 +1,12 @@
-local wibox = require("wibox")
+local awful     = require("awful")
 local beautiful = require("beautiful")
+local gears     = require("gears")
+local wibox     = require("wibox")
+
 local vicious = require("vicious")
-local gears = require("gears")
+
 local dpi = beautiful.xresources.apply_dpi
+
 
 local cpuwidget = wibox.widget.graph()
 cpuwidget:set_width(dpi(50))
@@ -17,6 +21,11 @@ cpuwidget:set_color({
     }
 })
 vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
+
+awful.tooltip {
+    objects = {cpuwidget},
+    text = "Load All Cores"
+}
 
 return wibox.container.background(
     cpuwidget, beautiful.border_focus, gears.shape.rectangle

@@ -68,7 +68,7 @@ function text.split(str, delimiter)
     return result;
 end
 
-function text.pad(str, width, char, right)
+function text.pad(str, width, right, char)
     local str = tostring(str) or ""
     local pad = width - str:len()
     local char = char or " "
@@ -83,6 +83,14 @@ function text.pad(str, width, char, right)
     end
 
     return str
+end
+
+function text.startswith(str, start)
+    return str:sub(1, #start) == start
+end
+
+function text.endswith(str, ending)
+    return ending == "" or str:sub(-#ending) == ending
 end
 
 return text
