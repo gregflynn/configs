@@ -18,6 +18,7 @@ local window_icon_overrides = {
     ["Alacritty"]                        = "\u{f489}",
     ["Google-chrome"]                    = "\u{f268}",
     ["Firefox"]                          = "\u{f269}",
+    ["jetbrains-idea"]                   = "\u{e7b5}",
     ["jetbrains-pycharm"]                = "\u{e73c}",
     ["Google Play Music Desktop Player"] = "\u{f001}",
     ["Slack"]                            = "\u{f198}",

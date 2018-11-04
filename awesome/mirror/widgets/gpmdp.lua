@@ -34,6 +34,8 @@ local gpmdp = {
     font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.orange}
 }
 
+local tooltip = awful.tooltip {}
+
 function trunc(str, max_len)
     return text.trunc(str, max_len, '(', true)
 end
@@ -140,6 +142,7 @@ gpmdp.widget = awful.widget.watch(
                 artist_color = colors.gray
             end
 
+            -- update wibar display
             gpmdp.font_icon:update(font_icon, icon_color)
             widget:set_markup(string.format(
                 title_text,
@@ -147,6 +150,10 @@ gpmdp.widget = awful.widget.watch(
                 markup.fg.color(artist_color, trunc(artist, 20))
             ))
 
+            -- update tooltip
+            tooltip.text = string.format("%s\nby %s\nfrom %s", title, artist, album)
+
+            -- update notification disp;ay
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
                 markup.fg.color(colors.white, markup.big(title)),
@@ -182,5 +189,6 @@ gpmdp.container = wibox.widget {
     gpmdp.font_icon,
     wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
 }
+tooltip:add_to_object(gpmdp.container)
 
 return gpmdp

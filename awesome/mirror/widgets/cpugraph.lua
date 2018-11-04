@@ -24,7 +24,7 @@ vicious.register(cpuwidget, vicious.widgets.cpu, "$1")
 
 awful.tooltip {
     objects = {cpuwidget},
-    text = "Load All Cores"
+    text = "CPU Load"
 }
 
 return wibox.container.background(

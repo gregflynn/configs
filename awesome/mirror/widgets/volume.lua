@@ -17,11 +17,11 @@ local font_icon_med = "\u{f027}"
 local font_icon_high = "\u{f028}"
 
 local volume_font_icon = FontIcon()
+local tooltip = awful.tooltip {}
 
 local volume = lain.widget.pulsebar {
     width = dpi(60),
-    ticks = true,
-    tick_size = dpi(5),
+    margins = 2,
     notification_preset = {
         font = "Hack 10"
     },
@@ -32,13 +32,16 @@ local volume = lain.widget.pulsebar {
     },
     settings = function()
         if volume_now.muted == "yes" then
+            tooltip.text = "Muted"
             volume_font_icon:update(font_icon_mute, colors.blue)
         else
+            local level = tonumber(volume_now.left)
+
             if volume_now.index ~= "0" then
                 volume_font_icon:update(font_icon_headphones, colors.purple)
+                tooltip.text = string.format("Headphones: %s%%", level)
             else
-                local level = tonumber(volume_now.left)
-
+                tooltip.text = string.format("Speakers: %s%%", level)
                 if level < 30 then
                     volume_font_icon:update(font_icon_low, colors.green)
                 elseif level < 60 then
@@ -84,6 +87,10 @@ volume.globalkeys = gears.table.join(
     end)
 )
 
+-- round the corners
+volume.bar.shape = beautiful.border_shape
+volume.bar.bar_shape = beautiful.border_shape
+
 volume.bar:buttons(volume.buttons)
 volume_font_icon:buttons(volume.buttons)
 
@@ -92,5 +99,8 @@ volume.container = wibox.widget {
     volume_font_icon,
     wibox.container.margin(volume.bar, dpi(0), dpi(3), dpi(3), dpi(3))
 }
+
+volume.tooltip:remove_from_object(volume.bar)
+tooltip:add_to_object(volume.container)
 
 return volume

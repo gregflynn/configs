@@ -31,13 +31,13 @@ cputemp.widget = awful.widget.watch(
     end
 )
 
-if cputemp.enabled then
-    cputemp.container = wibox.widget {
-        layout = wibox.layout.fixed.horizontal,
-        wibox.container.margin(cputemp.widget, dpi(2), dpi(2))
-    }
-else
-    cputemp.container = nil
-end
+cputemp.container = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    wibox.container.margin(cputemp.widget, dpi(2), dpi(2))
+}
+awful.tooltip {
+    objects = {cputemp.container},
+    text = "CPU Temp"
+}
 
 return cputemp
