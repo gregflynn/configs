@@ -4,14 +4,14 @@ local home      = os.getenv("HOME")
 beautiful.init(home.."/.config/awesome/theme.lua")
 
 -- The Rest
-local awful     = require("awful")
-local gears     = require("gears")
-local wibox     = require("wibox")
+local awful = require("awful")
+local gears = require("gears")
+local wibox = require("wibox")
 
-local lain      = require("lain")
+local lain = require("lain")
 
-local bar        = require("util/bar")
-local display    = require("util/display")
+local bar     = require("util/bar")
+local display = require("util/display")
 
 require("awful.autofocus")
 require("errors")
@@ -41,6 +41,7 @@ awful.rules.rules = require("rules")
 --
 local brightness = require("widgets/brightness")
 local rofi       = require("widgets/rofi")
+local redshift   = require("widgets/redshift")
 local screenshot = require("widgets/screenshots")
 local volume     = require("widgets/volume")
 
@@ -75,6 +76,7 @@ awful.screen.connect_for_each_screen(function(screen)
                 { widget = require("widgets/battery").container },
                 { widget = wibox.widget {
                     layout = wibox.layout.fixed.horizontal,
+                    redshift,
                     require("widgets/blinky").container,
                     require("widgets/caffeine").container,
                     screenshot.container,
