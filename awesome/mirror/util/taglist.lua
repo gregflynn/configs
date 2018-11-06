@@ -37,8 +37,13 @@ local function listupdate_tags(w, buttons, label, data, tags)
 
         local title, bg = label(tag, arr.widget)
         if tn:len() == 3 then
-            local fg_color = text.select(title, "'")
-            arr.widget:update(tn, fg_color)
+            local color_side = text.split(title, "color")[2]
+            if color_side then
+                local fg_color = text.select(color_side, "'")
+                arr.widget:update(tn, fg_color)
+            else
+                arr.widget:update(tn, beautiful.colors.white)
+            end
         else
             arr.widget:set_markup_silently(title)
         end
