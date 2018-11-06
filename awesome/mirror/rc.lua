@@ -60,9 +60,16 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
-            Arrow { color = colors.gray, right = true },
-            display.create_layout_widget(screen),
-            Arrow { color = colors.gray, right = true },
+            Arrow { color = colors.gray, right=true, widget = wibox.widget {
+                layout = wibox.layout.fixed.horizontal,
+                redshift,
+                require("widgets/blinky").container,
+                require("widgets/caffeine").container,
+                screenshot.container,
+                require("widgets/wallpapers").container,
+                require("widgets/arandr").container,
+                display.create_layout_widget(screen),
+            } }
         },
         {
             screen.mytasklist,
@@ -79,16 +86,6 @@ awful.screen.connect_for_each_screen(function(screen)
                     require("widgets/storage").container
                   }},
                 { widget = require("widgets/battery").container },
-                { widget = wibox.widget {
-                    layout = wibox.layout.fixed.horizontal,
-                    redshift,
-                    require("widgets/blinky").container,
-                    require("widgets/caffeine").container,
-                    screenshot.container,
-                    require("widgets/wallpapers").container,
-                    require("widgets/arandr").container,
-                  },
-                  color = colors.purple },
                 { widget = volume.container,
                   color = colors.gray },
                 { widget = require("widgets/weather").container,
