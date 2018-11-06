@@ -45,12 +45,11 @@ function listupdate_windows(window_list, buttons, label, data, clients)
 
         local icon_override = window_icon_overrides[client.class]
 
-        if icon_override and not ib then
-            ib = FontIcon()
-        end
-
         if icon_override or not icon then
             -- no true icon or we've overridden it
+            if not ib then
+                ib = FontIcon()
+            end
             local unicode = icon_override or window_icon_fallback
             ib:update(unicode, fg_color)
         elseif not ib then
