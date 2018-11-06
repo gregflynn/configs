@@ -167,6 +167,7 @@ gpmdp.widget = awful.widget.watch(
         else
             gpmdp.font_icon:update(gpmdp_default_icon, colors.orange)
             widget:set_markup("")
+            tooltip.text = "Music"
             gpmdp.current_track = nil
         end
     end

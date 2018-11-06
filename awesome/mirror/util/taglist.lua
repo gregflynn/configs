@@ -30,11 +30,6 @@ local function listupdate_tags(w, buttons, label, data, tags)
 
             arr = Arrow { widget = widget, right = true }
 
-            awful.tooltip {
-                objects = {arr},
-                text = tn
-            }
-
             data[tag] = {
                 arr = arr,
             }

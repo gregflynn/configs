@@ -66,7 +66,8 @@ function listupdate_windows(window_list, buttons, label, data, clients)
             -- create the tooltip only once
             awful.tooltip {
                 objects = {arr},
-                text = client.class
+                text = client.name
+--                text = client.class -- useful for rule debugging
             }
 
             -- add the icon and text only once
