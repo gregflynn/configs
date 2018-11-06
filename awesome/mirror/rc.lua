@@ -10,8 +10,11 @@ local wibox = require("wibox")
 
 local lain = require("lain")
 
-local bar     = require("util/bar")
-local display = require("util/display")
+local Arrow     = require("util/arrow")
+local ArrowList = require("util/arrowlist")
+local display   = require("util/display")
+local TagList   = require("util/taglist")
+local TaskList  = require("util/tasklist")
 
 require("awful.autofocus")
 require("errors")
@@ -21,7 +24,7 @@ awesome.set_preferred_icon_size(42)
 
 local colors   = beautiful.colors
 local terminal = "alacritty"
-local taglist  = { "main", "alpha", "bravo", "slack", "music" }
+local taglist  = { "\u{f303}", "\u{f674}", "\u{fcb5}", "\u{f1d1}", "\u{f1d8}" }
 
 -- disable "AeroSnap" like feature
 awful.mouse.snap.edge_enabled = false
@@ -47,23 +50,25 @@ local volume     = require("widgets/volume")
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
-    screen.mytaglist = display.create_taglist_widget(taglist, screen)
+    screen.mytaglist = TagList { screen = screen, taglist = taglist }
 
     -- Create a tasklist widget
-    screen.mytasklist = display.create_windowlist_widget(screen)
+    screen.mytasklist = TaskList { screen = screen }
 
     -- Create the wibox
     screen.mywibar = display.create_wibar(
         screen,
         {
             screen.mytaglist,
-            display.create_layout_widget(screen)
+            Arrow { color = colors.gray, right = true },
+            display.create_layout_widget(screen),
+            Arrow { color = colors.gray, right = true },
         },
         {
             screen.mytasklist,
         },
         {
-            bar.arrow_left_list({
+            ArrowList { prefix = true, blocks = {
                 { widget = require("widgets/net") },
                 { widget = require("widgets/gpmdp").container },
                 { widget = wibox.widget {
@@ -89,8 +94,8 @@ awful.screen.connect_for_each_screen(function(screen)
                 { widget = require("widgets/weather").container,
                   color = colors.background },
                 { widget = require("widgets/clock"),
-                  color = colors.blue },
-            })
+                  color = colors.blue }
+            } }
         })
 end)
 

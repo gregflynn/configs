@@ -4,8 +4,6 @@ local beautiful = require("beautiful")
 local gears     = require("gears")
 local lain      = require("lain")
 
-local listupdate = require("util/listupdate")
-
 local dpi = beautiful.xresources.apply_dpi
 
 
@@ -48,31 +46,6 @@ function display.set_wallpaper(screen)
     end
 end
 
-function display.create_taglist_widget(taglist, screen)
-    local screen_type = display.screen_type(screen)
-
-    awful.tag(
-        taglist, screen,
-        {
-            awful.layout.suit.floating,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,
-            awful.layout.suit.floating,
-            awful.layout.suit.floating
-        }
-    )
-
-    return awful.widget.taglist(
-        screen,
-        awful.widget.taglist.filter.all,
-        gears.table.join(
-            awful.button({ }, 1, function(t) t:view_only() end)
-        ),
-        nil,
-        listupdate.tags
-    )
-end
-
 function display.create_layout_widget(screen)
     awful.layout.layouts = {
         awful.layout.suit.floating,
@@ -94,35 +67,7 @@ function display.create_layout_widget(screen)
         awful.button({ }, 5, function() awful.layout.inc(-1) end)
     ))
 
-    return wibox.container.margin(widget, dpi(3), dpi(3), dpi(4), dpi(4))
-end
-
-function display.create_windowlist_widget(screen)
-    return awful.widget.tasklist(
-        screen,
-        awful.widget.tasklist.filter.currenttags,
-        gears.table.join(
-            awful.button({ }, 1, function(c)
-                if c == client.focus then
-                    c.minimized = true
-                else
-                    -- Without this, the following
-                    -- :isvisible() makes no sense
-                    c.minimized = false
-                    if not c:isvisible() and c.first_tag then
-                        c.first_tag:view_only()
-                    end
-                    -- This will also un-minimize
-                    -- the client, if needed
-                    client.focus = c
-                    c:raise()
-                end
-            end)
-        ),
-        nil,
-        listupdate.windows,
-        wibox.layout.flex.horizontal()
-    )
+    return wibox.container.margin(widget, dpi(6), dpi(6), dpi(4), dpi(4))
 end
 
 function display.create_wibar(screen, left, center, right)

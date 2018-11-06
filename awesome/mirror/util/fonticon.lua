@@ -11,7 +11,7 @@ local margin_v = dpi(2)
 function factory(args)
     local args = args or {}
 
-    local icon = args.icon or "F"
+    local icon  = args.icon or "F"
     local color = args.color
 
     local FontIcon = wibox.widget.textbox()
