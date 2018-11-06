@@ -1,3 +1,4 @@
+local awful     = require("awful")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 
@@ -15,8 +16,12 @@ local blinky = Toggle {
     font_icon_disabled       = "\u{fbe7}",
     font_icon_disabled_color = colors.background,
     default_enabled          = true,
-    command_enable           = {command, "--on"},
-    command_disable          = {command, "--off" },
+    on_enable = function()
+        awful.spawn({command, "--on"})
+    end,
+    on_disable = function()
+        awful.spawn({command, "--off"})
+    end,
     tooltip_text             = "Toggle LED Backlights"
 }
 

@@ -11,10 +11,10 @@ local function factory(args)
     local tooltip_text             = args.tooltip_text
     local font_icon_enabled        = args.font_icon_enabled
     local font_icon_enabled_color  = args.font_icon_enabled_color
-    local command_enable           = args.command_enable
+    local on_enable                = args.on_enable or function() end
     local font_icon_disabled       = args.font_icon_disabled
     local font_icon_disabled_color = args.font_icon_disabled_color
-    local command_disable          = args.command_disable
+    local on_disable               = args.on_disable or function() end
 
     local Toggle = FontIcon()
 
@@ -27,12 +27,12 @@ local function factory(args)
 
     function Toggle:enable()
         Toggle:update(font_icon_enabled, font_icon_enabled_color)
-        awful.spawn(command_enable)
+        on_enable()
     end
 
     function Toggle:disable()
         Toggle:update(font_icon_disabled, font_icon_disabled_color)
-        awful.spawn(command_disable)
+        on_disable()
     end
 
     function Toggle:toggle()
