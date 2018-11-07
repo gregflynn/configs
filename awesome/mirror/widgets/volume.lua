@@ -21,12 +21,13 @@ local tooltip = awful.tooltip {}
 
 local volume = lain.widget.pulsebar {
     width = dpi(60),
-    margins = 2,
+    margins = 4,
+    paddings = 0,
     notification_preset = {
         font = "Hack 10"
     },
     colors = {
-        background = beautiful.colors.background,
+        background = beautiful.colors.gray,
         mute       = beautiful.colors.blue,
         unmute     = beautiful.colors.green
     },

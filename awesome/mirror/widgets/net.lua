@@ -11,11 +11,12 @@ local number   = require("util/number")
 local text     = require("util/text")
 
 local colors = beautiful.colors
+local markup = lain.util.markup
 
 
-local none  = " \u{f701}"
-local wifi  = " \u{faa8}"
-local wired = " \u{f6ff}"
+local none  = "\u{f701}"
+local wifi  = "\u{faa8}"
+local wired = "\u{f6ff}"
 local connection_icon = FontIcon { icon = none, color = colors.red }
 
 local tooltip   = awful.tooltip {}
@@ -47,13 +48,13 @@ local down_text = lain.widget.net {
     settings = function()
         local down = number.human_bytes(net_now.received, 0, 2)
         local up   = number.human_bytes(net_now.sent, 0, 2)
-        widget:set_markup(text.pad(down, 5))
-        up_text:set_markup(text.pad(up, 5, true))
+        widget:set_markup(markup.fg.color(colors.background, text.pad(down, 4)))
+        up_text:set_markup(markup.fg.color(colors.background, text.pad(up, 4)))
 
         -- check interfaces for any that are connected
         for interface_name, interface in pairs(net_now.devices) do
             if interface.ethernet then
-                connection_icon:update(wired, colors.blue)
+                connection_icon:update(wired, colors.purple)
                 set_tooltip("Wired")
                 return
             elseif interface.wifi then
@@ -84,8 +85,8 @@ local netwidget = wibox.widget {
     connection_icon,
     down_text,
     FontIcon { icon = "\u{f103}", color = colors.green },
-    FontIcon { icon = "\u{f102}", color = colors.red },
     up_text,
+    FontIcon { icon = "\u{f102}", color = colors.red },
 }
 tooltip:add_to_object(netwidget)
 

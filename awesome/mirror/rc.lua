@@ -42,11 +42,20 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
+local battery    = require("widgets/battery")
 local brightness = require("widgets/brightness")
-local rofi       = require("widgets/rofi")
+local clock      = require("widgets/clock")
+local cpugraph   = require("widgets/cpugraph")
+local cputemp    = require("widgets/cputemp")
+local gpmdp      = require("widgets/gpmdp")
+local mempie     = require("widgets/mempie")
+local net        = require("widgets/net")
 local redshift   = require("widgets/redshift")
+local rofi       = require("widgets/rofi")
 local screenshot = require("widgets/screenshots")
+local storage    = require("widgets/storage")
 local volume     = require("widgets/volume")
+local weather    = require("widgets/weather")
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
@@ -71,27 +80,28 @@ awful.screen.connect_for_each_screen(function(screen)
                 display.create_layout_widget(screen),
             } }
         },
-        {
-            screen.mytasklist,
-        },
+        { screen.mytasklist },
         {
             ArrowList { prefix = true, blocks = {
-                { widget = require("widgets/net") },
-                { widget = require("widgets/gpmdp").container },
-                { widget = wibox.widget {
-                    layout = wibox.layout.fixed.horizontal,
-                    require("widgets/cpugraph"),
-                    require("widgets/cputemp").container,
-                    require("widgets/mempie").container,
-                    require("widgets/storage").container
-                  }},
-                { widget = require("widgets/battery").container },
-                { widget = volume.container,
-                  color = colors.gray },
-                { widget = require("widgets/weather").container,
-                  color = colors.background },
-                { widget = require("widgets/clock"),
-                  color = colors.blue }
+                { widget = gpmdp.container, color = colors.background },
+                { widget = net, color = colors.yellow },
+                {
+                    widget = wibox.widget {
+                        layout = wibox.layout.fixed.horizontal,
+                        volume.container, cpugraph, cputemp.container,
+                    },
+                    color = colors.background
+                },
+                { widget = battery.container, color = colors.gray },
+                {
+                    widget = wibox.widget {
+                        layout = wibox.layout.fixed.horizontal,
+                        mempie.container, storage.container,
+                    },
+                    color = colors.background
+                },
+                { widget = weather.container, color = colors.white },
+                { widget = clock, color = colors.purple }
             } }
         })
 end)
