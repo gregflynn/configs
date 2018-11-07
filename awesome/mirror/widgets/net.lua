@@ -87,6 +87,11 @@ local netwidget = wibox.widget {
     FontIcon { icon = "\u{f103}", color = colors.green },
     up_text,
     FontIcon { icon = "\u{f102}", color = colors.red },
+    buttons = gears.table.join(
+        awful.button({}, 1, function()
+            awful.spawn("networkmanager_dmenu")
+        end)
+    )
 }
 tooltip:add_to_object(netwidget)
 
