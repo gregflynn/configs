@@ -1,13 +1,14 @@
 local awful     = require("awful")
+local beautiful = require("beautiful")
 local gears     = require("gears")
 local wibox     = require("wibox")
-local beautiful = require("beautiful")
 local lain      = require("lain")
+local markup    = lain.util.markup
 
 
-local clock = wibox.widget.textclock(
-    '<span color="'..beautiful.colors.background..'">%a %b %d %l:%M%P</span>'
-)
+local clock = wibox.widget.textclock(markup.fg.color(
+    beautiful.colors.background, '%a %m/%d %l:%M%P'
+))
 
 awful.tooltip {
     objects = {clock},
