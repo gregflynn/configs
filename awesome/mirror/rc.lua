@@ -84,10 +84,10 @@ awful.screen.connect_for_each_screen(function(screen)
         {
             ArrowList { prefix = true, blocks = {
                 { widget = gpmdp.container, color = colors.background },
-                { widget = net, color = colors.yellow },
                 {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
+                        net,
                         volume.container, cpugraph, cputemp.container,
                     },
                     color = colors.background
