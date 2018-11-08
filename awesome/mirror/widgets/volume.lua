@@ -28,27 +28,27 @@ local volume = lain.widget.pulsebar {
     },
     colors = {
         background = beautiful.colors.gray,
-        mute       = beautiful.colors.blue,
-        unmute     = beautiful.colors.green
+        mute       = beautiful.colors.purple,
+        unmute     = beautiful.colors.orange
     },
     settings = function()
         if volume_now.muted == "yes" then
             tooltip.text = "Muted"
-            volume_font_icon:update(font_icon_mute, colors.blue)
+            volume_font_icon:update(font_icon_mute, colors.purple)
         else
             local level = tonumber(volume_now.left)
 
             if volume_now.index ~= "0" then
-                volume_font_icon:update(font_icon_headphones, colors.purple)
+                volume_font_icon:update(font_icon_headphones, colors.orange)
                 tooltip.text = string.format("Headphones: %s%%", level)
             else
                 tooltip.text = string.format("Speakers: %s%%", level)
                 if level < 30 then
-                    volume_font_icon:update(font_icon_low, colors.green)
+                    volume_font_icon:update(font_icon_low, colors.orange)
                 elseif level < 60 then
-                    volume_font_icon:update(font_icon_med, colors.green)
+                    volume_font_icon:update(font_icon_med, colors.orange)
                 else
-                    volume_font_icon:update(font_icon_high, colors.green)
+                    volume_font_icon:update(font_icon_high, colors.orange)
                 end
             end
         end

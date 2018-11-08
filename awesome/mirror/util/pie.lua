@@ -52,7 +52,7 @@ function factory(args)
         wibox.widget {
             max_value = max_value,
             thickness = dpi(thickness),
-            start_angle = 0,
+            start_angle = (2 * math.pi) * 3 / 4,
             bg = bg_color,
             colors = pie_colors,
             widget = wibox.container.arcchart
