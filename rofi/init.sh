@@ -7,7 +7,6 @@ function __dotsan__rofi__init {
             case $2 in
                 required) echo "rofi" ;;
                 suggested) echo "rofi-calc" ;;
-                noroot) echo 1 ;;
             esac
             ;;
         build)

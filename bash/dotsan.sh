@@ -80,6 +80,17 @@ function dotsan {
                 __dotsan__error "Invalid module name '$modname'"
             fi
         ;;
+        inject)
+            host="$2"
+            if [ "$host" == "" ]; then
+                __dotsan__error "No host given"
+                return 1
+            fi
+
+            ssh $host git clone https://github.com/gregflynn/dotsanity.git ~/.sanity
+            ssh $host bash ~/.sanity/setup.sh
+            ssh $host
+        ;;
         dpi)
             case $2 in
                 high)

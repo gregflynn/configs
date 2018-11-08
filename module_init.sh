@@ -13,9 +13,9 @@ function __dotsan__MODULE__init {
                     # echo suggested packages
                     echo "bash"
                 ;;
-                noroot)
+                clionly)
                     # echo any output here to indicate a module
-                    # should not be installed if whoami == root
+                    # should still be installed in cli only contexts
                     echo "1"
                 ;;
             esac

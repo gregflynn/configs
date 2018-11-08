@@ -5,8 +5,6 @@ function __dotsan__x11__init {
         check)
             case $2 in
                 required) echo "lightdm scrot imagemagick xautolock i3lock-color compton" ;;
-                suggested) echo "" ;;
-                noroot) echo 1 ;;
             esac
             ;;
         build)

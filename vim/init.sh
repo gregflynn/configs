@@ -5,7 +5,7 @@ function __dotsan__vim__init {
         check)
             case $2 in
                 required) echo "vim-runtime" ;;
-                suggested) echo "" ;;
+                clionly) echo 1 ;;
             esac
             ;;
         build)

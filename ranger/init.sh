@@ -11,6 +11,7 @@ function __dotsan__ranger__init {
             case $2 in
                 required) echo "ranger" ;;
                 suggested) echo "nerd-fonts-hack w3m" ;;
+                clionly) echo 1 ;;
             esac
             ;;
         build)
