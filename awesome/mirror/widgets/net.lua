@@ -48,8 +48,8 @@ local down_text = lain.widget.net {
     settings = function()
         local down = number.human_bytes(net_now.received, 0, 2)
         local up   = number.human_bytes(net_now.sent, 0, 2)
-        widget:set_markup(markup.fg.color(colors.white, text.pad(down, 4)))
-        up_text:set_markup(markup.fg.color(colors.white, text.pad(up, 4)))
+        widget:set_markup(markup.fg.color(colors.white, down))
+        up_text:set_markup(markup.fg.color(colors.white, up))
 
         -- check interfaces for any that are connected
         for interface_name, interface in pairs(net_now.devices) do
@@ -82,11 +82,11 @@ local down_text = lain.widget.net {
 
 local netwidget = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    connection_icon,
     down_text,
     FontIcon { icon = "\u{f103}", color = colors.green },
     up_text,
     FontIcon { icon = "\u{f102}", color = colors.red },
+    connection_icon,
     buttons = gears.table.join(
         awful.button({}, 1, function()
             awful.spawn("networkmanager_dmenu")

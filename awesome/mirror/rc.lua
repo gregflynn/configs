@@ -24,7 +24,7 @@ awesome.set_preferred_icon_size(42)
 
 local colors   = beautiful.colors
 local terminal = "alacritty"
-local taglist  = { "\u{f303}", "\u{f674}", "\u{fcb5}", "\u{f1d1}", "\u{f1d8}" }
+local taglist  = { "\u{f303}", "\u{f674}", "\u{fcb5}", "\u{e780}", "\u{f1d8}" }
 
 -- disable "AeroSnap" like feature
 awful.mouse.snap.edge_enabled = false
@@ -69,7 +69,7 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
-            Arrow { color = colors.gray, right=true, widget = wibox.widget {
+            Arrow { color = colors.purple, right=true, widget = wibox.widget {
                 layout = wibox.layout.fixed.horizontal,
                 redshift,
                 require("widgets/blinky").container,
@@ -83,19 +83,21 @@ awful.screen.connect_for_each_screen(function(screen)
         { screen.mytasklist },
         {
             ArrowList { prefix = true, blocks = {
-                { widget = gpmdp.container, color = colors.background },
+                { widget = awful.widget.only_on_screen(net, "primary"), color = colors.background },
+                { color = colors.orange },
                 {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
-                        net,
-                        volume.container, cpugraph, cputemp.container,
+                        awful.widget.only_on_screen(gpmdp.container, "primary"),
+                        volume.container
                     },
                     color = colors.background
                 },
-                { widget = battery.container, color = colors.gray },
+                { color = colors.orange },
                 {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
+                        battery.container, cpugraph, cputemp.container,
                         mempie.container, storage.container,
                     },
                     color = colors.background

@@ -80,12 +80,7 @@ function listupdate_windows(window_list, buttons, label, data, clients)
             }
         end
 
-        arr:update(
-            bg,
-            idx == #clients and colors.background or colors.gray,
-            idx == 1 and colors.background or colors.gray
-        )
-
+        arr:update(bg, colors.background, colors.background)
         arr:buttons(awful.widget.common.create_buttons(buttons, client))
         window_list:add(arr)
     end
