@@ -79,7 +79,7 @@ function __prompt__user {
 
     # check for superuser
     if [[ "$ME" == "root" ]]; then
-        C2=$'\e[31;40m'
+        C1=$'\e[31;40m'
     fi
 
     echo -n "$C1 $ME $C2"
