@@ -6,6 +6,7 @@ function __dotsan__vscode__init {
             case $2 in
                 required) echo "visual-studio-code-bin" ;;
                 suggested) echo "" ;;
+                noroot) echo 1 ;;
             esac
             ;;
         build)

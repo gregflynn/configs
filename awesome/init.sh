@@ -6,6 +6,7 @@ function __dotsan__awesome__init {
             case $2 in
                 required) echo "awesome" ;;
                 suggested) echo "gpmdp" ;;
+                noroot) echo 1 ;;
             esac
             ;;
         build)

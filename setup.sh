@@ -136,6 +136,14 @@ function __dotsan__requirements {
     init_func_name="$1"
     missing=""
 
+    if [ $(whoami) == "root" ]; then
+        noroot=$(eval "${init_func_name}" check noroot)
+        if [ "$noroot" != "" ]; then
+            echo "Module not enabled for root"
+            return 1
+        fi
+    fi
+
     # get required and suggested packages from the module
     required=$(eval "${init_func_name}" check required)
     suggested=$(eval "${init_func_name}" check suggested)

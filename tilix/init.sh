@@ -6,6 +6,7 @@ function __dotsan__tilix__init {
             case $2 in
                 required) echo "tilix" ;;
                 suggested) echo "bash" ;;
+                noroot) echo 1 ;;
             esac
             ;;
         build)

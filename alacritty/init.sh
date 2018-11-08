@@ -6,6 +6,7 @@ function __dotsan__alacritty__init {
         check)
             case $2 in
                 required) echo "alacritty" ;;
+                noroot) echo 1 ;;
             esac
             ;;
         build)
