@@ -60,6 +60,26 @@ function dotsan {
             fi
             popd > /dev/null
         ;;
+        init)
+            modname="$2"
+            if [ "$modname" == "" ]; then
+                __dotsan__error "No module name specified"
+                return 1
+            fi
+
+            if [[ $modname =~ ^[a-zA-Z_]+$ ]]; then
+                if [ -d $__dotsan__home/$modname ]; then
+                    __dotsan__error "Module '$modname' already exists"
+                    return 1
+                fi
+
+                echo "Creating module $modname"
+                mkdir $__dotsan__home/$2
+                cat ${__dotsan__home}/module_init.sh | sed "s;MODULE;$modname;g" > $__dotsan__home/$modname/init.sh
+            else
+                __dotsan__error "Invalid module name '$modname'"
+            fi
+        ;;
         dpi)
             case $2 in
                 high)
