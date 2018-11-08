@@ -24,7 +24,7 @@ awesome.set_preferred_icon_size(42)
 
 local colors   = beautiful.colors
 local terminal = "alacritty"
-local taglist  = { "\u{f303}", "\u{f674}", "\u{fcb5}", "\u{f1d1}", "\u{f1d8}" }
+local taglist  = { "\u{f303}", "\u{f674}", "\u{fcb5}", "\u{e780}", "\u{f1d8}" }
 
 -- disable "AeroSnap" like feature
 awful.mouse.snap.edge_enabled = false

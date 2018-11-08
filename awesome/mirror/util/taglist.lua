@@ -8,12 +8,14 @@ local Arrow    = require("util/arrow")
 local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local text     = require("util/text")
+local colors   = beautiful.colors
 
 
 local function listupdate_tags(w, buttons, label, data, tags)
     w:reset()
+    local prev_color = colors.background
 
-    for _, tag in ipairs(tags) do
+    for idx, tag in ipairs(tags) do
         local tn = tag.name
         local cache = data[tag]
         local arr
@@ -28,7 +30,7 @@ local function listupdate_tags(w, buttons, label, data, tags)
                 widget = wibox.widget.textbox()
             end
 
-            arr = Arrow { widget = widget, right = true }
+            arr = Arrow { widget = widget, right = true, no_right = idx ~= #tags }
 
             data[tag] = {
                 arr = arr,
@@ -42,13 +44,16 @@ local function listupdate_tags(w, buttons, label, data, tags)
                 local fg_color = text.select(color_side, "'")
                 arr.widget:update(tn, fg_color)
             else
-                arr.widget:update(tn, beautiful.colors.white)
+                arr.widget:update(tn, colors.white)
             end
         else
             arr.widget:set_markup_silently(title)
         end
 
-        arr:update(bg or beautiful.colors.background)
+        local arr_color = bg or colors.background
+        arr:update(arr_color, colors.background, prev_color)
+        prev_color = arr_color
+
         arr:buttons(awful.widget.common.create_buttons(buttons, tag))
         w:add(arr)
     end
