@@ -79,7 +79,7 @@ function __prompt__user {
 
     # check for superuser
     if [[ "$ME" == "root" ]]; then
-        C2=$'\e[31;40m'
+        C1=$'\e[31;40m'
     fi
 
     echo -n "$C1 $ME $C2"
@@ -115,7 +115,7 @@ function pss_venv {
     C2=$'\e[30m'
     C3=$'\e[32m'
     pyenv local > /dev/null 2>&1
-    if [ "$?" == "0" ]; then
+    if [[ "$?" == "0" || "$VIRTUAL_ENV" != "" ]]; then
         echo -n "$C1$RI$C2 py $C3"
     fi
 }

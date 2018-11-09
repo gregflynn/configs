@@ -6,6 +6,7 @@ function __dotsan__git__init {
         check)
             case $2 in
                 required) echo "git" ;;
+                clionly) echo 1 ;;
             esac
             ;;
         install)

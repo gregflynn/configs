@@ -9,7 +9,7 @@ function __dotsan__tmux__init {
         check)
             case $2 in
                 required) echo "tmux" ;;
-                suggested) echo "" ;;
+                clionly) echo 1 ;;
             esac
             ;;
         build)

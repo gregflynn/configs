@@ -6,6 +6,7 @@ function __dotsan__bash__init {
             case $2 in
                 required) echo "bash" ;;
                 suggested) echo "alacritty" ;;
+                clionly) echo 1 ;;
             esac
             ;;
         build)

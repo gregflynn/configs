@@ -28,26 +28,8 @@ bash ~/.sanity/setup.sh
 ```
 
 ## Module Boilerplate
-```bash
-# ~/.sanity/MODULE/init.sh
-
-function __dotsan__MODULE__init {
-    case $1 in
-        check)
-            case $2 in
-                required) echo "linux" ;; # echo required packages
-                suggested) echo "bash" ;; # echo suggested packages
-            esac
-            ;;
-        build)
-            # prepare configuration files for linking
-            ;;
-        install)
-            # link up configuration files
-            ;;
-    esac
-}
-```
+`$ dotsan init MODULE_NAME`
+This command will create all scaffolding required for creating a new module
 
 ### Module Globals
 - `__dotsan__inject` $module $template [$output]

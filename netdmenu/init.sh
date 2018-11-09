@@ -6,7 +6,6 @@ function __dotsan__netdmenu__init {
         check)
             case $2 in
                 required) echo "networkmanager-dmenu-git" ;;
-                suggested) echo "" ;;
             esac
             ;;
         build)

@@ -136,6 +136,23 @@ function __dotsan__requirements {
     init_func_name="$1"
     missing=""
 
+    if [ $(whoami) == "root" ]; then
+        clionly=$(eval "${init_func_name}" check clionly)
+        if [ "$clionly" == "" ]; then
+            echo "Module not enabled for root"
+            return 1
+        fi
+    fi
+
+    # if we're ssh'd somewhere
+    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+        clionly=$(eval "${init_func_name}" check clionly)
+        if [ "$clionly" == "" ]; then
+            echo "Module not enabled for ssh sessions"
+            return 1
+        fi
+    fi
+
     # get required and suggested packages from the module
     required=$(eval "${init_func_name}" check required)
     suggested=$(eval "${init_func_name}" check suggested)

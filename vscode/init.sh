@@ -5,7 +5,7 @@ function __dotsan__vscode__init {
         check)
             case $2 in
                 required) echo "visual-studio-code-bin" ;;
-                suggested) echo "" ;;
+                clionly) echo 1 ;;
             esac
             ;;
         build)
