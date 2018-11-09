@@ -42,8 +42,15 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
+local function only_primary(widget)
+    return awful.widget.only_on_screen(widget, "primary")
+end
+
+local arandr     = require("widgets/arandr")
 local battery    = require("widgets/battery")
+local blinky     = require("widgets/blinky")
 local brightness = require("widgets/brightness")
+local caffeine   = require("widgets/caffeine")
 local clock      = require("widgets/clock")
 local cpugraph   = require("widgets/cpugraph")
 local cputemp    = require("widgets/cputemp")
@@ -55,6 +62,7 @@ local rofi       = require("widgets/rofi")
 local screenshot = require("widgets/screenshots")
 local storage    = require("widgets/storage")
 local volume     = require("widgets/volume")
+local wallpapers = require("widgets/wallpapers")
 local weather    = require("widgets/weather")
 
 awful.screen.connect_for_each_screen(function(screen)
@@ -71,24 +79,24 @@ awful.screen.connect_for_each_screen(function(screen)
             screen.mytaglist,
             Arrow { color = colors.purple, right=true, widget = wibox.widget {
                 layout = wibox.layout.fixed.horizontal,
-                redshift,
-                require("widgets/blinky").container,
-                require("widgets/caffeine").container,
-                screenshot.container,
-                require("widgets/wallpapers").container,
-                require("widgets/arandr").container,
+                only_primary(redshift),
+                only_primary(blinky.container),
+                only_primary(caffeine),
+                only_primary(screenshot.container),
+                only_primary(wallpapers),
+                only_primary(arandr.container),
                 display.create_layout_widget(screen),
             } }
         },
         { screen.mytasklist },
         {
             ArrowList { prefix = true, blocks = {
-                { widget = awful.widget.only_on_screen(net, "primary"), color = colors.background },
+                { widget = only_primary(net), color = colors.background },
                 { color = colors.orange },
                 {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
-                        awful.widget.only_on_screen(gpmdp.container, "primary"),
+                        only_primary(gpmdp.container),
                         volume.container
                     },
                     color = colors.background

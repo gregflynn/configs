@@ -4,6 +4,7 @@ local gears     = require("gears")
 local wibox     = require("wibox")
 
 local Arrow    = require("util/arrow")
+local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local text     = require("util/text")
 
@@ -23,67 +24,86 @@ local window_icon_overrides = {
 }
 local window_icon_fallback = "\u{fb13}"
 
-function listupdate_windows(window_list, buttons, label, data, clients)
-    window_list:reset()
+local max_full_clients = {
+    ["tall"] = 3,
+    ["square"] = 5,
+    ["widescreen"] = 6,
+    ["ultrawide"] = 10,
+}
 
-    for idx, client in ipairs(clients) do
-        local cache = data[client]
-        local ib, tb, arr
+local function create_update_func(screen)
+    local screen = screen
+    local max_full_clients = max_full_clients[display.screen_type(screen)]
 
-        if cache then
-            ib  = cache.ib
-            tb  = cache.tb
-            arr = cache.arr
-        else
-            tb = wibox.widget.textbox()
-            arr = Arrow { widget = wibox.layout.fixed.horizontal(), right = true }
-        end
+    local function listupdate_windows(window_list, buttons, label, data, clients)
+        window_list:reset()
 
-        local title, bg, _, icon = label(client, tb)
-        local fg_color = text.select(title, "'")
-        tb:set_markup_silently(title)
+        local no_text = #clients > max_full_clients
 
-        local icon_override = window_icon_overrides[client.class]
+        for idx, client in ipairs(clients) do
+            local cache = data[client]
+            local ib, tb, arr
 
-        if icon_override or not icon then
-            -- no true icon or we've overridden it
-            if not ib then
-                ib = FontIcon()
+            if cache then
+                ib  = cache.ib
+                tb  = cache.tb
+                arr = cache.arr
+            else
+                tb = wibox.widget.textbox()
+                arr = Arrow { widget = wibox.layout.fixed.horizontal(), right = true }
             end
-            local unicode = icon_override or window_icon_fallback
-            ib:update(unicode, fg_color)
-        elseif not ib then
-            -- going with the real app icon here, display the imagebox
-            ib = wibox.widget.imagebox()
-            ib:set_image(icon)
+
+            local title, bg, _, icon = label(client, tb)
+            local fg_color = text.select(title, "'")
+
+            -- Update the textbox
+            local text_width = dpi(100)
+            if no_text then
+                title = ""
+                text_width = 0
+            end
+            tb:set_markup_silently(title)
+            tb.forced_width = text_width
+
+            -- Update the icon
+            local icon_override = window_icon_overrides[client.class]
+            if icon_override or not icon then
+                -- no true icon or we've overridden it
+                if not ib then
+                    ib = FontIcon()
+                end
+                local unicode = icon_override or window_icon_fallback
+                ib:update(unicode, fg_color)
+            elseif not ib then
+                -- going with the real app icon here, display the imagebox
+                ib = wibox.widget.imagebox()
+                ib:set_image(icon)
+            end
+
+            if not cache then
+                ib.forced_width = dpi(24)
+
+                -- create the tooltip only once
+                awful.tooltip { objects = {arr}, text = client.name }
+
+                -- add the icon and text only once
+                arr.widget:add(ib)
+                arr.widget:add(tb)
+
+                data[client] = {
+                    ib  = ib,
+                    tb  = tb,
+                    arr = arr
+                }
+            end
+
+            arr:update(bg, colors.background, colors.background)
+            arr:buttons(awful.widget.common.create_buttons(buttons, client))
+            window_list:add(arr)
         end
-
-        if not cache then
-            ib.forced_width = dpi(24)
-            tb.forced_width = dpi(100)
-
-            -- create the tooltip only once
-            awful.tooltip {
-                objects = {arr},
-                text = client.name
---                text = client.class -- useful for rule debugging
-            }
-
-            -- add the icon and text only once
-            arr.widget:add(ib)
-            arr.widget:add(tb)
-
-            data[client] = {
-                ib  = ib,
-                tb  = tb,
-                arr = arr
-            }
-        end
-
-        arr:update(bg, colors.background, colors.background)
-        arr:buttons(awful.widget.common.create_buttons(buttons, client))
-        window_list:add(arr)
     end
+
+    return listupdate_windows
 end
 
 local function factory(args)
@@ -111,7 +131,7 @@ local function factory(args)
             end)
         ),
         nil,
-        listupdate_windows,
+        create_update_func(screen),
         wibox.layout.flex.horizontal()
     )
 end

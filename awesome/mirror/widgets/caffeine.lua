@@ -1,6 +1,5 @@
 local awful     = require("awful")
 local beautiful = require("beautiful")
-local wibox     = require("wibox")
 
 local Toggle = require("util/toggle")
 local colors = beautiful.colors
@@ -21,10 +20,6 @@ local caffeine = Toggle {
         awful.spawn({"xautolock", "-disable"})
         awful.spawn({"xset", "s", "off"})
     end
-}
-
-caffeine.container = {
-    layout = wibox.layout.fixed.horizontal, caffeine
 }
 
 return caffeine

@@ -1,6 +1,5 @@
 local awful     = require("awful")
 local beautiful = require("beautiful")
-local wibox     = require("wibox")
 local gears     = require("gears")
 
 local Dropdown = require("util/dropdown")
@@ -16,10 +15,5 @@ wallpapers_icon = Dropdown {
         end)
     end
 }
-
-wallpapers_icon.container = {
-    layout = wibox.layout.fixed.horizontal, wallpapers_icon
-}
-
 
 return wallpapers_icon
