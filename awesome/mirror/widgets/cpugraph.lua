@@ -27,6 +27,4 @@ awful.tooltip {
     text = "CPU Load"
 }
 
-return wibox.container.background(
-    cpuwidget, beautiful.border_focus, gears.shape.rectangle
-)
+return wibox.container.margin(cpuwidget, dpi(2), dpi(2))
