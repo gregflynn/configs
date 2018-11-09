@@ -1,6 +1,5 @@
 local awful     = require("awful")
 local beautiful = require("beautiful")
-local wibox     = require("wibox")
 
 local file   = require("util/file")
 local Toggle = require("util/toggle")
@@ -26,11 +25,7 @@ local blinky = Toggle {
 }
 
 if file.exists("/usr/bin/blinky") then
-    blinky.container = {
-        layout = wibox.layout.fixed.horizontal, blinky
-    }
+    return blinky
 else
-    blinky.container = nil
+    return nil
 end
-
-return blinky
