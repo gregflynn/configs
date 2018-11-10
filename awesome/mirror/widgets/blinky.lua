@@ -7,6 +7,10 @@ local Toggle = require("util/toggle")
 local colors = beautiful.colors
 
 
+if not file.exists("/usr/bin/blinky") then
+    return nil
+end
+
 local command = "blinky"
 
 local blinky = Toggle {
@@ -24,8 +28,4 @@ local blinky = Toggle {
     tooltip_text             = "Toggle LED Backlights"
 }
 
-if file.exists("/usr/bin/blinky") then
-    return blinky
-else
-    return nil
-end
+return blinky

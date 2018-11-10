@@ -80,7 +80,7 @@ awful.screen.connect_for_each_screen(function(screen)
             Arrow { color = colors.purple, right=true, widget = wibox.widget {
                 layout = wibox.layout.fixed.horizontal,
                 only_primary(redshift),
-                only_primary(blinky.container),
+                only_primary(blinky),
                 only_primary(caffeine),
                 only_primary(screenshot.container),
                 only_primary(wallpapers),
