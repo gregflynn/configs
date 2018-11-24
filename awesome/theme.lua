@@ -78,11 +78,10 @@ theme.menu_width        = dpi(300)
 --
 -- Notifications
 --
-theme.notification_opacity      = 0.9
 theme.notification_font         = font_name.." 12"
 theme.notification_fg           = colors.white
-theme.notification_border_width = dpi(2)
-theme.notification_border_color = colors.background
+theme.notification_border_width = dpi(4)
+theme.notification_border_color = colors.orange
 theme.notification_shape        = theme.border_shape
 
 --

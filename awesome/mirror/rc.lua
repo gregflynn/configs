@@ -4,9 +4,10 @@ local home      = os.getenv("HOME")
 beautiful.init(home.."/.config/awesome/theme.lua")
 
 -- The Rest
-local awful = require("awful")
-local gears = require("gears")
-local wibox = require("wibox")
+local awful   = require("awful")
+local gears   = require("gears")
+local naughty = require("naughty")
+local wibox   = require("wibox")
 
 local lain = require("lain")
 
@@ -21,6 +22,8 @@ require("errors")
 require("signals")
 
 awesome.set_preferred_icon_size(42)
+naughty.config.padding = 30
+naughty.config.defaults.margin = 10
 
 local colors   = beautiful.colors
 local terminal = "alacritty"

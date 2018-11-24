@@ -3,31 +3,31 @@ local gears = require("gears")
 local naughty = require("naughty")
 
 local brightness = {
+    width = 30,
     bright_notification = nil
 }
 
 function brightness.update()
-    awful.spawn.easy_async("light", function(stdout, stderr, reason, exit_code)
-        local level = tonumber(stdout)
+    awful.spawn.easy_async("light", function(stdout)
         local preset = {
-            title = "Brightness",
-            text = level
+            position = "bottom_middle",
+            title    = "Brightness",
         }
 
-        local int = math.modf((level / 100) * awful.screen.focused().mywibox.height)
+        local level = math.modf((tonumber(stdout) / 100) * brightness.width)
         preset.text = string.format(
             "[%s%s]",
-            string.rep("|", int),
-            string.rep(" ", awful.screen.focused().mywibox.height - int)
+            string.rep("|", level),
+            string.rep(" ", brightness.width - level)
         )
 
-        if not bright_notification then
-            bright_notification = naughty.notify {
+        if not brightness.bright_notification then
+            brightness.bright_notification = naughty.notify {
                 preset  = preset,
-                destroy = function() bright_notification = nil end
+                destroy = function() brightness.bright_notification = nil end
             }
         else
-            naughty.replace_text(bright_notification, preset.title, preset.text)
+            naughty.replace_text(brightness.bright_notification, preset.title, preset.text)
         end
     end)
 end
