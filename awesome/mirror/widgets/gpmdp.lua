@@ -134,7 +134,7 @@ gpmdp.widget = awful.widget.watch(
             local icon_color = colors.orange
             local title_color = colors.orange
             local artist_color = colors.orange
-            local title_text = markup.italic(" %s").." / %s"
+            local title_text = markup.italic(" %s").." / %s "
 
             if not gpm_now.playing then
                 font_icon = "\u{f04c}"
