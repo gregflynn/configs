@@ -1,5 +1,6 @@
 local awful     = require("awful")
 local beautiful = require("beautiful")
+local wibox     = require("wibox")
 
 local file   = require("util/file")
 local Toggle = require("util/toggle")
