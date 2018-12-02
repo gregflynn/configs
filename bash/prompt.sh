@@ -1,18 +1,13 @@
 #! /bin/bash
 
 
-__right=$'\uE0B0'
-__right__line=$'\uE0B1'
-__left=$'\uE0B2'
-RI=$'\uE0B0'
-RI_LN=$'\uE0B1'
-INV=$'\e[7m'
+__right=$'\uE0BC'
 
 # disable default venv PS1 manipulation
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 
-function pss_git {
+function __prompt__git {
     gitstatus=`git status -s -b --porcelain 2>/dev/null`
     [[ "$?" -ne 0 ]] && return 0
 
@@ -70,7 +65,7 @@ function pss_git {
     C1=$'\e[40m'
     C2=$'\e[32m'
     C3=$'\e[30m'
-    echo -n "$C1$RI$C2 $branch$E $C3"
+    echo -n "$C1$__right$C2 $branch$E $C3"
 }
 
 function __prompt__user {
@@ -78,14 +73,14 @@ function __prompt__user {
     C2=$'\e[0;30m'
 
     # check for superuser
-    if [[ "$ME" == "root" ]]; then
+    if [[ "$ME" == "root" || "$DOTSAN_DEBUG_ROOT" == "1" ]]; then
         C1=$'\e[31;40m'
     fi
 
-    echo -n "$C1 $ME $C2"
+    echo -n " $C1$ME $C2"
 }
 
-function pss_path {
+function __prompt__path {
     C1=$'\e[45m'
     C2=$'\e[30m'
     C3=$'\e[35m'
@@ -107,36 +102,38 @@ function pss_path {
     if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
     else SP="$SP${F:1}"; fi
 
-    echo -n "$C1$RI$C2 $SP $C3"
+    echo -n "$C1$__right$C2 $SP $C3"
 }
 
-function pss_venv {
+function __prompt__venv {
     C1=$'\e[42m'
     C2=$'\e[30m'
     C3=$'\e[32m'
     pyenv local > /dev/null 2>&1
     if [[ "$?" == "0" || "$VIRTUAL_ENV" != "" ]]; then
-        echo -n "$C1$RI$C2 py $C3"
+        echo -n "$C1$__right$C2 py $C3"
     fi
 }
 
 function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
+    echo -n "$C_$(__prompt__user)$(__prompt__path)$(__prompt__venv)$(__prompt__git)$CE$__right$C_"
 }
 
 function __prompt__line2 {
-    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-        echo -n -e "${HOSTNAME} "
+    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$DOTSAN_DEBUG_HOST" ]; then
+        echo -n -e "${HOSTNAME}"
     fi
-    echo "${__right__line}"
+    echo $'\uf061'
 }
 
 
 # only set PS1 in emulated sessions
 if [[ $(tty) == /dev/pts/* ]]; then
     ME="$(whoami)"
+
+    # resets the color _after_ the user input
     normalcol="$(tput sgr0)"
     trap 'echo -n "$normalcol"' DEBUG
 
@@ -146,6 +143,7 @@ if [[ $(tty) == /dev/pts/* ]]; then
         prompt_color=$'\e[33m'
     fi
 
-    PS1=$'$(__prompt__line1)
+    PS1=$'
+$(__prompt__line1)
 \[$prompt_color\]$(__prompt__line2) '
 fi
