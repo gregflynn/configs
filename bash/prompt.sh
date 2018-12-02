@@ -123,9 +123,7 @@ function pss_venv {
 function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    printf "%${COLUMNS}s\r%s" \
-        "" \
-        "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
+    echo -n "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
 function __prompt__line2 {
