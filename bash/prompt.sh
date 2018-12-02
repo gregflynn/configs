@@ -120,16 +120,11 @@ function pss_venv {
     fi
 }
 
-function __prompt__time {
-    CURRENT=$(date +"%H:%M:%S")
-    echo -e -n "\e[34m$CURRENT"
-}
-
 function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
     printf "%${COLUMNS}s\r%s" \
-        "$(__prompt__time)" \
+        "" \
         "$C_$(__prompt__user)$(pss_path)$(pss_venv)$(pss_git)$CE$RI$C_"
 }
 
