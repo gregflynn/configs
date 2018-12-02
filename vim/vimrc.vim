@@ -17,6 +17,8 @@ Plugin 'tpope/vim-vinegar'
 Plugin 'mustache/vim-mustache-handlebars'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'peitalin/vim-jsx-typescript'
+Plugin 'leafgarland/typescript-vim'
 call vundle#end()
 filetype plugin indent on
 
