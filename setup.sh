@@ -23,7 +23,6 @@ function __dotsan__inject {
     infile_short=$(echo ${infile} | sed "s;${HOME};~;g")
     outfile_short=$(echo ${outfile} | sed "s;${HOME};~;g")
 
-    __dotsan__info "Injecting Color: $infile_short => $outfile_short"
     cat ${infile} \
         | sed "s;{DS_HOME};${__dotsan__home};g" \
         | sed "s;{DS_LOCK};${__dotsan__lock};g" \
@@ -132,23 +131,35 @@ function __dotsan__is__installed {
     fi
 }
 
-function __dotsan__requirements {
-    init_func_name="$1"
-    missing=""
+function __dotsan__setup__echo {
+    local status="$1"
+    local color="$2"
+    local module="$3"
+    local extra_info="$4"
 
-    if [ $(whoami) == "root" ]; then
-        clionly=$(eval "${init_func_name}" check clionly)
-        if [ "$clionly" == "" ]; then
-            echo "Module not enabled for root"
+    echo -n $(__dotsan__echo "[${status}]" ${color})
+    echo -n $(__dotsan__echo " ${module} " 'blue')
+    __dotsan__echo "${extra_info}" ${color}
+}
+
+function __dotsan__requirements {
+    local init_func_name="$1"
+    local missing=""
+    local missing_suggested=""
+
+    if [[ $(whoami) == "root" ]]; then
+        local clionly=$(eval "${init_func_name}" check clionly)
+        if [[ "$clionly" == "" ]]; then
+            echo "\tModule not enabled for root"
             return 1
         fi
     fi
 
     # if we're ssh'd somewhere
-    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-        clionly=$(eval "${init_func_name}" check clionly)
-        if [ "$clionly" == "" ]; then
-            echo "Module not enabled for ssh sessions"
+    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
+        local clionly=$(eval "${init_func_name}" check clionly)
+        if [[ "$clionly" == "" ]]; then
+            echo "\tModule not enabled for ssh sessions"
             return 1
         fi
     fi
@@ -159,19 +170,52 @@ function __dotsan__requirements {
 
     for pkg in ${required}; do
         if ! __dotsan__is__installed ${pkg}; then
-            __dotsan__error "${pkg} is not installed"
             missing="$missing $pkg"
         fi
     done
 
     for pkg in ${suggested}; do
         if ! __dotsan__is__installed ${pkg}; then
-            __dotsan__warn "${pkg} is not installed"
+            missing_suggested="$missing_suggested $pkg"
         fi
     done
 
-    if [ "$missing" != "" ]; then
-        return 1
+    if [[ "$missing" != "" || "$missing_suggested" != "" ]]; then
+        echo -e "\n\t Missing Packages:"
+        echo -e "\t\t Required: ${missing}"
+
+        if [ "$missing_suggested" != "" ]; then
+            echo -e "\t\tSuggested: ${missing_suggested}"
+        fi
+
+        if [ "$missing" != "" ]; then
+            return 1
+        fi
+    fi
+}
+
+function __dotsan__install__module {
+    local module_name="$1"
+    local init_file="$__dotsan__home/$module_name/init.sh"
+    local init_func_name="__dotsan__${module_name}__init"
+
+    if [[ -e "$init_file" ]]; then
+        source "$init_file"
+
+        if ! __dotsan__requirements ${init_func_name}; then
+            __dotsan__setup__echo 'SK' 'yellow' ${module_name} "requirements not met"
+            return 0
+        fi
+
+        if ! eval "${init_func_name}" build; then
+            __dotsan__setup__echo 'ER' 'red' ${module_name} "failed to build"
+        else
+            if eval "${init_func_name}" install; then
+                __dotsan__setup__echo 'IN' 'green' ${module_name}
+            else
+                __dotsan__setup__echo 'ER' 'red' ${module_name} "install failed"
+            fi
+        fi
     fi
 }
 
@@ -179,31 +223,5 @@ function __dotsan__requirements {
 # Module Support
 #
 for module_name in ${__dotsan__modules}; do
-    init_file="$__dotsan__home/$module_name/init.sh"
-    init_func_name="__dotsan__${module_name}__init"
-
-    if [ -e "$init_file" ]; then
-        echo
-        __dotsan__info "Loading $module_name"
-        source "$init_file"
-
-        __dotsan__requirements ${init_func_name}
-        if [ "$?" != "0" ]; then
-            __dotsan__warn "${module_name} Skipped"
-            continue
-        fi
-
-        if eval "${init_func_name}" build; then
-
-            if eval "${init_func_name}" install; then
-                __dotsan__success "Installed ${module_name}"
-            else
-                __dotsan__error "Install Failed ${module_name}"
-                exit 1
-            fi
-        else
-            __dotsan__error "Build Failed ${module_name}"
-            exit 1
-        fi
-    fi
+    __dotsan__install__module ${module_name}
 done

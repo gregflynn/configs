@@ -26,6 +26,11 @@ function dotsan {
             bash setup.sh
             popd > /dev/null
         ;;
+        install)
+            pushd ${__dotsan__home} > /dev/null
+            bash setup.sh
+            popd > /dev/null
+        ;;
         version)
             pushd ${__dotsan__home} > /dev/null
             # shamelessly stolen from https://stackoverflow.com/a/3278427/625802
