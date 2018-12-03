@@ -1,6 +1,9 @@
 #! /bin/bash
 
 
+__pac__cache="/var/cache/pacman/pkg/"
+
+
 function pac {
     local pkgs="${@:2}"
 
@@ -91,11 +94,41 @@ function pac {
             echo
             echo "$OUTPUT"
         ;;
+        cache)
+            if ! pacman -Q pacman-contrib >/dev/null 2>&1; then
+                __dotsan__error "pacman-contrib not installed, paccache unavailable"
+                return
+            fi
+
+            case $2 in
+                show)
+                    local pkg="$3"
+                    if [ "$pkg" == "" ]; then
+                        __dotsan__error "No package specified"
+                        return
+                    fi
+
+                    ls -ltr --time-style=+"%F %r" ${__pac__cache} \
+                        | grep -v ^t \
+                        | awk '{ print "\033[34m", $6, $7, $8, "\033[33m>\033[0m", $9}' \
+                        | grep " ${pkg}-"[0-9]
+                ;;
+                info) ;&
+                *)
+                    local num_pkgs=$(ls -C ${__pac__cache} | wc -l)
+                    local cache_size=$(du -h -d 1 ${__pac__cache} | awk '{ print $1 }')
+
+                    echo "Pacman Package Cache ${__pac__cache}"
+                    echo -e "\t ${num_pkgs} Cached Packages"
+                    echo -e "\t ${cache_size} on disk"
+                ;;
+            esac
+        ;;
         web)
             xdg-open "https://www.archlinux.org/packages/"
         ;;
         *)
-            echo "Usage: pac [update|install|remove|search|list] [package_name]"
+            echo "Usage: pac [update|install|remove|search|list|web] [package_name]"
         ;;
     esac
 }
