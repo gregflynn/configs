@@ -91,6 +91,9 @@ function pac {
             echo
             echo "$OUTPUT"
         ;;
+        web)
+            xdg-open "https://www.archlinux.org/packages/"
+        ;;
         *)
             echo "Usage: pac [update|install|remove|search|list] [package_name]"
         ;;

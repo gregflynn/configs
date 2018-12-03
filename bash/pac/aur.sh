@@ -55,6 +55,9 @@ function aur {
                 __dotsan__warn "${pkgs} is not installed from the AUR"
             fi
         ;;
+        web)
+            xdg-open "https://aur.archlinux.org/"
+        ;;
         *)
             echo "Usage: aur [update|install|remove|search|list|clean] package names"
         ;;
