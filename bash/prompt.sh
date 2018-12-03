@@ -2,6 +2,7 @@
 
 
 __right=$'\uE0BC'
+__right_alt=$'\uE0C7'
 
 # disable default venv PS1 manipulation
 export VIRTUAL_ENV_DISABLE_PROMPT=1
@@ -68,22 +69,16 @@ function __prompt__git {
     echo -n "$C1$__right$C2 $branch$E $C3"
 }
 
-function __prompt__user {
-    C1=$'\e[0;34;40m' # start of ME
-    C2=$'\e[0;30m'
+function __prompt__userpath {
+    C0=$'\e[34m'
+    C1=$'\e[35m'
+    C2=$'\e[30;45m'
+    C3=$'\e[35m'
 
     # check for superuser
     if [[ "$ME" == "root" || "$DOTSAN_DEBUG_ROOT" == "1" ]]; then
-        C1=$'\e[31;40m'
+        C0=$'\e[31m'
     fi
-
-    echo -n " $C1$ME $C2"
-}
-
-function __prompt__path {
-    C1=$'\e[45m'
-    C2=$'\e[30m'
-    C3=$'\e[35m'
 
     # replace home dir with tilde
     if [[ ":$PWD" != ":$HOME"* ]]; then P=`pwd`
@@ -102,7 +97,7 @@ function __prompt__path {
     if [[ ${F::1} == "." ]]; then SP="$SP${F:2}"
     else SP="$SP${F:1}"; fi
 
-    echo -n "$C1$__right$C2 $SP $C3"
+    echo -n " $C0$ME $C1$__right_alt$C2 $SP $C3"
 }
 
 function __prompt__venv {
@@ -118,7 +113,7 @@ function __prompt__venv {
 function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(__prompt__user)$(__prompt__path)$(__prompt__venv)$(__prompt__git)$CE$__right$C_"
+    echo -n "$C_$(__prompt__userpath)$(__prompt__venv)$(__prompt__git)$CE$__right$C_"
 }
 
 function __prompt__line2 {

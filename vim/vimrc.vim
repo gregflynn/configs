@@ -35,6 +35,7 @@ map <C-F> :CtrlPTag<cr>
 " Git Gutter
 let g:gitgutter_override_sign_column_highlight = 0
 map <Leader>d :GitGutterLineHighlightsToggle<cr>
+hi SignColumn guibg=NONE ctermbg=NONE
 hi link GitGutterAdd Function
 hi link GitGutterChange String
 hi link GitGutterDelete Define
@@ -75,7 +76,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-K><C-K> <C-W><C-W>
-map <C-D> dd
 map <Leader>p "+p
 map <Leader>y "+y
 map <C-G> :!ctags -R -f tags --exclude=node_modules --exclude=__pycache__ --exclude=dist --exclude=tmp --exclude=bower_components --python-kinds=-i<cr>
@@ -91,6 +91,11 @@ vnoremap <C-Down> :m '>+1<CR>gv=gv
 vnoremap <C-Up> :m '<-2<CR>gv=gv
 
 map <C-K><C-W> :bufdo bwipeout<CR>
+
+" delete current line
+nnoremap <C-D> dd
+inoremap <C-D> <Esc>dd
+vnoremap <C-D> <Esc>dd
 
 " quit
 nnoremap <C-Q> <Esc>:q<CR>
@@ -127,3 +132,6 @@ endf
 
 set cursorline
 set mouse=a
+
+" Make background transparent
+hi Normal guibg=NONE ctermbg=NONE
