@@ -74,7 +74,8 @@ function display.create_wibar(screen, left, center, right)
     local wibar = awful.wibar {
         position = "top",
         screen   = screen,
-        height   = beautiful.bar_height
+        height   = beautiful.bar_height,
+        opacity  = beautiful.bar_opacity
     }
 
     left.layout = wibox.layout.fixed.horizontal
