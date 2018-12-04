@@ -104,7 +104,7 @@ function __dotsan__mirror__syslink {
         fi
     done
 
-    if [ "$clean" == "clean" ]; then
+    if [[ "$clean" == "clean" ]]; then
         untracked_files=$(echo -e "$diff_result" \
             | grep "Only in $target_dir" \
             | awk '{ print $3$4 }' \
@@ -137,8 +137,8 @@ function __dotsan__setup__echo {
     local module="$3"
     local extra_info="$4"
 
-    echo -n $(__dotsan__echo "[${status}]" ${color})
-    echo -n $(__dotsan__echo " ${module} " 'blue')
+    __dotsan__echo "[${status}]" ${color} p p 1
+    __dotsan__echo " ${module} " blue p p 1
     __dotsan__echo "${extra_info}" ${color}
 }
 
@@ -150,7 +150,8 @@ function __dotsan__requirements {
     if [[ $(whoami) == "root" ]]; then
         local clionly=$(eval "${init_func_name}" check clionly)
         if [[ "$clionly" == "" ]]; then
-            echo "\tModule not enabled for root"
+            echo
+            echo "Module not enabled for root"
             return 1
         fi
     fi
@@ -159,7 +160,8 @@ function __dotsan__requirements {
     if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
         local clionly=$(eval "${init_func_name}" check clionly)
         if [[ "$clionly" == "" ]]; then
-            echo "\tModule not enabled for ssh sessions"
+            echo
+            echo "Module not enabled for ssh sessions"
             return 1
         fi
     fi
@@ -181,14 +183,15 @@ function __dotsan__requirements {
     done
 
     if [[ "$missing" != "" || "$missing_suggested" != "" ]]; then
-        echo -e "\n\t Missing Packages:"
-        echo -e "\t\t Required: ${missing}"
+        echo
+        echo -e "Missing Packages:"
+        echo -e "Required: ${missing}"
 
-        if [ "$missing_suggested" != "" ]; then
-            echo -e "\t\tSuggested: ${missing_suggested}"
+        if [[ "$missing_suggested" != "" ]]; then
+            echo -e "Suggested: ${missing_suggested}"
         fi
 
-        if [ "$missing" != "" ]; then
+        if [[ "$missing" != "" ]]; then
             return 1
         fi
     fi
@@ -204,6 +207,7 @@ function __dotsan__install__module {
 
         if ! __dotsan__requirements ${init_func_name}; then
             __dotsan__setup__echo 'SK' 'yellow' ${module_name} "requirements not met"
+            echo
             return 0
         fi
 
