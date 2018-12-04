@@ -10,19 +10,19 @@ function pac {
     case $1 in
         update)
             sudo pacman -Syy
-            if [ "$?" == "0" ]; then
+            if [[ "$?" == "0" ]]; then
                 sudo pacman -Syu
             fi
         ;;
         install)
-            if [ "${pkgs}" == "" ]; then
+            if [[ "${pkgs}" == "" ]]; then
                 echo "Usage: pac install pkg1 [pkg2...]"
                 return
             fi
             sudo pacman -S ${pkgs}
         ;;
         remove)
-            if [ "$pkgs" == "" ]; then
+            if [[ "$pkgs" == "" ]]; then
                 echo "Usage: pac remove pkg1 [pkg2...]"
                 return
             fi
@@ -36,7 +36,7 @@ function pac {
             done
         ;;
         search)
-            if [ "${pkgs}" == "" ]; then
+            if [[ "${pkgs}" == "" ]]; then
                 echo "Usage: pac search pkg"
                 return 0
             fi
@@ -44,7 +44,7 @@ function pac {
             echo "Official Repos:"
             echo "==============="
             local remote=`pacman -Ss ${pkgs}`
-            if [ "$remote" == "" ]; then
+            if [[ "$remote" == "" ]]; then
                 echo "Not Found"
             else
                 echo "$remote"
@@ -54,7 +54,7 @@ function pac {
             echo "Installed Packages:"
             echo "==================="
             local locals=`pacman -Qs ${pkgs}`
-            if [ "$locals" == "" ]; then
+            if [[ "$locals" == "" ]]; then
                 echo "Not Installed"
             else
                 echo "$locals"
@@ -85,7 +85,7 @@ function pac {
                 ;;
             esac
 
-            if [ "$SEARCH" != "" ]; then
+            if [[ "$SEARCH" != "" ]]; then
                 # case where we had filtering and a search term
                 echo "Filter: ${SEARCH}"
                 OUTPUT=$(echo "${OUTPUT}" | grep -i ${SEARCH})
@@ -122,10 +122,7 @@ function pac {
                         return
                     fi
 
-                    ls -ltr --time-style=+"%F %r" ${__pac__cache} \
-                        | grep -v ^t \
-                        | awk '{ print "\033[34m", $6, $7, $8, "\033[33m>\033[0m", $9}' \
-                        | grep " ${pkg}-"[0-9]
+                    __pac__cache__list ${pkg}
                 ;;
                 *)
                     if [[ "$2" != "" ]]; then
@@ -162,4 +159,22 @@ function __pac__cache__info {
     __dotsan__echo " Cached Packages" blue
     __dotsan__echo "${cache_size}" green p p 1
     __dotsan__echo " on disk" blue
+}
+
+function __pac__cache__list {
+    local pkg="$1"
+
+    # https://unix.stackexchange.com/a/45954/212439
+    local esc=$(printf '\033')
+
+    local current_ver=$(pacman -Q ${pkg} 2>/dev/null | awk '{ print $2 }')
+    local current_file=$(ls -l ${__pac__cache} \
+        | grep " ${pkg}-${current_ver}" \
+        | awk '{ print $9 }')
+
+    ls -ltr --time-style=+"%F %r" ${__pac__cache} \
+        | grep -v ^t \
+        | awk '{ print "\033[34m", $6, $7, $8, "\033[33m>\033[0m", $9}' \
+        | grep " ${pkg}-"[0-9] \
+        | sed "s/${current_file}/${esc}[32m${current_file} ${esc}[33minstalled${esc}[0m/g"
 }
