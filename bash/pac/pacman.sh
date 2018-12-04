@@ -95,13 +95,13 @@ function pac {
             echo "$OUTPUT"
         ;;
         cache)
-            if ! pacman -Q pacman-contrib >/dev/null 2>&1; then
-                __dotsan__error "pacman-contrib not installed, paccache unavailable"
-                return
-            fi
-
             case $2 in
                 prune)
+                    if ! pacman -Q pacman-contrib >/dev/null 2>&1; then
+                        __dotsan__error "pacman-contrib not installed, paccache unavailable"
+                        return
+                    fi
+
                     __pac__cache__info
                     echo
 
@@ -128,14 +128,21 @@ function pac {
                         | grep " ${pkg}-"[0-9]
                 ;;
                 *)
-                    __dotsan__error "Unknown option: ${2}"
-                    echo "Usage pac cache [prune|info|show]"
-                    echo
+                    if [[ "$2" != "" ]]; then
+                        __dotsan__error "Unknown option: ${2}"
+                        echo "Usage pac cache [prune|info|show]"
+                        echo
+                    fi
                 ;&
                 info)
                     __dotsan__echo "Pacman Package Cache" blue p p 1
                     __dotsan__echo " ${__pac__cache}" green
                     __pac__cache__info
+
+                    local ignores=$(cat /etc/pacman.conf | grep -v ^# | grep IgnorePkg)
+                    if [[ "${ignores}" != "" ]]; then
+                        __dotsan__echo "${ignores}" red
+                    fi
                 ;;
             esac
         ;;
