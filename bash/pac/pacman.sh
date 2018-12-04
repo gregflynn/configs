@@ -101,9 +101,23 @@ function pac {
             fi
 
             case $2 in
+                prune)
+                    __pac__cache__info
+                    echo
+
+                    __dotsan__info "Removing uninstalled packages..."
+                    paccache -r -c ${__pac__cache} -u
+                    echo
+
+                    __dotsan__info "Removing old packages..."
+                    paccache -r -c ${__pac__cache} -k 10
+                    echo
+
+                    __pac__cache__info
+                ;;
                 show)
                     local pkg="$3"
-                    if [ "$pkg" == "" ]; then
+                    if [[ "$pkg" == "" ]]; then
                         __dotsan__error "No package specified"
                         return
                     fi
@@ -113,14 +127,15 @@ function pac {
                         | awk '{ print "\033[34m", $6, $7, $8, "\033[33m>\033[0m", $9}' \
                         | grep " ${pkg}-"[0-9]
                 ;;
-                info) ;&
                 *)
-                    local num_pkgs=$(ls -C ${__pac__cache} | wc -l)
-                    local cache_size=$(du -h -d 1 ${__pac__cache} | awk '{ print $1 }')
-
-                    echo "Pacman Package Cache ${__pac__cache}"
-                    echo -e "\t ${num_pkgs} Cached Packages"
-                    echo -e "\t ${cache_size} on disk"
+                    __dotsan__error "Unknown option: ${2}"
+                    echo "Usage pac cache [prune|info|show]"
+                    echo
+                ;&
+                info)
+                    __dotsan__echo "Pacman Package Cache" blue p p 1
+                    __dotsan__echo " ${__pac__cache}" green
+                    __pac__cache__info
                 ;;
             esac
         ;;
@@ -128,7 +143,16 @@ function pac {
             xdg-open "https://www.archlinux.org/packages/"
         ;;
         *)
-            echo "Usage: pac [update|install|remove|search|list|web] [package_name]"
+            echo "Usage: pac [update|install|remove|search|list|web|cache] [package_name]"
         ;;
     esac
+}
+
+function __pac__cache__info {
+    local num_pkgs=$(ls -C ${__pac__cache} | wc -l)
+    local cache_size=$(du -h -d 1 ${__pac__cache} | awk '{ print $1 }')
+    __dotsan__echo "${num_pkgs}" green p p 1
+    __dotsan__echo " Cached Packages" blue
+    __dotsan__echo "${cache_size}" green p p 1
+    __dotsan__echo " on disk" blue
 }

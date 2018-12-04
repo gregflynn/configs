@@ -42,23 +42,26 @@ function __dotsan__color__variation__mapper {
 }
 
 function __dotsan__color {
+    local fg="$1"
+    local bg="$2"
+    local var="$3"
     color='\e['
 
-    if [[ "$3" != "" && "$3" != 'pass' ]]; then
+    if [[ "$var" != "" && "$var" != 'p' ]]; then
         variant=$(__dotsan__color__variation__mapper $3)
     fi
 
-    if [[ "$1" != "" && "$1" != 'pass' ]]; then
+    if [[ "$fg" != "" && "$fg" != 'p' ]]; then
         fg_color=$(__dotsan__color__mapper $1)
 
-        if [ "$variant" != "" ]; then
+        if [[ "$variant" != "" ]]; then
             color="${color};3${fg_color}"
         else
             color="${color}3${fg_color}"
         fi
     fi
 
-    if [[ "$2" != "" && "$2" != 'pass' ]]; then
+    if [[ "$bg" != "" && "$bg" != 'p' ]]; then
         bg_color=$(__dotsan__color__mapper $2)
 
         if [[ "$variant" != "" || "$fg_color" != "" ]]; then
@@ -76,7 +79,19 @@ function __dotsan__color__reset {
 }
 
 function __dotsan__echo {
-    echo -e "$(__dotsan__color $2 $3 $4)${1}$(__dotsan__color__reset)"
+    local txt="$1"
+    local fg="$2"
+    local bg="$3"
+    local variant="$4"
+    local no_newline="$5"
+
+    local echo_string="$(__dotsan__color ${fg} ${bg} ${variant})${txt}$(__dotsan__color__reset)"
+
+    if [[ ${no_newline} == "" ]]; then
+        echo -e ${echo_string}
+    else
+        echo -e -n ${echo_string}
+    fi
 }
 
 function __dotsan__warn {
