@@ -6,10 +6,12 @@ function aur {
 
     case $1 in
         update)
-            if [ "${pkgs}" == "" ]; then
+            local selected_pkgs="1"
+            if [[ "${pkgs}" == "" ]]; then
                 pkgs=$(ls ${__aur__home} | xargs)
+                selected_pkgs=""
             fi
-            _aur_update "${pkgs}"
+            _aur_update "${pkgs}" "${selected_pkgs}"
         ;;
         install)
             if [ "${pkgs}" == "" ]; then
@@ -110,6 +112,7 @@ function _aur_install {
 #
 function _aur_update {
     local pkgs="$1"
+    local yes="$2"
     local needs_update=""
 
     for pkg in ${pkgs}; do
@@ -136,23 +139,25 @@ function _aur_update {
         fi
     done
 
-    if [ "${needs_update}" == "" ]; then
+    if [[ "${needs_update}" == "" ]]; then
         echo "No updates available"
         return 0
     fi
 
-    echo
-    echo "The following packages have updates available:"
-    for pkg in ${needs_update}; do
-        _aur_print_version ${pkg} \
-            $(_aur_local_ver ${pkg}) \
-            $(_aur_remote_ver ${pkg})
-    done
+    if [[ "${yes}" == "" ]]; then
+        echo
+        echo "The following packages have updates available:"
+        for pkg in ${needs_update}; do
+            _aur_print_version ${pkg} \
+                $(_aur_local_ver ${pkg}) \
+                $(_aur_remote_ver ${pkg})
+        done
 
-    echo
-    read -p "==> Install updates? [y/n] " -r
+        echo
+        read -p "==> Install updates? [y/n] " -r
+    fi
 
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    if [[ "${yes}" != "" || $REPLY =~ ^[Yy]$ ]]; then
         built_pkgs=""
 
         for pkg in ${needs_update}; do
