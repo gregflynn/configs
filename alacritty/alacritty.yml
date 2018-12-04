@@ -19,16 +19,17 @@ scrolling:
 tabspaces: 8
 
 font:
-  size: 11
+  size: 13
   offset:
     x: 0
     y: 1
   normal:
     family: Hack
     style: Regular
-  scale_with_dpi: false
 
-custom_cursor_colors: true
+cursor:
+  style: Underline
+  unfocused_hollow: true
 
 colors:
   primary:
@@ -71,6 +72,7 @@ mouse_bindings:
 mouse:
   double_click: { threshold: 300 }
   triple_click: { threshold: 300 }
+  hide_when_typing: true
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
@@ -78,8 +80,6 @@ selection:
 dynamic_title: false
 
 hide_cursor_when_typing: false
-
-cursor_style: Underline
 
 shell:
   program: tmux

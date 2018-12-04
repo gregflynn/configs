@@ -4,6 +4,8 @@ compton -b -c --backend glx --paint-on-overlay --vsync opengl-swc
 
 xautolock -time 15 -locker "bash {DS_LOCK}" &
 
+export WINIT_HIDPI_FACTOR=1
+
 # disable gpu LED on desktop
 if command -v nvidia-settings > /dev/null; then
     nvidia-settings --assign GPULogoBrightness=0
