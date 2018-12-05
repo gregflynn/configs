@@ -2,6 +2,7 @@
 
 
 __pac__cache="/var/cache/pacman/pkg/"
+__pac__log="/var/log/pacman.log"
 
 
 function pac {
@@ -34,6 +35,21 @@ function pac {
                     sudo pacman -Rs ${pkg}
                 fi
             done
+        ;;
+        history)
+            local pkg="$2"
+
+            local pacman_history=$(
+                cat ${__pac__log} \
+                | grep 'installed\|upgraded\|removed' \
+                | sed 's/ \[ALPM\] / /g'
+            )
+
+            if [[ "$pkg" != "" ]]; then
+                pacman_history=$(echo -e "${pacman_history}" | grep "$pkg")
+            fi
+
+            echo -e "${pacman_history}"
         ;;
         search)
             if [[ "${pkgs}" == "" ]]; then
