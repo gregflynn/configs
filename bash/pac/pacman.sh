@@ -115,6 +115,34 @@ function pac {
 
                     __pac__cache__info
                 ;;
+                revert)
+                    local pkg="$3"
+                    local version="$4"
+
+                    if [[ "$pkg" == "" ]]; then
+                        __dotsan__error "No package specified"
+                        return
+                    fi
+
+                    if [[ "$version" == "" ]]; then
+                        pac cache show "${pkg}"
+                        echo
+                        read -p "==> revert to: " -r
+                        version="${REPLY}"
+                    fi
+
+                    if ! [[ -e "${__pac__cache}/${version}" ]]; then
+                        __dotsan__error "${version} not found"
+                        return
+                    fi
+
+                    read -p "==> revert to ${version}? [y/n]: " -r
+                    if [[ $REPLY =~ ^[Yy]$ ]]; then
+                        sudo pacman -U ${__pac__cache}/${version}
+                    else
+                        __dotsan__echo 'Revert Aborted' yellow
+                    fi
+                ;;
                 show)
                     local pkg="$3"
                     if [[ "$pkg" == "" ]]; then

@@ -154,7 +154,7 @@ function _aur_update {
         done
 
         echo
-        read -p "==> Install updates? [y/n] " -r
+        read -p "==> install updates? [y/n]: " -r
     fi
 
     if [[ "${yes}" != "" || $REPLY =~ ^[Yy]$ ]]; then
