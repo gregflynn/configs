@@ -32,17 +32,6 @@ map <C-P> :CtrlP<cr>
 map <C-B> :CtrlPBuffer<cr>
 map <C-F> :CtrlPTag<cr>
 
-" Git Gutter
-let g:gitgutter_override_sign_column_highlight = 0
-map <Leader>d :GitGutterLineHighlightsToggle<cr>
-hi SignColumn guibg=NONE ctermbg=NONE
-hi link GitGutterAdd Function
-hi link GitGutterChange String
-hi link GitGutterDelete Define
-hi link GitGutterChangeDelete Define
-let g:gitgutter_sign_modified = '>'
-let g:gitgutter_sign_modified_removed = '>'
-
 " Airline config options
 let g:airline_powerline_fonts = 1
 let g:airline_section_y = ''
@@ -55,6 +44,7 @@ let g:netrw_browse_split = 4
 let g:netrw_winsize = 20
 map <C-\> :Lexplore<cr>
 
+" syntax highlighting setup
 syntax enable
 :silent! colorscheme monokai
 :silent! set t_Co=256
@@ -68,6 +58,17 @@ set shiftwidth=4
 set expandtab
 set backspace=indent,eol,start
 set colorcolumn=80,120
+
+" Git Gutter
+let g:gitgutter_override_sign_column_highlight = 0
+map <Leader>d :GitGutterLineHighlightsToggle<cr>
+hi SignColumn guibg=NONE ctermbg=NONE
+hi link GitGutterAdd Function
+hi link GitGutterChange String
+hi link GitGutterDelete Define
+hi link GitGutterChangeDelete Define
+let g:gitgutter_sign_modified = '>'
+let g:gitgutter_sign_modified_removed = '>'
 
 " Key mappings
 :let mapleader = "\\"
