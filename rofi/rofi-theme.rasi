@@ -27,7 +27,7 @@ inputbar {
     background-color: @background;
     padding: 20px;
     border: 0 0 2px 0;
-    border-color: @green;
+    border-color: @yellow;
     children: [textbox-prompt-colon, entry, prompt];
 }
 
@@ -38,15 +38,15 @@ prompt {
 
 entry {
     background-color: @background;
-    text-color: @green;
+    text-color: @yellow;
 }
 
 textbox-prompt-colon {
     background-color: @background;
     expand:     false;
-    str:        ">";
+    str:        "";
     margin:     0 0.2em 0 0;
-    text-color: @green;
+    text-color: @yellow;
 }
 
 //
@@ -76,7 +76,7 @@ listview {
     spacing: 2px ;
     padding: 20px;
     dynamic: true;
-    lines: 5;
+    lines: 7;
 }
 
 element {
@@ -91,15 +91,14 @@ element.normal.normal, element.alternate.normal {
 }
 
 element.selected.normal {
-    text-color: @purple;
+    background-color: @yellow;
 }
 
 element.normal.active, element.alternate.active {
     text-color: @green;
 }
 element.selected.active {
-    background-color: @background;
-    text-color: @purple;
+    background-color: @purple;
 }
 
 element.normal.urgent, element.alternate.urgent {
