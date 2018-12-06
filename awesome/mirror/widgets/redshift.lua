@@ -20,7 +20,7 @@ lain.widget.contrib.redshift:attach(
     function (active)
         if active then
             tooltip.text = "Redshift: Active"
-            redshift:update(active_icon, colors.white)
+            redshift:update(active_icon, colors.background)
         else
             tooltip.text = "Redshift: Inctive"
             redshift:update(inactive_icon, colors.red)

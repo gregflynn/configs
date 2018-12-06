@@ -11,7 +11,8 @@ function brightness.update()
     awful.spawn.easy_async("light", function(stdout)
         local preset = {
             position = "bottom_middle",
-            title    = "Brightness",
+            title    = "brightness",
+            font     = "Hack 12"
         }
 
         local level = math.modf((tonumber(stdout) / 100) * brightness.width)

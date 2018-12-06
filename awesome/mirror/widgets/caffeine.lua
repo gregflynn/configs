@@ -7,7 +7,7 @@ local colors = beautiful.colors
 
 local caffeine = Toggle {
     font_icon_enabled        = "\u{fbc8}",
-    font_icon_enabled_color  = colors.white,
+    font_icon_enabled_color  = colors.background,
     font_icon_disabled       = "\u{f675}",
     font_icon_disabled_color = colors.red,
     default_enabled          = true,

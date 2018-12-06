@@ -80,22 +80,12 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
-            Arrow { color = colors.purple, right=true, widget = wibox.widget {
-                layout = wibox.layout.fixed.horizontal,
-                only_primary(redshift),
-                only_primary(blinky.container),
-                only_primary(caffeine),
-                only_primary(screenshot.container),
-                only_primary(wallpapers),
-                only_primary(arandr.container),
-                display.create_layout_widget(screen),
-            } }
+            Arrow { color = colors.white, right = true }
         },
         { screen.mytasklist },
         {
             ArrowList { prefix = true, blocks = {
                 { widget = only_primary(net), color = colors.background },
-                { color = colors.orange },
                 {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
@@ -104,18 +94,39 @@ awful.screen.connect_for_each_screen(function(screen)
                     },
                     color = colors.background
                 },
-                { color = colors.orange },
                 {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
-                        battery.container, cpugraph, cputemp.container,
-                        mempie.container, storage.container,
+                        battery.container,
+                        cpugraph,
+                        cputemp.container,
                     },
                     color = colors.background
                 },
-                { widget = weather.container, color = colors.white },
-                { widget = clock, color = colors.purple }
-            } }
+                {
+                    widget = wibox.widget {
+                        layout = wibox.layout.fixed.horizontal,
+                        mempie.container,
+                        storage.container,
+                    },
+                    color = colors.background
+                },
+                {
+                    widget = wibox.widget {
+                        layout = wibox.layout.fixed.horizontal,
+                        only_primary(redshift),
+                        only_primary(blinky.container),
+                        only_primary(caffeine),
+                        only_primary(screenshot.container),
+                        only_primary(wallpapers),
+                        only_primary(arandr.container),
+                    },
+                    color = colors.orange
+                },
+                { widget = weather.container, color = colors.purple },
+                { widget = clock, color = colors.blue },
+            } },
+            display.create_layout_widget(screen)
         })
 end)
 

@@ -11,9 +11,9 @@ local command = "blinky"
 
 local blinky = Toggle {
     font_icon_enabled        = "\u{fbe6}",
-    font_icon_enabled_color  = colors.white,
+    font_icon_enabled_color  = colors.background,
     font_icon_disabled       = "\u{fbe7}",
-    font_icon_disabled_color = colors.background,
+    font_icon_disabled_color = colors.red,
     default_enabled          = true,
     on_enable = function()
         awful.spawn({command, "--on"})

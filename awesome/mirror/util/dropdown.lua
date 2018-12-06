@@ -10,7 +10,7 @@ local colors = beautiful.colors
 
 local backup_font_icon = "\u{f54a}"
 local close_font_icon = "\u{f562}"
-local close_font_icon_color = colors.red
+local close_font_icon_color = colors.white
 
 local function create_dropdown(args)
     local Dropdown
@@ -51,7 +51,10 @@ local function factory(args)
         end
 
         if is_font_icon then
-            Dropdown:update(args.font_icon or backup_font_icon, args.font_icon_color)
+            Dropdown:update(
+                args.font_icon or backup_font_icon,
+                args.font_icon_color or colors.background
+            )
         end
     end
 

@@ -7,7 +7,7 @@ local markup    = lain.util.markup
 
 
 local clock = wibox.widget.textclock(markup.fg.color(
-    beautiful.colors.white, '%a %m/%d %l:%M%P'
+    beautiful.colors.background, '%a %m/%d %l:%M%P'
 ))
 
 awful.tooltip {

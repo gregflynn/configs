@@ -24,7 +24,9 @@ local volume = lain.widget.pulsebar {
     margins = 4,
     paddings = 0,
     notification_preset = {
-        font = "Hack 10"
+        position = "bottom_middle",
+        title    = "volume",
+        font     = "Hack 12"
     },
     colors = {
         background = beautiful.colors.gray,

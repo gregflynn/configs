@@ -73,8 +73,6 @@ battery.lain_widget = lain.widget.bat {
         widget:set_markup(string.format(
             '<span color="%s">%s%%</span>', color, bat_now.perc
         ))
-
-        bat_notification_charged_preset = nil
     end
 }
 
