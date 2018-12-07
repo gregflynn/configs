@@ -26,7 +26,7 @@ return {
         }
     },
     {
-        rule = { instance = "tilix", type = "normal" },
+        rule = { class = "jetbrains-pycharm", type = "normal" },
         properties = {
             floating = false
         }

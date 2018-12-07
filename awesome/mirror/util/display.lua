@@ -8,6 +8,12 @@ local dpi = beautiful.xresources.apply_dpi
 
 
 local display = {}
+local default_layouts = {
+    awful.layout.suit.floating,
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.fair
+}
 
 -- Get the screen type based on its geometry
 -- @returns [ultrawide, widescreen, square, tall]
@@ -34,6 +40,20 @@ function display.screen_type(screen)
     end
 end
 
+function display.layouts_for_screen(type)
+    if type == 'ultrawide' then
+        return {
+            awful.layout.suit.floating,
+            lain.layout.centerwork,
+            awful.layout.suit.tile,
+            awful.layout.suit.tile.left,
+            awful.layout.suit.fair
+        }
+    else
+        return default_layouts
+    end
+end
+
 -- Set the given screen's wallpaper
 function display.set_wallpaper(screen)
     if beautiful.wallpaper then
@@ -46,25 +66,26 @@ function display.set_wallpaper(screen)
     end
 end
 
-function display.create_layout_widget(screen)
-    awful.layout.layouts = {
-        awful.layout.suit.floating,
-        lain.layout.centerwork,
-        awful.layout.suit.tile,
-        awful.layout.suit.tile.left,
-        awful.layout.suit.tile.bottom,
-        awful.layout.suit.tile.top,
-        awful.layout.suit.fair,
-        awful.layout.suit.fair.horizontal
-    }
+function display.incr_layout(screen, amt)
+    local screen = screen or awful.screen.focused()
+    local amt = amt or 1
+    local screen_type = display.screen_type(screen)
+    local screen_layouts = display.layouts_for_screen(screen_type)
+    awful.layout.inc(amt, screen, screen_layouts)
+end
 
+function display.decr_layout()
+    display.incr_layout(nil, -1)
+end
+
+function display.create_layout_widget(screen)
     local widget = awful.widget.layoutbox(screen)
 
     widget:buttons(gears.table.join(
-        awful.button({ }, 1, function() awful.layout.inc( 1) end),
-        awful.button({ }, 3, function() awful.layout.inc(-1) end),
-        awful.button({ }, 4, function() awful.layout.inc( 1) end),
-        awful.button({ }, 5, function() awful.layout.inc(-1) end)
+        awful.button({ }, 1, display.incr_layout),
+        awful.button({ }, 3, display.decr_layout),
+        awful.button({ }, 4, display.incr_layout),
+        awful.button({ }, 5, display.decr_layout)
     ))
 
     return wibox.container.margin(widget, dpi(6), dpi(6), dpi(4), dpi(4))

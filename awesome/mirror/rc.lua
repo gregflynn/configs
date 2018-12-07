@@ -80,7 +80,15 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
-            Arrow { color = colors.white, right = true }
+            Arrow {
+                color = colors.background,
+                right = true,
+                widget = wibox.widget {
+                    layout = wibox.layout.fixed.horizontal,
+                    mempie.container,
+                    storage.container,
+                }
+            }
         },
         { screen.mytasklist },
         {
@@ -100,14 +108,6 @@ awful.screen.connect_for_each_screen(function(screen)
                         battery.container,
                         cpugraph,
                         cputemp.container,
-                    },
-                    color = colors.background
-                },
-                {
-                    widget = wibox.widget {
-                        layout = wibox.layout.fixed.horizontal,
-                        mempie.container,
-                        storage.container,
                     },
                     color = colors.background
                 },
@@ -225,59 +225,43 @@ globalkeys = gears.table.join(
     -- Layout
     --
     awful.key(
-        { modkey,        }, "l",
-        function()
-            awful.tag.incmwfact(0.05)
-        end,
+        {modkey}, "l",
+        function() awful.tag.incmwfact(0.05) end,
         {description = "Inc. Master Width", group = "layout"}
     ),
     awful.key(
-        { modkey,        }, "h",
-        function()
-            awful.tag.incmwfact(-0.05)
-        end,
+        {modkey}, "h",
+        function() awful.tag.incmwfact(-0.05) end,
         {description = "Dec. Master Width", group = "layout"}
     ),
     awful.key(
-        { modkey, shift  }, "h",
-        function()
-            awful.tag.incnmaster(1, nil, true)
-        end,
+        {modkey, shift}, "h",
+        function() awful.tag.incnmaster(1, nil, true) end,
         {description = "Inc. Master Client Count", group = "layout"}
     ),
     awful.key(
-        { modkey, shift  }, "l",
-        function()
-            awful.tag.incnmaster(-1, nil, true)
-        end,
+        {modkey, shift}, "l",
+        function() awful.tag.incnmaster(-1, nil, true) end,
         {description = "Dec. Master Client Count", group = "layout"}
     ),
     awful.key(
-        { modkey, ctlKey }, "h",
-        function()
-            awful.tag.incncol(1, nil, true)
-        end,
+        {modkey, ctlKey}, "h",
+        function() awful.tag.incncol(1, nil, true) end,
         {description = "Inc. Column Count", group = "layout"}
     ),
     awful.key(
-        { modkey, ctlKey }, "l",
-        function()
-            awful.tag.incncol(-1, nil, true)
-        end,
+        {modkey, ctlKey}, "l",
+        function() awful.tag.incncol(-1, nil, true) end,
         {description = "Dec. Column Count", group = "layout"}
     ),
     awful.key(
-        { modkey, shift  }, "k",
-        function()
-            awful.layout.inc(1)
-        end,
+        {modkey, shift}, "k",
+        display.incr_layout,
         {description = "Next Layout", group = "layout"}
     ),
     awful.key(
-        { modkey, shift  }, "j",
-        function()
-            awful.layout.inc(-1)
-        end,
+        {modkey, shift}, "j",
+        display.decr_layout,
         {description = "Previous Layout", group = "layout"}
     ),
 
