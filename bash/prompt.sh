@@ -118,7 +118,7 @@ function __prompt__line1 {
 
 function __prompt__line2 {
     if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$DOTSAN_DEBUG_HOST" ]; then
-        echo -n -e "${HOSTNAME}"
+        echo -n -e "${HOSTNAME} "
     fi
     echo $'\uf061'
 }
