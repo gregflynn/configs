@@ -9,26 +9,14 @@ local FontIcon = require("util/fonticon")
 local text     = require("util/text")
 
 local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
 
-local dpi = beautiful.xresources.apply_dpi
-
-local window_icon_overrides = {
-    ["Alacritty"]                        = "\u{f489}",
-    ["Google-chrome"]                    = "\u{f268}",
-    ["Firefox"]                          = "\u{f269}",
-    ["jetbrains-idea"]                   = "\u{e7b5}",
-    ["jetbrains-pycharm"]                = "\u{e73c}",
-    ["Google Play Music Desktop Player"] = "\u{f001}",
-    ["Slack"]                            = "\u{f198}",
-    ["Thunar"]                           = "\u{f413}"
-}
-local window_icon_fallback = "\u{fb13}"
 
 local max_full_clients = {
     ["tall"] = 3,
     ["square"] = 5,
     ["widescreen"] = 6,
-    ["ultrawide"] = 10,
+    ["ultrawide"] = 13,
 }
 
 local function create_update_func(screen)
@@ -66,13 +54,13 @@ local function create_update_func(screen)
             tb.forced_width = text_width
 
             -- Update the icon
-            local icon_override = window_icon_overrides[client.class]
+            local icon_override = display.get_icon_for_client(client)
             if icon_override or not icon then
                 -- no true icon or we've overridden it
                 if not ib then
                     ib = FontIcon()
                 end
-                local unicode = icon_override or window_icon_fallback
+                local unicode = icon_override or display.get_default_client_icon()
                 ib:update(unicode, fg_color)
             elseif not ib then
                 -- going with the real app icon here, display the imagebox

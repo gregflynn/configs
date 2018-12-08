@@ -1,8 +1,13 @@
 local awful     = require("awful")
+local beautiful = require("beautiful")
 local gears     = require("gears")
 local wibox     = require("wibox")
-local beautiful = require("beautiful")
-local dpi       = beautiful.xresources.apply_dpi
+
+local display  = require("util/display")
+local FontIcon = require("util/fonticon")
+
+local colors = beautiful.colors
+local dpi    = beautiful.xresources.apply_dpi
 
 -- Signal function to execute when a new client appears.
 client.connect_signal("manage", function(c)
@@ -37,12 +42,39 @@ client.connect_signal("request::titlebars", function(c)
         end)
     )
 
+    local icon_widget
+    local font_icon
+    local font_icon_override = display.get_icon_for_client(c)
+
+    if font_icon_override then
+        font_icon = FontIcon {
+            icon  = font_icon_override,
+            color = colors.white
+        }
+        icon_widget = wibox.container.margin(
+            font_icon,
+            dpi(2), dpi(2), dpi(2), dpi(2)
+        )
+    else
+        icon_widget = wibox.container.margin(
+            awful.titlebar.widget.iconwidget(c),
+            dpi(4), dpi(4), dpi(4), dpi(4)
+        )
+    end
+
+    c.update_titlebar = function(event)
+        if font_icon_override and font_icon then
+            if event == "focus" then
+                font_icon:update(font_icon_override, beautiful.fg_focus)
+            elseif event == "unfocus" then
+                font_icon:update(font_icon_override, beautiful.fg_normal)
+            end
+        end
+    end
+
     awful.titlebar(c) : setup {
         { -- Left
-            wibox.container.margin(
-                awful.titlebar.widget.iconwidget(c),
-                dpi(4), dpi(4), dpi(4), dpi(4)
-            ),
+            icon_widget,
             buttons = buttons,
             layout  = wibox.layout.fixed.horizontal
         },
@@ -91,10 +123,18 @@ end)
 
 client.connect_signal("focus", function(c)
     c.border_color = beautiful.border_focus
+
+    if c.update_titlebar then
+        c.update_titlebar("focus")
+    end
 end)
 
 client.connect_signal("unfocus", function(c)
     c.border_color = beautiful.border_normal
+
+    if c.update_titlebar then
+        c.update_titlebar("unfocus")
+    end
 end)
 
 client.connect_signal("request::activate", function(c, context, hints)

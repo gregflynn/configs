@@ -14,6 +14,18 @@ local default_layouts = {
     awful.layout.suit.tile.left,
     awful.layout.suit.fair
 }
+local window_icon_overrides = {
+    ["Alacritty"]                        = "\u{f489}",
+    ["Google-chrome"]                    = "\u{f268}",
+    ["Firefox"]                          = "\u{f269}",
+    ["jetbrains-idea"]                   = "\u{e7b5}",
+    ["jetbrains-pycharm"]                = "\u{e73c}",
+    ["Google Play Music Desktop Player"] = "\u{f001}",
+    ["Slack"]                            = "\u{f198}",
+    ["Thunar"]                           = "\u{f413}",
+    ["Trello"]                           = "\u{fa31}"
+}
+local window_icon_fallback = "\u{fb13}"
 
 -- Get the screen type based on its geometry
 -- @returns [ultrawide, widescreen, square, tall]
@@ -111,6 +123,14 @@ function display.create_wibar(screen, left, center, right)
     }
 
     return wibar
+end
+
+function display.get_icon_for_client(client)
+    return window_icon_overrides[client.class]
+end
+
+function display.get_default_client_icon()
+    return window_icon_fallback
 end
 
 

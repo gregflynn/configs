@@ -52,7 +52,7 @@ theme.bg_minimize   = colors.background
 theme.bg_systray    = colors.background
 
 theme.fg_normal     = colors.white
-theme.fg_focus      = colors.blue
+theme.fg_focus      = colors.yellow
 theme.fg_urgent     = colors.red
 theme.fg_minimize   = colors.purple
 
