@@ -22,6 +22,9 @@ function pac {
             fi
             sudo pacman -S ${pkgs}
         ;;
+        info)
+            pacman -Qi ${pkgs}
+        ;;
         remove)
             if [[ "$pkgs" == "" ]]; then
                 echo "Usage: pac remove pkg1 [pkg2...]"
