@@ -79,8 +79,6 @@ selection:
 
 dynamic_title: false
 
-hide_cursor_when_typing: false
-
 shell:
   program: tmux
 
