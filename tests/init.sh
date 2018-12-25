@@ -6,7 +6,6 @@ function __dotsan__tests__init {
         check)
             case $2 in
                 required) echo "linux" ;;
-                suggested) echo "bash" ;;
             esac
             ;;
         build)

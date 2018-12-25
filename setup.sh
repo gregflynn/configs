@@ -12,7 +12,7 @@ function __dotsan__inject {
     dist="$__dotsan__home/$module/dist"
     infile="$__dotsan__home/$module/$2"
 
-    if [ "$3" == "" ]; then
+    if [[ "$3" == "" ]]; then
         outfile="$dist/$2"
     else
         outfile="$dist/$3"
@@ -47,10 +47,10 @@ function __dotsan__syslink {
     link_loc="$3"
     link_target="$__dotsan__home/$module/$source"
 
-    if [ -e "$link_loc" ]; then
+    if [[ -e "$link_loc" ]]; then
         existing_link_target=$(readlink ${link_loc})
 
-        if [ "$existing_link_target" == "$link_target" ]; then
+        if [[ "$existing_link_target" == "$link_target" ]]; then
             return
         else
             echo "$link_loc: updated target"
@@ -83,7 +83,7 @@ function __dotsan__mirror__syslink {
         rm ${broken_link}
     done
 
-    if [ "$broken_links" != "" ]; then
+    if [[ "$broken_links" != "" ]]; then
         diff_result=$(diff -r ${source_dir} ${target_dir} 2>&1)
     fi
 
@@ -95,7 +95,7 @@ function __dotsan__mirror__syslink {
     for new_link in ${missing_links}; do
         # new_link if the full system path of the file being linked to in
         # __dotsan__home
-        if [ -d ${new_link} ]; then
+        if [[ -d ${new_link} ]]; then
             # don't create directories
             continue
         else
@@ -145,30 +145,18 @@ function __dotsan__setup__echo {
 function __dotsan__requirements {
     local init_func_name="$1"
     local missing=""
-    local missing_suggested=""
 
-    if [[ $(whoami) == "root" ]]; then
+    if [[ $(whoami) == "root" ]] || [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
         local clionly=$(eval "${init_func_name}" check clionly)
+
         if [[ "$clionly" == "" ]]; then
-            echo
-            echo "Module not enabled for root"
+            echo "Module not enabled in CLI-Only environment."
             return 1
         fi
     fi
 
-    # if we're ssh'd somewhere
-    if [[ -n "$SSH_CLIENT" ]] || [[ -n "$SSH_TTY" ]]; then
-        local clionly=$(eval "${init_func_name}" check clionly)
-        if [[ "$clionly" == "" ]]; then
-            echo
-            echo "Module not enabled for ssh sessions"
-            return 1
-        fi
-    fi
-
-    # get required and suggested packages from the module
+    # get required packages from the module
     required=$(eval "${init_func_name}" check required)
-    suggested=$(eval "${init_func_name}" check suggested)
 
     for pkg in ${required}; do
         if ! __dotsan__is__installed ${pkg}; then
@@ -176,24 +164,9 @@ function __dotsan__requirements {
         fi
     done
 
-    for pkg in ${suggested}; do
-        if ! __dotsan__is__installed ${pkg}; then
-            missing_suggested="$missing_suggested $pkg"
-        fi
-    done
-
-    if [[ "$missing" != "" || "$missing_suggested" != "" ]]; then
-        echo
-        echo -e "Missing Packages:"
-        echo -e "Required: ${missing}"
-
-        if [[ "$missing_suggested" != "" ]]; then
-            echo -e "Suggested: ${missing_suggested}"
-        fi
-
-        if [[ "$missing" != "" ]]; then
-            return 1
-        fi
+    if [[ "$missing" != "" ]]; then
+        echo "Missing Packages: ${missing}"
+        return 1
     fi
 }
 
@@ -204,10 +177,10 @@ function __dotsan__install__module {
 
     if [[ -e "$init_file" ]]; then
         source "$init_file"
+        local requirements_message="$(__dotsan__requirements ${init_func_name})"
 
-        if ! __dotsan__requirements ${init_func_name}; then
-            __dotsan__setup__echo 'SK' 'yellow' ${module_name} "requirements not met"
-            echo
+        if [[ "$requirements_message" != "" ]]; then
+            __dotsan__setup__echo 'SK' 'yellow' ${module_name} "${requirements_message}"
             return 0
         fi
 

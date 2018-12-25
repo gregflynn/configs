@@ -5,7 +5,6 @@ function __dotsan__bash__init {
         check)
             case $2 in
                 required) echo "bash" ;;
-                suggested) echo "alacritty" ;;
                 clionly) echo 1 ;;
             esac
             ;;

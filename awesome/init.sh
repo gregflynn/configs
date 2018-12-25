@@ -4,8 +4,7 @@ function __dotsan__awesome__init {
     case $1 in
         check)
             case $2 in
-                required) echo "awesome" ;;
-                suggested) echo "gpmdp" ;;
+                required) echo "awesome gpmdp lain-git vicious" ;;
             esac
             ;;
         build)

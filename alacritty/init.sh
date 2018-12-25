@@ -5,7 +5,7 @@ function __dotsan__alacritty__init {
     case $1 in
         check)
             case $2 in
-                required) echo "alacritty" ;;
+                required) echo "alacritty tmux" ;;
             esac
             ;;
         build)

@@ -9,10 +9,6 @@ function __dotsan__MODULE__init {
                     # echo required packages
                     echo "linux"
                 ;;
-                suggested)
-                    # echo suggested packages
-                    echo "bash"
-                ;;
                 clionly)
                     # echo any output here to indicate a module
                     # should still be installed in cli only contexts
