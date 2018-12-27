@@ -1,27 +1,55 @@
 #! /bin/bash
 
 
+function __aur__push {
+    # set current working directory for the given AUR package
+    # $1 name of the AUR package to enter context for
+
+    pushd "${__aur__home}/$1" > /dev/null
+}
+
+
+function __aur__pop {
+    # return to the previous working directory
+
+    popd > /dev/null
+}
+
+
+function __aur__help {
+    # echo help information
+
+    echo "dotsanity AUR wrapper
+
+    Usage: aur COMMAND package [package]
+
+    COMMAND options
+        install
+            - install one or more packages from the AUR
+    "
+#    echo "Usage: aur [update|install|remove|search|list|clean] package names"
+}
+
+
 function aur {
+    if ! command -v pacman > /dev/null; then
+        __dotsan__error "pacman not installed"
+        return 1
+    fi
+
+    if ! [[ -d "${__aur__home}" ]]; then
+        mkdir -p "${__aur__home}"
+    fi
+
     local pkgs="${@:2}"
 
     case $1 in
-        update)
-            local selected_pkgs="1"
-            if [[ "${pkgs}" == "" ]]; then
-                pkgs=$(ls ${__aur__home} | xargs)
-                selected_pkgs=""
-            fi
-            _aur_update "${pkgs}" "${selected_pkgs}"
-        ;;
-        install)
-            if [ "${pkgs}" == "" ]; then
-                echo "Usage: aur install pkg1 [pkg2...]"
-                return
-            fi
-            _aur_install ${pkgs}
+        install) __aur__install "${pkgs}" ;;
+        list)
+            ll ${__aur__home} | awk '{ print $9}'
         ;;
         remove)
-            if [ "${pkgs}" == "" ]; then
+            if [[ "${pkgs}" == "" ]]; then
                 echo "Usage: aur remove pkg1 [pkg2...]"
                 return
             fi
@@ -29,7 +57,7 @@ function aur {
             for pkg in ${pkgs}; do
                 if __pac__is__aur__pkg ${pkg}; then
                     sudo pacman -Rs ${pkg}
-                    if [ "$?" == "0" ]; then
+                    if [[ "$?" == "0" ]]; then
                         rm -rf "${__aur__home}/${pkg}"
                     fi
                 else
@@ -38,21 +66,26 @@ function aur {
             done
         ;;
         search)
-            if [ "${pkgs}" == "" ]; then
+            if [[ "${pkgs}" == "" ]]; then
                 echo "Usage: aur search pkg1"
                 return 0
             fi
             _aur_search "${pkgs}"
         ;;
-        list)
-            ll ${__aur__home} | awk '{ print $9}'
+        update)
+            local selected_pkgs="1"
+            if [[ "${pkgs}" == "" ]]; then
+                pkgs=$(ls ${__aur__home} | xargs)
+                selected_pkgs=""
+            fi
+            _aur_update "${pkgs}" "${selected_pkgs}"
         ;;
         clean)
             _aur_clean ${pkgs}
         ;;
         inspect)
             if __pac__is__aur__pkg ${pkgs}; then
-                _aur_pushd ${pkgs}
+                __aur__push "${pkgs}"
             else
                 __dotsan__warn "${pkgs} is not installed from the AUR"
             fi
@@ -60,26 +93,21 @@ function aur {
         web)
             xdg-open "https://aur.archlinux.org/"
         ;;
-        *)
-            echo "Usage: aur [update|install|remove|search|list|clean] package names"
-        ;;
+        *) __aur__help ;;
     esac
 }
 
-function _aur_pushd {
-    pushd ${__aur__home}/$1 > /dev/null
-}
 
-function _aur_popd() {
-    popd > /dev/null
-}
+function __aur__install {
+    # install the given package names from the AUR
+    # $1 list of space separated package names to install
 
-#
-# Install a package from the AUR
-#
-function _aur_install {
     local pkgs="$1"
-    mkdir -p "${__aur__home}"
+
+    if [[ "${pkgs}" == "" ]]; then
+        echo "Usage: aur install pkg1 [pkg2...]"
+        return
+    fi
 
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
@@ -98,7 +126,7 @@ function _aur_install {
             fi
 
             _aur_build $1
-            if [ "$?" == "0" ]; then
+            if [[ "$?" == "0" ]]; then
                 _aur_install_pkg $1
             else
                 __dotsan__warn "${pkg} failed to build"
@@ -117,10 +145,10 @@ function _aur_update {
 
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
-            _aur_pushd ${pkg}
+            __aur__push "${pkg}"
             git checkout master > /dev/null 2>&1
             git pull -q > /dev/null
-            _aur_popd
+            __aur__pop
 
             _aur_needs_update ${pkg}
             case $? in
@@ -213,7 +241,7 @@ function _aur_print_version {
     local C2=$'\e[33m'
     local C3=$'\e[32m'
 
-    if [ "$3" == "" ]; then
+    if [[ "$3" == "" ]]; then
         echo "$C3[OK] $C1$1$C0: $C3$2$C0"
     else
         echo "$C2[UP] $C1$1$C0: $C2$2$C0 => $C3$3$C0"
@@ -226,7 +254,7 @@ function _aur_print_version {
 #
 function _aur_local_ver {
     local pacman_version=$(pacman -Q $1 2>/dev/null)
-    if [ "$?" == "0" ]; then
+    if [[ "$?" == "0" ]]; then
         echo ${pacman_version} | awk '{ print $2 }'
     fi
 }
@@ -237,12 +265,12 @@ function _aur_local_ver {
 #
 function _aur_remote_ver {
     local pkgbuild="${__aur__home}/$1/PKGBUILD"
-    if [ ! -e ${pkgbuild} ]; then return 1; fi
+    if [[ ! -e ${pkgbuild} ]]; then return 1; fi
 
     source "$pkgbuild"
 
     local base_version="$pkgver-$pkgrel"
-    if [ "$epoch" != "" ]; then
+    if [[ "$epoch" != "" ]]; then
         echo "$epoch:$base_version"
     else
         echo "$base_version"
@@ -253,10 +281,10 @@ function _aur_remote_ver {
 # Build the given AUR package
 #
 function _aur_build {
-    _aur_pushd $1
+    __aur__push "$1"
     makepkg -s
     mk_rc="$?"
-    _aur_popd
+    __aur__pop
     return ${mk_rc}
 }
 
@@ -264,11 +292,11 @@ function _aur_build {
 # Build and install the given package
 #
 function _aur_install_pkg {
-    _aur_pushd $1
+    __aur__push "$1"
     remote_version=$(_aur_remote_ver $1)
     pkg_path=$(ls -la | grep "${remote_version}" | head -n 1 | awk '{print $9}')
     sudo pacman -U ${pkg_path} --needed --noconfirm
-    _aur_popd
+    __aur__pop
 }
 
 #
@@ -283,11 +311,11 @@ function _aur_clean {
     local pkgs="$1"
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
-            _aur_pushd ${pkg}
+            __aur__push "${pkg}"
             pwd
             git checkout master
             git clean -fdx
-            _aur_popd
+            __aur__pop
         else
             __dotsan__warn "${pkg} was not found in the AUR cache"
         fi

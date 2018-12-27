@@ -31,12 +31,11 @@ function __dotsan__color__mapper {
 
 function __dotsan__color__variation__mapper {
     case $1 in
-        bold) echo '1' ;;
-        dim) echo '2' ;;
-        underline) echo '3' ;;
-        blink) echo '4' ;;
-        invert) echo '5' ;;
-        normal) ;&
+        bold|b) echo '1' ;;
+        dim|d) echo '2' ;;
+        italic|i) echo '3' ;;
+        underline|u) echo '4' ;;
+        invert|inv) echo '7' ;;
         *) echo '0' ;;
     esac
 }
