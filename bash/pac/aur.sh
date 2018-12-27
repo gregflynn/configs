@@ -21,13 +21,18 @@ function __aur__help {
 
     echo "dotsanity AUR wrapper
 
-    Usage: aur COMMAND package [package]
+    Usage: aur COMMAND package [...package]
 
     COMMAND options
         install
             - install one or more packages from the AUR
+        list
+            - show all packages installed from the AUR
+        remove
+            - remove one or more AUR installed packages
+        search
+            - search the AUR for a package
     "
-#    echo "Usage: aur [update|install|remove|search|list|clean] package names"
 }
 
 
@@ -45,33 +50,9 @@ function aur {
 
     case $1 in
         install) __aur__install "${pkgs}" ;;
-        list)
-            ll ${__aur__home} | awk '{ print $9}'
-        ;;
-        remove)
-            if [[ "${pkgs}" == "" ]]; then
-                echo "Usage: aur remove pkg1 [pkg2...]"
-                return
-            fi
-
-            for pkg in ${pkgs}; do
-                if __pac__is__aur__pkg ${pkg}; then
-                    sudo pacman -Rs ${pkg}
-                    if [[ "$?" == "0" ]]; then
-                        rm -rf "${__aur__home}/${pkg}"
-                    fi
-                else
-                    __dotsan__warn "${pkg} not an AUR package"
-                fi
-            done
-        ;;
-        search)
-            if [[ "${pkgs}" == "" ]]; then
-                echo "Usage: aur search pkg1"
-                return 0
-            fi
-            _aur_search "${pkgs}"
-        ;;
+        list) ll "${__aur__home}" | awk '{ print $9}' ;;
+        remove) __aur__remove "${pkgs}" ;;
+        search) __aur__search "${pkgs}" ;;
         update)
             local selected_pkgs="1"
             if [[ "${pkgs}" == "" ]]; then
@@ -134,6 +115,31 @@ function __aur__install {
         fi
     done
 }
+
+
+function __aur__remove {
+    # remove the given packages
+    # $1 list of space separated package names to remove
+
+    local pkgs="$1"
+
+    if [[ "${pkgs}" == "" ]]; then
+        echo "Usage: aur remove pkg1 [pkg2...]"
+        return
+    fi
+
+    for pkg in ${pkgs}; do
+        if __pac__is__aur__pkg ${pkg}; then
+            sudo pacman -Rs ${pkg}
+            if [[ "$?" == "0" ]]; then
+                rm -rf "${__aur__home}/${pkg}"
+            fi
+        else
+            __dotsan__warn "${pkg} not an AUR package"
+        fi
+    done
+}
+
 
 #
 # Updates a list of packages from the AUR
@@ -299,13 +305,21 @@ function _aur_install_pkg {
     __aur__pop
 }
 
-#
-# Search the AUR for $1
-#
-function _aur_search {
+
+function __aur__search {
+    # search the AUR for a package
+    # $1 package name to search for
+    local pkgs="$1"
+
+    if [[ "${pkgs}" == "" ]]; then
+        echo "Usage: aur search pkg1"
+        return 0
+    fi
+
     curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$1" | \
-        python "$__dotsan__home/bash/pac/aur_search.py"
+        python "${__dotsan__home}/bash/pac/aur_search.py"
 }
+
 
 function _aur_clean {
     local pkgs="$1"
