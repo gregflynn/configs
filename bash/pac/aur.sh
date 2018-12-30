@@ -73,6 +73,27 @@ function __aur__help {
 }
 
 
+function __aur__completion {
+    COMPREPLY=()
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prev="${COMP_WORDS[COMP_CWORD-1]}"
+    local opts
+
+    case "$prev" in
+        aur)
+            opts="clean inspect install list remove search update web help"
+        ;;
+        clean|inspect|list|remove|update)
+            opts=$(__aur__list)
+        ;;
+    esac
+
+    COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
+    return 0
+}
+complete -F __aur__completion aur
+
+
 function aur {
     if ! command -v pacman > /dev/null; then
         __dsc__error "pacman not installed"
