@@ -33,7 +33,7 @@ function pac {
 
             for pkg in "$pkgs"; do
                 if __pac__is__aur__pkg ${pkg}; then
-                    __dotsan__warn "${pkg} is installed via the AUR"
+                    __dsc__warn "${pkg} is installed via the AUR"
                 else
                     sudo pacman -Rs ${pkg}
                 fi
@@ -117,18 +117,18 @@ function pac {
             case $2 in
                 prune)
                     if ! pacman -Q pacman-contrib >/dev/null 2>&1; then
-                        __dotsan__error "pacman-contrib not installed, paccache unavailable"
+                        __dsc__error "pacman-contrib not installed, paccache unavailable"
                         return
                     fi
 
                     __pac__cache__info
                     echo
 
-                    __dotsan__info "Removing uninstalled packages..."
+                    __dsc__info "Removing uninstalled packages..."
                     paccache -r -c ${__pac__cache} -u
                     echo
 
-                    __dotsan__info "Removing old packages..."
+                    __dsc__info "Removing old packages..."
                     paccache -r -c ${__pac__cache} -k 10
                     echo
 
@@ -139,7 +139,7 @@ function pac {
                     local version="$4"
 
                     if [[ "$pkg" == "" ]]; then
-                        __dotsan__error "No package specified"
+                        __dsc__error "No package specified"
                         return
                     fi
 
@@ -151,7 +151,7 @@ function pac {
                     fi
 
                     if ! [[ -e "${__pac__cache}/${version}" ]]; then
-                        __dotsan__error "${version} not found"
+                        __dsc__error "${version} not found"
                         return
                     fi
 
@@ -159,13 +159,13 @@ function pac {
                     if [[ $REPLY =~ ^[Yy]$ ]]; then
                         sudo pacman -U ${__pac__cache}/${version}
                     else
-                        __dotsan__echo 'Revert Aborted' yellow
+                        __dsc__echo 'Revert Aborted' yellow
                     fi
                 ;;
                 show)
                     local pkg="$3"
                     if [[ "$pkg" == "" ]]; then
-                        __dotsan__error "No package specified"
+                        __dsc__error "No package specified"
                         return
                     fi
 
@@ -173,19 +173,19 @@ function pac {
                 ;;
                 *)
                     if [[ "$2" != "" ]]; then
-                        __dotsan__error "Unknown option: ${2}"
+                        __dsc__error "Unknown option: ${2}"
                         echo "Usage pac cache [prune|info|show]"
                         echo
                     fi
                 ;&
                 info)
-                    __dotsan__echo "Pacman Package Cache" blue p p 1
-                    __dotsan__echo " ${__pac__cache}" green
+                    __dsc__echo "Pacman Package Cache" blue p p 1
+                    __dsc__echo " ${__pac__cache}" green
                     __pac__cache__info
 
                     local ignores=$(cat /etc/pacman.conf | grep -v ^# | grep IgnorePkg)
                     if [[ "${ignores}" != "" ]]; then
-                        __dotsan__echo "${ignores}" red
+                        __dsc__echo "${ignores}" red
                     fi
                 ;;
             esac
@@ -202,10 +202,8 @@ function pac {
 function __pac__cache__info {
     local num_pkgs=$(ls -C ${__pac__cache} | wc -l)
     local cache_size=$(du -h -d 1 ${__pac__cache} | awk '{ print $1 }')
-    __dotsan__echo "${num_pkgs}" green p p 1
-    __dotsan__echo " Cached Packages" blue
-    __dotsan__echo "${cache_size}" green p p 1
-    __dotsan__echo " on disk" blue
+    __dsc__line "${num_pkgs}" green " Cached Packages" blue
+    __dsc__line "${cache_size}" green " on disk" blue
 }
 
 function __pac__cache__list {

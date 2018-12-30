@@ -26,7 +26,7 @@ function __bash__import {
     full_path="$__bash__home/$rel_path"
     source ${full_path}
     if [ "$?" != "0" ]; then
-        __dotsan__error "Failed to import $rel_path"
+        __dsc__error "Failed to import $rel_path"
         return 1
     fi
 }

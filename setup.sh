@@ -136,9 +136,9 @@ function __dotsan__setup__echo {
     local module="$3"
     local extra_info="$4"
 
-    __dotsan__echo "[${status}]" ${color} p p 1
-    __dotsan__echo " ${module} " blue p p 1
-    __dotsan__echo "${extra_info}" ${color}
+    __dsc__echo "[${status}]" ${color} p p 1
+    __dsc__echo " ${module} " blue p p 1
+    __dsc__echo "${extra_info}" ${color}
 }
 
 function __dotsan__requirements {

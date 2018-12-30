@@ -17,28 +17,27 @@ function __aur__pop {
 
 
 function __aur__hl {
-    __dotsan__echo "$1" yellow p p 1
+    __dsc__echo "$1" yellow p p 1
 }
 
 
 function __aur__opt {
-    __dotsan__echo "$1" p p i 1
+    __dsc__echo "$1" p p i 1
 }
 
 
 function __aur__help {
     # echo help information
 
+    cmd=$(__aur__hl COMMAND)
+    opt_pkg=$(__aur__opt "package")
     opt_pkgs=$(__aur__opt "package [package2, ...]")
 
-    echo "    dotsanity AUR wrapper
+    echo "    Arch Linux User Repository Wrapper
 
-    $(echo -en $'\uf061') aur $(__aur__hl COMMAND) $(__aur__opt "[package [package2 ...]]")
+    $(echo -en $'\uf061') aur $cmd $(__aur__opt "[package [package2 ...]]")
 
-    COMMAND options
-
-        $(__aur__hl clean) $opt_pkgs
-            - clean one or more aur build directories
+    General $cmd options
 
         $(__aur__hl install) $opt_pkgs
             - install one or more packages from the AUR
@@ -52,15 +51,31 @@ function __aur__help {
         $(__aur__hl remove) $opt_pkgs
             - remove one or more AUR installed packages
 
-        $(__aur__hl search) $(__aur__opt "package")
+        $(__aur__hl update) $opt_pkgs
+            - update one or more AUR installed packages
+
+    Search $cmd options
+
+        $(__aur__hl search) $opt_pkg
             - search the AUR for a package
+
+        $(__aur__hl web) $(__aur__opt "[package]")
+            - Open and search the AUR web interface
+
+    Maintenance $cmd options
+
+        $(__aur__hl clean) $opt_pkgs
+            - clean one or more aur build directories
+
+        $(__aur__hl inspect) $opt_pkg
+            - cd into the checkout directory for the given AUR package
     "
 }
 
 
 function aur {
     if ! command -v pacman > /dev/null; then
-        __dotsan__error "pacman not installed"
+        __dsc__error "pacman not installed"
         return 1
     fi
 
@@ -71,30 +86,15 @@ function aur {
     local pkgs="${@:2}"
 
     case $1 in
-        clean)   __aur__clean   "${pkgs}" ;;
-        install) __aur__install "${pkgs}" ;;
-        list)    __aur__list    "${pkgs}" ;;
-        remove)  __aur__remove  "${pkgs}" ;;
-        search)  __aur__search  "${pkgs}" ;;
-        update)
-            local selected_pkgs="1"
-            if [[ "${pkgs}" == "" ]]; then
-                pkgs=$(ls ${__aur__home} | xargs)
-                selected_pkgs=""
-            fi
-            _aur_update "${pkgs}" "${selected_pkgs}"
-        ;;
-        inspect)
-            if __pac__is__aur__pkg ${pkgs}; then
-                __aur__push "${pkgs}"
-            else
-                __dotsan__warn "${pkgs} is not installed from the AUR"
-            fi
-        ;;
-        web)
-            xdg-open "https://aur.archlinux.org/"
-        ;;
-        *) __aur__help ;;
+        clean)   __aur__clean   "$pkgs" ;;
+        inspect) __aur__inspect "$pkgs" ;;
+        install) __aur__install "$pkgs" ;;
+        list)    __aur__list    "$pkgs" ;;
+        remove)  __aur__remove  "$pkgs" ;;
+        search)  __aur__search  "$pkgs" ;;
+        update)  __aur__update  "$pkgs" ;;
+        web)     __aur__web     "$pkgs" ;;
+        *)       __aur__help ;;
     esac
 }
 
@@ -105,16 +105,16 @@ function __aur__install {
 
     local pkgs="$1"
 
-    if [[ "${pkgs}" == "" ]]; then
+    if [[ "$pkgs" == "" ]]; then
         echo "Usage: aur install pkg1 [pkg2...]"
         return
     fi
 
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
-            _aur_update ${pkg}
+            __aur__update "$pkg"
         else
-            local aur_path="${__aur__home}/${pkg}"
+            local aur_path="$__aur__home/$pkg"
 
             git clone aur:${pkg} ${aur_path}
 
@@ -122,15 +122,15 @@ function __aur__install {
                 if __pac__is__aur__pkg ${pkg}; then
                     rm -rf ${aur_path}
                 fi
-                __dotsan__warn "${pkg} not found on the AUR"
+                __dsc__warn "$pkg not found on the AUR"
                 continue
             fi
 
-            _aur_build $1
+            __aur__build__pkg "$1"
             if [[ "$?" == "0" ]]; then
-                _aur_install_pkg $1
+                __aur__install__built__pkg "$1"
             else
-                __dotsan__warn "${pkg} failed to build"
+                __dsc__warn "$pkg failed to build"
             fi
         fi
     done
@@ -143,7 +143,7 @@ function __aur__remove {
 
     local pkgs="$1"
 
-    if [[ "${pkgs}" == "" ]]; then
+    if [[ "$pkgs" == "" ]]; then
         echo "Usage: aur remove pkg1 [pkg2...]"
         return
     fi
@@ -152,144 +152,147 @@ function __aur__remove {
         if __pac__is__aur__pkg ${pkg}; then
             sudo pacman -Rs ${pkg}
             if [[ "$?" == "0" ]]; then
-                rm -rf "${__aur__home}/${pkg}"
+                rm -rf "$__aur__home/$pkg"
             fi
         else
-            __dotsan__warn "${pkg} not an AUR package"
+            __dsc__warn "$pkg not an AUR package"
         fi
     done
 }
 
 
-#
-# Updates a list of packages from the AUR
-#
-function _aur_update {
+function __aur__update {
+    # Update one or more packages on from the AUR
+    # $1 list of packages to update (optional)
     local pkgs="$1"
-    local yes="$2"
+    local yes=""
+
+    if [[ "$pkgs" == "" ]]; then
+        pkgs=$(__aur__list)
+    else
+        yes="y"
+    fi
+
     local needs_update=""
 
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
-            __aur__push "${pkg}"
-            git checkout master > /dev/null 2>&1
-            git pull -q > /dev/null
-            __aur__pop
+            __aur__needs__update "$pkg"
+            local ret_val="$?"
 
-            _aur_needs_update ${pkg}
-            case $? in
-                0)
-                    needs_update="$needs_update $pkg"
-                    _aur_print_version ${pkg} \
-                        $(_aur_local_ver ${pkg}) \
-                        $(_aur_remote_ver ${pkg})
-                ;;
-                1)
-                    _aur_print_version ${pkg} $(_aur_local_ver ${pkg})
-                ;;
-            esac
+            if [[ "$ret_val" == "0" ]]; then
+                needs_update="$needs_update $pkg"
+            fi
+
+            __aur__print__version "$pkg" "$ret_val"
         else
-            __dotsan__warn "${pkg} not installed via AUR"
+            __dsc__warn "${pkg} not installed via AUR"
         fi
     done
 
-    if [[ "${needs_update}" == "" ]]; then
+    if [[ "$needs_update" == "" ]]; then
         echo "No updates available"
         return 0
     fi
 
-    if [[ "${yes}" == "" ]]; then
+    if [[ "$yes" == "" ]]; then
         echo
         echo "The following packages have updates available:"
         for pkg in ${needs_update}; do
-            _aur_print_version ${pkg} \
-                $(_aur_local_ver ${pkg}) \
-                $(_aur_remote_ver ${pkg})
+            __aur__print__version "$pkg"
         done
 
         echo
         read -p "==> install updates? [y/n]: " -r
     fi
 
-    if [[ "${yes}" != "" || $REPLY =~ ^[Yy]$ ]]; then
+    if [[ "$yes" != "" || $REPLY =~ ^[Yy]$ ]]; then
         built_pkgs=""
 
         for pkg in ${needs_update}; do
-            _aur_build ${pkg}
-            if [ "$?" == "0" ]; then
-                built_pkgs="${built_pkgs} ${pkg}"
+            __aur__build__pkg "$pkg"
+            if [[ "$?" == "0" ]]; then
+                built_pkgs="$built_pkgs $pkg"
             else
-                __dotsan__warn "${pkg} failed to build"
+                __dsc__warn "$pkg failed to build"
             fi
         done
 
-        if [ "${built_pkgs}" != "" ]; then
+        if [[ "$built_pkgs" != "" ]]; then
             echo "Acquiring elevated privileges"
             sudo echo "Granted"
-            if [ "$?" != "0" ]; then
+            if [[ "$?" != "0" ]]; then
                 echo "Failed to elevate privileges, exiting"
                 return 1
             fi
             for pkg in ${built_pkgs}; do
-                _aur_install_pkg ${pkg}
+                __aur__install__built__pkg "$pkg"
             done
         fi
     fi
 }
 
-#
-# Check if $1 has an update remotely
-# $? == 1 Up to date
-# $? == 0 Update available
-# $? == 2 Partial install
-#
-function _aur_needs_update {
-    local installed=$(_aur_local_ver $1)
+
+function __aur__needs__update {
+    # Check if $1 has an update remotely
+    # $1 package name
+    # $? == 1 Up to date
+    # $? == 0 Update available
+    # $? == 2 Partial install
+    local pkg="$1"
+
+    __aur__push "${pkg}"
+    git checkout master > /dev/null 2>&1
+    git pull -q > /dev/null
+    __aur__pop
+
+    local installed=$(__aur__local__version "$pkg")
     if [[ "${installed}" == "" ]]; then
         return 2
     fi
 
-    local remote=$(_aur_remote_ver $1)
-    if [ "$installed" != "$remote" ]; then
+    local remote=$(__aur__remote__version "$pkg")
+    if [[ "$installed" != "$remote" ]]; then
         return 0
     else
         return 1
     fi
 }
 
-#
-# Print a colored version number printout to the terminal
-# print_version (pkg name) (installed version) [remote version]
-#
-function _aur_print_version {
-    local C0=$'\e[0m'
-    local C1=$'\e[34m'
-    local C2=$'\e[33m'
-    local C3=$'\e[32m'
 
-    if [[ "$3" == "" ]]; then
-        echo "$C3[OK] $C1$1$C0: $C3$2$C0"
+function __aur__print__version {
+    # Print a colored version number to the terminal
+    # $1 name of the package
+    # $2 specify "1" to only show local version
+    local pkg="$1"
+    local installed_version=$(__aur__local__version "$pkg")
+
+    if [[ "$2" == "1" ]]; then
+        __dsc__line "[OK]" green " $pkg" blue ": " white \
+                "$installed_version" green
     else
-        echo "$C2[UP] $C1$1$C0: $C2$2$C0 => $C3$3$C0"
+        local remote_version=$(__aur__remote__version "$pkg")
+
+        __dsc__line "[UP]" yellow " $pkg" blue ": " white \
+                "$installed_version" yellow " => " white "$remote_version" green
     fi
 }
 
-#
-# Retrieve the locally installed version of $1
-# stdout > version reported by pacman
-#
-function _aur_local_ver {
-    local pacman_version=$(pacman -Q $1 2>/dev/null)
+
+function __aur__local__version {
+    # Retrieve the locally installed version of the given package name
+    # $1 name of the package to query the version of
+    local pacman_version=$(pacman -Q "$1" 2>/dev/null)
+
     if [[ "$?" == "0" ]]; then
         echo ${pacman_version} | awk '{ print $2 }'
     fi
 }
 
-#
-# Get the version number of an AUR package describe in PKGBUILD for $1
-# stdout > AUR PKGBUILD version
-#
-function _aur_remote_ver {
+
+function __aur__remote__version {
+    # Get the version number of an AUR package described in PKGBUILD given package
+    # $1 name of the package to get the version for
     local pkgbuild="${__aur__home}/$1/PKGBUILD"
     if [[ ! -e ${pkgbuild} ]]; then return 1; fi
 
@@ -303,24 +306,26 @@ function _aur_remote_ver {
     fi
 }
 
-#
-# Build the given AUR package
-#
-function _aur_build {
+
+function __aur__build__pkg {
+    # Build the given AUR package
+    # $1 the aur package name to build
     __aur__push "$1"
-    makepkg -s
+    makepkg -sf
     mk_rc="$?"
     __aur__pop
     return ${mk_rc}
 }
 
-#
-# Build and install the given package
-#
-function _aur_install_pkg {
-    __aur__push "$1"
-    remote_version=$(_aur_remote_ver $1)
-    pkg_path=$(ls -la | grep "${remote_version}" | head -n 1 | awk '{print $9}')
+
+function __aur__install__built__pkg {
+    # Install the given built package
+    # $1 path to the built package file
+    local pkg="$1"
+
+    __aur__push "$pkg"
+    remote_version=$(__aur__remote__version "$pkg")
+    pkg_path=$(ls -la | grep "$remote_version" | head -n 1 | awk '{print $9}')
     sudo pacman -U ${pkg_path} --needed --noconfirm
     __aur__pop
 }
@@ -331,30 +336,29 @@ function __aur__search {
     # $1 package name to search for
     local pkgs="$1"
 
-    if [[ "${pkgs}" == "" ]]; then
+    if [[ "$pkgs" == "" ]]; then
         echo "Usage: aur search pkg1"
         return 0
     fi
 
-    curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$1" | \
-        python "${__dotsan__home}/bash/pac/aur_search.py"
+    curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$pkgs" | \
+        python "$__dotsan__home/bash/pac/aur_search.py"
 }
 
 
 function __aur__clean {
     # clean the aur build directory for the given packages
     # $1 package names to clean
-
     local pkgs="$1"
 
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
-            __aur__push "${pkg}"
+            __aur__push "$pkg"
             git checkout master
             git clean -fdx
             __aur__pop
         else
-            __dotsan__warn "${pkg} was not found in the AUR cache"
+            __dsc__warn "$pkg was not found in the AUR cache"
         fi
     done
 }
@@ -363,12 +367,35 @@ function __aur__clean {
 function __aur__list {
     # list out package installed via the aur
     # $1 package name to filter by
-
-    list=$(ll "${__aur__home}" | awk '{ print $9}')
+    local list=$(ll "$__aur__home" | awk '{ print $9}')
 
     if [[ "$1" != "" ]]; then
-        echo -e "${list}" | grep "$1"
+        echo -e "$list" | grep "$1"
     else
-        echo -e "${list}"
+        echo -e "$list"
+    fi
+}
+
+
+function __aur__web {
+    # Open the AUR website
+    # $1 if supplied, search the AUR website for the given package
+    if [[ "$1" == "" ]]; then
+        xdg-open "https://aur.archlinux.org/"
+    else
+        xdg-open "https://aur.archlinux.org/packages/?K=$1"
+    fi
+}
+
+
+function __aur__inspect {
+    # Change working directory into AUR package's build directory
+    # $1 package name
+    local pkg="$1"
+
+    if __pac__is__aur__pkg ${pkgs}; then
+        __aur__push "$pkg"
+    else
+        __dsc__warn "$pkg is not installed from the AUR"
     fi
 }

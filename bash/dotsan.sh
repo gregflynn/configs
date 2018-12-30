@@ -68,13 +68,13 @@ function dotsan {
         init)
             modname="$2"
             if [ "$modname" == "" ]; then
-                __dotsan__error "No module name specified"
+                __dsc__error "No module name specified"
                 return 1
             fi
 
             if [[ $modname =~ ^[a-zA-Z_]+$ ]]; then
                 if [ -d $__dotsan__home/$modname ]; then
-                    __dotsan__error "Module '$modname' already exists"
+                    __dsc__error "Module '$modname' already exists"
                     return 1
                 fi
 
@@ -82,13 +82,13 @@ function dotsan {
                 mkdir $__dotsan__home/$2
                 cat ${__dotsan__home}/module_init.sh | sed "s;MODULE;$modname;g" > $__dotsan__home/$modname/init.sh
             else
-                __dotsan__error "Invalid module name '$modname'"
+                __dsc__error "Invalid module name '$modname'"
             fi
         ;;
         inject)
             host="$2"
             if [[ "$host" == "" ]]; then
-                __dotsan__error "No host given"
+                __dsc__error "No host given"
                 return 1
             fi
 
@@ -117,7 +117,7 @@ function dotsan {
             module="$2"
 
             if [[ "$module" == "" ]]; then
-                __dotsan__error "Must specify a module to watch"
+                __dsc__error "Must specify a module to watch"
                 return 1
             fi
 
