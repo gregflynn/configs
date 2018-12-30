@@ -37,7 +37,6 @@ function __dotsan__inject {
         | sed "s;{DS_RED};${__dotsan__hex__red};g" \
         | sed "s;{DS_WHITE};${__dotsan__hex__white};g" \
         | sed "s;{DS_YELLOW};${__dotsan__hex__yellow};g" \
-        | sed "s;{DS_YELLOW_TEXT};${__dotsan__hex__yellow__text};g" \
         > ${outfile}
 }
 
@@ -196,9 +195,11 @@ function __dotsan__install__module {
     fi
 }
 
-#
-# Module Support
-#
+
+if [[ "$1" != "" ]]; then
+    __dotsan__modules=$(echo "$__dotsan__modules" | grep "$1")
+fi
+
 for module_name in ${__dotsan__modules}; do
     __dotsan__install__module ${module_name}
 done

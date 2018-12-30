@@ -28,7 +28,7 @@ function dotsan {
         ;;
         install)
             pushd ${__dotsan__home} > /dev/null
-            bash setup.sh
+            bash setup.sh "${@:2}"
             popd > /dev/null
         ;;
         version)
@@ -112,6 +112,19 @@ function dotsan {
                     cat ~/.Xresources
                 ;;
             esac
+        ;;
+        watch)
+            module="$2"
+
+            if [[ "$module" == "" ]]; then
+                __dotsan__error "Must specify a module to watch"
+                return 1
+            fi
+
+            while true; do
+                dotsan install ${module}
+                sleep 2
+            done
         ;;
         *)
             echo "Usage: dotsan [reload|diff|commit|update|version]"

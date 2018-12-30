@@ -11,8 +11,8 @@ __dotsan__hex__orange='FD971F'
 __dotsan__hex__purple='AE81FF'
 __dotsan__hex__red='F92672'
 __dotsan__hex__white='F8F8F2'
-__dotsan__hex__yellow='F4BF75'
-__dotsan__hex__yellow__text='E6DB74'
+#__dotsan__hex__yellow='F4BF75'
+__dotsan__hex__yellow='FFE792'
 
 
 function __dotsan__color__mapper {

@@ -23,7 +23,6 @@ local colors = {
     red        = "#{DS_RED}",
     white      = "#{DS_WHITE}",
     yellow     = "#{DS_YELLOW}",
-    yellow_txt = "#{DS_YELLOW_TEXT}",
 }
 
 local theme = {

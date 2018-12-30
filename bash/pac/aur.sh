@@ -17,7 +17,7 @@ function __aur__pop {
 
 
 function __aur__hl {
-    __dotsan__echo "$1" purple p p 1
+    __dotsan__echo "$1" yellow p p 1
 }
 
 
