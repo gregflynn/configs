@@ -16,21 +16,43 @@ function __aur__pop {
 }
 
 
+function __aur__hl {
+    __dotsan__echo "$1" purple p p 1
+}
+
+
+function __aur__opt {
+    __dotsan__echo "$1" p p i 1
+}
+
+
 function __aur__help {
     # echo help information
 
-    echo "dotsanity AUR wrapper
+    opt_pkgs=$(__aur__opt "package [package2, ...]")
 
-    Usage: aur COMMAND package [...package]
+    echo "    dotsanity AUR wrapper
+
+    $(echo -en $'\uf061') aur $(__aur__hl COMMAND) $(__aur__opt "[package [package2 ...]]")
 
     COMMAND options
-        install
+
+        $(__aur__hl clean) $opt_pkgs
+            - clean one or more aur build directories
+
+        $(__aur__hl install) $opt_pkgs
             - install one or more packages from the AUR
-        list
+
+        $(__aur__hl help)
+            - show this help message
+
+        $(__aur__hl list) $(__aur__opt "[filter]")
             - show all packages installed from the AUR
-        remove
+
+        $(__aur__hl remove) $opt_pkgs
             - remove one or more AUR installed packages
-        search
+
+        $(__aur__hl search) $(__aur__opt "package")
             - search the AUR for a package
     "
 }
@@ -49,10 +71,11 @@ function aur {
     local pkgs="${@:2}"
 
     case $1 in
+        clean)   __aur__clean   "${pkgs}" ;;
         install) __aur__install "${pkgs}" ;;
-        list) ll "${__aur__home}" | awk '{ print $9}' ;;
-        remove) __aur__remove "${pkgs}" ;;
-        search) __aur__search "${pkgs}" ;;
+        list)    __aur__list    "${pkgs}" ;;
+        remove)  __aur__remove  "${pkgs}" ;;
+        search)  __aur__search  "${pkgs}" ;;
         update)
             local selected_pkgs="1"
             if [[ "${pkgs}" == "" ]]; then
@@ -60,9 +83,6 @@ function aur {
                 selected_pkgs=""
             fi
             _aur_update "${pkgs}" "${selected_pkgs}"
-        ;;
-        clean)
-            _aur_clean ${pkgs}
         ;;
         inspect)
             if __pac__is__aur__pkg ${pkgs}; then
@@ -225,7 +245,7 @@ function _aur_update {
 #
 function _aur_needs_update {
     local installed=$(_aur_local_ver $1)
-    if [ "${installed}" == "" ]; then
+    if [[ "${installed}" == "" ]]; then
         return 2
     fi
 
@@ -321,12 +341,15 @@ function __aur__search {
 }
 
 
-function _aur_clean {
+function __aur__clean {
+    # clean the aur build directory for the given packages
+    # $1 package names to clean
+
     local pkgs="$1"
+
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
             __aur__push "${pkg}"
-            pwd
             git checkout master
             git clean -fdx
             __aur__pop
@@ -334,4 +357,18 @@ function _aur_clean {
             __dotsan__warn "${pkg} was not found in the AUR cache"
         fi
     done
+}
+
+
+function __aur__list {
+    # list out package installed via the aur
+    # $1 package name to filter by
+
+    list=$(ll "${__aur__home}" | awk '{ print $9}')
+
+    if [[ "$1" != "" ]]; then
+        echo -e "${list}" | grep "$1"
+    else
+        echo -e "${list}"
+    fi
 }

@@ -48,6 +48,7 @@ function __dotsan__color {
 
     if [[ "$var" != "" && "$var" != 'p' ]]; then
         variant=$(__dotsan__color__variation__mapper $3)
+        color="${color}${variant}"
     fi
 
     if [[ "$fg" != "" && "$fg" != 'p' ]]; then
