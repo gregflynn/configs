@@ -45,7 +45,13 @@ function __dsc {
     local fg="$1"
     local bg="$2"
     local var="$3"
-    color='\e['
+    local no_escape="$4"
+
+    local color='\e['
+
+    if [[ "$no_escape" != "" ]]; then
+        color="["
+    fi
 
     if [[ "$var" != "" && "$var" != 'p' ]]; then
         variant=$(__dsc__variation__mapper $3)
@@ -100,7 +106,6 @@ function __dsc__echo {
 
 function __dsc__ncho {
     # like __dsc__echo but without trailing newline
-
     __dsc__echo "${1:-p}" "${2:-p}" "${3:-p}" "${4:-p}" 1
 }
 
@@ -109,7 +114,6 @@ function __dsc__line {
     # echo a line of strings with different foreground colors
     # $1...$N where $N % 2 == 0
     #       (text, foreground color) pairs of 2 arguments
-
     local loaded=false
     local text=""
 
@@ -122,6 +126,21 @@ function __dsc__line {
         fi
     done
     echo # print just a newline
+}
+
+
+function __dsc__hl {
+    # highlight a regex from stdin, in a certain color
+    # STDIN the text to highlight
+    # $1 regex to match (sed style)
+    # $2 the foreground color
+    # $3 the background color
+    # $4 the variant
+
+    # https://unix.stackexchange.com/a/45954/212439
+    local esc=$(printf '\033')
+    local color=$(__dsc ${2:-p} ${3:-p} ${4:-p} 1)
+    sed "s/$1/$esc$color&$esc[0m/g"
 }
 
 

@@ -17,21 +17,20 @@ function __aur__pop {
 
 
 function __aur__hl {
-    __dsc__echo "$1" yellow p p 1
+    __dsc__ncho "$1" yellow
 }
 
 
 function __aur__opt {
-    __dsc__echo "$1" p p i 1
+    __dsc__ncho "$1" p p i
 }
 
 
 function __aur__help {
     # echo help information
-
-    cmd=$(__aur__hl COMMAND)
-    opt_pkg=$(__aur__opt "package")
-    opt_pkgs=$(__aur__opt "package [package2, ...]")
+    local cmd=$(__aur__hl COMMAND)
+    local opt_pkg=$(__aur__opt "package")
+    local opt_pkgs=$(__aur__opt "package [package2, ...]")
 
     echo "    Arch Linux User Repository Wrapper
 
@@ -39,14 +38,11 @@ function __aur__help {
 
     General $cmd options
 
-        $(__aur__hl install) $opt_pkgs
-            - install one or more packages from the AUR
-
         $(__aur__hl help)
             - show this help message
 
-        $(__aur__hl list) $(__aur__opt "[filter]")
-            - show all packages installed from the AUR
+        $(__aur__hl install) $opt_pkgs
+            - install one or more packages from the AUR
 
         $(__aur__hl remove) $opt_pkgs
             - remove one or more AUR installed packages
@@ -69,6 +65,9 @@ function __aur__help {
 
         $(__aur__hl inspect) $opt_pkg
             - cd into the checkout directory for the given AUR package
+
+        $(__aur__hl list) $(__aur__opt "[filter]")
+            - show all packages installed from the AUR
     "
 }
 
@@ -76,13 +75,13 @@ function __aur__help {
 function __aur__completion {
     COMPREPLY=()
     local cur="${COMP_WORDS[COMP_CWORD]}"
-    local prev="${COMP_WORDS[COMP_CWORD-1]}"
     local opts
 
-    case "$prev" in
-        aur)
-            opts="clean inspect install list remove search update web help"
-        ;;
+    if [[ "${COMP_WORDS[0]}" == "aur" ]]; then
+        opts="clean inspect install list remove search update web help"
+    fi
+
+    case "${COMP_WORDS[1]}" in
         clean|inspect|list|remove|update)
             opts=$(__aur__list)
         ;;
@@ -401,10 +400,12 @@ function __aur__list {
 function __aur__web {
     # Open the AUR website
     # $1 if supplied, search the AUR website for the given package
+    local url="https://aur.archlinux.org/packages/"
+
     if [[ "$1" == "" ]]; then
-        xdg-open "https://aur.archlinux.org/"
+        xdg-open "$url"
     else
-        xdg-open "https://aur.archlinux.org/packages/?K=$1"
+        xdg-open "$url?K=$1"
     fi
 }
 
