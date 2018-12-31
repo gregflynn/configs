@@ -170,15 +170,20 @@ function __pac__list {
     local pkg="$1"
     local flags=""
     local search="$2"
+    local results
 
-    case ${pkg} in
-        explicit) flags="en"  ;;
-        orphans)   flags="tdq" ;;
-        *) search="$pkg" ;;
-    esac
+    if [[ "$pkg" == "dead" ]]; then
+        results=$(grep -vxF -f <(ls ~/.aur) <(pacman -Qmq))
+    else
+        case ${pkg} in
+            explicit) flags="en"  ;;
+            orphans)   flags="tdq" ;;
+            *) search="$pkg" ;;
+        esac
 
-    flags="-Q$flags"
-    local results="$(pacman ${flags} | awk '{ print $1 }')"
+        flags="-Q$flags"
+        results="$(pacman ${flags} | awk '{ print $1 }')"
+    fi
 
     if [[ "$search" != "" ]]; then
         results=$(echo "$results" | grep -i ${search})
