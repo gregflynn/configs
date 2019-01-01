@@ -119,6 +119,11 @@ function aur {
 }
 
 
+function __aur__pm {
+    sudo pacman --color auto $@
+}
+
+
 function __aur__install {
     # install the given package names from the AUR
     # $1 list of space separated package names to install
@@ -170,7 +175,7 @@ function __aur__remove {
 
     for pkg in ${pkgs}; do
         if __pac__is__aur__pkg ${pkg}; then
-            sudo pacman -Rs ${pkg}
+            __aur__pm -Rs ${pkg}
             if [[ "$?" == "0" ]]; then
                 rm -rf "$__aur__home/$pkg"
             fi
@@ -346,7 +351,7 @@ function __aur__install__built__pkg {
     __aur__push "$pkg"
     remote_version=$(__aur__remote__version "$pkg")
     pkg_path=$(ls -la | grep "$remote_version" | head -n 1 | awk '{print $9}')
-    sudo pacman -U ${pkg_path} --needed --noconfirm
+    __aur__pm -U ${pkg_path} --needed --noconfirm
     __aur__pop
 }
 

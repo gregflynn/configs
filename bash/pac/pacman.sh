@@ -123,6 +123,11 @@ function pac {
 #
 
 
+function __pac__pm {
+    sudo pacman --color auto $@
+}
+
+
 function __pac__install {
     local pkgs="$1"
 
@@ -131,14 +136,14 @@ function __pac__install {
         return 1
     fi
 
-    sudo pacman -S ${pkgs}
+    __pac__pm -S ${pkgs}
 }
 
 
 function __pac__update {
-    sudo pacman -Syy
+    __pac__pm -Syy
     if [[ "$?" == "0" ]]; then
-        sudo pacman -Syu
+        __pac__pm -Su
     fi
 }
 
@@ -155,7 +160,7 @@ function __pac__remove {
         if __pac__is__aur__pkg ${pkg}; then
             __dsc__warn "$pkg is installed via the AUR"
         else
-            sudo pacman -Rs ${pkg}
+            __pac__pm -Rs ${pkg}
         fi
     done
 }
@@ -194,7 +199,7 @@ function __pac__list {
 
 
 function __pac__info {
-    pacman -Qi ${1}
+    pacman -Qi ${1} --color auto
 }
 
 
@@ -316,7 +321,7 @@ function __pac__cache__revert {
 
     read -p "==> revert to ${version}? [y/n]: " -r
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        sudo pacman -U ${__pac__cache}/${version}
+        __pac__pm -U ${__pac__cache}/${version}
     else
         __dsc__echo 'Revert Aborted' yellow
     fi
