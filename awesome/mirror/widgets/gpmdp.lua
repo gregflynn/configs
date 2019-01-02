@@ -151,9 +151,14 @@ gpmdp.widget = awful.widget.watch(
             ))
 
             -- update tooltip
-            tooltip.text = string.format("%s\nby %s\nfrom %s", title, artist, album)
+            tooltip.markup = string.format(
+                "%s\n%s %s\n%s %s",
+                markup.italic(title),
+                markup.bold("by"), artist,
+                markup.bold("from"), album
+            )
 
-            -- update notification disp;ay
+            -- update notification display
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
                 markup.fg.color(colors.white, markup.big(title)),
@@ -185,11 +190,11 @@ local buttons = gears.table.join(
 gpmdp.font_icon:buttons(buttons)
 gpmdp.widget:buttons(buttons)
 
-gpmdp.container = wibox.widget {
+local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     gpmdp.font_icon,
     wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
 }
-tooltip:add_to_object(gpmdp.container)
+tooltip:add_to_object(container)
 
-return gpmdp
+return container

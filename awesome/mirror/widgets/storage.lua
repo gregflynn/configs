@@ -11,8 +11,6 @@ local dpi    = beautiful.xresources.apply_dpi
 local markup = lain.util.markup
 
 
-local storage = {}
-
 local function create_storage_command(grep)
     return string.format("df -B1 %s | tail -n 1 | awk '{ print $2,$3,$4 }'", grep)
 end
@@ -20,11 +18,43 @@ end
 local function notif_row(label, bytes, color, pct)
     return string.format(
         "%s: %s %s",
-        markup.bold(text.pad(label, 5)),
+        markup.bold(text.pad(label, 6)),
         markup.fg.color(color, text.pad(number.human_bytes(bytes), 7)),
         pct and string.format("(%s%%)", pct) or ""
     )
 end
+
+local mem_pie = Pie {
+    notification_title = "Memory",
+    colors = {colors.blue, colors.yellow},
+    command = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
+    parse_command = function(stdout)
+        local split = text.split(stdout)
+        local total_bytes = tonumber(split[1])
+        local used_bytes = tonumber(split[2])
+        local free_bytes = tonumber(split[3])
+        local buffer_bytes = total_bytes - free_bytes - used_bytes
+
+        local used_raw_pct = used_bytes / total_bytes
+        local buffer_raw_pct = buffer_bytes / total_bytes
+        local pct_used = number.round(used_raw_pct * 100, 1)
+        local pct_free = number.round(100 * free_bytes / total_bytes, 1)
+        local pct_buffer = number.round(100 * buffer_bytes / total_bytes, 1)
+
+        return {
+            values = {used_raw_pct, buffer_raw_pct},
+            notification_preset = {
+                text = string.format(
+                    "%s\n%s\n%s\n%s",
+                    notif_row("Free", free_bytes, colors.green, pct_free),
+                    notif_row("Used", used_bytes, colors.red, pct_used),
+                    notif_row("Buffer", buffer_bytes, colors.yellow, pct_buffer),
+                    notif_row("Total", total_bytes, colors.blue)
+                )
+            }
+        }
+    end
+}
 
 local function parse_command(stdout)
     local split = text.split(stdout)
@@ -62,10 +92,9 @@ local root_pie = Pie {
     colors = {colors.purple}
 }
 
-storage.container = wibox.widget {
+return wibox.widget {
     layout = wibox.layout.fixed.horizontal,
+    wibox.container.margin( mem_pie, dpi(3), dpi(3)),
     wibox.container.margin(root_pie, dpi(3), dpi(3)),
     wibox.container.margin(boot_pie, dpi(3), dpi(3)),
 }
-
-return storage

@@ -64,7 +64,7 @@ local weather = lain.widget.weather {
     end
 }
 
-weather.container = wibox.widget {
+local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     fonticon, weather.widget,
     buttons = gears.table.join(
@@ -76,6 +76,6 @@ weather.container = wibox.widget {
         end)
     )
 }
-tooltip:add_to_object(weather.container)
+tooltip:add_to_object(container)
 
-return weather
+return container

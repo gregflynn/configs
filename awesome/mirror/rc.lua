@@ -49,23 +49,16 @@ local function only_primary(widget)
     return awful.widget.only_on_screen(widget, "primary")
 end
 
-local arandr     = require("widgets/arandr")
 local battery    = require("widgets/battery")
-local blinky     = require("widgets/blinky")
 local brightness = require("widgets/brightness")
-local caffeine   = require("widgets/caffeine")
 local clock      = require("widgets/clock")
-local cpugraph   = require("widgets/cpugraph")
-local cputemp    = require("widgets/cputemp")
+local cpu        = require("widgets/cpu")
 local gpmdp      = require("widgets/gpmdp")
-local mempie     = require("widgets/mempie")
 local net        = require("widgets/net")
-local redshift   = require("widgets/redshift")
 local rofi       = require("widgets/rofi")
-local screenshot = require("widgets/screenshots")
 local storage    = require("widgets/storage")
+local tray       = require("widgets/tray")
 local volume     = require("widgets/volume")
-local wallpapers = require("widgets/wallpapers")
 local weather    = require("widgets/weather")
 
 awful.screen.connect_for_each_screen(function(screen)
@@ -80,51 +73,19 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
-            Arrow {
-                color = colors.background,
-                right = true,
-                widget = wibox.widget {
-                    layout = wibox.layout.fixed.horizontal,
-                    mempie.container,
-                    storage.container,
-                }
-            }
+            Arrow { widget = only_primary(gpmdp), color = colors.background, right = true }
         },
         { screen.mytasklist },
         {
             ArrowList { prefix = true, blocks = {
-                { widget = only_primary(net), color = colors.background },
-                {
-                    widget = wibox.widget {
-                        layout = wibox.layout.fixed.horizontal,
-                        only_primary(gpmdp.container),
-                        volume.container
-                    },
-                    color = colors.background
-                },
-                {
-                    widget = wibox.widget {
-                        layout = wibox.layout.fixed.horizontal,
-                        battery.container,
-                        cpugraph,
-                        cputemp.container,
-                    },
-                    color = colors.background
-                },
-                {
-                    widget = wibox.widget {
-                        layout = wibox.layout.fixed.horizontal,
-                        only_primary(redshift),
-                        only_primary(blinky.container),
-                        only_primary(caffeine),
-                        only_primary(screenshot.container),
-                        only_primary(wallpapers),
-                        only_primary(arandr.container),
-                    },
-                    color = colors.orange
-                },
-                { widget = weather.container, color = colors.purple },
-                { widget = clock, color = colors.blue },
+                { widget = only_primary(net),     color = colors.background },
+                { widget = only_primary(storage), color = colors.background },
+                { widget = volume,                color = colors.background },
+                { widget = battery,               color = colors.green      },
+                { widget = cpu,                   color = colors.red        },
+                { widget = only_primary(tray),    color = colors.orange     },
+                { widget = weather,               color = colors.purple     },
+                { widget = clock,                 color = colors.blue       },
             } },
             display.create_layout_widget(screen)
         })
@@ -319,7 +280,7 @@ globalkeys = gears.table.join(
     -- Widget keys
     brightness.globalkeys,
     rofi.globalkeys,
-    screenshot.globalkeys,
+    tray.globalkeys,
     volume.globalkeys
 )
 

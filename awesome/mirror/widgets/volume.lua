@@ -75,7 +75,23 @@ volume.buttons = awful.util.table.join(
     end)
 )
 
-volume.globalkeys = gears.table.join(
+-- round the corners
+volume.bar.shape = beautiful.border_shape
+volume.bar.bar_shape = beautiful.border_shape
+
+volume.bar:buttons(volume.buttons)
+volume_font_icon:buttons(volume.buttons)
+
+local container = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    volume_font_icon,
+    wibox.container.margin(volume.bar, dpi(0), dpi(3), dpi(3), dpi(3))
+}
+
+volume.tooltip:remove_from_object(volume.bar)
+tooltip:add_to_object(container)
+
+container.globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function()
         awful.spawn("pactl set-sink-volume @DEFAULT_SINK@ +5%")
         volume.notify()
@@ -90,20 +106,4 @@ volume.globalkeys = gears.table.join(
     end)
 )
 
--- round the corners
-volume.bar.shape = beautiful.border_shape
-volume.bar.bar_shape = beautiful.border_shape
-
-volume.bar:buttons(volume.buttons)
-volume_font_icon:buttons(volume.buttons)
-
-volume.container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    volume_font_icon,
-    wibox.container.margin(volume.bar, dpi(0), dpi(3), dpi(3), dpi(3))
-}
-
-volume.tooltip:remove_from_object(volume.bar)
-tooltip:add_to_object(volume.container)
-
-return volume
+return container

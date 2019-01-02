@@ -19,9 +19,9 @@ local battery_icons = {
 }
 
 local battery_colors = {
-    plug    = colors.green,
-    full    = colors.green,
-    good    = colors.green,
+    plug    = colors.background,
+    full    = colors.background,
+    good    = colors.background,
     low     = colors.yellow,
     caution = colors.red,
     empty   = colors.red,
@@ -76,11 +76,11 @@ battery.lain_widget = lain.widget.bat {
     end
 }
 
-battery.container = wibox.widget {
+local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     battery.font_icon,
     wibox.container.margin(battery.lain_widget.widget, dpi(0), dpi(3))
 }
-battery.tooltip:add_to_object(battery.container)
+battery.tooltip:add_to_object(container)
 
-return battery
+return container
