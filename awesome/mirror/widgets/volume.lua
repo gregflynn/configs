@@ -37,7 +37,7 @@ local volume = lain.widget.pulsebar {
     settings = function()
         if volume_now.muted == "yes" then
             tooltip.text = "Muted"
-            volume_font_icon:update(font_icon_mute, colors.white)
+            volume_font_icon:update(font_icon_mute, fg_color)
         else
             local level = tonumber(volume_now.left)
 
