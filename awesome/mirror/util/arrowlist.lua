@@ -15,7 +15,7 @@ local function should_display_on_primary(block, screen)
         return true
     end
 
-    return capi.screen["primary"] == screen
+    return capi.screen["primary"] == screen or capi.screen[1] == screen
 end
 
 local function factory(args)
