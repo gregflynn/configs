@@ -22,8 +22,8 @@ local battery_colors = {
     plug    = colors.background,
     full    = colors.background,
     good    = colors.background,
-    low     = colors.yellow,
-    caution = colors.red,
+    low     = colors.background,
+    caution = colors.white,
     empty   = colors.red,
 }
 
@@ -40,7 +40,7 @@ function battery:get_status()
         return "plug"
     end
 
-    if     pct < 5  then return "empty"
+    if     pct < 10 then return "empty"
     elseif pct < 20 then return "caution"
     elseif pct < 50 then return "low"
     elseif pct < 90 then return "good"
