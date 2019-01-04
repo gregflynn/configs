@@ -91,7 +91,8 @@ element.normal.normal, element.alternate.normal {
 }
 
 element.selected.normal {
-    background-color: @yellow;
+    background-color: @purple;
+    text-color: @white;
 }
 
 element.normal.active, element.alternate.active {
@@ -99,12 +100,13 @@ element.normal.active, element.alternate.active {
 }
 element.selected.active {
     background-color: @purple;
+    text-color: @white;
 }
 
 element.normal.urgent, element.alternate.urgent {
     text-color: @red;
 }
 element.selected.urgent {
-    background-color: @red;
-    text-color: @white;
+    background-color: @purple;
+    text-color: @red;
 }
