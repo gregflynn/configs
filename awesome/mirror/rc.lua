@@ -7,11 +7,9 @@ beautiful.init(home.."/.config/awesome/theme.lua")
 local awful   = require("awful")
 local gears   = require("gears")
 local naughty = require("naughty")
-local wibox   = require("wibox")
 
 local lain = require("lain")
 
-local Arrow     = require("util/arrow")
 local ArrowList = require("util/arrowlist")
 local display   = require("util/display")
 local TagList   = require("util/taglist")
@@ -45,15 +43,10 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
-local function only_primary(widget)
-    return awful.widget.only_on_screen(widget, "primary")
-end
-
 local battery    = require("widgets/battery")
 local brightness = require("widgets/brightness")
 local clock      = require("widgets/clock")
 local cpu        = require("widgets/cpu")
-local gpmdp      = require("widgets/gpmdp")
 local rofi       = require("widgets/rofi")
 local storage    = require("widgets/storage")
 local tray       = require("widgets/tray")
@@ -70,20 +63,17 @@ awful.screen.connect_for_each_screen(function(screen)
     -- Create the wibox
     screen.mywibar = display.create_wibar(
         screen,
-        {
-            screen.mytaglist,
-            Arrow { widget = only_primary(gpmdp), color = colors.background, right = true }
-        },
+        { screen.mytaglist },
         { screen.mytasklist },
         {
-            ArrowList { prefix = true, blocks = {
-                { widget = only_primary(storage), color = colors.background },
-                { widget = volume,                color = colors.background },
-                { widget = battery,               color = colors.green      },
-                { widget = cpu,                   color = colors.red        },
-                { widget = only_primary(tray),    color = colors.orange     },
-                { widget = weather,               color = colors.purple     },
-                { widget = clock,                 color = colors.blue       },
+            ArrowList { screen = screen, prefix = true, blocks = {
+                { widget = battery, color = colors.green      },
+                { widget = cpu,     color = colors.red        },
+                { widget = storage, color = colors.background, primary_only = true },
+                { widget = volume,  color = colors.purple,     primary_only = true },
+                { widget = tray,    color = colors.orange,     primary_only = true },
+                { widget = weather, color = colors.purple     },
+                { widget = clock,   color = colors.blue       },
             } },
             display.create_layout_widget(screen)
         })

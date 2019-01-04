@@ -10,7 +10,7 @@ local markup   = lain.util.markup
 
 local fonticon = FontIcon()
 local city_id = 4930956
-local color = beautiful.colors.background
+local color = beautiful.colors.white
 
 -- https://openweathermap.org/weather-conditions
 local icon_map = {

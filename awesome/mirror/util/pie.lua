@@ -18,7 +18,7 @@ function factory(args)
     local time                 = args.time or 30
     local bg_color             = args.bg_color or colors.gray
     local pie_colors           = args.colors or {beautiful.colors.blue }
-    local thickness            = args.thickness or 6
+    local thickness            = args.thickness or 5
     local notification_title   = args.notification_title
     local notification_timeout = args.notification_timeout
     local right_click          = args.right_click

@@ -29,28 +29,28 @@ local volume = lain.widget.pulsebar {
         font     = "Hack 12"
     },
     colors = {
-        background = beautiful.colors.gray,
-        mute       = beautiful.colors.purple,
-        unmute     = beautiful.colors.orange
+        background = beautiful.colors.background,
+        mute       = beautiful.colors.white,
+        unmute     = beautiful.colors.white
     },
     settings = function()
         if volume_now.muted == "yes" then
             tooltip.text = "Muted"
-            volume_font_icon:update(font_icon_mute, colors.purple)
+            volume_font_icon:update(font_icon_mute, colors.white)
         else
             local level = tonumber(volume_now.left)
 
             if volume_now.index ~= "0" then
-                volume_font_icon:update(font_icon_headphones, colors.orange)
+                volume_font_icon:update(font_icon_headphones, colors.white)
                 tooltip.text = string.format("Headphones: %s%%", level)
             else
                 tooltip.text = string.format("Speakers: %s%%", level)
                 if level < 30 then
-                    volume_font_icon:update(font_icon_low, colors.orange)
+                    volume_font_icon:update(font_icon_low, colors.white)
                 elseif level < 60 then
-                    volume_font_icon:update(font_icon_med, colors.orange)
+                    volume_font_icon:update(font_icon_med, colors.white)
                 else
-                    volume_font_icon:update(font_icon_high, colors.orange)
+                    volume_font_icon:update(font_icon_high, colors.white)
                 end
             end
         end
@@ -85,7 +85,7 @@ volume_font_icon:buttons(volume.buttons)
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     volume_font_icon,
-    wibox.container.margin(volume.bar, dpi(0), dpi(3), dpi(3), dpi(3))
+    wibox.container.margin(volume.bar, dpi(0), dpi(0), dpi(3), dpi(3))
 }
 
 volume.tooltip:remove_from_object(volume.bar)

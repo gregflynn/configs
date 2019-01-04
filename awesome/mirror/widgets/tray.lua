@@ -14,6 +14,7 @@ local Toggle   = require("util/toggle")
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
+local gpmdp  = require("widgets/gpmdp")
 
 
 --
@@ -205,6 +206,7 @@ network_icon.buttons = gears.table.join(
 --
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
+    gpmdp,
     redshift,
     blinky_enabled and blinky or nil,
     caffeine,

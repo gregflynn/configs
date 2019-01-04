@@ -4,13 +4,9 @@ local wibox     = require("wibox")
 
 local vicious = require("vicious")
 
-local FontIcon  = require("util/fonticon")
-
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
 
-
-local cpu_chip_icon = FontIcon { icon = '\u{fb19}', color = colors.background }
 
 local cpu_temp_widget = awful.widget.watch("sensors", 15, function(widget, stdout)
     local temp = stdout:match("Package id 0:%s+%p(%d+%p%d)")
@@ -21,8 +17,8 @@ local cpu_temp_widget = awful.widget.watch("sensors", 15, function(widget, stdou
     if temp then
         widget:set_markup(
             string.format(
-                '<span color="%s">%s°C</span>',
-                beautiful.colors.background,
+                '<span color="%s">%s°C</span> ',
+                colors.background,
                 math.floor(temp)
             )
         )
@@ -46,7 +42,6 @@ awful.tooltip {
 
 return wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    cpu_chip_icon,
     cpu_temp_widget,
     wibox.container.margin(cpu_load_widget, dpi(2), dpi(2), dpi(2), dpi(2))
 }

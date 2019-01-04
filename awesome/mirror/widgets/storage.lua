@@ -26,9 +26,9 @@ end
 
 local mem_pie = Pie {
     notification_title = "Memory",
-    colors = {colors.blue, colors.yellow},
-    command = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
-    parse_command = function(stdout)
+    colors             = {colors.blue, colors.yellow},
+    command            = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
+    parse_command      = function(stdout)
         local split = text.split(stdout)
         local total_bytes = tonumber(split[1])
         local used_bytes = tonumber(split[2])
@@ -57,16 +57,16 @@ local mem_pie = Pie {
 }
 
 local function parse_command(stdout)
-    local split = text.split(stdout)
+    local split       = text.split(stdout)
     local total_bytes = tonumber(split[1])
-    local used_bytes = tonumber(split[2])
-    local free_bytes = tonumber(split[3])
+    local used_bytes  = tonumber(split[2])
+    local free_bytes  = tonumber(split[3])
 
     local used_raw_pct = used_bytes / total_bytes
-    local pct_used = number.round(used_raw_pct * 100, 1)
-    local pct_free = number.round(100 * free_bytes / total_bytes, 1)
+    local pct_used     = number.round(used_raw_pct * 100, 1)
+    local pct_free     = number.round(100 * free_bytes / total_bytes, 1)
     return {
-        values = {used_raw_pct},
+        values              = {used_raw_pct},
         notification_preset = {
             text = string.format(
                 "%s\n%s\n%s",
@@ -94,7 +94,7 @@ local root_pie = Pie {
 
 return wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin( mem_pie, dpi(3), dpi(3)),
-    wibox.container.margin(root_pie, dpi(3), dpi(3)),
-    wibox.container.margin(boot_pie, dpi(3), dpi(3)),
+    wibox.container.margin( mem_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
+    wibox.container.margin(root_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
+    wibox.container.margin(boot_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
 }
