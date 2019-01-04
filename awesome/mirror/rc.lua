@@ -67,10 +67,10 @@ awful.screen.connect_for_each_screen(function(screen)
         { screen.mytasklist },
         {
             ArrowList { screen = screen, prefix = true, blocks = {
+                { widget = storage, color = colors.background, primary_only = true },
                 { widget = battery, color = colors.green      },
                 { widget = cpu,     color = colors.red        },
-                { widget = storage, color = colors.background, primary_only = true },
-                { widget = volume,  color = colors.purple,     primary_only = true },
+                { widget = volume,  color = colors.blue,       primary_only = true },
                 { widget = tray,    color = colors.orange,     primary_only = true },
                 { widget = weather, color = colors.purple     },
                 { widget = clock,   color = colors.blue       },

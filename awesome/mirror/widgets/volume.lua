@@ -18,6 +18,7 @@ local font_icon_high = "\u{f028}"
 
 local volume_font_icon = FontIcon()
 local tooltip = awful.tooltip {}
+local fg_color = colors.background
 
 local volume = lain.widget.pulsebar {
     width = dpi(60),
@@ -29,9 +30,9 @@ local volume = lain.widget.pulsebar {
         font     = "Hack 12"
     },
     colors = {
-        background = beautiful.colors.background,
-        mute       = beautiful.colors.white,
-        unmute     = beautiful.colors.white
+        background = beautiful.colors.gray,
+        mute       = fg_color,
+        unmute     = fg_color
     },
     settings = function()
         if volume_now.muted == "yes" then
@@ -41,16 +42,16 @@ local volume = lain.widget.pulsebar {
             local level = tonumber(volume_now.left)
 
             if volume_now.index ~= "0" then
-                volume_font_icon:update(font_icon_headphones, colors.white)
+                volume_font_icon:update(font_icon_headphones, fg_color)
                 tooltip.text = string.format("Headphones: %s%%", level)
             else
                 tooltip.text = string.format("Speakers: %s%%", level)
                 if level < 30 then
-                    volume_font_icon:update(font_icon_low, colors.white)
+                    volume_font_icon:update(font_icon_low, fg_color)
                 elseif level < 60 then
-                    volume_font_icon:update(font_icon_med, colors.white)
+                    volume_font_icon:update(font_icon_med, fg_color)
                 else
-                    volume_font_icon:update(font_icon_high, colors.white)
+                    volume_font_icon:update(font_icon_high, fg_color)
                 end
             end
         end

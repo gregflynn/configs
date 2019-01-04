@@ -152,10 +152,10 @@ gpmdp.widget = awful.widget.watch(
 
             -- update tooltip
             tooltip.markup = string.format(
-                "%s\n%s %s\n%s %s",
-                markup.italic(markup.big(markup.fg.color(colors.white, title))),
-                markup.bold("by"), artist,
-                markup.bold("from"), album
+                "%s\n%s\n%s",
+                markup.italic(markup.fg.color(colors.white, title)),
+                markup.fg.color(colors.purple, artist),
+                markup.fg.color(colors.blue, markup.italic(album))
             )
 
             -- update notification display

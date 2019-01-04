@@ -36,13 +36,14 @@ local mem_pie = Pie {
         local buffer_bytes = total_bytes - free_bytes - used_bytes
 
         local used_raw_pct = used_bytes / total_bytes
-        local buffer_raw_pct = buffer_bytes / total_bytes
+--        local buffer_raw_pct = buffer_bytes / total_bytes
         local pct_used = number.round(used_raw_pct * 100, 1)
         local pct_free = number.round(100 * free_bytes / total_bytes, 1)
         local pct_buffer = number.round(100 * buffer_bytes / total_bytes, 1)
 
         return {
-            values = {used_raw_pct, buffer_raw_pct},
+--            values = {used_raw_pct, buffer_raw_pct},
+            values = {used_raw_pct},
             notification_preset = {
                 text = string.format(
                     "%s\n%s\n%s\n%s",
