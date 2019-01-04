@@ -25,7 +25,6 @@ naughty.config.defaults.margin = 10
 
 local colors   = beautiful.colors
 local terminal = "alacritty"
-local taglist  = { "\u{f303}", "\u{f674}", "\u{fcb5}", "\u{e780}", "\u{f1d8}" }
 
 -- disable "AeroSnap" like feature
 awful.mouse.snap.edge_enabled = false
@@ -55,7 +54,7 @@ local weather    = require("widgets/weather")
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
-    screen.mytaglist = TagList { screen = screen, taglist = taglist }
+    screen.mytaglist = TagList { screen = screen }
 
     -- Create a tasklist widget
     screen.mytasklist = TaskList { screen = screen }
@@ -90,38 +89,31 @@ globalkeys = gears.table.join(
     -- Awesome
     --
     awful.key(
-        { modkey, ctlKey }, "r",
-        awesome.restart,
+        {modkey, ctlKey}, "r", function()
+            -- NOTE: pkill here to avoid flicker hell when restarting awesome
+            -- and redshift is still running
+            os.execute("pkill redshift")
+            awesome.restart()
+        end,
         {description = "Reload Awesome", group = "awesome"}
     ),
     awful.key(
-        { modkey, shift  }, "q",
-        awesome.quit,
+        {modkey, shift}, "q", awesome.quit,
         {description = "Logout", group = "awesome"}
     ),
     awful.key(
-        { modkey,        }, "s",
-        hotkeys_popup.show_help,
+        {modkey}, "s", hotkeys_popup.show_help,
         {description = "Show Keybindings", group = "awesome"}
     ),
     awful.key(
-        { modkey,        }, "Return",
-        function()
-            awful.spawn(terminal)
-        end,
+        {modkey}, "Return", function() awful.spawn(terminal) end,
         {description = "Open Terminal", group = "awesome"}
     ),
     awful.key(
-        {                }, "XF86Explorer",
-        function()
-            awful.spawn("thunar "..home)
-        end
+        {}, "XF86Explorer", function() awful.spawn("thunar "..home) end
     ),
     awful.key(
-        { modkey,        }, "i",
-        function()
-            awful.spawn({"bash", beautiful.lock_script})
-        end,
+        {modkey}, "i", function() awful.spawn({"bash", beautiful.lock_script}) end,
         {description = "Lock Screen", group = "awesome"}
     ),
 
@@ -129,8 +121,7 @@ globalkeys = gears.table.join(
     -- Client
     --
     awful.key(
-        { modkey,        }, "Tab",
-        function ()
+        {modkey}, "Tab", function()
             awful.client.focus.history.previous()
             if client.focus then
                 client.focus:raise()
@@ -151,11 +142,6 @@ globalkeys = gears.table.join(
             awful.client.focus.byidx(1)
         end,
         {description = "Right Window in List", group = "client"}
-    ),
-    awful.key(
-        { modkey,           }, "u",
-        awful.client.urgent.jumpto,
-        {description = "Jump To Urgent Window", group = "client"}
     ),
     awful.key(
         { modkey, ctlKey }, "n",
@@ -246,24 +232,8 @@ globalkeys = gears.table.join(
         {description = "Previous Screen", group = "screen"}
     ),
 
-    --
-    -- Tags
-    --
-    awful.key(
-        { modkey,        }, "Left",
-        awful.tag.viewprev,
-        {description = "Previous Tag", group = "tag"}
-    ),
-    awful.key(
-        { modkey,        }, "Right",
-        awful.tag.viewnext,
-        {description = "Next Tagt", group = "tag"}
-    ),
-    awful.key(
-        { modkey,        }, "Escape",
-        awful.tag.history.restore,
-        {description = "Restore Tag", group = "tag"}
-    ),
+    -- Tag Keys
+    TagList { keys = true },
 
     -- Widget keys
     brightness.globalkeys,
@@ -271,61 +241,6 @@ globalkeys = gears.table.join(
     tray.globalkeys,
     volume.globalkeys
 )
-
-function add_tag_keys(idx, override)
-    local tag_name = taglist[idx]
-    local key = '#'..(idx + 9)
-    if override then
-        key = '#'..(override + 9)
-    end
-
-    globalkeys = gears.table.join(
-        globalkeys,
-        awful.key(
-            { modkey }, key,
-            function()
-                local screen = awful.screen.focused()
-                local tag = screen.tags[idx]
-                if tag then
-                    tag:view_only()
-                end
-            end,
-            {description = "View "..tag_name, group = "tag"}
-        ),
-        awful.key(
-            { modkey, "Control" }, key,
-            function()
-                local screen = awful.screen.focused()
-                local tag = screen.tags[idx]
-                if tag then
-                    awful.tag.viewtoggle(tag)
-                end
-            end,
-            {description = "Toggle " .. tag_name, group = "tag"}
-        ),
-        awful.key(
-            { modkey, "Shift" }, key,
-            function()
-                if client.focus then
-                    local tag = client.focus.screen.tags[idx]
-                    if tag then
-                        client.focus:move_to_tag(tag)
-                    end
-                end
-            end,
-            {description = "Move Window to " .. tag_name, group = "tag"}
-        )
-    )
-end
-
--- Bind all key numbers to tags.
-for i = 1, 10 do
-    if i < 6 then
-        add_tag_keys(i)
-    else
-        add_tag_keys(i - 5, i)
-    end
-end
 
 -- Set keys
 root.keys(globalkeys)

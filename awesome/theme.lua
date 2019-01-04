@@ -16,6 +16,7 @@ local font_name = "Hack Nerd Font Mono"
 local colors = {
     background = "#{DS_BACKGROUND}",
     blue       = "#{DS_BLUE}",
+    cyan       = "#{DS_CYAN}",
     green      = "#{DS_GREEN}",
     gray       = "#{DS_GRAY}",
     orange     = "#{DS_ORANGE}",

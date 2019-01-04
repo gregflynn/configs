@@ -141,3 +141,7 @@ client.connect_signal("request::activate", function(c, context, hints)
     c.minimized = false
     awful.ewmh.activate(c, context, hints)
 end)
+
+client.connect_signal("property::urgent", function()
+    awful.client.urgent.jumpto(false)
+end)

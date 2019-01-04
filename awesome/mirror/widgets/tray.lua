@@ -154,7 +154,7 @@ local function update_network_tooltip(network, up, down, wifi_signal)
     end
 
     network_tooltip.text = string.format(
-        "Network: %s%s\n%s Down / %s Up", network, signal, down, up
+        "Network: %s%s\n%s \u{f63b} %s \u{f63e}", network, signal, down, up
     )
 end
 local function network_update()

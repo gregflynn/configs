@@ -11,6 +11,10 @@ local text     = require("util/text")
 local colors   = beautiful.colors
 
 
+local taglist   = {"\u{f303}", "\u{f674}", "\u{fcb5}", "\u{e780}", "\u{f1d8}"}
+local fg_colors = {colors.background, colors.background, colors.background, colors.white, colors.background}
+local bg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.cyan}
+
 local function listupdate_tags(w, buttons, label, data, tags)
     w:reset()
     local prev_color = colors.background
@@ -41,16 +45,24 @@ local function listupdate_tags(w, buttons, label, data, tags)
         if tn:len() == 3 then
             local color_side = text.split(title, "color")[2]
             if color_side then
-                local fg_color = text.select(color_side, "'")
+                -- selected
+                -- local fg_color = text.select(color_side, "'")
+                local fg_color = fg_colors[idx]
                 arr.widget:update(tn, fg_color)
             else
+                -- not selected
                 arr.widget:update(tn, colors.white)
             end
         else
             arr.widget:set_markup_silently(title)
         end
 
-        local arr_color = bg or colors.background
+        local arr_color = colors.background
+        if bg then
+            -- selected
+            arr_color = bg_colors[idx]
+        end
+
         arr:update(arr_color, colors.background, prev_color)
         prev_color = arr_color
 
@@ -59,10 +71,83 @@ local function listupdate_tags(w, buttons, label, data, tags)
     end
 end
 
-local function factory(args)
-    local screen  = args.screen
-    local taglist = args.taglist
+local function create_tag_keys(idx, override)
+    local tag_name = taglist[idx]
+    local key = '#'..(idx + 9)
+    if override then
+        key = '#'..(override + 9)
+    end
 
+    return gears.table.join(
+        globalkeys,
+        awful.key(
+            {modkey}, key, function()
+                local screen = awful.screen.focused()
+                local tag = screen.tags[idx]
+                if tag then
+                    tag:view_only()
+                end
+            end,
+            {description = "View "..tag_name, group = "tag"}
+        ),
+        awful.key(
+            {modkey, "Control"}, key, function()
+                local screen = awful.screen.focused()
+                local tag = screen.tags[idx]
+                if tag then
+                    awful.tag.viewtoggle(tag)
+                end
+            end,
+            {description = "Toggle " .. tag_name, group = "tag"}
+        ),
+        awful.key(
+            {modkey, "Shift"}, key, function()
+                if client.focus then
+                    local tag = client.focus.screen.tags[idx]
+                    if tag then
+                        client.focus:move_to_tag(tag)
+                    end
+                end
+            end,
+            {description = "Move Window to " .. tag_name, group = "tag"}
+        )
+    )
+end
+
+local function factory(args)
+    -- crazy hack to generator taglist keys
+    if args.keys then
+        local globalkeys = gears.table.join(
+            awful.key(
+                {modkey}, "Left", awful.tag.viewprev,
+                {description = "Previous Tag", group = "tag"}
+            ),
+            awful.key(
+                {modkey}, "Right", awful.tag.viewnext,
+                {description = "Next Tagt", group = "tag"}
+            ),
+            awful.key(
+                {modkey}, "Escape", awful.tag.history.restore,
+                {description = "Restore Tag", group = "tag"}
+            )
+        )
+
+        for i = 1, 10 do
+            local tag_keys
+
+            if i < 6 then
+                tag_keys = create_tag_keys(i)
+            else
+                tag_keys = create_tag_keys(i - 5, i)
+            end
+
+            globalkeys = gears.table.join(globalkeys, tag_keys)
+        end
+
+        return globalkeys
+    end
+
+    local screen      = args.screen
     local screen_type = display.screen_type(screen)
 
     awful.tag(
@@ -80,7 +165,8 @@ local function factory(args)
         screen,
         awful.widget.taglist.filter.all,
         gears.table.join(
-            awful.button({ }, 1, function(t) t:view_only() end)
+            awful.button({}, 1, function(t) t:view_only() end),
+            awful.button({"Control"}, 1, function(t) awful.tag.viewtoggle(t) end)
         ),
         nil,
         listupdate_tags
