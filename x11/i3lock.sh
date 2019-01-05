@@ -6,10 +6,18 @@ screen="/tmp/screen.png"
 scrot "$screen"
 
 # pixelate
-convert "$screen" -scale 10% -scale 1000% "$screen"
+convert "$screen" -scale 5%  -scale 2000% "$screen"
+
+# turn blinky off, if installed and on
+blinky_status=$(/usr/bin/blinky --status 2>/dev/null)
+if [[ "$blinky_status" != "" ]] && [[ "$blinky_status" != "#000000" ]]; then
+    blinky --off &
+fi
 
 i3lock \
     --ignore-empty-password \
+    --nofork \
+    --screen=0 \
     --image="$screen" \
     --tiling \
     --indicator \
@@ -20,8 +28,8 @@ i3lock \
     --veriftext="" \
     --wrongtext="" \
     --force-clock \
-    --ringcolor={DS_BLUE}FF \
-    --ringvercolor={DS_YELLOW}FF \
+    --ringcolor={DS_PURPLE}FF \
+    --ringvercolor={DS_BLUE}FF \
     --verifcolor={DS_YELLOW}FF \
     --ringwrongcolor={DS_RED}FF \
     --wrongcolor={DS_RED}FF \
@@ -35,10 +43,14 @@ i3lock \
     --timestr="%l:%M%P" \
     --timepos="w*15/16+x:y+h*3/16" \
     --time-align 2 \
-    --timecolor={DS_BLUE}FF \
+    --timecolor={DS_PURPLE}FF \
     --time-font="Hack" \
-    --timesize=102 \
+    --timesize=112 \
     --datestr=" " \
     ;
 
 rm "$screen"
+
+if [[ "$blinky_status" != "" ]] && [[ "$blinky_status" != "#000000" ]]; then
+    blinky --on &
+fi
