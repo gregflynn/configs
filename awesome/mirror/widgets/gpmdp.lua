@@ -4,7 +4,7 @@ local awful     = require("awful")
 local beautiful = require("beautiful")
 local gears     = require("gears")
 local naughty   = require("naughty")
---local wibox     = require("wibox")
+local wibox     = require("wibox")
 local lain      = require("lain")
 
 local text     = require("util/text")
@@ -131,39 +131,39 @@ gpmdp.widget = awful.widget.watch(
             local artist = text.trim(gpm_now.artist)
             local album = text.trim(gpm_now.album)
 
-            local icon_color = colors.background
---            local title_color = colors.orange
---            local artist_color = colors.orange
---            local title_text = markup.italic(" %s").." / %s "
+            local icon_color = colors.orange
+            local title_color = colors.white
+            local artist_color = colors.blue
+            local title_text = markup.italic(" %s").." %s "
 
             if not gpm_now.playing then
                 font_icon = "\u{f04c}"
---                title_color = colors.gray
+                title_color = colors.gray
 --                artist_color = colors.gray
             end
 
             -- update wibar display
             gpmdp.font_icon:update(font_icon, icon_color)
---            widget:set_markup(string.format(
---                title_text,
---                markup.fg.color(title_color, trunc(title, 20)),
---                markup.fg.color(artist_color, trunc(artist, 20))
---            ))
+            widget:set_markup(string.format(
+                title_text,
+                markup.fg.color(title_color, trunc(title, 20)),
+                markup.fg.color(artist_color, trunc(artist, 20))
+            ))
 
             -- update tooltip
             tooltip.markup = string.format(
                 "%s\n%s\n%s",
                 markup.italic(markup.fg.color(colors.white, title)),
-                markup.fg.color(colors.purple, artist),
-                markup.fg.color(colors.blue, markup.italic(album))
+                markup.fg.color(colors.blue, artist),
+                markup.fg.color(colors.purple, markup.italic(album))
             )
 
             -- update notification display
             gpmdp.notification_preset.text = string.format(
                 "\n%s\n%s\n%s",
                 markup.fg.color(colors.white, markup.italic(markup.big(title))),
-                markup.fg.color(colors.purple, markup.big(artist)),
-                markup.fg.color(colors.blue, markup.italic(markup.big(album)))
+                markup.fg.color(colors.blue, markup.big(artist)),
+                markup.fg.color(colors.purple, markup.italic(markup.big(album)))
             )
 
             if gpmdp.notify == "on" and gpm_now.title ~= gpmdp.current_track then
@@ -180,23 +180,21 @@ gpmdp.widget = awful.widget.watch(
 
 local buttons = gears.table.join(
     awful.button({ }, 1, function()
-        gpmdp.notification_on()
+        awful.spawn("gpmdp")
     end),
     awful.button({ }, 3, function()
-        awful.spawn("gpmdp")
+        gpmdp.notification_on()
     end)
 )
 
 gpmdp.font_icon:buttons(buttons)
---gpmdp.widget:buttons(buttons)
+gpmdp.widget:buttons(buttons)
 
---local container = wibox.widget {
---    layout = wibox.layout.fixed.horizontal,
---    gpmdp.font_icon,
-----    wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
---}
---tooltip:add_to_object(container)
-tooltip:add_to_object(gpmdp.font_icon)
+local container = wibox.widget {
+    layout = wibox.layout.fixed.horizontal,
+    gpmdp.font_icon,
+    wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
+}
+tooltip:add_to_object(container)
 
---return container
-return gpmdp.font_icon
+return container
