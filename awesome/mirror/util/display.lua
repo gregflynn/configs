@@ -79,16 +79,19 @@ function display.set_wallpaper(screen)
     end
 end
 
-function display.incr_layout(screen, amt)
-    local screen = screen or awful.screen.focused()
-    local amt = amt or 1
+function display.adjust_layout(amt)
+    local screen = awful.screen.focused()
     local screen_type = display.screen_type(screen)
     local screen_layouts = display.layouts_for_screen(screen_type)
     awful.layout.inc(amt, screen, screen_layouts)
 end
 
+function display.incr_layout()
+    display.adjust_layout(1)
+end
+
 function display.decr_layout()
-    display.incr_layout(nil, -1)
+    display.incr_layout(-1)
 end
 
 function display.create_layout_widget(screen)
