@@ -298,8 +298,12 @@ function __aur__print__version {
     else
         local remote_version=$(__aur__remote__version "$pkg")
 
-        __dsc__line "[UP]" yellow " $pkg" blue ": " white \
-                "$installed_version" yellow " => " white "$remote_version" green
+        if [[ "$installed_version" == "" ]]; then
+            __dsc__line "[NA]" red " $pkg" blue ": " white "$remote_version" red
+        else
+            __dsc__line "[UP]" yellow " $pkg" blue ": " white \
+                    "$installed_version" yellow " => " white "$remote_version" green
+        fi
     fi
 }
 
