@@ -3,6 +3,7 @@
 
 __pac__cache="/var/cache/pacman/pkg/"
 __pac__log="/var/log/pacman.log"
+__pac__watch__list="linux nvidia systemd"
 
 
 function __pac__hl {
@@ -141,8 +142,24 @@ function __pac__install {
 
 
 function __pac__update {
+    # update the package database
     __pac__pm -Syy
+
     if [[ "$?" == "0" ]]; then
+
+        # check for watched packages
+        local searchstr=$(echo "$__pac__watch__list" | sed 's/ /\\\|/g')
+        local watched_updates=$(pacman -Qu | grep "$searchstr")
+        if [[ "$watched_updates" != "" ]]; then
+            echo
+            __dsc__warn "Watched packages updated"
+            while IFS=$'\n' read -r pkgstr; do
+                IFS=', ' read -r -a pkgarr <<< "$pkgstr"
+                __dsc__line "[UP] " yellow ${pkgarr[0]} blue ": " white ${pkgarr[1]} yellow " => " white ${pkgarr[3]} green
+            done <<< "$watched_updates"
+            echo
+        fi
+
         __pac__pm -Su
     fi
 }
