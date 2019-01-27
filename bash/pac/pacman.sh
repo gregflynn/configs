@@ -3,7 +3,7 @@
 
 __pac__cache="/var/cache/pacman/pkg/"
 __pac__log="/var/log/pacman.log"
-__pac__watch__list="linux nvidia systemd"
+__pac__watch__list="alacritty awesome linux nvidia python systemd"
 
 
 function __pac__hl {
