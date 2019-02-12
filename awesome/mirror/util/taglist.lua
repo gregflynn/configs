@@ -11,7 +11,7 @@ local text     = require("util/text")
 local colors   = beautiful.colors
 
 
-local taglist   = {"\u{f303}", "\u{f674}", "\u{fcb5}", "\u{e780}", "\u{f1d8}"}
+local taglist   = {"\u{f303}", "\u{f674}", "\u{e7a2}", "\u{e780}", "\u{f1d8}"}
 local fg_colors = {colors.background, colors.background, colors.background, colors.white, colors.background}
 local bg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.cyan}
 
@@ -153,7 +153,8 @@ local function factory(args)
     awful.tag(
         taglist, screen,
         {
-            awful.layout.suit.floating,
+--            awful.layout.suit.floating,
+            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,
             awful.layout.suit.floating,

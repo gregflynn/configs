@@ -27,6 +27,7 @@ end
 local mem_pie = Pie {
     notification_title = "Memory",
     colors             = {colors.blue, colors.yellow},
+    bg_color           = colors.background,
     command            = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
     parse_command      = function(stdout)
         local split = text.split(stdout)
@@ -83,14 +84,16 @@ local boot_pie = Pie {
     notification_title = "boot",
     command = create_storage_command("/boot"),
     parse_command = parse_command,
-    colors = {colors.green}
+    colors = {colors.green },
+    bg_color = colors.background,
 }
 
 local root_pie = Pie {
     notification_title = "root",
     command = create_storage_command("/"),
     parse_command = parse_command,
-    colors = {colors.purple}
+    colors = {colors.purple},
+    bg_color = colors.background,
 }
 
 return wibox.widget {

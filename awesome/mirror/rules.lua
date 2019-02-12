@@ -20,7 +20,7 @@ return {
             maximized_vertical = false,
             maximized_horizontal = false,
             maximized = false,
-            floating = true,
+--            floating = true,
             border_width = beautiful.border_width,
             size_hints_honor = false
         }

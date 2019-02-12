@@ -9,10 +9,10 @@ local dpi = beautiful.xresources.apply_dpi
 
 local display = {}
 local default_layouts = {
-    awful.layout.suit.floating,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
-    awful.layout.suit.fair
+    awful.layout.suit.fair,
+    awful.layout.suit.floating,
 }
 local window_icon_overrides = {
     ["Alacritty"]                        = "\u{f489}",
@@ -56,8 +56,8 @@ end
 function display.layouts_for_screen(type)
     if type == 'ultrawide' then
         return {
-            awful.layout.suit.floating,
             lain.layout.centerwork,
+            awful.layout.suit.floating,
             awful.layout.suit.tile,
             awful.layout.suit.tile.left,
             awful.layout.suit.fair

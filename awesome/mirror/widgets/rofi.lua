@@ -27,10 +27,6 @@ rofi.globalkeys = gears.table.join(
         {description = "Launch Program", group = "awesome"}
     ),
     awful.key(
-        {modkey, shift}, " ", function() rofi:show("ssh") end,
-        {description = "Open SSH", group = "awesome"}
-    ),
-    awful.key(
         {modkey}, "u", function() awful.spawn("rofi-pass") end,
         {description = "Open Passwords", group = "awesome"}
     ),
@@ -43,7 +39,7 @@ rofi.globalkeys = gears.table.join(
         {description = "Select Window", group = "client"}
     ),
     awful.key(
-        {modkey, shift}, "w", function() rofi:show("allwindows") end,
+        {modkey}, "p", function() rofi:show("allwindows") end,
         {description = "Select Window (all tags)", group = "client"}
     )
 )
