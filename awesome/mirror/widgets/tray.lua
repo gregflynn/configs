@@ -8,6 +8,7 @@ local lain = require("lain")
 
 local Dropdown = require("util/dropdown")
 local file     = require("util/file")
+local Expand   = require("util/expand")
 local FontIcon = require("util/fonticon")
 local number   = require("util/number")
 local Toggle   = require("util/toggle")
@@ -201,6 +202,14 @@ network_icon.buttons = gears.table.join(
 
 
 --
+-- collapsed systray
+--
+local systray = Expand {
+    font_icon = "\u{f013}",
+    widget = wibox.widget.systray()
+}
+
+--
 -- tray container and global keys
 --
 local container = wibox.widget {
@@ -211,7 +220,8 @@ local container = wibox.widget {
     screenshot_icon,
     wallpapers_icon,
     arandr_enabled and arandr or nil,
-    network_icon
+    network_icon,
+    systray
 }
 container.globalkeys = gears.table.join(
     awful.key(

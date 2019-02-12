@@ -49,7 +49,7 @@ theme.bg_normal     = colors.background
 theme.bg_focus      = colors.background
 theme.bg_urgent     = colors.background
 theme.bg_minimize   = colors.background
-theme.bg_systray    = colors.background
+theme.bg_systray    = colors.orange
 
 theme.fg_normal     = colors.white
 theme.fg_focus      = colors.yellow
