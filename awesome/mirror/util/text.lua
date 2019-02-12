@@ -54,7 +54,7 @@ function text.trunc(str, max_len, trim_char, use_ellipsis)
         if use_ellipsis then
             return string.sub(str, 0, max_len - 3)..'...'
         else
-            return stromg.sub(str, 0, max_len)
+            return string.sub(str, 0, max_len)
         end
     end
 end

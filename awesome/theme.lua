@@ -82,7 +82,7 @@ theme.menu_width        = dpi(300)
 theme.notification_font         = font_name.." 12"
 theme.notification_fg           = colors.white
 theme.notification_border_width = dpi(4)
-theme.notification_border_color = colors.orange
+theme.notification_border_color = colors.yellow
 theme.notification_shape        = theme.border_shape
 
 --
@@ -95,7 +95,7 @@ theme.taglist_bg_focus = colors.purple
 -- Tasklist
 --
 theme.tasklist_fg_focus = colors.white
-theme.tasklist_bg_focus = colors.purple
+theme.tasklist_bg_focus = colors.yellow
 theme.tasklist_fg_minimize = colors.purple
 theme.tasklist_plain_task_name = true
 
