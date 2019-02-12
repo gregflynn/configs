@@ -217,26 +217,22 @@ local container = wibox.widget {
     redshift,
     blinky_enabled and blinky or nil,
     caffeine,
-    screenshot_icon,
+--    screenshot_icon,
     wallpapers_icon,
     arandr_enabled and arandr or nil,
     network_icon,
     systray
 }
+
+--
+-- Screenshot hotkeys
+--
 container.globalkeys = gears.table.join(
     awful.key(
-        {modkey}, "p",
-        function() awful.spawn(string.format(
-            "scrot -e 'mv $f %s'", screenshots_folder
-        )) end,
-        {description = "take full screen screenshot", group = "screen"}
-    ),
-    awful.key(
-        { modkey }, "o",
-        function() awful.spawn.with_shell(string.format(
-            "sleep 0.2 && scrot -s -e 'mv $f %s'", screenshots_folder
-        )) end,
-        {description = "take snippet screenshot", group = "screen"}
+        {modkey}, "o", function()
+            awful.spawn("flameshot gui")
+        end,
+        {description = "open flameshot", group = "screen"}
     )
 )
 

@@ -26,6 +26,10 @@ client.connect_signal("manage", function(c)
     c.shape = beautiful.border_shape
 end)
 
+function should_show_titlebars(client)
+    return not (client.requests_no_titlebar or not client.floating)
+end
+
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)
     -- buttons for the titlebar
@@ -95,7 +99,7 @@ client.connect_signal("request::titlebars", function(c)
         layout = wibox.layout.align.horizontal
     }
 
-    if not c.floating then
+    if not should_show_titlebars(c) then
         awful.titlebar.hide(c)
     end
 
@@ -104,7 +108,7 @@ client.connect_signal("request::titlebars", function(c)
 end)
 
 client.connect_signal("property::floating", function(c)
-    if c.floating then
+    if should_show_titlebars(c) then
         awful.titlebar.show(c)
     else
         awful.titlebar.hide(c)

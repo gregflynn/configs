@@ -85,12 +85,4 @@ function text.pad(str, width, right, char)
     return str
 end
 
-function text.startswith(str, start)
-    return str:sub(1, #start) == start
-end
-
-function text.endswith(str, ending)
-    return ending == "" or str:sub(-#ending) == ending
-end
-
 return text
