@@ -29,7 +29,7 @@ local calendar = lain.widget.cal {
 clock:disconnect_signal("mouse::enter", calendar.hover_on)
 
 clock:buttons(gears.table.join(
-    awful.button({ }, 1, calendar.prev),
+    awful.button({ }, 1, calendar.hover_on),
     awful.button({ }, 2, calendar.hover_on),
     awful.button({ }, 3, function()
         awful.spawn("xdg-open https://calendar.google.com/")
