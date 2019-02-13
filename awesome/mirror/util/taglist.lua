@@ -8,7 +8,9 @@ local Arrow    = require("util/arrow")
 local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local text     = require("util/text")
+
 local colors   = beautiful.colors
+local dpi      = beautiful.xresources.apply_dpi
 
 
 local taglist   = {"\u{f303}", "\u{f674}", "\u{e7a2}", "\u{e780}", "\u{f1d8}"}
@@ -162,16 +164,15 @@ local function factory(args)
         }
     )
 
-    return awful.widget.taglist(
-        screen,
-        awful.widget.taglist.filter.all,
-        gears.table.join(
+    return wibox.container.margin(awful.widget.taglist {
+        screen = screen,
+        filter = awful.widget.taglist.filter.all,
+        update_function = listupdate_tags,
+        buttons = gears.table.join(
             awful.button({}, 1, function(t) t:view_only() end),
             awful.button({"Control"}, 1, function(t) awful.tag.viewtoggle(t) end)
         ),
-        nil,
-        listupdate_tags
-    )
+    }, 0, dpi(15))
 end
 
 return factory
