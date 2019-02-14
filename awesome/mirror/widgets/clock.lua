@@ -17,6 +17,7 @@ awful.tooltip {
 
 local calendar = lain.widget.cal {
     attach_to = { clock },
+    week_start = 1,
     icons = "",
     notification_preset = {
         font = 'Hack',
