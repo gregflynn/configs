@@ -27,7 +27,7 @@ client.connect_signal("manage", function(c)
 end)
 
 function should_show_titlebars(client)
-    return not (client.requests_no_titlebar or not client.floating)
+    return not (client.requests_no_titlebar or not client.floating) and not client.maximized
 end
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.

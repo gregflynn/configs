@@ -11,7 +11,7 @@ local capi = {
 
 
 local function should_display_on_primary(block, screen)
-    if not block.primary_only then
+    if not block.primary_only or #capi.screen == 1 then
         return true
     end
 
