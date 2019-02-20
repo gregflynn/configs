@@ -45,7 +45,7 @@ i3lock \
     --time-align 2 \
     --timecolor={DS_PURPLE}FF \
     --time-font="Hack" \
-    --timesize=112 \
+    --timesize=122 \
     --datestr=" " \
     ;
 

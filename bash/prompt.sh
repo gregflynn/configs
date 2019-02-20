@@ -113,7 +113,7 @@ function __prompt__venv {
 function __prompt__line1 {
     CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(__prompt__userpath)$(__prompt__venv)$(__prompt__git)$CE$__right$C_"
+    echo -n "$C_$(__prompt__userpath)$CE$__right$C_"
 }
 
 function __prompt__line2 {

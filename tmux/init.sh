@@ -20,9 +20,11 @@ function __dotsan__tmux__init {
                 git pull
                 popd > /dev/null
             fi
+
+            __dotsan__inject tmux tmux.conf
             ;;
         install)
-            __dotsan__link tmux tmux.conf .tmux.conf
+            __dotsan__link tmux dist/tmux.conf .tmux.conf
             bash ${__tmux__plugins}/bin/install_plugins
             bash ${__tmux__plugins}/bin/update_plugins all
             ;;
