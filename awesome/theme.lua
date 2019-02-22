@@ -37,7 +37,7 @@ local theme = {
     border_width  = dpi(2),
     font          = font_name.." 10",
     font_name     = font_name,
-    wallpaper     = dotsan_home.."/private/wallpapers/light_lanes.png",
+    wallpaper     = "{DS_WALLPAPER}",
     border_shape  = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(5))
     end,

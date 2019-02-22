@@ -5,8 +5,13 @@ screen="/tmp/screen.png"
 # take screenshot
 scrot "$screen"
 
-# pixelate
-convert "$screen" -scale 5%  -scale 2000% "$screen"
+convert ${screen} \
+    -scale 5% \
+    -blur 0x4 \
+    -fill black \
+    -colorize 10% \
+    -scale 2000% \
+    ${screen}
 
 # turn blinky off, if installed and on
 blinky_status=$(/usr/bin/blinky --status 2>/dev/null)
@@ -18,7 +23,7 @@ i3lock \
     --ignore-empty-password \
     --nofork \
     --screen=0 \
-    --image="$screen" \
+    --image="${screen}" \
     --tiling \
     --indicator \
     --indpos="x+w/2:y+2*h/3" \
