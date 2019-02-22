@@ -9,7 +9,7 @@ convert ${screen} \
     -scale 5% \
     -blur 0x4 \
     -fill black \
-    -colorize 10% \
+    -colorize 30% \
     -scale 2000% \
     ${screen}
 
@@ -46,8 +46,8 @@ i3lock \
     --keyhlcolor={DS_GREEN}FF \
     --bshlcolor={DS_RED}FF \
     --timestr="%l:%M%P" \
-    --timepos="w*15/16+x:y+h*3/16" \
-    --time-align 2 \
+    --timepos="w/2:y+h*1/4" \
+    --time-align 0 \
     --timecolor={DS_PURPLE}FF \
     --time-font="Hack" \
     --timesize=122 \
