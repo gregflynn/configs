@@ -1,17 +1,10 @@
 #!/usr/bin/env bash
 
-screen="/tmp/screen.png"
+screen="/tmp/screen_2.png"
 
-# take screenshot
-scrot "$screen"
-
-convert ${screen} \
-    -scale 5% \
-    -blur 0x4 \
-    -fill black \
-    -colorize 30% \
-    -scale 2000% \
-    ${screen}
+resolution=$(xdpyinfo | grep dimensions | awk '{print $2}')
+filters='noise=alls=10,scale=iw*.05:-1,scale=iw*20:-1:flags=neighbor,gblur=sigma=5'
+ffmpeg -y -loglevel 0 -s "$resolution" -f x11grab -i $DISPLAY -vframes 1 -vf "$filters" "$screen"
 
 # turn blinky off, if installed and on
 blinky_status=$(/usr/bin/blinky --status 2>/dev/null)
