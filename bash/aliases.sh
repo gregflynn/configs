@@ -91,7 +91,7 @@ function gmb {
         return 1
     fi
     date="$(date '+%Y%m')"
-    git checkout -b "${date}_$1"
+    git checkout -b "${date}_gf_$1"
 }
 
 function ydb {
