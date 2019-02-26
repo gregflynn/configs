@@ -68,11 +68,16 @@ function __git__status {
 }
 
 function __python__status {
+    local b=$(badge '' 0 2)
     local venv_name=$(pyenv version-name)
     if [[ "$venv_name" != "system" ]]; then
-        local prefix=$(pyenv prefix)
-        local py_version=$($prefix/bin/python --version 2>&1 | cut -f 2 -d " ")
-        echo -n "$(badge '' 0 2) #[fg=2]$venv_name/$py_version "
+        if [[ "$venv_name" == "" ]]; then
+            echo -n "$b #[fg=1]N/A "
+        else
+            local prefix=$(pyenv prefix)
+            local py_version=$($prefix/bin/python --version 2>&1 | cut -f 2 -d " ")
+            echo -n "$b #[fg=2]$venv_name/$py_version "
+        fi
     fi
 }
 
