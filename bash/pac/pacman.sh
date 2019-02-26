@@ -58,6 +58,9 @@ function __pac__help {
 
         $(__pac__hl list) $(__pac__opt "[explicit|orphans] [filter]")
             - list installed packages, optionally filtered by status or name
+
+        $(__pac__hl cache) $(__pac__opt "[info|prune|revert|show]")
+            - show and manage the pacman cache
     "
 }
 
@@ -68,10 +71,13 @@ function __pac__completion {
     local opts
 
     if [[ "${COMP_WORDS[0]}" == "pac" ]]; then
-        opts="help info install list remove update web history search"
+        opts="help info install list remove update web history search cache"
     fi
 
     case "${COMP_WORDS[1]}" in
+        cache)
+            opts="info prune revert show"
+        ;;
         list)
             opts="explicit orphans"
         ;;
@@ -98,12 +104,12 @@ function pac {
                 prune)  __pac__cache__prune  ;;
                 revert) __pac__cache__revert $3 $4 ;;
                 show)   __pac__cache__show   $3 ;;
+                info)   __pac__cache__summary ;;
                 *)
                     if [[ "$2" != "" ]]; then
                         __dsc__error "Unknown option: ${2}"
                     fi
-                ;&
-                info)   __pac__cache__summary ;;
+                ;;
             esac
         ;;
         history) __pac__history "$pkgs" ;;
