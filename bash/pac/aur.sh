@@ -371,7 +371,7 @@ function __aur__search {
     fi
 
     curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$pkgs" | \
-        python "$__dotsan__home/bash/pac/aur_search.py"
+        /usr/bin/python "$__dotsan__home/bash/pac/aur_search.py" "$__aur__home"
 }
 
 
