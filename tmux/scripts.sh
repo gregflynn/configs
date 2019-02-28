@@ -5,7 +5,7 @@ function badge {
 }
 
 function __git__status {
-    local options="branch conflicted added changed untracked stash"
+    local options="branch conflicted staged changed untracked stash"
 
     gitstatus=$(git status -s -b --porcelain 2>/dev/null)
 
