@@ -51,6 +51,9 @@ function __dock__help {
         $(__dock__hl restart) $svcs
             - restart all or certain services
 
+        $(__dock__hl run) $svc
+            - run a one time command on the given service container.
+
         $(__dock__hl up) $svcs
             - bring up all or certain services in the foreground
 
@@ -91,17 +94,18 @@ function dock {
     local services="${@:2}"
 
     case $1 in
-        bash)    __dock__bash    "$2"        ;;
-        bg)      __dock__bg      "$services" ;;
-        build)   __dock__build   "$services" ;;
-        down)    __dock__down    "$services" ;;
-        edit)    __dock__edit                ;;
-        restart) __dock__restart "$services" ;;
-        ps)      __dock__ps                  ;;
-        up)      __dock__up      "$services" ;;
-        purge)   __dock__purge   "$services" ;;
-        sys)     __dock__sys     ${@:2}      ;;
-        *)       __dock__help                ;;
+        bash)    __dock__bash    "$2"          ;;
+        bg)      __dock__bg      "$services"   ;;
+        build)   __dock__build   "$services"   ;;
+        down)    __dock__down    "$services"   ;;
+        edit)    __dock__edit                  ;;
+        restart) __dock__restart "$services"   ;;
+        run)     __dock__run     "$2" "${@:3}" ;;
+        ps)      __dock__ps                    ;;
+        up)      __dock__up      "$services"   ;;
+        purge)   __dock__purge   "$services"   ;;
+        sys)     __dock__sys     ${@:2}        ;;
+        *)       __dock__help                  ;;
     esac
 }
 
@@ -110,6 +114,14 @@ function __dock__bash {
     # open a bash prompt on the given container name
     # $1 name of the container to start a prompt on
     docker-compose exec $1 bash
+}
+
+
+function __dock__run {
+    # run a command on the given service container
+    # $1 name of the container
+    # $2 command string to run
+    docker-compose run $1 $2
 }
 
 
