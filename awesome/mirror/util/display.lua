@@ -57,8 +57,8 @@ end
 function display.layouts_for_screen(type)
     if type == 'ultrawide' then
         return {
-            lain.layout.centerwork,
             awful.layout.suit.floating,
+            lain.layout.centerwork,
             awful.layout.suit.tile,
             awful.layout.suit.tile.left,
             awful.layout.suit.fair

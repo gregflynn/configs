@@ -156,7 +156,7 @@ local function factory(args)
         taglist, screen,
         {
 --            awful.layout.suit.floating,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
+            screen_type == 'ultrawide' and awful.layout.suit.floating or awful.layout.suit.tile,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,
             awful.layout.suit.floating,
