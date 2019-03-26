@@ -21,7 +21,6 @@ local gpmdp_default_icon = "\u{f001}"
 
 local gpmdp = {
     notify        = "on",
-    followtag     = false,
     file_location = gpmdp_json,
     notification_preset = {
         title     = "Now playing",
@@ -31,7 +30,8 @@ local gpmdp = {
     notification  = nil,
     current_track = nil,
     current_album_art = nil,
-    font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.background}
+    font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.background},
+    running_counter = 0
 }
 
 local tooltip = awful.tooltip {}
@@ -44,10 +44,6 @@ function gpmdp.notification_on()
     local new_album_art = string.format(gpmdp_album_art_fmt, math.random(0, 3894732897))
     local gpm_now = gpmdp.latest
     gpmdp.current_track = gpm_now.title
-
-    if gpmdp.followtag then
-        gpmdp.notification_preset.screen = awful.screen.focused()
-    end
 
     awful.spawn.easy_async({"curl", gpm_now.cover_url, "-o", new_album_art}, function()
         local old_id
@@ -88,16 +84,12 @@ function gpmdp.get_lines(file)
     return lines
 end
 
-function gpmdp.get_now(running)
-    local gpm_now = {
-        running = running,
-        playing = false
-    }
-
+function gpmdp.get_now()
+    local gpm_now = { playing = false }
     local filelines = gpmdp.get_lines(gpmdp.file_location)
 
     -- exit early if gpmdp isn't running
-    if not running or not filelines then
+    if not filelines then
         return gpm_now
     end
 
@@ -119,70 +111,82 @@ function gpmdp.get_now(running)
     return gpm_now
 end
 
+function gpmdp.render(widget, title, artist, album, is_playing)
+    local font_icon = gpmdp_default_icon
+    local title_color = colors.white
+
+    if not is_playing then
+        font_icon = "\u{f04c}"
+        title_color = colors.gray
+    end
+
+    -- update wibar display
+    gpmdp.font_icon:update(font_icon, colors.orange)
+    widget:set_markup(string.format(
+        markup.italic("%s "),
+        markup.fg.color(title_color, trunc(title, 30))
+    ))
+
+    -- update tooltip
+    tooltip.markup = string.format(
+        "%s\nBy: %s\nFrom: %s",
+        markup.italic(markup.fg.color(colors.white, title)),
+        markup.fg.color(colors.blue, artist),
+        markup.fg.color(colors.purple, markup.italic(album))
+    )
+
+    -- update notification display
+    gpmdp.notification_preset.text = string.format(
+        "\n%s\n%s\n%s",
+        markup.fg.color(colors.white, markup.italic(markup.big(title))),
+        markup.fg.color(colors.blue, markup.big(artist)),
+        markup.fg.color(colors.purple, markup.italic(markup.big(album)))
+    )
+end
+
+function gpmdp.maybe_not_running(widget)
+    gpmdp.running_counter = gpmdp.running_counter + 1
+    if gpmdp.running_counter > 5 then
+        gpmdp.font_icon:update(gpmdp_default_icon, colors.background)
+        widget:set_markup("")
+        tooltip.text = "Music"
+        gpmdp.current_track = nil
+    end
+end
+
 gpmdp.widget = awful.widget.watch(
     {"pidof", "Google Play Music Desktop Player"}, 2,
     function(widget, stdout)
-        local gpm_now = gpmdp.get_now(stdout ~= '')
+        local is_running = stdout ~= ''
+
+        if not is_running then
+            gpmdp.maybe_not_running(widget)
+            return
+        end
+
+        local gpm_now = gpmdp.get_now()
         gpmdp.latest = gpm_now
 
-        if gpm_now.running and gpm_now.title then
-            local font_icon = gpmdp_default_icon
+        if gpm_now.title then
+            gpmdp.running_counter = 0
+
             local title = text.trim(gpm_now.title)
             local artist = text.trim(gpm_now.artist)
             local album = text.trim(gpm_now.album)
 
-            local icon_color = colors.orange
-            local title_color = colors.white
-            local artist_color = colors.blue
-            local title_text = markup.italic(" %s").." %s "
-
-            if not gpm_now.playing then
-                font_icon = "\u{f04c}"
-                title_color = colors.gray
---                artist_color = colors.gray
-            end
-
-            -- update wibar display
-            gpmdp.font_icon:update(font_icon, icon_color)
-            widget:set_markup(string.format(
-                title_text,
-                markup.fg.color(title_color, trunc(title, 20)),
-                markup.fg.color(artist_color, trunc(artist, 20))
-            ))
-
-            -- update tooltip
-            tooltip.markup = string.format(
-                "%s\n%s\n%s",
-                markup.italic(markup.fg.color(colors.white, title)),
-                markup.fg.color(colors.blue, artist),
-                markup.fg.color(colors.purple, markup.italic(album))
-            )
-
-            -- update notification display
-            gpmdp.notification_preset.text = string.format(
-                "\n%s\n%s\n%s",
-                markup.fg.color(colors.white, markup.italic(markup.big(title))),
-                markup.fg.color(colors.blue, markup.big(artist)),
-                markup.fg.color(colors.purple, markup.italic(markup.big(album)))
-            )
+            gpmdp.render(widget, title, artist, album, gpm_now.playing)
 
             if gpmdp.notify == "on" and gpm_now.title ~= gpmdp.current_track then
                 gpmdp.notification_on()
             end
         else
-            gpmdp.font_icon:update(gpmdp_default_icon, colors.background)
-            widget:set_markup("")
-            tooltip.text = "Music"
-            gpmdp.current_track = nil
+            gpmdp.maybe_not_running(widget)
         end
     end
 )
 
 local buttons = gears.table.join(
     awful.button({ }, 1, function()
-        awful.spawn("gpmdp")
-    end),
-    awful.button({ }, 3, function()
         gpmdp.notification_on()
     end)
 )
@@ -193,7 +197,7 @@ gpmdp.widget:buttons(buttons)
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     gpmdp.font_icon,
-    wibox.container.margin(gpmdp.widget,   dpi(0), dpi(0))
+    wibox.container.margin(gpmdp.widget, dpi(3))
 }
 tooltip:add_to_object(container)
 
