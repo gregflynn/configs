@@ -15,7 +15,7 @@ local max_full_clients = {
     ["tall"] = 3,
     ["square"] = 5,
     ["widescreen"] = 6,
-    ["ultrawide"] = 13,
+    ["ultrawide"] = 20,
 }
 
 local function create_update_func(screen)
