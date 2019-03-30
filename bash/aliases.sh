@@ -13,6 +13,7 @@ alias ll='ls -l'
 alias proc='ps ax | grep -i --color'
 alias open='xdg-open'
 alias dict='sdcv'
+alias cdds="cd $__dotsan__home"
 
 function bl {
     $@
@@ -25,8 +26,7 @@ function rmpyc {
 }
 
 function title {
-    export __DOTSAN__TITLE="$1"
-#    echo -en "\033]0;$1\a"
+    echo -en "\033]0;$1\a"
 }
 
 function colors {

@@ -13,7 +13,9 @@
             div {
                 color: #{DS_WHITE};
                 text-align: center;
-                padding: 1em;
+                padding-top: 1em;
+                padding-bottom: 1em;
+                width: 5em;
             }
 
             div.row {
@@ -29,67 +31,77 @@
                 display: flex;
                 flex-direction: column;
                 padding: 0;
+                width: unset;
             }
         </style>
     </head>
     <body>
         <div class="row">
-            <div>background; #{DS_BACKGROUND}</div>
-            <div style="color: #{DS_BACKGROUND}; background-color: #{DS_WHITE}">white; #{DS_WHITE}</div>
+            <div class="column">
+                <div class="row">
+                    <div style="color: #{DS_BLUE}">#{DS_BLUE}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_BLUE}">blue</div>
+                    <div style="color: #{DS_BLUE}; background-color: #{DS_WHITE}">#{DS_BLUE}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_BLUE}">blue</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_RED}">#{DS_RED}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_RED}">red</div>
+                    <div style="color: #{DS_RED}; background-color: #{DS_WHITE}">#{DS_RED}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_RED}">red</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_GREEN}">#{DS_GREEN}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_GREEN}">green</div>
+                    <div style="color: #{DS_GREEN}; background-color: #{DS_WHITE}">#{DS_GREEN}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_GREEN}">green</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_ORANGE}">#{DS_ORANGE}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_ORANGE}">orange</div>
+                    <div style="color: #{DS_ORANGE}; background-color: #{DS_WHITE}">#{DS_ORANGE}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_ORANGE}">orange</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_PURPLE}">#{DS_PURPLE}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_PURPLE}">purple</div>
+                    <div style="color: #{DS_PURPLE}; background-color: #{DS_WHITE}">#{DS_PURPLE}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_PURPLE}">purple</div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="row">
+                    <div style="color: #{DS_YELLOW}">#{DS_YELLOW}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_YELLOW}">yellow</div>
+                    <div style="color: #{DS_YELLOW}; background-color: #{DS_WHITE}">#{DS_YELLOW}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_YELLOW}">yellow</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_CYAN}">#{DS_CYAN}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_CYAN}">cyan</div>
+                    <div style="color: #{DS_CYAN}; background-color: #{DS_WHITE}">#{DS_CYAN}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_CYAN}">cyan</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_WHITE}">#{DS_WHITE}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_WHITE}">white</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_WHITE}">#{DS_BACKGROUND}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_BACKGROUND}">background</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_GRAY}">#{DS_GRAY}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_GRAY}">gray</div>
+                    <div style="color: #{DS_GRAY}; background-color: #{DS_WHITE}">#{DS_GRAY}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_GRAY}">gray</div>
+                </div>
+                <div class="row">
+                    <div style="color: #{DS_BLACK}">#{DS_BLACK}</div>
+                    <div style="color: #{DS_BACKGROUND}; background-color: #{DS_BLACK}">black</div>
+                    <div style="color: #{DS_BLACK}; background-color: #{DS_WHITE}">#{DS_BLACK}</div>
+                    <div style="color: #{DS_WHITE}; background-color: #{DS_BLACK}">black</div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="column">
-                <div style="color: #{DS_BLUE}">#{DS_BLUE}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_BLUE}">blue</div>
-                <div style="color: #{DS_BLUE}; background-color: #{DS_WHITE}">#{DS_BLUE}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_BLUE}">blue</div>
-            </div>
-            <div class="column">
-                <div style="color: #{DS_RED}">#{DS_RED}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_RED}">red</div>
-                <div style="color: #{DS_RED}; background-color: #{DS_WHITE}">#{DS_RED}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_RED}">red</div>
-            </div>
-            <div class="column">
-                <div style="color: #{DS_GREEN}">#{DS_GREEN}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_GREEN}">green</div>
-                <div style="color: #{DS_GREEN}; background-color: #{DS_WHITE}">#{DS_GREEN}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_GREEN}">green</div>
-            </div>
-            <div class="column">
-                <div style="color: #{DS_ORANGE}">#{DS_ORANGE}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_ORANGE}">orange</div>
-                <div style="color: #{DS_ORANGE}; background-color: #{DS_WHITE}">#{DS_ORANGE}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_ORANGE}">orange</div>
-            </div>
-            <div class="column">
-                <div style="color: #{DS_PURPLE}">#{DS_PURPLE}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_PURPLE}">purple</div>
-                <div style="color: #{DS_PURPLE}; background-color: #{DS_WHITE}">#{DS_PURPLE}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_PURPLE}">purple</div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="column">
-                <div style="color: #{DS_CYAN}">#{DS_CYAN}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_CYAN}">cyan</div>
-                <div style="color: #{DS_CYAN}; background-color: #{DS_WHITE}">#{DS_CYAN}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_CYAN}">cyan</div>
-            </div>
-            <div class="column">
-                <div style="color: #{DS_YELLOW}">#{DS_YELLOW}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_YELLOW}">yellow</div>
-                <div style="color: #{DS_YELLOW}; background-color: #{DS_WHITE}">#{DS_YELLOW}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_YELLOW}">yellow</div>
-            </div>
-            <div class="column">
-                <div style="color: #{DS_GRAY}">#{DS_GRAY}</div>
-                <div style="color: #{DS_BACKGROUND}; background-color: #{DS_GRAY}">gray</div>
-                <div style="color: #{DS_GRAY}; background-color: #{DS_WHITE}">#{DS_GRAY}</div>
-                <div style="color: #{DS_WHITE}; background-color: #{DS_GRAY}">gray</div>
-            </div>
-        </div>
-
         <!--
         TMP_COLOR / TMP_NAME
             <div class="column">
