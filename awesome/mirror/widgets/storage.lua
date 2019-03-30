@@ -24,39 +24,39 @@ local function notif_row(label, bytes, color, pct)
     )
 end
 
-local mem_pie = Pie {
-    notification_title = "Memory",
-    colors             = {colors.blue, colors.yellow},
-    bg_color           = colors.background,
-    command            = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
-    parse_command      = function(stdout)
-        local split = text.split(stdout)
-        local total_bytes = tonumber(split[1])
-        local used_bytes = tonumber(split[2])
-        local free_bytes = tonumber(split[3])
-        local buffer_bytes = total_bytes - free_bytes - used_bytes
-
-        local used_raw_pct = used_bytes / total_bytes
---        local buffer_raw_pct = buffer_bytes / total_bytes
-        local pct_used = number.round(used_raw_pct * 100, 1)
-        local pct_free = number.round(100 * free_bytes / total_bytes, 1)
-        local pct_buffer = number.round(100 * buffer_bytes / total_bytes, 1)
-
-        return {
---            values = {used_raw_pct, buffer_raw_pct},
-            values = {used_raw_pct},
-            notification_preset = {
-                text = string.format(
-                    "%s\n%s\n%s\n%s",
-                    notif_row("Free", free_bytes, colors.green, pct_free),
-                    notif_row("Used", used_bytes, colors.red, pct_used),
-                    notif_row("Buffer", buffer_bytes, colors.yellow, pct_buffer),
-                    notif_row("Total", total_bytes, colors.blue)
-                )
-            }
-        }
-    end
-}
+--local mem_pie = Pie {
+--    notification_title = "Memory",
+--    colors             = {colors.blue, colors.yellow},
+--    bg_color           = colors.background,
+--    command            = "free -b | grep Mem | awk '{ print $2,$3,$4,$5,$6,$7 }'",
+--    parse_command      = function(stdout)
+--        local split = text.split(stdout)
+--        local total_bytes = tonumber(split[1])
+--        local used_bytes = tonumber(split[2])
+--        local free_bytes = tonumber(split[3])
+--        local buffer_bytes = total_bytes - free_bytes - used_bytes
+--
+--        local used_raw_pct = used_bytes / total_bytes
+----        local buffer_raw_pct = buffer_bytes / total_bytes
+--        local pct_used = number.round(used_raw_pct * 100, 1)
+--        local pct_free = number.round(100 * free_bytes / total_bytes, 1)
+--        local pct_buffer = number.round(100 * buffer_bytes / total_bytes, 1)
+--
+--        return {
+----            values = {used_raw_pct, buffer_raw_pct},
+--            values = {used_raw_pct},
+--            notification_preset = {
+--                text = string.format(
+--                    "%s\n%s\n%s\n%s",
+--                    notif_row("Free", free_bytes, colors.green, pct_free),
+--                    notif_row("Used", used_bytes, colors.red, pct_used),
+--                    notif_row("Buffer", buffer_bytes, colors.yellow, pct_buffer),
+--                    notif_row("Total", total_bytes, colors.blue)
+--                )
+--            }
+--        }
+--    end
+--}
 
 local function parse_command(stdout)
     local split       = text.split(stdout)
@@ -80,25 +80,25 @@ local function parse_command(stdout)
     }
 end
 
-local boot_pie = Pie {
-    notification_title = "boot",
-    command = create_storage_command("/boot"),
-    parse_command = parse_command,
-    colors = {colors.green },
-    bg_color = colors.background,
-}
+--local boot_pie = Pie {
+--    notification_title = "boot",
+--    command = create_storage_command("/boot"),
+--    parse_command = parse_command,
+--    colors = {colors.green },
+--    bg_color = colors.background,
+--}
 
 local root_pie = Pie {
     notification_title = "root",
     command = create_storage_command("/"),
     parse_command = parse_command,
-    colors = {colors.purple},
+    colors = {colors.yellow},
     bg_color = colors.background,
 }
 
 return wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    wibox.container.margin( mem_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
+--    wibox.container.margin( mem_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
     wibox.container.margin(root_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
-    wibox.container.margin(boot_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
+--    wibox.container.margin(boot_pie, dpi(2), dpi(2), dpi(2), dpi(2)),
 }

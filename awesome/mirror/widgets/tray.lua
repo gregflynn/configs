@@ -2,7 +2,7 @@ local awful     = require("awful")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
-local naughty   = require("naughty")
+--local naughty   = require("naughty")
 
 local lain = require("lain")
 
@@ -14,7 +14,7 @@ local number   = require("util/number")
 local Toggle   = require("util/toggle")
 
 local colors = beautiful.colors
-local dpi    = beautiful.xresources.apply_dpi
+--local dpi    = beautiful.xresources.apply_dpi
 
 
 --
@@ -39,22 +39,22 @@ end)
 --
 -- blinky
 --
-local blinky_command = "blinky"
-local blinky_enabled = file.exists("/usr/bin/blinky")
-local blinky         = Toggle {
-    font_icon_enabled        = "\u{fbe6}",
-    font_icon_enabled_color  = colors.background,
-    font_icon_disabled       = "\u{fbe7}",
-    font_icon_disabled_color = colors.white,
-    default_enabled          = true,
-    tooltip_text             = "Toggle LED Backlights",
-    on_enable = function()
-        awful.spawn({blinky_command, "--on"})
-    end,
-    on_disable = function()
-        awful.spawn({blinky_command, "--off"})
-    end
-}
+--local blinky_command = "blinky"
+--local blinky_enabled = file.exists("/usr/bin/blinky")
+--local blinky         = Toggle {
+--    font_icon_enabled        = "\u{fbe6}",
+--    font_icon_enabled_color  = colors.background,
+--    font_icon_disabled       = "\u{fbe7}",
+--    font_icon_disabled_color = colors.white,
+--    default_enabled          = true,
+--    tooltip_text             = "Toggle LED Backlights",
+--    on_enable = function()
+--        awful.spawn({blinky_command, "--on"})
+--    end,
+--    on_disable = function()
+--        awful.spawn({blinky_command, "--off"})
+--    end
+--}
 
 
 --
@@ -81,26 +81,26 @@ local caffeine = Toggle {
 --
 -- screenshots
 --
-local screenshots_folder = beautiful.home.."/Pictures/Screenshots"
-local screenshot_icon    = Dropdown {
-    folder    = screenshots_folder,
-    reverse   = true,
-    font_icon = "\u{f793}",
-    tooltip_text = "Screenshots",
-    menu_func = function(full_path)
-        awful.spawn(string.format(
-            "xclip -selection clipboard -t image/png %s",
-            full_path
-        ))
-        naughty.notify({
-            preset =  {
-                icon_size = dpi(256),
-                timeout   = 2
-            },
-            icon = full_path,
-        })
-    end
-}
+--local screenshots_folder = beautiful.home.."/Pictures/Screenshots"
+--local screenshot_icon    = Dropdown {
+--    folder    = screenshots_folder,
+--    reverse   = true,
+--    font_icon = "\u{f793}",
+--    tooltip_text = "Screenshots",
+--    menu_func = function(full_path)
+--        awful.spawn(string.format(
+--            "xclip -selection clipboard -t image/png %s",
+--            full_path
+--        ))
+--        naughty.notify({
+--            preset =  {
+--                icon_size = dpi(256),
+--                timeout   = 2
+--            },
+--            icon = full_path,
+--        })
+--    end
+--}
 
 
 --
@@ -215,7 +215,7 @@ local systray = Expand {
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     redshift,
-    blinky_enabled and blinky or nil,
+--    blinky_enabled and blinky or nil,
     caffeine,
 --    screenshot_icon,
     wallpapers_icon,

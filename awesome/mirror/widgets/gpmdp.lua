@@ -113,7 +113,7 @@ end
 
 function gpmdp.render(widget, title, artist, album, is_playing)
     local font_icon = gpmdp_default_icon
-    local title_color = colors.white
+    local title_color = colors.background
 
     if not is_playing then
         font_icon = "\u{f04c}"
@@ -121,7 +121,7 @@ function gpmdp.render(widget, title, artist, album, is_playing)
     end
 
     -- update wibar display
-    gpmdp.font_icon:update(font_icon, colors.orange)
+    gpmdp.font_icon:update(font_icon, colors.background)
     widget:set_markup(string.format(
         markup.italic("%s "),
         markup.fg.color(title_color, trunc(title, 30))
@@ -187,7 +187,11 @@ gpmdp.widget = awful.widget.watch(
 
 local buttons = gears.table.join(
     awful.button({ }, 1, function()
-        gpmdp.notification_on()
+        if gpmdp.current_track ~= nil then
+            gpmdp.notification_on()
+        else
+            awful.spawn("gpmdp")
+        end
     end)
 )
 

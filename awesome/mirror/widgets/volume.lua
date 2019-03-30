@@ -9,6 +9,8 @@ local FontIcon = require("util/fonticon")
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
 
+local gpmdp = require("widgets/gpmdp")
+
 
 local font_icon_headphones = "\u{f7ca}"
 local font_icon_mute = "\u{fc5d}"
@@ -85,6 +87,7 @@ volume_font_icon:buttons(volume.buttons)
 
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
+    gpmdp,
     volume_font_icon,
     wibox.container.margin(volume.bar, dpi(0), dpi(0), dpi(3), dpi(3))
 }
