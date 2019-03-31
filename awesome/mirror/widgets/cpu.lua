@@ -59,7 +59,7 @@ container:add(graph_container(cpu_load_widget, "CPU Load"))
 --
 -- GPU
 --
-if file.exists("/usr/bin/nvidia-smi") then
+if file.exists("/usr/bin/nvidia-smi") and not file.exists("/proc/acpi/bbswitch")then
     local gpu_temp_widget = awful.widget.watch(
         "nvidia-smi --format=csv,nounits,noheader --query-gpu=temperature.gpu",
         15,
