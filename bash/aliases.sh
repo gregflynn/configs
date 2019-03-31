@@ -14,6 +14,7 @@ alias proc='ps ax | grep -i --color'
 alias open='xdg-open'
 alias dict='sdcv'
 alias cdds="cd $__dotsan__home"
+alias xmds="xmodmap $__dotsan__home/x11/xmodmap"
 
 function bl {
     $@

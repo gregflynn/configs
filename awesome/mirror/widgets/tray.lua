@@ -2,7 +2,6 @@ local awful     = require("awful")
 local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
---local naughty   = require("naughty")
 
 local lain = require("lain")
 
@@ -76,31 +75,6 @@ local caffeine = Toggle {
         awful.spawn({"xset", "s", "off"})
     end
 }
-
-
---
--- screenshots
---
---local screenshots_folder = beautiful.home.."/Pictures/Screenshots"
---local screenshot_icon    = Dropdown {
---    folder    = screenshots_folder,
---    reverse   = true,
---    font_icon = "\u{f793}",
---    tooltip_text = "Screenshots",
---    menu_func = function(full_path)
---        awful.spawn(string.format(
---            "xclip -selection clipboard -t image/png %s",
---            full_path
---        ))
---        naughty.notify({
---            preset =  {
---                icon_size = dpi(256),
---                timeout   = 2
---            },
---            icon = full_path,
---        })
---    end
---}
 
 
 --
@@ -194,11 +168,11 @@ lain.widget.net {
     eth_state  = "on",
     settings   = network_update
 }
-network_icon.buttons = gears.table.join(
+network_icon:buttons(gears.table.join(
     awful.button({}, 1, function()
         awful.spawn("networkmanager_dmenu")
     end)
-)
+))
 
 
 --
@@ -217,7 +191,6 @@ local container = wibox.widget {
     redshift,
 --    blinky_enabled and blinky or nil,
     caffeine,
---    screenshot_icon,
     wallpapers_icon,
     arandr_enabled and arandr or nil,
     network_icon,
