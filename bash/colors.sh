@@ -1,20 +1,8 @@
 #!/usr/bin/env bash
 
 
-if [[ "$DS_NEW_COLORS" == "1" ]]; then
-    echo "NEW COLOR PALETTE INJECTED"
-    __dotsan__hex__background='2D2A2E'
-    __dotsan__hex__black='727072'
-    __dotsan__hex__blue='78DCE8'
-    __dotsan__hex__cyan='A1EFE4'
-    __dotsan__hex__green='A9DC76'
-    __dotsan__hex__gray='939293'
-    __dotsan__hex__orange='FC9867'
-    __dotsan__hex__purple='AB9DF2'
-    __dotsan__hex__red='FF6188'
-    __dotsan__hex__white='FCFCFA'
-    __dotsan__hex__yellow='FFD866'
-else
+if [[ "$DS_OLD_COLORS" == "1" ]]; then
+    echo "OLD COLOR PALETTE INJECTED"
     __dotsan__hex__background='272822'
     __dotsan__hex__black='000000'
     __dotsan__hex__blue='66D9EF'
@@ -26,6 +14,18 @@ else
     __dotsan__hex__red='F92672'
     __dotsan__hex__white='F8F8F2'
     __dotsan__hex__yellow='FFE792'
+else
+    __dotsan__hex__background='2D2A2E'
+    __dotsan__hex__black='727072'
+    __dotsan__hex__blue='78DCE8'
+    __dotsan__hex__cyan='A1EFE4'
+    __dotsan__hex__green='A9DC76'
+    __dotsan__hex__gray='939293'
+    __dotsan__hex__orange='FC9867'
+    __dotsan__hex__purple='AB9DF2'
+    __dotsan__hex__red='FF6188'
+    __dotsan__hex__white='FCFCFA'
+    __dotsan__hex__yellow='FFD866'
 fi
 
 

@@ -13,7 +13,7 @@ local dpi    = beautiful.xresources.apply_dpi
 
 local function make_graph()
     local graph = wibox.widget.graph {
-        width = dpi(40),
+        width = dpi(30),
     }
     graph.background_color = colors.red
     graph.color = colors.background

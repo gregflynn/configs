@@ -46,9 +46,8 @@ local battery    = require("widgets/battery")
 local brightness = require("widgets/brightness")
 local clock      = require("widgets/clock")
 local cpu        = require("widgets/cpu")
---local gpmdp      = require("widgets/gpmdp")
 local rofi       = require("widgets/rofi")
---local storage    = require("widgets/storage")
+local timer      = require("widgets/timer")
 local tray       = require("widgets/tray")
 local volume     = require("widgets/volume")
 local weather    = require("widgets/weather")
@@ -66,14 +65,13 @@ awful.screen.connect_for_each_screen(function(screen)
         { screen.mytaglist },
         { screen.mytasklist },
         {
---            gpmdp,
             ArrowList { screen = screen, prefix = true, blocks = {
                 { widget = battery, color = colors.green      },
                 { widget = cpu,     color = colors.red        },
                 { widget = volume,  color = colors.blue,       primary_only = true },
                 { widget = tray,    color = colors.orange,     primary_only = true },
---                { widget = storage, color = colors.background, primary_only = true },
                 { widget = weather, color = colors.purple     },
+                { widget = timer,   color = colors.yellow     },
                 { widget = clock,   color = colors.blue       },
             } },
             display.create_layout_widget(screen)
