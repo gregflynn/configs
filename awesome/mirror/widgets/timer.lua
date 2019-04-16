@@ -35,8 +35,9 @@ local function update_progress()
         value = math.floor(Timer.seconds / 60)
         unit = 'm'
     else
-        local hours = math.floor(Timer.seconds / 60 / 60)
-        local minutes = Timer.seconds / 60 % 60
+        local total_minutes = math.floor(Timer.seconds / 60)
+        local hours = math.floor(total_minutes / 60)
+        local minutes = total_minutes % 60
         value = string.format('%s:%s', hours, minutes)
         unit = ''
     end
