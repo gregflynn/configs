@@ -13,7 +13,6 @@ local number   = require("util/number")
 local Toggle   = require("util/toggle")
 
 local colors = beautiful.colors
---local dpi    = beautiful.xresources.apply_dpi
 
 
 --
@@ -38,22 +37,22 @@ end)
 --
 -- blinky
 --
---local blinky_command = "blinky"
---local blinky_enabled = file.exists("/usr/bin/blinky")
---local blinky         = Toggle {
---    font_icon_enabled        = "\u{fbe6}",
---    font_icon_enabled_color  = colors.background,
---    font_icon_disabled       = "\u{fbe7}",
---    font_icon_disabled_color = colors.white,
---    default_enabled          = true,
---    tooltip_text             = "Toggle LED Backlights",
---    on_enable = function()
---        awful.spawn({blinky_command, "--on"})
---    end,
---    on_disable = function()
---        awful.spawn({blinky_command, "--off"})
---    end
---}
+local blinky_command = "blinky"
+local blinky_enabled = file.exists("/usr/bin/blinky")
+local blinky         = Toggle {
+    font_icon_enabled        = "\u{fbe6}",
+    font_icon_enabled_color  = colors.background,
+    font_icon_disabled       = "\u{fbe7}",
+    font_icon_disabled_color = colors.white,
+    default_enabled          = true,
+    tooltip_text             = "Toggle LED Backlights",
+    on_enable = function()
+        awful.spawn({blinky_command, "--on"})
+    end,
+    on_disable = function()
+        awful.spawn({blinky_command, "--off"})
+    end
+}
 
 
 --
@@ -189,7 +188,7 @@ local systray = Expand {
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     redshift,
---    blinky_enabled and blinky or nil,
+    blinky_enabled and blinky or nil,
     caffeine,
     wallpapers_icon,
     arandr_enabled and arandr or nil,
