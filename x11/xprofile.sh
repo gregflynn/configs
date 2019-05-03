@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-compton -b -c --backend glx --vsync --use-damage
+compton -b -c --backend glx --use-damage
 
 xautolock -time 15 -locker "bash {DS_LOCK}" &
 
