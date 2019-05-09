@@ -16,7 +16,7 @@ if [[ "$DS_OLD_COLORS" == "1" ]]; then
     __dotsan__hex__yellow='FFE792'
 else
     __dotsan__hex__background='2D2A2E'
-    __dotsan__hex__black='727072'
+    __dotsan__hex__black='080808'
     __dotsan__hex__blue='78DCE8'
     __dotsan__hex__cyan='A1EFE4'
     __dotsan__hex__green='A9DC76'

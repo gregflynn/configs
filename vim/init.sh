@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+__vim__plug="$__dotsan__home/vim/dist/vim-plug"
+
 function __dotsan__vim__init {
     case $1 in
         check)
@@ -9,18 +11,20 @@ function __dotsan__vim__init {
             esac
             ;;
         build)
-            if [ ! -e "$HOME/.vim" ]; then
-                git clone https://github.com/VundleVim/Vundle.vim.git \
-                        "$HOME/.vim/bundle/Vundle.vim"
+            mkdir -p "$HOME/.vim/autoload/airline/themes"
+            if [ ! -e "$__vim__plug" ]; then
+                git clone https://github.com/junegunn/vim-plug.git "$__vim__plug"
             else
-                pushd "$HOME/.vim/bundle/Vundle.vim" > /dev/null
+                pushd "$__vim__plug" > /dev/null
                 git pull
                 popd > /dev/null
             fi
             ;;
         install)
             __dotsan__link vim vimrc.vim .vimrc
-            vim +PluginInstall +qall
+            __dotsan__link vim monokaipro.vim .vim/autoload/airline/themes/monokaipro.vim
+            __dotsan__link vim dist/vim-plug/plug.vim .vim/autoload/plug.vim
+            vim +PlugInstall +qall
             ;;
     esac
 }

@@ -1,26 +1,16 @@
-set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'Yggdroot/indentLine'
-Plugin 'majutsushi/tagbar'
-Plugin 'crusoexia/vim-monokai'
-Plugin 'nvie/vim-flake8'
-Plugin 'tpope/vim-vinegar'
-Plugin 'mustache/vim-mustache-handlebars'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'peitalin/vim-jsx-typescript'
-Plugin 'leafgarland/typescript-vim'
-call vundle#end()
-filetype plugin indent on
+call plug#begin('~/.vim/plugged')
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'Yggdroot/indentLine'
+Plug 'majutsushi/tagbar'
+Plug 'phanviet/vim-monokai-pro'
+Plug 'nvie/vim-flake8'
+Plug 'tpope/vim-vinegar'
+Plug 'scrooloose/nerdcommenter'
+Plug 'airblade/vim-gitgutter'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'leafgarland/typescript-vim'
+call plug#end()
 
 " CtrlP config options
 " Ignore some folders and files for CtrlP indexing
@@ -34,9 +24,15 @@ map <C-F> :CtrlPTag<cr>
 
 " Airline config options
 let g:airline_powerline_fonts = 1
-let g:airline_section_y = ''
-let g:airline_section_z = ''
-let g:airline_theme='molokai'
+let g:airline_skip_empty_sections = 1
+function! AirlineInit()
+    let g:airline_section_b = airline#section#create(['%{getcwd()}'])
+    let g:airline_section_c = airline#section#create_left(['file'])
+    let g:airline_section_y = 0
+    let g:airline_section_z = 0
+  endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+let g:airline_theme='monokaipro'
 
 " netrw config
 let g:netrw_liststyle = 3
@@ -46,7 +42,7 @@ map <C-\> :Lexplore<cr>
 
 " syntax highlighting setup
 syntax enable
-:silent! colorscheme monokai
+:silent! colorscheme monokai_pro
 :silent! set t_Co=256
 :silent! set termguicolors
 let g:monokai_term_italic = 1
@@ -131,8 +127,11 @@ function! CreateInPreview()
   redraw!
 endf
 
-set cursorline
+" NOTE: cursorline is disabled for now because it's hiding the cursor on me
+"set cursorline
 set mouse=a
 
 " Make background transparent
 hi Normal guibg=NONE ctermbg=NONE
+hi NonText guibg=NONE ctermbg=NONE
+
