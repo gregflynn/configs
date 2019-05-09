@@ -12,13 +12,9 @@ let s:cyan    = {'hex': '#A1EFE4', 'term': 51}
 let s:green   = {'hex': '#A9DC76', 'term': 150}
 
 let g:airline#themes#monokaipro#palette = {}
-"let g:airline#themes#monokaipro#palette.accents = {
-""      \ 'red': [s:red['hex'], '', s:red['term'], '', ''],
-""      \ }
 
 
-hi Cursor ctermfg=221 ctermbg=16 guifg=#FFD866 guibg=#2D2A2E
-hi CursorLine ctermfg=221 ctermbg=16 cterm=NONE guifg=#FFD866 guibg=#2D2A2E gui=NONE
+
 " Normal mode
 let s:N1 = [s:background['hex'], s:yellow['hex'], s:background['term'], s:yellow['term']]
 let s:N2 = [s:white['hex'], s:background['hex'], s:white['term'], s:background['term']]
