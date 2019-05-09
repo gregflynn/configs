@@ -10,7 +10,7 @@
     /**
      * Editor
      */
-    "editor.fontFamily": "'Hack'",
+    "editor.fontFamily": "'Hack Nerd Font'",
     "window.zoomLevel": 0,
     "editor.fontSize": 12,
     "editor.renderIndentGuides": true,
