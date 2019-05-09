@@ -88,6 +88,18 @@ function __docker__status {
     fi
 }
 
+function __kube__status {
+    if command -v kubectl > /dev/null; then
+        local context=$(kubectl config current-context)
+        local namespace=$(kubectl config view --minify | grep namespace | awk '{ print $2 }')
+        if [[ "$namespace" == "" ]]; then
+            echo -n "$(badge '力' 0 4) $context "
+        else
+            echo -n "$(badge '力' 0 4) $context ($namespace) "
+        fi
+    fi
+}
+
 function main {
     local dir="$1"
     local badges="${@:2}"
@@ -97,6 +109,7 @@ function main {
         case ${badge} in
             docker) __docker__status ;;
             git) __git__status ;;
+            kube) __kube__status ;;
             python) __python__status ;;
         esac
     done
