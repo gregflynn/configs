@@ -47,7 +47,7 @@ local brightness = require("widgets/brightness")
 local clock      = require("widgets/clock")
 local cpu        = require("widgets/cpu")
 local rofi       = require("widgets/rofi")
-local timer      = require("widgets/timer")
+--local timer      = require("widgets/timer")
 local tray       = require("widgets/tray")
 local volume     = require("widgets/volume")
 local weather    = require("widgets/weather")
@@ -71,7 +71,7 @@ awful.screen.connect_for_each_screen(function(screen)
                 { widget = volume,  color = colors.blue,       primary_only = true },
                 { widget = tray,    color = colors.orange,     primary_only = true },
                 { widget = weather, color = colors.purple     },
-                { widget = timer,   color = colors.yellow     },
+                --{ widget = timer,   color = colors.yellow     },
                 { widget = clock,   color = colors.blue       },
             } },
             display.create_layout_widget(screen)
