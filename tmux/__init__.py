@@ -19,7 +19,7 @@ class Initializer(BaseInitializer):
         tpm_bin_path = self.TPM_PATH + ('bin',)
         self.link(self.dist_path('tmux.conf'), self.home_path('.tmux.conf'))
         self.run(self.home_path(*tpm_bin_path, 'install_plugins'))
-        self.run(self.home_path(*tpm_bin_path, 'update_plugins'), 'all')
+        self.run(self.home_path(*tpm_bin_path, 'update_plugins') + ' all')
 
 
 def initializer():

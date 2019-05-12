@@ -142,10 +142,19 @@ class BaseInitializer(object):
         os.symlink(points_to, link_location)
 
     @staticmethod
+    def mkdir(path):
+        """Make directories
+
+        Args:
+            path (str): path to create
+        """
+        os.makedirs(path, exist_ok=True)
+
+    @staticmethod
     def run(*command, cwd=None):
         """Run a command
         """
-        check_call(command, cwd=cwd)
+        check_call(command, cwd=cwd, shell=True)
 
     #
     # Private helpers
@@ -160,10 +169,5 @@ class BaseInitializer(object):
 
     def _assert_dist(self):
         if not self._dist_exists:
-            dist = self.dist_path()
-
-            if not os.path.isdir(dist):
-                os.mkdir(dist)
-
+            self.mkdir(self.dist_path())
             self._dist_exists = True
-
