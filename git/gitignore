@@ -4,3 +4,5 @@
 .fab_tasks~
 tags
 
+*.pyc
+**/__pycache/**
