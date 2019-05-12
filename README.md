@@ -19,6 +19,10 @@ this is a, mediocre at best, attempt to keep my configuration files in a managea
   * Custom configuration
   * Compartmentalized Widget
 
+## Requirements
+- bash
+- Python 3.4+
+
 ## install
 ```
 git clone https://github.com/gregflynn/dotsanity.git ~/.sanity

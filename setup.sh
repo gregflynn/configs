@@ -207,7 +207,7 @@ for module_name in ${__dotsan__modules}; do
 done
 
 if [[ "$@" == "" ]]; then
-    python -m _src
+    python3 -m _src
 else
-    python -m _src --module $@
+    python3 -m _src --module $@
 fi
