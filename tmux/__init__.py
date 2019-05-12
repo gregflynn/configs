@@ -8,10 +8,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['tmux']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def build(self):
         tpm_path = self.home_path(*self.TPM_PATH)
         self.checkout(

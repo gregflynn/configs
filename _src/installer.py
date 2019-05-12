@@ -13,7 +13,7 @@ class PackageManager(object):
             check_call(pacman, stdout=DEVNULL, stderr=DEVNULL)
             self._query_cmd = pacman
             self._grep_template = '^{} '
-        except CalledProcessError:
+        except (CalledProcessError, FileNotFoundError):
             self._query_cmd = ['dpkg', '-l']
             self._grep_template = ' {} '
 
