@@ -10,6 +10,10 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['vim-runtime']
 
+    @property
+    def install_in_cli(self):
+        return True
+
     def build(self):
         self.mkdir(self.home_path(*self.AIRLINE_THEMES))
         self.checkout('https://github.com/junegunn/vim-plug.git', self.VIM_PLUG)

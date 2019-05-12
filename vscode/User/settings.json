@@ -3,7 +3,6 @@
     "window.title": "${dirty} ${rootName}:${activeEditorShort}",
     "extensions.ignoreRecommendations": true,
     "keyboard.dispatch": "keyCode",
-    "atomKeymap.promptV3Features": true,
     "editor.multiCursorModifier": "ctrlCmd",
     "workbench.startupEditor": "none",
 
@@ -12,7 +11,7 @@
      */
     "editor.fontFamily": "'Hack Nerd Font'",
     "window.zoomLevel": 0,
-    "editor.fontSize": 12,
+    "editor.fontSize": 15,
     "editor.renderIndentGuides": true,
     "editor.codeLens": false,
     "editor.minimap.enabled": false,
@@ -75,49 +74,26 @@
      */
     "terminal.integrated.fontSize": 15,
     "workbench.colorCustomizations": {
-        "[Monokai]": {
-            "sideBar.background": "#272822",
+        "[Monokai Pro]": {
+            "sideBar.background": "#2D2A2E",
             "editorGroupHeader.tabsBackground": "#1e1f1c",
             "statusBar.background": "#1e1f1c",
             "editorGutter.background": "#1e1f1c"
         },
-        "terminal.background": "#272822",
-        "terminal.foreground": "#f8f8f2",
-        "terminal.ansiRed": "#F92672",
-        "terminal.ansiGreen": "#A6E22E",
-        "terminal.ansiYellow": "#f4bf75",
-        "terminal.ansiBlue": "#66D9EF",
-        "terminal.ansiMagenta": "#ae81ff",
-        "terminal.ansiCyan": "#a1efe4",
-        "terminal.ansiWhite": "#f8f8f2"
+        "terminal.background": "#2D2A2E",
+        "terminal.foreground": "#FCFCFA",
+        "terminal.ansiRed": "#FF6188",
+        "terminal.ansiGreen": "#A9DC76",
+        "terminal.ansiYellow": "#FFD866",
+        "terminal.ansiBlue": "#78DCE8",
+        "terminal.ansiMagenta": "#AB9DF2",
+        "terminal.ansiCyan": "#A1EFE4",
+        "terminal.ansiWhite": "#FCFCFA"
     },
-    "workbench.iconTheme": "vscode-icons",
-    "workbench.colorTheme": "Monokai",
-    "dayNightThemeSwitcher.dayTheme": "Ayu Light",
-    "dayNightThemeSwitcher.nightTheme": "Monokai",
-    "dayNightThemeSwitcher.nightThemeCustomizations": {
-        "[Monokai]": {
-            "sideBar.background": "#272822",
-            "editorGroupHeader.tabsBackground": "#1e1f1c",
-            "statusBar.background": "#1e1f1c",
-            "editorGutter.background": "#1e1f1c"
-        },
-        /**
-            * Terminal customization
-            */
-        "terminal.background": "#272822",
-        "terminal.foreground": "#f8f8f2",
-        "terminal.ansiRed": "#F92672",
-        "terminal.ansiGreen": "#A6E22E",
-        "terminal.ansiYellow": "#f4bf75",
-        "terminal.ansiBlue": "#66D9EF",
-        "terminal.ansiMagenta": "#ae81ff",
-        "terminal.ansiCyan": "#a1efe4",
-        "terminal.ansiWhite": "#f8f8f2"
-    },
+    "workbench.iconTheme": "Monokai Pro Icons",
+    "workbench.colorTheme": "Monokai Pro",
     "window.menuBarVisibility": "hidden",
     "workbench.statusBar.feedback.visible": false,
     "problems.decorations.enabled": false,
-    "vsicons.dontShowNewVersionMessage": true,
-    "explorer.confirmDragAndDrop": false,
+    "explorer.confirmDragAndDrop": false
 }
