@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 
+alias ds='dotsan'
 alias reload='dotsan reload'
 
 
@@ -65,26 +66,6 @@ function dotsan {
             fi
             popd > /dev/null
         ;;
-        init)
-            modname="$2"
-            if [ "$modname" == "" ]; then
-                __dsc__error "No module name specified"
-                return 1
-            fi
-
-            if [[ $modname =~ ^[a-zA-Z_]+$ ]]; then
-                if [ -d $__dotsan__home/$modname ]; then
-                    __dsc__error "Module '$modname' already exists"
-                    return 1
-                fi
-
-                echo "Creating module $modname"
-                mkdir $__dotsan__home/$2
-                cat ${__dotsan__home}/module_init.sh | sed "s;MODULE;$modname;g" > $__dotsan__home/$modname/init.sh
-            else
-                __dsc__error "Invalid module name '$modname'"
-            fi
-        ;;
         inject)
             host="$2"
             if [[ "$host" == "" ]]; then
@@ -126,7 +107,7 @@ function dotsan {
                 sleep 2
             done
         ;;
-        *)
+        help|*)
             echo "Usage: dotsan [reload|diff|commit|update|version]"
             echo "       dotsan dpi [high|low]"
         ;;

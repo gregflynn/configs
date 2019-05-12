@@ -205,3 +205,9 @@ fi
 for module_name in ${__dotsan__modules}; do
     __dotsan__install__module ${module_name}
 done
+
+if [[ "$@" == "" ]]; then
+    python -m _src
+else
+    python -m _src --module $@
+fi
