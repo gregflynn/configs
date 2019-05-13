@@ -1,6 +1,6 @@
 import os
 import traceback
-from getpass import getuser
+from subprocess import check_output
 
 from .logger import LogLevel, Logger
 from .package_manager import PackageManager
@@ -14,7 +14,7 @@ class Installer(object):
         """
         self._modules = modules
 
-        self._is_root = getuser() == 'root'
+        self._is_root = check_output('whoami').decode('utf-8').strip() == 'root'
         self._is_ssh = os.getenv('SSH_CLIENT') or os.getenv('SSH_TTY')
         self._is_cli_install = self._is_root or self._is_ssh
 
