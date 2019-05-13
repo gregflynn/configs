@@ -93,9 +93,9 @@ function __kube__status {
         local context=$(kubectl config current-context)
         local namespace=$(kubectl config view --minify | grep namespace | awk '{ print $2 }')
         if [[ "$namespace" == "" ]]; then
-            echo -n "$(badge '力' 0 4) $context "
+            echo -n "$(badge 'k' 0 4) $context "
         else
-            echo -n "$(badge '力' 0 4) $context ($namespace) "
+            echo -n "$(badge 'k' 0 4) $context ($namespace) "
         fi
     fi
 }
