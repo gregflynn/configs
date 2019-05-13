@@ -1,34 +1,5 @@
 #!/usr/bin/env bash
 
-
-if [[ "$DS_OLD_COLORS" == "1" ]]; then
-    echo "OLD COLOR PALETTE INJECTED"
-    __dotsan__hex__background='272822'
-    __dotsan__hex__black='000000'
-    __dotsan__hex__blue='66D9EF'
-    __dotsan__hex__cyan='A1EFE4'
-    __dotsan__hex__green='A6E22E'
-    __dotsan__hex__gray='75715E'
-    __dotsan__hex__orange='FD971F'
-    __dotsan__hex__purple='AE81FF'
-    __dotsan__hex__red='F92672'
-    __dotsan__hex__white='F8F8F2'
-    __dotsan__hex__yellow='FFE792'
-else
-    __dotsan__hex__background='2D2A2E'
-    __dotsan__hex__black='080808'
-    __dotsan__hex__blue='78DCE8'
-    __dotsan__hex__cyan='A1EFE4'
-    __dotsan__hex__green='A9DC76'
-    __dotsan__hex__gray='939293'
-    __dotsan__hex__orange='FC9867'
-    __dotsan__hex__purple='AB9DF2'
-    __dotsan__hex__red='FF6188'
-    __dotsan__hex__white='FCFCFA'
-    __dotsan__hex__yellow='FFD866'
-fi
-
-
 function __dsc__mapper {
     case $1 in
         black)  echo '0' ;;
@@ -176,4 +147,32 @@ function __dsc__info {
 
 function __dsc__success {
     __dsc__echo "$1" green
+}
+
+function colors {
+    for x in {0..8}; do
+        for i in {30..37}; do
+            for a in {40..47}; do
+                echo -ne "\e[$x;$i;$a""m\\\e[$x;$i;$a""m\e[0;37;40m "
+            done
+            echo
+        done
+    done
+    echo
+}
+
+function gradient {
+    awk 'BEGIN{
+        s="/\\/\\/\\/\\/\\"; s=s s s s s s s s s s s s s s s s s s s s s s s;
+        for (colnum = 0; colnum<256; colnum++) {
+            r = 255-(colnum*255/255);
+            g = (colnum*510/255);
+            b = (colnum*255/255);
+            if (g>255) g = 510-g;
+            printf "\033[48;2;%d;%d;%dm", r,g,b;
+            printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+            printf "%s\033[0m", substr(s,colnum+1,1);
+        }
+        printf "\n";
+    }'
 }

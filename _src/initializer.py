@@ -2,6 +2,7 @@ import os
 from subprocess import check_call
 
 from . import settings
+from .logger import Logger
 
 
 class BaseInitializer(object):
@@ -14,6 +15,7 @@ class BaseInitializer(object):
         'DS_HOME': settings.DOTSAN_HOME,
         'DS_LOCK': settings.DOTSAN_LOCK,
         'DS_WALLPAPER': settings.DOTSAN_WALLPAPER,
+        'DS_SHELL_INIT': settings.DOTSAN_SHELL_SCRIPT,
 
         'DS_BACKGROUND': settings.Colors.BACKGROUND,
         'DS_BLACK': settings.Colors.BLACK,
@@ -35,7 +37,9 @@ class BaseInitializer(object):
             name (str): Name of the module and its subdirectory
         """
         self.name = name
+        self.logger = Logger(name)
         self._dist_exists = None
+        self._shell_sources_exists = None
 
     #
     # Overrides
@@ -140,9 +144,12 @@ class BaseInitializer(object):
             else cls.home_path(link_location)
         )
         cls._assert_dir(link)
-        if os.path.islink(link) and os.readlink(link) == points_to:
-            # link already exists and is correct
-            return
+        if os.path.islink(link):
+            if os.readlink(link) == points_to:
+                # link already exists and is correct
+                return
+            else:
+                os.remove(link)
 
         os.symlink(points_to, link)
 
@@ -178,6 +185,43 @@ class BaseInitializer(object):
         """Run a command
         """
         check_call(command, cwd=cwd, shell=True)
+
+    def shell_source(self, points_to, init=False):
+        """Register a source script that the configured shell should source
+
+        Args:
+            points_to (str): absolute path to the source script to register
+            init (bool): Set to true to ensure this script is loaded before
+                non-init scripts
+        """
+        name = os.path.basename(points_to)
+
+        if init:
+            name = '00_' + name
+
+        self.link(points_to, os.path.join(settings.DOTSAN_SHELL_SOURCES, name))
+
+    def shell_base(self, points_to_from_base, init=False):
+        """Register a source script that the configured shell should source
+
+        Args:
+            points_to_from_base (str): path from base to the source script to
+                register
+            init (bool): Set to true to ensure this script is loaded before
+                non-init scripts
+        """
+        self.shell_source(self.base_path(points_to_from_base), init=init)
+
+    def shell_dist(self, points_to_from_dist, init=False):
+        """Register a source script that the configured shell should source
+
+        Args:
+            points_to_from_dist (str): path from dist to the source script to
+                register
+            init (bool): Set to true to ensure this script is loaded before
+                non-init scripts
+        """
+        self.shell_source(self.dist_path(points_to_from_dist), init=init)
 
     #
     # Private helpers

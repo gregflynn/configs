@@ -87,7 +87,8 @@ function __dock__completion {
     COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
     return 0
 }
-complete -F __dock__completion dock
+
+__ds__complete __dock__completion dock
 
 
 function dock {

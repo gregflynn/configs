@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 __aur__home="$HOME/.aur"
 
 
@@ -11,7 +10,3 @@ function __pac__is__aur__pkg {
         return 1
     fi
 }
-
-
-__bash__import pac/aur
-__bash__import pac/pacman

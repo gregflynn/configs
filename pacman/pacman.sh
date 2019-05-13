@@ -92,7 +92,7 @@ function __pac__completion {
     COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
     return 0
 }
-complete -F __pac__completion pac
+__ds__complete __pac__completion pac
 
 
 function pac {

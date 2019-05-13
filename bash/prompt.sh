@@ -4,9 +4,6 @@
 __right=$'\uE0BC'
 __right_alt=$'\uE0C7'
 
-# disable default venv PS1 manipulation
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
 
 function __prompt__git {
     gitstatus=`git status -s -b --porcelain 2>/dev/null`

@@ -2,8 +2,6 @@ from _src.initializer import BaseInitializer
 
 
 class Initializer(BaseInitializer):
-    AUTOLOAD = ('.vim', 'autoload')
-    AIRLINE_THEMES = AUTOLOAD + ('airline', 'themes')
     VIM_PLUG = 'vim-plug'
 
     @property
@@ -15,7 +13,6 @@ class Initializer(BaseInitializer):
         return True
 
     def build(self):
-        self.mkdir(self.home_path(*self.AIRLINE_THEMES))
         self.checkout('https://github.com/junegunn/vim-plug.git', self.VIM_PLUG)
 
     def install(self):

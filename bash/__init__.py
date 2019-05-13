@@ -4,17 +4,17 @@ from _src.initializer import BaseInitializer
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['zsh', 'oh-my-zsh-git']
+        return ['bash']
 
     @property
     def install_in_cli(self):
         return True
 
     def build(self):
-        self.inject('zshrc.zsh')
+        self.inject('bashrc.sh')
 
     def install(self):
-        self.link_dist('zshrc.zsh', '.zshrc')
+        self.link_dist('bashrc.sh', '.bashrc')
 
 
 def initializer():

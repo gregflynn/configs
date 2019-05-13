@@ -41,3 +41,11 @@ class Colors:
     PURPLE = 'AB9DF2'
     RED = 'FF6188'
     YELLOW = 'FFD866'
+
+
+DOTSAN_SHELL_SOURCES = home_path('.sanity_sources')
+DOTSAN_SHELL_SCRIPT = """
+for source_script in $(ls -l "{0}" | awk '{{ print $9}}'); do
+    source "{0}/$source_script"
+done
+""".format(DOTSAN_SHELL_SOURCES)

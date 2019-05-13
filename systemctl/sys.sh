@@ -78,7 +78,7 @@ function __sys__completion {
     COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
     return 0
 }
-complete -F __sys__completion sys
+__ds__complete __sys__completion sys
 
 
 function sys {

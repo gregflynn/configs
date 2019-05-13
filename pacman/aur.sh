@@ -90,7 +90,7 @@ function __aur__completion {
     COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
     return 0
 }
-complete -F __aur__completion aur
+__ds__complete __aur__completion aur
 
 
 function aur {
@@ -371,7 +371,7 @@ function __aur__search {
     fi
 
     curl -s "https://aur.archlinux.org/rpc.php?v=5&type=search&arg=$pkgs" | \
-        /usr/bin/python "$__dotsan__home/bash/pac/aur_search.py" "$__aur__home"
+        /usr/bin/python "$__dotsan__home/pacman/aur_search.py" "$__aur__home"
 }
 
 
