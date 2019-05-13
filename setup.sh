@@ -205,6 +205,7 @@ fi
 for module_name in ${__dotsan__modules}; do
     __dotsan__install__module ${module_name}
 done
+echo '-- -- -- -- --'
 
 if [[ "$@" == "" ]]; then
     python3 -m _src

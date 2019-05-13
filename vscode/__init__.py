@@ -4,31 +4,16 @@ from _src.initializer import BaseInitializer
 
 
 class Initializer(BaseInitializer):
-    USER_DIR = ('.config', 'Code', 'User')
-
     @property
     def requirements(self):
         return ['visual-studio-code-bin']
 
     def install(self):
-        def user(suffix):
-            return self.USER_DIR + (suffix,)
-
-        self.mkdir(self.home_path(*self.USER_DIR))
-        self.link(self.base_path('ctags'), self.home_path('.ctags'))
-
-        self.link(
-            self.base_path('User', 'snippets'),
-            self.home_path(*user('snippets'))
-        )
-        self.link(
-            self.base_path('User', 'keybindings.json'),
-            self.home_path(*user('keybindings.json'))
-        )
-        self.link(
-            self.base_path('User', 'settings.json'),
-            self.home_path(*user('settings.json'))
-        )
+        path = '.config/Code/User/'
+        self.link_base('ctags', '.ctags')
+        self.link_base('User/snippets', path + 'snippets')
+        self.link_base('User/keybindings.json', path + 'keybindings.json')
+        self.link_base('User/settings.json', path + 'settings.json')
         self._sync_extensions()
 
     def _sync_extensions(self):

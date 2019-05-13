@@ -44,4 +44,4 @@ class Modules(object):
             if module.is_valid():
                 modules.append(module)
 
-        return modules
+        return sorted(modules, key=lambda m: m.name)

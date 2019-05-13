@@ -19,15 +19,11 @@ class Initializer(BaseInitializer):
         self.checkout('https://github.com/junegunn/vim-plug.git', self.VIM_PLUG)
 
     def install(self):
-        self.link(self.base_path('vimrc.vim'), self.home_path('.vimrc'))
-        self.link(
-            self.base_path('monokaipro.vim'),
-            self.home_path(*(self.AIRLINE_THEMES + ('monokaipro.vim',)))
+        self.link_base('vimrc.vim', '.vimrc')
+        self.link_base(
+            'monokaipro.vim', '.vim/autoload/airline/themes/monokaipro.vim'
         )
-        self.link(
-            self.dist_path(self.VIM_PLUG, 'plug.vim'),
-            self.home_path(*(self.AUTOLOAD + ('plug.vim',)))
-        )
+        self.link_dist(self.VIM_PLUG + '/plug.vim', '.vim/autoload/plug.vim')
         self.run('vim +PlugUpdate +qall')
 
 

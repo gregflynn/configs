@@ -85,17 +85,18 @@ class BaseInitializer(object):
     # Public helpers
     #
 
-    def checkout(self, repo, dest, absolute=False):
+    def checkout(self, repo, dest):
         """Clone or pull a remote repository
 
         Args:
             repo (str): git remote url passed to git clone
             dest (str): the path in the dist directory to clone to, or absolute
                 path if the absolute flag is set to true
-            absolute (bool): flag denoting if dest is an absolute path or a
-                relative path inside the module's dist directory
         """
-        if not absolute:
+        absolute = os.path.isabs(dest)
+        if absolute:
+            self._assert_dir(dest)
+        else:
             self._assert_dist()
 
         checkout_path = dest if absolute else self.dist_path(dest)
@@ -118,28 +119,50 @@ class BaseInitializer(object):
         self._assert_dist()
         infile = self.base_path(source)
         outfile = self.dist_path(source if dest is None else dest)
+        self._assert_dir(outfile)
 
         with open(infile, 'r') as rf, open(outfile, 'w') as wf:
             for line in rf.readlines():
                 wf.write(self._inject_line(line, inject_map or self.INJECT_MAP))
 
-    @staticmethod
-    def link(points_to, link_location):
-        """Create a symlink with absolute paths
+    @classmethod
+    def link(cls, points_to, link_location):
+        """Create a symlink
 
         Args:
             points_to (str): the absolute path the link points to
-            link_location (str): the absolute path where the link will reside on
-                 the filesystem
+            link_location (str): the absolute path, or relative within HOME,
+                where the link will reside on the filesystem
         """
-        if (
-            os.path.islink(link_location)
-            and os.readlink(link_location) == points_to
-        ):
+        link = (
+            link_location
+            if os.path.isabs(link_location)
+            else cls.home_path(link_location)
+        )
+        cls._assert_dir(link)
+        if os.path.islink(link) and os.readlink(link) == points_to:
             # link already exists and is correct
             return
 
-        os.symlink(points_to, link_location)
+        os.symlink(points_to, link)
+
+    def link_base(self, points_to_from_base, link_location):
+        """Create a symlink from the module base
+
+        Args:
+            points_to_from_base (str):
+            link_location (str):
+        """
+        self.link(self.base_path(points_to_from_base), link_location)
+
+    def link_dist(self, points_to_from_dist, link_location):
+        """Create a symlink from the module base
+
+        Args:
+            points_to_from_dist (str):
+            link_location (str):
+        """
+        self.link(self.dist_path(points_to_from_dist), link_location)
 
     @staticmethod
     def mkdir(path):
@@ -171,3 +194,9 @@ class BaseInitializer(object):
         if not self._dist_exists:
             self.mkdir(self.dist_path())
             self._dist_exists = True
+
+    @classmethod
+    def _assert_dir(cls, path):
+        dir_path = os.path.dirname(path)
+        if not os.path.exists(dir_path):
+            cls.mkdir(dir_path)
