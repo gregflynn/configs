@@ -14,7 +14,7 @@ bindkey -e
 export PATH=/usr/local/bin:$PATH
 
 ZSH=/usr/share/oh-my-zsh/
-ZSH_THEME="agnoster"
+ZSH_THEME="avit"
 DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -24,7 +24,7 @@ DISABLE_AUTO_UPDATE="true"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-plugins=(git)
+plugins=(git aws colored-man-pages emoji)
 
 
 # User configuration

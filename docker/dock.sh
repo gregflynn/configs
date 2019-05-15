@@ -5,17 +5,17 @@ __dotsan__dock__manage__dir="$HOME/.dock_manager"
 __dotsan__dock__manage__file="$__dotsan__dock__manage__dir/docker-compose.yaml"
 
 
-function __dock__hl {
+__dock__hl() {
     __dsc__ncho "$1" yellow
 }
 
 
-function __dock__opt {
+__dock__opt() {
     __dsc__ncho "$1" p p i
 }
 
 
-function __dock__help {
+__dock__help() {
     local cmd=$(__dock__hl COMMAND)
     local svc=$(__dock__opt 'service')
     local svcs=$(__dock__opt '[service[, service2]]')
@@ -69,7 +69,7 @@ function __dock__help {
 }
 
 
-function __dock__completion {
+__dock__completion() {
     COMPREPLY=()
     local cur="${COMP_WORDS[COMP_CWORD]}"
     local opts
@@ -91,7 +91,7 @@ function __dock__completion {
 __ds__complete __dock__completion dock
 
 
-function dock {
+dock() {
     local services="${@:2}"
 
     case $1 in
@@ -111,14 +111,14 @@ function dock {
 }
 
 
-function __dock__bash {
+__dock__bash() {
     # open a bash prompt on the given container name
     # $1 name of the container to start a prompt on
     docker-compose exec $1 bash
 }
 
 
-function __dock__run {
+__dock__run() {
     # run a command on the given service container
     # $1 name of the container
     # $2 command string to run
@@ -126,14 +126,14 @@ function __dock__run {
 }
 
 
-function __dock__build {
+__dock__build() {
     # build one or more docker services
     # [$1] optional list of services to start
     docker-compose up --build $1
 }
 
 
-function __dock__down {
+__dock__down() {
     # bring down one or more services
     # [$1] optional list of services to bring down
     if [[ "$1" == "" ]]; then
@@ -144,26 +144,26 @@ function __dock__down {
 }
 
 
-function __dock__edit {
+__dock__edit() {
     # edit the current docker compose
     vim -c ":lcd %:p:h" docker-compose.y*
 }
 
 
-function __dock__ps {
+__dock__ps() {
     # list out running containers
     docker-compose ps
 }
 
 
-function __dock__restart {
+__dock__restart() {
     # restart one or more services
     # [$1] optional list of services to restart
     docker-compose restart $1
 }
 
 
-function __dock__up {
+__dock__up() {
     # bring up one or more services
     # [$1] optional list of services to bring up
     if [[ "$1" == "" ]]; then
@@ -174,7 +174,7 @@ function __dock__up {
 }
 
 
-function __dock__bg {
+__dock__bg() {
     # bring up one or more services in the background
     # [$1] optional list of services to bring up
     if [[ "$1" == "" ]]; then
@@ -185,7 +185,7 @@ function __dock__bg {
 }
 
 
-function __dock__purge {
+__dock__purge() {
     # purge docker cached files
     # $1 all|containers|images|volumes
     case $1 in
@@ -209,7 +209,7 @@ function __dock__purge {
 }
 
 
-function __dock__sys {
+__dock__sys() {
     __dock__hl "Docker User Service\n"
 
     if ! [[ -e ${__dotsan__dock__manage__file} ]]; then

@@ -16,6 +16,7 @@ class BaseInitializer(object):
         'DS_LOCK': settings.DOTSAN_LOCK,
         'DS_WALLPAPER': settings.DOTSAN_WALLPAPER,
         'DS_SHELL_INIT': settings.DOTSAN_SHELL_SCRIPT,
+        'DS_BIN': settings.DOTSAN_SHELl_BIN,
 
         'DS_BACKGROUND': settings.Colors.BACKGROUND,
         'DS_BLACK': settings.Colors.BLACK,

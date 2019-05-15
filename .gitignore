@@ -1,3 +1,6 @@
 private
 .idea/
 **/dist/**
+
+_shell
+_bin
