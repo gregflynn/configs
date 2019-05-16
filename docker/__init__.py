@@ -11,7 +11,12 @@ class Initializer(BaseInitializer):
         return True
 
     def install(self):
-        self.shell_base('dock.sh')
+        self.bin(
+            'dock',
+            'source {}\n__dock $@'.format(self.base_path('dock.sh')),
+            bash_comp=self.base_path('dock-completions.bash'),
+            zsh_comp=self.base_path('dock-completions.zsh')
+        )
 
 
 def initializer():

@@ -43,10 +43,51 @@ class Colors:
     YELLOW = 'FFD866'
 
 
-DOTSAN_SHELl_BIN = ds_path('_bin')
+DOTSAN_SHELL_BIN = ds_path('_bin')
+DOTSAN_SHELL_COMP = ds_path('_comp')
 DOTSAN_SHELL_SOURCES = ds_path('_shell')
-DOTSAN_SHELL_SCRIPT = """
-for source_script in $(ls -l "{0}" | awk '{{ print $9}}'); do
-    source "{0}/$source_script"
-done
-""".format(DOTSAN_SHELL_SOURCES)
+DOTSAN_SHELL_COMP_BASH = DOTSAN_SHELL_COMP + '/bash'
+DOTSAN_SHELL_COMP_ZSH = DOTSAN_SHELL_COMP + '/zsh'
+
+DOTSAN_SOURCE_SCRIPT = """
+__ds__src() {
+    for source_script in $(ls -l "$1" | awk '{ print $9}'); do
+        . "$1/$source_script"
+    done
+}
+"""
+
+DEFAULT_INJECT_MAP = {
+    'DS_HOME': DOTSAN_HOME,
+    'DS_LOCK': DOTSAN_LOCK,
+    'DS_WALLPAPER': DOTSAN_WALLPAPER,
+    'DS_SOURCE': DOTSAN_SOURCE_SCRIPT,
+    'DS_BIN': DOTSAN_SHELL_BIN,
+    'DS_SOURCES': DOTSAN_SHELL_SOURCES,
+
+    'DS_COMP_BASH': DOTSAN_SHELL_COMP_BASH,
+    'DS_COMP_ZSH': DOTSAN_SHELL_COMP_ZSH,
+
+    'DS_BACKGROUND': Colors.BACKGROUND,
+    'DS_BLACK': Colors.BLACK,
+    'DS_GRAY': Colors.GRAY,
+    'DS_WHITE': Colors.WHITE,
+
+    'DS_BLUE': Colors.BLUE,
+    'DS_CYAN': Colors.CYAN,
+    'DS_GREEN': Colors.GREEN,
+    'DS_ORANGE': Colors.ORANGE,
+    'DS_PURPLE': Colors.PURPLE,
+    'DS_RED': Colors.RED,
+    'DS_YELLOW': Colors.YELLOW
+}
+
+BASH_WRAPPER = """
+#!/usr/bin/env bash
+{ds_src_script}
+__ds__src {ds_src}
+""".format(ds_src_script=DOTSAN_SOURCE_SCRIPT, ds_src=DOTSAN_SHELL_SOURCES)
+BIN_WRAPPERS = {
+    'default': BASH_WRAPPER,
+    'bash': BASH_WRAPPER
+}

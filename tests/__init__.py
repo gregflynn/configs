@@ -1,9 +1,10 @@
 from copy import deepcopy
 
+from _src import settings
 from _src.initializer import BaseInitializer
 
 
-TEST_INJECT_MAP = deepcopy(BaseInitializer.INJECT_MAP)
+TEST_INJECT_MAP = deepcopy(settings.DEFAULT_INJECT_MAP)
 TEST_INJECT_MAP.update({
     'DS_BACKGROUND': '2D2A2E',
     'DS_BLACK': '727072',

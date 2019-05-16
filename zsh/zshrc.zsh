@@ -64,4 +64,6 @@ source $ZSH/oh-my-zsh.sh
 bindkey '\e[1~' beginning-of-line
 bindkey '\e[4~' end-of-line
 
-{DS_SHELL_INIT}
+{DS_SOURCE}
+__ds__src "{DS_SOURCES}"
+fpath=({DS_COMP_ZSH} $fpath)

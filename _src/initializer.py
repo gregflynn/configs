@@ -1,4 +1,5 @@
 import os
+import stat
 from subprocess import check_call
 
 from . import settings
@@ -8,30 +9,6 @@ from .logger import Logger
 class BaseInitializer(object):
     """Base initializer for modules
     """
-
-    DIST = 'dist'
-
-    INJECT_MAP = {
-        'DS_HOME': settings.DOTSAN_HOME,
-        'DS_LOCK': settings.DOTSAN_LOCK,
-        'DS_WALLPAPER': settings.DOTSAN_WALLPAPER,
-        'DS_SHELL_INIT': settings.DOTSAN_SHELL_SCRIPT,
-        'DS_BIN': settings.DOTSAN_SHELl_BIN,
-
-        'DS_BACKGROUND': settings.Colors.BACKGROUND,
-        'DS_BLACK': settings.Colors.BLACK,
-        'DS_GRAY': settings.Colors.GRAY,
-        'DS_WHITE': settings.Colors.WHITE,
-
-        'DS_BLUE': settings.Colors.BLUE,
-        'DS_CYAN': settings.Colors.CYAN,
-        'DS_GREEN': settings.Colors.GREEN,
-        'DS_ORANGE': settings.Colors.ORANGE,
-        'DS_PURPLE': settings.Colors.PURPLE,
-        'DS_RED': settings.Colors.RED,
-        'DS_YELLOW': settings.Colors.YELLOW
-    }
-
     def __init__(self, name):
         """
         Args:
@@ -90,6 +67,33 @@ class BaseInitializer(object):
     # Public helpers
     #
 
+    def bin(self, name, executable, bash_comp=None, zsh_comp=None):
+        """Add an executable to the path with shell completion support
+
+        Args:
+            name (str): name of the executable on the PATH
+            executable (str): appended to the wrapper script to execute, this
+                can be any bash required to start the executable
+            bash_comp (str): absolute path to bash completions for this command
+            zsh_comp (str): absolute path to zsh completions for this command
+        """
+        bin_path = os.path.join(settings.DOTSAN_SHELL_BIN, name)
+        self._assert_dir(bin_path)
+        with open(bin_path, 'w') as ex:
+            ex.write(settings.BIN_WRAPPERS['default'])
+            ex.write(executable)
+        os.chmod(bin_path, stat.S_IRWXU)
+
+        if bash_comp:
+            self.link(
+                bash_comp, os.path.join(settings.DOTSAN_SHELL_COMP_BASH, name)
+            )
+        if zsh_comp:
+            self.link(
+                zsh_comp,
+                os.path.join(settings.DOTSAN_SHELL_COMP_ZSH, '_' + name)
+            )
+
     def checkout(self, repo, dest):
         """Clone or pull a remote repository
 
@@ -125,10 +129,11 @@ class BaseInitializer(object):
         infile = self.base_path(source)
         outfile = self.dist_path(source if dest is None else dest)
         self._assert_dir(outfile)
+        inject_map = inject_map or settings.DEFAULT_INJECT_MAP
 
         with open(infile, 'r') as rf, open(outfile, 'w') as wf:
             for line in rf.readlines():
-                wf.write(self._inject_line(line, inject_map or self.INJECT_MAP))
+                wf.write(self._inject_line(line, inject_map))
 
     @classmethod
     def link(cls, points_to, link_location):

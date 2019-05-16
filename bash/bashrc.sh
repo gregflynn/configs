@@ -15,6 +15,8 @@ if [[ -e "{DS_HOME}/private/bashrc.sh" ]]; then
     source "{DS_HOME}/private/bashrc.sh"
 fi
 
-{DS_SHELL_INIT}
+{DS_SOURCE}
+__ds__src "{DS_SOURCES}"
+__ds__src "{DS_COMP_BASH}"
 
 stty -ixon

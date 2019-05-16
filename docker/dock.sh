@@ -22,7 +22,7 @@ __dock__help() {
 
     echo "    Docker command and system wrapper
 
-    $(echo -en $'\uf061') dock $cmd $(__sys__opt "[service]")
+    $(echo -en $'\uf061') dock $cmd $(__dock__opt "[service]")
 
     $(__dock__hl help)
         - show this help message
@@ -69,29 +69,7 @@ __dock__help() {
 }
 
 
-__dock__completion() {
-    COMPREPLY=()
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    local opts
-
-    if [[ "${COMP_WORDS[0]}" == "dock" ]]; then
-        opts="help bash bg build down ps restart up purge sys"
-    fi
-
-    case "${COMP_WORDS[1]}" in
-        purge)
-            opts="all containers images volumes"
-        ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
-    return 0
-}
-
-__ds__complete __dock__completion dock
-
-
-dock() {
+__dock() {
     local services="${@:2}"
 
     case $1 in
