@@ -9,15 +9,18 @@ class Initializer(BaseInitializer):
         return ['tmux']
 
     def build(self):
-        tpm_path = self.home_path(*self.TPM_PATH)
-        self.checkout('https://github.com/tmux-plugins/tpm', tpm_path)
+        self.checkout('https://github.com/tmux-plugins/tpm', self._tpm_path)
         self.inject('tmux.conf')
 
     def install(self):
-        tpm_bin_path = self.TPM_PATH + ('bin',)
+        tpm_bin_path = self._tpm_path + '/bin'
         self.link_dist('tmux.conf', '.tmux.conf')
-        self.run(self.home_path(*tpm_bin_path, 'install_plugins'))
-        self.run(self.home_path(*tpm_bin_path, 'update_plugins') + ' all')
+        self.run(tpm_bin_path + '/install_plugins')
+        self.run(tpm_bin_path + '/update_plugins' + ' all')
+
+    @property
+    def _tpm_path(self):
+        return self.home_path(*self.TPM_PATH)
 
 
 def initializer():
