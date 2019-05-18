@@ -17,6 +17,7 @@ local default_layouts = {
 local window_icon_overrides = {
     ["Alacritty"]                        = "\u{f489}",
     ["Android Messages"]                 = "\u{f869}",
+    ["Code"]                             = "\u{e70c}",
     ["Google-chrome"]                    = "\u{f268}",
     ["Firefox"]                          = "\u{f269}",
     ["jetbrains-idea"]                   = "\u{e7b5}",

@@ -95,5 +95,7 @@
     "window.menuBarVisibility": "hidden",
     "workbench.statusBar.feedback.visible": false,
     "problems.decorations.enabled": false,
-    "explorer.confirmDragAndDrop": false
+    "explorer.confirmDragAndDrop": false,
+    "workbench.tips.enabled": false,
+    "workbench.tree.indent": 30
 }

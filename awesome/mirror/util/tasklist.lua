@@ -73,7 +73,10 @@ local function create_update_func(screen)
                 ib.forced_width = dpi(24)
 
                 -- create the tooltip only once
-                awful.tooltip { objects = {arr}, text = client.name }
+                awful.tooltip {
+                    objects = {arr},
+                    text = string.format('%s (%s)', client.name, client.class)
+                }
 
                 -- add the icon and text only once
                 arr:add(ib)
