@@ -1,9 +1,10 @@
 #! /bin/bash
 
-
-__pac__cache="/var/cache/pacman/pkg/"
-__pac__log="/var/log/pacman.log"
-__pac__watch__list="alacritty awesome linux nvidia python systemd"
+{IS_AUR_PKG}
+__aur__home="{AUR_HOME}"
+__pac__cache="{PACMAN_CACHE}"
+__pac__log="{PACMAN_LOG}"
+__pac__watch__list="{PACKAGE_WATCH_LIST}"
 
 
 function __pac__hl {
@@ -17,14 +18,13 @@ function __pac__opt {
 
 
 function __pac__help {
-    # echo help information
     local cmd=$(__pac__hl COMMAND)
     local opt_pkg=$(__pac__opt "package")
     local opt_pkgs=$(__pac__opt "package [package2, ...]")
 
     echo "    Arch Linux Pacman Wrapper
 
-    $(echo -en $'\uf061') aur $cmd $(__pac__opt "[package [package2 ...]]")
+    $(echo -en $'\uf061') pac $cmd $(__pac__opt "[package [package2 ...]]")
 
     General $cmd options
 
@@ -65,37 +65,7 @@ function __pac__help {
 }
 
 
-function __pac__completion {
-    COMPREPLY=()
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    local opts
-
-    if [[ "${COMP_WORDS[0]}" == "pac" ]]; then
-        opts="help info install list remove update web history search cache"
-    fi
-
-    case "${COMP_WORDS[1]}" in
-        cache)
-            opts="info prune revert show"
-        ;;
-        list)
-            opts="explicit orphans"
-        ;;
-        remove|info|history)
-            opts=$(__pac__list)
-        ;;
-        install|help|update|search|web)
-            opts=""
-        ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
-    return 0
-}
-__ds__complete __pac__completion pac
-
-
-function pac {
+function __pac {
     local pkgs="${@:2}"
 
     case $1 in
@@ -201,7 +171,7 @@ function __pac__list {
     local results
 
     if [[ "$pkg" == "dead" ]]; then
-        results=$(grep -vxF -f <(ls ~/.aur) <(pacman -Qmq))
+        results=$(grep -vxF -f <(ls $__aur__home) <(pacman -Qmq))
     else
         case ${pkg} in
             explicit) flags="en"  ;;

@@ -1,5 +1,6 @@
 #! /bin/bash
-
+__aur__home="{AUR_HOME}"
+{IS_AUR_PKG}
 
 function __aur__push {
     # set current working directory for the given AUR package
@@ -72,28 +73,7 @@ function __aur__help {
 }
 
 
-function __aur__completion {
-    COMPREPLY=()
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    local opts
-
-    if [[ "${COMP_WORDS[0]}" == "aur" ]]; then
-        opts="clean inspect install list remove search update web help"
-    fi
-
-    case "${COMP_WORDS[1]}" in
-        clean|inspect|list|remove|update)
-            opts=$(__aur__list)
-        ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
-    return 0
-}
-__ds__complete __aur__completion aur
-
-
-function aur {
+function __aur {
     if ! command -v pacman > /dev/null; then
         __dsc__error "pacman not installed"
         return 1
@@ -396,7 +376,7 @@ function __aur__clean {
 function __aur__list {
     # list out package installed via the aur
     # $1 package name to filter by
-    local list=$(ll "$__aur__home" | awk '{ print $9}')
+    local list=$(ls -l "$__aur__home" | awk '{ print $9}')
 
     if [[ "$1" != "" ]]; then
         echo -e "$list" | grep "$1"
