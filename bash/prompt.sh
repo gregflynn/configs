@@ -5,7 +5,7 @@ __right=$'\uE0BC'
 __right_alt=$'\uE0C7'
 
 
-function __prompt__git {
+__prompt__git() {
     gitstatus=`git status -s -b --porcelain 2>/dev/null`
     [[ "$?" -ne 0 ]] && return 0
 
@@ -66,7 +66,7 @@ function __prompt__git {
     echo -n "$C1$__right$C2 $branch$E $C3"
 }
 
-function __prompt__userpath {
+__prompt__userpath() {
     C0=$'\e[34m'
     C1=$'\e[35m'
     C2=$'\e[30;45m'
@@ -97,7 +97,7 @@ function __prompt__userpath {
     echo -n " $C0$ME $C1$__right_alt$C2 $SP $C3"
 }
 
-function __prompt__venv {
+__prompt__venv() {
     C1=$'\e[42m'
     C2=$'\e[30m'
     C3=$'\e[32m'
@@ -107,13 +107,13 @@ function __prompt__venv {
     fi
 }
 
-function __prompt__line1 {
+__prompt__line1() {
     CE=$'\e[49m'
     C_=$'\e[0m'
     echo -n "$C_$(__prompt__userpath)$(__prompt__git)$CE$__right$C_"
 }
 
-function __prompt__line2 {
+__prompt__line2() {
     if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$DOTSAN_DEBUG_HOST" ]; then
         echo -n -e "${HOSTNAME} "
     fi

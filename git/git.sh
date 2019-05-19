@@ -7,7 +7,7 @@ alias gc='git checkout'
 alias pull='git pull'
 alias undo='git reset HEAD~'
 
-function gmb {
+gmb() {
     if ! [[ "$1" ]]; then
         echo "no branch name specified"
         return 1
@@ -16,7 +16,7 @@ function gmb {
     git checkout -b "${date}_gf_$1"
 }
 
-function ydb {
+ydb() {
     if ! [[ "$1" ]]; then
         echo "no feature name given"
         return 1
@@ -27,5 +27,9 @@ function ydb {
 if [[ "$ZSH_VERSION" == "" ]]; then
     if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
         source /usr/share/git/completion/git-completion.bash
+    fi
+else 
+    if [[ -e /usr/share/git/completion/git-completion.zsh ]]; then
+        source /usr/share/git/completion/git-completion.zsh
     fi
 fi
