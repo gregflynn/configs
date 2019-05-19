@@ -110,5 +110,9 @@
     {
         "key": "ctrl+\\",
         "command": "workbench.action.toggleSidebarVisibility"
+    },
+    {
+        "key": "ctrl+shift+c",
+        "command": "workbench.action.files.copyPathOfActiveFile",
     }
 ]
