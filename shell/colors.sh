@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function __dsc__mapper {
+__dsc__mapper() {
     case $1 in
         black)  echo '0' ;;
         red)    echo '1' ;;
@@ -14,7 +14,7 @@ function __dsc__mapper {
 }
 
 
-function __dsc__variation__mapper {
+__dsc__variation__mapper() {
     case $1 in
         bold|b) echo '1' ;;
         dim|d) echo '2' ;;
@@ -26,7 +26,7 @@ function __dsc__variation__mapper {
 }
 
 
-function __dsc {
+__dsc() {
     local fg="$1"
     local bg="$2"
     local var="$3"
@@ -67,12 +67,12 @@ function __dsc {
 }
 
 
-function __dsc__reset {
+__dsc__reset() {
     echo -e '\e[0m'
 }
 
 
-function __dsc__echo {
+__dsc__echo() {
     local txt="$1"
     local fg="$2"
     local bg="$3"
@@ -89,13 +89,13 @@ function __dsc__echo {
 }
 
 
-function __dsc__ncho {
+__dsc__ncho() {
     # like __dsc__echo but without trailing newline
     __dsc__echo "${1:-p}" "${2:-p}" "${3:-p}" "${4:-p}" 1
 }
 
 
-function __dsc__line {
+__dsc__line() {
     # echo a line of strings with different foreground colors
     # $1...$N where $N % 2 == 0
     #       (text, foreground color) pairs of 2 arguments
@@ -114,7 +114,7 @@ function __dsc__line {
 }
 
 
-function __dsc__hl {
+__dsc__hl() {
     # highlight a regex from stdin, in a certain color
     # STDIN the text to highlight
     # $1 regex to match (sed style)
@@ -129,27 +129,27 @@ function __dsc__hl {
 }
 
 
-function __dsc__warn {
+__dsc__warn() {
     # print a colored warning message to the console
     # $1 message
     __dsc__echo "[WARN] $1" yellow
 }
 
-function __dsc__error {
+__dsc__error() {
     # print a colored error message to the console
     # $1 message
     __dsc__echo "[ERROR] $1" red
 }
 
-function __dsc__info {
+__dsc__info() {
     __dsc__echo "$1" blue
 }
 
-function __dsc__success {
+__dsc__success() {
     __dsc__echo "$1" green
 }
 
-function colors {
+colors() {
     for x in {0..8}; do
         for i in {30..37}; do
             for a in {40..47}; do
@@ -161,7 +161,7 @@ function colors {
     echo
 }
 
-function gradient {
+gradient() {
     awk 'BEGIN{
         s="/\\/\\/\\/\\/\\"; s=s s s s s s s s s s s s s s s s s s s s s s s;
         for (colnum = 0; colnum<256; colnum++) {

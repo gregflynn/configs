@@ -1,17 +1,17 @@
 #! /bin/bash
 
 
-function __sys__hl {
+__sys__hl() {
     __dsc__ncho "$1" yellow
 }
 
 
-function __sys__opt {
+__sys__opt() {
     __dsc__ncho "$1" p p i
 }
 
 
-function __sys__help {
+__sys__help() {
     local cmd=$(__sys__hl COMMAND)
     local opt_svc=$(__sys__opt "[service]")
     local nopt_svc=$(__sys__opt "service")
@@ -57,31 +57,7 @@ function __sys__help {
 }
 
 
-function __sys__completion {
-    COMPREPLY=()
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-    local opts
-
-    if [[ "${COMP_WORDS[0]}" == "sys" ]]; then
-        opts="help log last list status start stop restart enable disable"
-    fi
-
-    case "${COMP_WORDS[1]}" in
-        log|status|start|stop|restart|enable|disable)
-            opts=$(__sys__list)
-        ;;
-        help|last|list)
-            opts=""
-        ;;
-    esac
-
-    COMPREPLY=( $(compgen -W "$opts" -- ${cur}) )
-    return 0
-}
-__ds__complete __sys__completion sys
-
-
-function sys {
+__sys() {
     case $1 in
         help) __sys__help ;;
         log)  __sys__log  ;;
@@ -102,7 +78,7 @@ function sys {
 }
 
 
-function __sys__log {
+__sys__log() {
     local unit="$1"
 
     if [[ "$unit" == "" ]]; then
@@ -113,7 +89,7 @@ function __sys__log {
 }
 
 
-function __sys__list {
+__sys__list() {
     local filter="$1"
 
     local units=$(systemctl list-unit-files --no-pager | grep -E 'enabled|disabled' | awk '{ print $1 }')

@@ -29,9 +29,3 @@ fknd() {
     grep --color --include="*.java" --exclude="R.java" -rli "$1" .
     grep --color --include="*.xml" -rli "$1" .
 }
-
-__ds__complete() {
-    if command -v complete > /dev/null; then
-        complete -F $1 $2
-    fi
-}

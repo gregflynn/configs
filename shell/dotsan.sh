@@ -5,7 +5,7 @@ alias ds='dotsan'
 alias reload='dotsan reload'
 
 
-function dotsan {
+dotsan() {
     case $1 in
         reload)
             source ${HOME}/.bashrc

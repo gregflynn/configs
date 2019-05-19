@@ -13,13 +13,13 @@ if [[ -e "$HOME/.pyenv" ]]; then
 fi
 
 
-function rmpyc {
+rmpyc() {
     find . -name '*.pyc' -exec rm -rf {} \;
     find . -name __pycache__ -exec rm -rf {} \;
 }
 
 alias pygrep='grep --color --include="*.py"'
 
-function fynd {
+fynd() {
     grep --color --include="*.py" -rli "$1" .
 }

@@ -1,10 +1,10 @@
 #! /bin/bash
 
-function badge {
+badge() {
     echo -n "#[fg=$2,bg=$3] $1 #[fg=$3,bg=default]"
 }
 
-function __git__status {
+__git__status() {
     local options="branch conflicted staged changed untracked stash"
 
     gitstatus=$(git status -s -b --porcelain 2>/dev/null)
@@ -67,7 +67,7 @@ function __git__status {
     echo -n "${output} "
 }
 
-function __python__status {
+__python__status() {
     local b=$(badge '' 0 2)
     local venv_name=$(pyenv version-name)
     if [[ "$venv_name" != "system" ]]; then
@@ -81,14 +81,14 @@ function __python__status {
     fi
 }
 
-function __docker__status {
+__docker__status() {
     local num_containers=$(docker ps --quiet | wc -l)
     if [[ "$num_containers" != "0" ]]; then
         echo -n "$(badge '🐳' 0 4) $num_containers "
     fi
 }
 
-function __kube__status {
+__kube__status() {
     if command -v kubectl > /dev/null; then
         local context=$(kubectl config current-context)
         local namespace=$(kubectl config view --minify | grep namespace | awk '{ print $2 }')
@@ -100,7 +100,7 @@ function __kube__status {
     fi
 }
 
-function main {
+main() {
     local dir="$1"
     local badges="${@:2}"
 

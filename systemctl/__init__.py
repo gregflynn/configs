@@ -11,7 +11,12 @@ class Initializer(BaseInitializer):
         return True
 
     def install(self):
-        self.shell_base('sys.sh')
+        self.bin(
+            'sys',
+            '. {}\n__sys $@'.format(self.base_path('sys.sh')),
+            bash_comp=self.base_path('sys-completions.bash'),
+            zsh_comp=self.base_path('sys-completions.zsh')
+        )
 
 
 def initializer():
