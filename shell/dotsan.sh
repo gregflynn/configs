@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 
-alias ds='dotsan'
-alias reload='dotsan reload'
-
-
-dotsan() {
+__dotsan() {
     case $1 in
         reload)
-            source ${HOME}/.bashrc
+            if [[ "$ZSH_VERSION" == "" ]]; then
+                . $HOME/.bashrc
+            else
+                . $HOME/.zshrc
+            fi
         ;;
         code)
             code ${__dotsan__home}
@@ -65,17 +65,6 @@ dotsan() {
                 echo "=> ${Y}diverged$RE"
             fi
             popd > /dev/null
-        ;;
-        inject)
-            host="$2"
-            if [[ "$host" == "" ]]; then
-                __dsc__error "No host given"
-                return 1
-            fi
-
-            ssh ${host} "git clone https://github.com/gregflynn/dotsanity.git ~/.sanity"
-            ssh ${host} "bash ~/.sanity/setup.sh"
-            ssh ${host}
         ;;
         dpi)
             case $2 in

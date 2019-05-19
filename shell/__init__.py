@@ -16,8 +16,10 @@ class Initializer(BaseInitializer):
     def install(self):
         self.shell_base('colors.sh', init=True)
         self.shell_dist('vars.sh', init=True)
-
-        self.shell_base('dotsan.sh')
+        self.bin(
+            'dotsan',
+            '. {}; __dotsan $@'.format(self.base_path('dotsan.sh'))
+        )
 
 
 def initializer():
