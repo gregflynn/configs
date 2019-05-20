@@ -58,6 +58,7 @@ __ds__src() {
 """
 
 DEFAULT_INJECT_MAP = {
+    'HOME': HOME,
     'DS_HOME': DOTSAN_HOME,
     'DS_LOCK': DOTSAN_LOCK,
     'DS_WALLPAPER': DOTSAN_WALLPAPER,

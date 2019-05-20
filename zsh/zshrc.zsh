@@ -1,5 +1,5 @@
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
-zstyle :compinstall filename '/home/greg/.zshrc'
+zstyle :compinstall filename '{HOME}/.zshrc'
 
 autoload -Uz compinit
 compinit
@@ -13,18 +13,12 @@ bindkey -e
 # If you come from bash you might have to change your $PATH.
 export PATH=/usr/local/bin:$PATH
 
-ZSH=/usr/share/oh-my-zsh/
-ZSH_THEME=""
-DISABLE_AUTO_UPDATE="true"
-
-plugins=(git aws colored-man-pages emoji)
-
-ZSH_CACHE_DIR=$HOME/.cache/oh-my-zsh
-if [[ ! -d $ZSH_CACHE_DIR ]]; then
-  mkdir $ZSH_CACHE_DIR
-fi
-
-source $ZSH/oh-my-zsh.sh
+source {ANTIGEN_INSTALL}
+antigen use oh-my-zsh
+antigen bundle git
+antigen bundle colored-man-pages
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen apply
 
 # fix home and end keys
 bindkey '\e[1~' beginning-of-line
