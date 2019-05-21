@@ -30,18 +30,29 @@ alias compreinit='rm -f ~/.zcompdump; compinit'
 __ds__src "{DS_SOURCES}"
 fpath=({DS_COMP_ZSH} $fpath)
 
+# ZSH Syntax Highlighting
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+ZSH_HIGHLIGHT_STYLES[command]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[builtin]='fg=yellow'
+
 # Theme
-__right=$'\uE0BC'
-__right_alt=$'\uE0C7'
+__right=$'\uE0B1'
 __prompt__userpath() {
-    C0=$'\e[34m'
-    C1=$'\e[35m'
-    C2=$'\e[30;45m'
-    C3=$'\e[35m'
+    local C0=$'\e[34m'
+    local C1=$'\e[35m'
+    local C2=$'\e[35m'
+    local C3=$'\e[35m'
+    local me=''
 
     # check for superuser
-    if [[ "$ME" == "root" || "$DOTSAN_DEBUG_ROOT" == "1" ]]; then
+    if [[ "$USER" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
         C0=$'\e[31m'
+        me='root'
+    fi
+
+    if [[ "$SSH_CLIENT" != "" ]] || [[ "$SSH_TTY" != "" ]] || [[ "$DS_SSH" != "" ]]; then
+        C0="%{$fg[yellow]%}"
+        me="$USER"
     fi
 
     # replace home dir with tilde
@@ -52,35 +63,45 @@ __prompt__userpath() {
     # from: https://superuser.com/a/1172745
     local path=$(echo $P | perl -pe 's/(\w)[^\/]+\//\1\//g')
 
-    echo -n " $C0$USER $C1$__right_alt$C2 $path $C3"
+    if [[ "$me" != "" ]]; then
+        echo -n " $C0$me $__right"
+    fi
+
+    echo -n "$C2 $path $C3$__right"
 }
 
 __prompt__git() {
     local git_status="$(git_prompt_info)"
     if [[ "$git_status" != "" ]]; then
-        C1=$'\e[40m'
-        C2=$'\e[32m'
-        C3=$'\e[30m'
-        echo -n "$C1$__right$C2 $git_status $C3"
+        local C0="%{$fg[green]%}"
+        echo -n " $git_status%{$reset_color%}$C0 $__right"
     fi
 }
 
 __prompt__line1() {
-    CE=$'\e[49m'
     C_=$'\e[0m'
-    echo -n "$C_$(__prompt__userpath)$(__prompt__git)$CE$__right$C_"
+    echo -n "$C_$(__prompt__userpath)$(__prompt__git)$C_"
 }
 
 __prompt__line2() {
-    echo -n "%{$fg[yellow]%}"
-    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$DOTSAN_DEBUG_HOST" ]; then
-        echo -n -e "${HOSTNAME} "
+    if [[ "$USER" == "root" ]]; then
+        echo -n "%{$fg[red]%}"
+    else
+        echo -n "%{$fg[yellow]%}"
     fi
-    echo $'\uf061'
+    echo -n $'\uf061'
+}
+
+__prompt__rc="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
+__prompt__host() {
+    local color='yellow'
+    if [[ "$SSH_CLIENT" != "" ]] || [[ "$SSH_TTY" != "" ]]; then
+        color='red'
+    fi
+    echo -n "%{$fg[$color]%}$(hostname)%{$reset_color%}"
 }
 
 # stolen from the avit theme
-local _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$bg[black]%}"
 ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[red]%}✗%{$reset_color%}"
@@ -95,4 +116,4 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}◒ "
 PROMPT='
 $(__prompt__line1)
 $(__prompt__line2) '
-RPROMPT='${_return_status}'
+RPROMPT='$__prompt__rc$(__prompt__host)'
