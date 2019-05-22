@@ -15,7 +15,7 @@ call plug#end()
 " CtrlP config options
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|public$\|log\|tmp$\|node_modules$',
+  \ 'dir':  '\.git$\|public$\|log\|tmp$\|node_modules$\|dist$',
   \ 'file': '\.so$\|\.dat$\|\.DS_Store$\|\.pyc$\|\.gz$\|\.class$'
   \ }
 map <C-P> :CtrlP<cr>

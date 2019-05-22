@@ -17,6 +17,7 @@ export PATH=/usr/local/bin:$PATH
 antigen use oh-my-zsh
 antigen bundle git
 antigen bundle colored-man-pages
+antigen bundle fzf
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
 
@@ -36,6 +37,7 @@ ZSH_HIGHLIGHT_STYLES[command]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[builtin]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[alias]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[function]='fg=yellow'
+ZSH_HIGHLIGHT_STYLES[path]='fg=magenta'
 
 # Theme
 . '{ZSH_PROMPT}'
