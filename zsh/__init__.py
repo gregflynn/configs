@@ -20,7 +20,8 @@ class Initializer(BaseInitializer):
 
     def build(self):
         ZSH_INJECT_MAP.update({
-            'ANTIGEN_INSTALL': self.dist_path(self.ANTIGEN)
+            'ANTIGEN_INSTALL': self.dist_path(self.ANTIGEN),
+            'ZSH_PROMPT': self.base_path('prompt.zsh')
         })
         self.inject('zshrc.zsh', inject_map=ZSH_INJECT_MAP)
         self.checkout('https://github.com/zsh-users/antigen.git', 'antigen')
