@@ -19,7 +19,7 @@ _is_ssh() {
 
 _prompt_userpath() {
     local user_color="%{$fg[blue]%}"
-    local me="$USER"
+    local me=""
 
     # check for superuser
     if _is_root; then
@@ -32,7 +32,7 @@ _prompt_userpath() {
     fi
 
     if [[ "$me" != "" ]]; then
-        echo -n " $user_color$me %{$fg[magenta]%}$__right "
+        echo -n "$user_color$me %{$fg[magenta]%}$__right "
     fi
 
     # replace home dir with tilde

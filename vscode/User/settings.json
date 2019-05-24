@@ -1,4 +1,3 @@
-// Place your settings in this file to overwrite the default settings
 {
     "window.title": "${dirty} ${rootName}:${activeEditorShort}",
     "extensions.ignoreRecommendations": true,
@@ -72,7 +71,7 @@
     /**
      * Theme
      */
-    "terminal.integrated.fontSize": 15,
+    "terminal.integrated.fontSize": 14,
     "workbench.colorCustomizations": {
         "[Monokai Pro]": {
             "sideBar.background": "#2D2A2E",
