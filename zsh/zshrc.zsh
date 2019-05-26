@@ -19,14 +19,14 @@ export FZF_DEFAULT_OPTS='
     --color info:5,prompt:3,pointer:3,marker:1,spinner:2,header:1
 '
 
-. {ANTIGEN_INSTALL}
+. '{ANTIGEN_INSTALL}'
 
 # oh-my-zsh packages
 antigen use oh-my-zsh
-antigen bundle git
+antigen bundle aws
 antigen bundle colored-man-pages
 antigen bundle fzf
-antigen bundle aws
+antigen bundle git
 
 # github packages
 antigen bundle zsh-users/zsh-syntax-highlighting
