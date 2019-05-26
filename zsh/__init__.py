@@ -1,10 +1,4 @@
-from copy import deepcopy
-
-from _src import settings
 from _src.initializer import BaseInitializer
-
-
-ZSH_INJECT_MAP = deepcopy(settings.DEFAULT_INJECT_MAP)
 
 
 class Initializer(BaseInitializer):
@@ -19,11 +13,11 @@ class Initializer(BaseInitializer):
         return True
 
     def build(self):
-        ZSH_INJECT_MAP.update({
+        inject_map = {
             'ANTIGEN_INSTALL': self.dist_path(self.ANTIGEN),
             'ZSH_PROMPT': self.base_path('prompt.zsh')
-        })
-        self.inject('zshrc.zsh', inject_map=ZSH_INJECT_MAP)
+        }
+        self.inject('zshrc.zsh', inject_map=inject_map)
         self.checkout('https://github.com/zsh-users/antigen.git', 'antigen')
 
     def install(self):

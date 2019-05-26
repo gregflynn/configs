@@ -14,7 +14,9 @@ class Installer(object):
         """
         self._modules = modules
 
-        self._is_root = check_output('whoami').decode('utf-8').strip() == 'root'
+        self._is_root = (
+            check_output('whoami').decode('utf-8').strip() == 'root'
+        )
         self._is_ssh = os.getenv('SSH_CLIENT') or os.getenv('SSH_TTY')
         self._is_cli_install = self._is_root or self._is_ssh
 
@@ -70,4 +72,3 @@ class Installer(object):
             return False
         else:
             return True
-

@@ -122,18 +122,21 @@ class BaseInitializer(object):
             source (str): name of the template file to read
             dest (str): name of the file to write in dist/, omit for the same
                 name as the source file
-            inject_map (dict{str => str}): map of values to template in, uses
-                default inject map if not supplied
+            inject_map (dict{str => str}): map of values to template in, in
+                addition to the default template map values
         """
         self._assert_dist()
         infile = self.base_path(source)
         outfile = self.dist_path(source if dest is None else dest)
         self._assert_dir(outfile)
-        inject_map = inject_map or settings.DEFAULT_INJECT_MAP
+
+        final_inject_map = {}
+        final_inject_map.update(settings.DEFAULT_INJECT_MAP)
+        final_inject_map.update(inject_map or {})
 
         with open(infile, 'r') as rf, open(outfile, 'w') as wf:
             for line in rf.readlines():
-                wf.write(self._inject_line(line, inject_map))
+                wf.write(self._inject_line(line, final_inject_map))
 
     @classmethod
     def link(cls, points_to, link_location):

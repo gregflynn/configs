@@ -13,7 +13,9 @@ class Initializer(BaseInitializer):
         return True
 
     def build(self):
-        self.checkout('https://github.com/junegunn/vim-plug.git', self.VIM_PLUG)
+        self.checkout(
+            'https://github.com/junegunn/vim-plug.git', self.VIM_PLUG
+        )
 
     def install(self):
         self.link_base('vimrc.vim', '.vimrc')

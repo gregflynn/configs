@@ -32,14 +32,18 @@ class AurPackage(object):
         name = f'\033[33m{self.name}\033[0m'
         src = '\033[2m(aur)\033[0m'
         installed = '\033[32m[installed]\033[0m' if self.installed else ''
-        print(f'{name} {src} {self.version} {installed}\n    {self.description}')
+        print(
+            f'{name} {src} {self.version} {installed}\n    {self.description}'
+        )
 
 
 if __name__ == '__main__':
     js = json.load(sys.stdin)
     aur_home = sys.argv[1]
     INSTALLED_AUR_PKGS = {
-        p.strip() for p in check_output(['ls', aur_home]).decode(encoding='UTF-8').split()
+        p.strip()
+        for p
+        in check_output(['ls', aur_home]).decode(encoding='UTF-8').split()
     }
 
     if len(js['results']):
