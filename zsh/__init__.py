@@ -12,7 +12,7 @@ class Initializer(BaseInitializer):
 
     @property
     def requirements(self):
-        return ['zsh']
+        return ['zsh', 'fzf']
 
     @property
     def install_in_cli(self):
