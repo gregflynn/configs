@@ -150,7 +150,7 @@ theme.layout_cornerne = themes_path.."zenburn/layouts/cornerne.png"
 theme.layout_cornersw = themes_path.."zenburn/layouts/cornersw.png"
 theme.layout_cornerse = themes_path.."zenburn/layouts/cornerse.png"
 
-theme.lain_icons         = "/usr/share/awesome/lib/lain/icons/layout/zenburn/"
+theme.lain_icons         = "/usr/share/lua/5.3/lain/icons/layout/zenburn/"
 theme.layout_termfair    = theme.lain_icons .. "termfair.png"
 theme.layout_centerfair  = theme.lain_icons .. "centerfair.png"  -- termfair.center
 theme.layout_cascade     = theme.lain_icons .. "cascade.png"
