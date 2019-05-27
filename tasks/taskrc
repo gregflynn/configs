@@ -1,0 +1,18 @@
+data.location=~/.task
+
+include {TASK_THEME}
+#color=on
+#fontunderline=off
+verbose=label,affected,sync
+
+report.list.labels=ID,P,T,S,Project,
+report.list.columns=id,urgency,type,size,project,description
+default.command=list
+
+uda.type.type=string
+uda.type.label=Type
+uda.type.values=BUG,TSK,FTR,IMP,RES
+
+uda.size.type=string
+uda.size.label=SZ
+uda.size.values=XS,S,M,L,XL
