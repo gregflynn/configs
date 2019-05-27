@@ -95,14 +95,14 @@ inoremap <C-D> <Esc>dd
 vnoremap <C-D> <Esc>dd
 
 " quit
-nnoremap <C-Q> <Esc>:q<CR>
-inoremap <C-Q> <Esc>:q<CR>
-vnoremap <C-Q> <Esc>:q<CR>
+nnoremap <Leader>q <Esc>:q<CR>
+inoremap <Leader>q <Esc>:q<CR>
+vnoremap <Leader>q <Esc>:q<CR>
 
 " save file
-nnoremap <C-S> <Esc>:w<CR>
-inoremap <C-S> <Esc>:w<CR>
-vnoremap <C-S> <Esc>:w<CR>
+nnoremap <Leader>s <Esc>:w<CR>
+inoremap <Leader>s <Esc>:w<CR>
+vnoremap <Leader>s <Esc>:w<CR>
 
 " indent in visual mode like a champ
 vnoremap < <gv

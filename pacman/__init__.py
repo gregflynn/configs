@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from _src import settings
 from _src.initializer import BaseInitializer
 
@@ -17,14 +15,13 @@ __pac__is__aur__pkg() {{
 PACKAGE_WATCH_LIST = {
     'alacritty', 'awesome', 'linux', 'nvidia', 'python', 'systemd'
 }
-INJECT_MAP = deepcopy(settings.DEFAULT_INJECT_MAP)
-INJECT_MAP.update({
+INJECT_MAP = {
     'PACMAN_CACHE': PACMAN_CACHE,
     'PACMAN_LOG': PACMAN_LOG,
     'AUR_HOME': AUR_HOME,
     'IS_AUR_PKG': IS_AUR_PKG,
     'PACKAGE_WATCH_LIST': ' '.join(PACKAGE_WATCH_LIST)
-})
+}
 
 
 class Initializer(BaseInitializer):
