@@ -4,7 +4,7 @@ from _src.initializer import BaseInitializer
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['task', 'timew']
+        return ['task']
 
     @property
     def install_in_cli(self):

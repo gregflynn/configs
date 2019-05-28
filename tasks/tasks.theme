@@ -3,18 +3,24 @@ rule.precedence.color=deleted,completed,active,keyword.,tag.,project.,overdue,sc
 
 # General decoration
 color.label=white
-color.label.sort=magenta
+color.label.sort=white
 color.alternate=
 color.header=
 color.footnote=
 color.warning=
-color.error=
+color.error=red
 color.debug=
+
+color.uda.type.FTR=green
+color.uda.type.BUG=red
+color.uda.type.TSK=white
+color.uda.type.RES=blue
+color.uda.type.IMP=magenta
 
 # Task state
 color.completed=
 color.deleted=
-color.active=green
+color.active=black on magenta
 color.recurring=
 color.scheduled=
 color.until=
@@ -40,34 +46,34 @@ color.due.today=
 color.overdue=
 
 # Report: burndown
-color.burndown.done=
-color.burndown.pending=
-color.burndown.started=
+color.burndown.done=on green
+color.burndown.pending=on red
+color.burndown.started=on magenta
 
 # Report: history
-color.history.add=
-color.history.delete=
-color.history.done=
+color.history.add=black on yellow
+color.history.delete=black on red
+color.history.done=black on green
 
 # Report: summary
-color.summary.background=
-color.summary.bar=
+color.summary.background=on bright black
+color.summary.bar=on green
 
 # Command: calendar
-color.calendar.due=
-color.calendar.due.today=
-color.calendar.holiday=
-color.calendar.overdue=
-color.calendar.today=
-color.calendar.weekend=
+color.calendar.due=yellow
+color.calendar.due.today=red
+color.calendar.holiday=green
+color.calendar.overdue=red
+color.calendar.today=magenta
+color.calendar.weekend=blue
 color.calendar.weeknumber=
 
 # Command: sync
-color.sync.added=
-color.sync.changed=
-color.sync.rejected=
+color.sync.added=green
+color.sync.changed=yellow
+color.sync.rejected=red
 
 # Command: undo
-color.undo.after=
-color.undo.before=
+color.undo.after=green
+color.undo.before=red
 

@@ -1,18 +1,44 @@
 data.location=~/.task
 
 include {TASK_THEME}
-#color=on
-#fontunderline=off
-verbose=label,affected,sync
+color=on
+fontunderline=off
+verbose=label,sync
 
-report.list.labels=ID,P,T,S,Project,
-report.list.columns=id,urgency,type,size,project,description
+report.list.labels=ID,A,T,S,Project,Tags,,
+report.list.columns=id,start.active,type,size,project,tags,description.count,urgency
+report.list.sort=project+,urgency-
+
 default.command=list
+default.project=home
 
+active.indicator=
+column.padding=2
+displayweeknumber=no
+indent.annotation=4
+
+uda.type.default=TSK
 uda.type.type=string
 uda.type.label=Type
 uda.type.values=BUG,TSK,FTR,IMP,RES
+urgency.uda.type.BUG.coefficient=1.5
+urgency.uda.type.TSK.coefficient=1.25
+urgency.uda.type.IMP.coefficient=1.0
+urgency.uda.type.FTR.coefficient=0.75
+urgency.uda.type.RES.coefficient=0.5
 
+uda.size.default=M
 uda.size.type=string
 uda.size.label=SZ
 uda.size.values=XS,S,M,L,XL
+urgency.uda.size.XS.coefficient=1.5
+urgency.uda.size.S.coefficient=1.25
+urgency.uda.size.M.coefficient=1.0
+urgency.uda.size.L.coefficient=0.75
+urgency.uda.size.XL.coefficient=0.5
+
+urgency.age.coefficient=0
+urgency.annotations.coefficient=0
+urgency.project.coefficient=0
+urgency.tags.coefficient=0
+urgency.active.coefficient=10
