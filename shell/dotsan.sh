@@ -92,7 +92,7 @@ __dotsan() {
             fi
 
             while true; do
-                dotsan install ${module}
+                echo "$(date): $(dotsan install ${module})"
                 sleep 2
             done
         ;;
