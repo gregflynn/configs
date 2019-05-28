@@ -1,3 +1,6 @@
+import os
+
+from _src import settings
 from _src.initializer import BaseInitializer
 
 
@@ -11,8 +14,11 @@ class Initializer(BaseInitializer):
         return True
 
     def build(self):
+        taskd = settings.ds_path('private', 'taskd', 'taskd_client')
+        taskd = 'include {}'.format(taskd) if os.path.isfile(taskd) else ''
         self.inject('taskrc', inject_map={
-            'TASK_THEME': self.base_path('tasks.theme')
+            'TASK_THEME': self.base_path('tasks.theme'),
+            'TASKD': taskd
         })
 
     def install(self):
