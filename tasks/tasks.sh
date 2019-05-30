@@ -1,2 +1,2 @@
 alias t='task'
-alias tw='timew'
+alias tqm='taskqm'

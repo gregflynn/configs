@@ -20,10 +20,12 @@ class Initializer(BaseInitializer):
             'TASK_THEME': self.base_path('tasks.theme'),
             'TASKD': taskd
         })
+        self.checkout('git@github.com:gregflynn/taskqm.git', 'taskqm')
 
     def install(self):
         self.shell_base('tasks.sh')
         self.link_dist('taskrc', '.taskrc')
+        self.bin('taskqm', self.dist_path('taskqm/taskqm'))
 
 
 def initializer():
