@@ -7,13 +7,18 @@ alias gc='git checkout'
 alias pull='git pull'
 alias undo='git reset HEAD~'
 
+_concat_branch() {
+    echo "$@" | sed 's/ /_/g'
+}
+
 gmb() {
-    if ! [[ "$1" ]]; then
+    local b=$(_concat_branch $@)
+    if ! [[ "$b" ]]; then
         echo "no branch name specified"
         return 1
     fi
     date="$(date '+%Y%m')"
-    git checkout -b "${date}_gf_$1"
+    git checkout -b "${date}_gf_$b"
 }
 
 ydb() {
@@ -21,7 +26,7 @@ ydb() {
         echo "no feature name given"
         return 1
     fi
-    gmb "yo_dawg_i_heard_you_like_$1"
+    gmb "yo_dawg_i_heard_you_like_$@"
 }
 
 if [[ "$ZSH_VERSION" == "" ]]; then
