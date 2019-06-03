@@ -5,11 +5,11 @@ color=on
 fontunderline=off
 verbose=label,sync
 
-report.list.labels=ID,A,T,S,Project,Tags,,
-report.list.columns=id,start.active,type,size,project,tags,description.count,urgency
-report.list.sort=project+,urgency-
+report.ls.labels=ID,A,T,S,Project,Tags,,
+report.ls.columns=id,start.active,type,size,project,tags,description.count,urgency
+report.ls.sort=project+,urgency-
 
-default.command=list
+default.command=ls
 default.project=home
 
 active.indicator=
