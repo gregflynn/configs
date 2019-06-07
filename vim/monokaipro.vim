@@ -8,7 +8,6 @@ let s:orange  = {'hex': '#FC9867', 'term': 209}
 let s:red     = {'hex': '#FF6188', 'term': 204}
 let s:purple  = {'hex': '#AB9DF2', 'term': 147}
 let s:blue    = {'hex': '#78DCE8', 'term': 116}
-let s:cyan    = {'hex': '#A1EFE4', 'term': 51}
 let s:green   = {'hex': '#A9DC76', 'term': 150}
 
 let g:airline#themes#monokaipro#palette = {}

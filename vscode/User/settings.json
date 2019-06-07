@@ -86,7 +86,7 @@
         "terminal.ansiYellow": "#FFD866",
         "terminal.ansiBlue": "#78DCE8",
         "terminal.ansiMagenta": "#AB9DF2",
-        "terminal.ansiCyan": "#A1EFE4",
+        "terminal.ansiCyan": "#FC9867",
         "terminal.ansiWhite": "#FCFCFA"
     },
     "workbench.iconTheme": "Monokai Pro Icons",

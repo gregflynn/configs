@@ -8,7 +8,7 @@ __dsc__mapper() {
         yellow) echo '3' ;;
         blue)   echo '4' ;;
         purple) echo '5' ;;
-        cyan)   echo '6' ;;
+        orange)   echo '6' ;;
         *)      echo '7' ;;
     esac
 }

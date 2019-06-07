@@ -47,7 +47,7 @@ colors:
     yellow:  '0x{DS_YELLOW}'
     blue:    '0x{DS_BLUE}'
     magenta: '0x{DS_PURPLE}'
-    cyan:    '0x{DS_CYAN}'
+    cyan:    '0x{DS_ORANGE}'
     white:   '0x{DS_WHITE}'
 
   bright:
@@ -57,7 +57,7 @@ colors:
     yellow:  '0x{DS_YELLOW}'
     blue:    '0x{DS_BLUE}'
     magenta: '0x{DS_PURPLE}'
-    cyan:    '0x{DS_CYAN}'
+    cyan:    '0x{DS_ORANGE}'
     white:   '0x{DS_WHITE}'
 
 visual_bell:

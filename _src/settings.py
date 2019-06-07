@@ -35,7 +35,6 @@ class Colors:
     WHITE = 'FCFCFA'
 
     BLUE = '78DCE8'
-    CYAN = 'A1EFE4'
     GREEN = 'A9DC76'
     ORANGE = 'FC9867'
     PURPLE = 'AB9DF2'
@@ -75,7 +74,6 @@ DEFAULT_INJECT_MAP = {
     'DS_WHITE': Colors.WHITE,
 
     'DS_BLUE': Colors.BLUE,
-    'DS_CYAN': Colors.CYAN,
     'DS_GREEN': Colors.GREEN,
     'DS_ORANGE': Colors.ORANGE,
     'DS_PURPLE': Colors.PURPLE,

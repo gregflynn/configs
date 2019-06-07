@@ -8,7 +8,6 @@ TEST_INJECT_MAP = {
     'DS_WHITE': 'FCFCFA',
 
     'DS_BLUE': '78DCE8',
-    # 'DS_CYAN': '',
     'DS_GREEN': 'A9DC76',
     'DS_ORANGE': 'FC9867',
     'DS_PURPLE': 'AB9DF2',

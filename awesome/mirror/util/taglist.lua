@@ -15,7 +15,7 @@ local dpi      = beautiful.xresources.apply_dpi
 
 local taglist   = {"\u{f303}", "\u{f674}", "\u{e7a2}", "\u{e780}", "\u{f1d8}"}
 local fg_colors = {colors.background, colors.background, colors.background, colors.white, colors.background}
-local bg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.cyan}
+local bg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.orange}
 
 local function listupdate_tags(w, buttons, label, data, tags)
     w:reset()
