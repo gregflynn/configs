@@ -61,7 +61,7 @@ local menu = awful.menu({
 })
 
 local timer
-local function clock_update()
+function clock_update()
     local now = DateTime.new_now(TimeZone.new_local())
     local icon = clock_map[now:format('%I')]
     clock_icon:update(icon, text_color)
