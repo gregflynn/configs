@@ -3,40 +3,64 @@ local beautiful = require("beautiful")
 local gears     = require("gears")
 local wibox     = require("wibox")
 local lain      = require("lain")
+local glib      = require("lgi").GLib
+
+local DateTime  = glib.DateTime
+local TimeZone  = glib.TimeZone
 local markup    = lain.util.markup
 
+local calendar = 'https://calendar.google.com/'
+local clock_fmt = '%H:%M '
+local tooltip_fmt = '%A %m/%d'
+local refresh = 60
+local text_color = beautiful.colors.blue
 
-local clock = wibox.widget.textclock(markup.fg.color(
-    beautiful.colors.background, '%a %m/%d %l:%M%P'
-))
+local function calc_timeout()
+    return refresh - os.time() % refresh
+end
 
-awful.tooltip {
-    objects = {clock},
-    text    = "Show Cal / Open Cal"
+local clock = wibox.widget.textbox()
+local tooltip = awful.tooltip {objects = {clock}}
+
+local awesome_menu = {
+    {'Reload', function()
+        os.execute("pkill redshift")
+        awesome.restart()
+    end}
 }
-
-local calendar = lain.widget.cal {
-    attach_to = { clock },
-    week_start = 1,
-    icons = "",
-    notification_preset = {
-        font = 'Hack',
-        fg = beautiful.fg_normal,
-        bg = beautiful.bg_normal
-    },
-    cal = "/usr/bin/env TERM=linux /usr/bin/cal --color=always"
+local system_menu = {
+    {'Reboot', 'reboot'},
+    {'Shutdown', 'shutdown -h now'}
 }
+local menu = awful.menu({
+    theme = { width = 120 },
+    items = {
+        {'Calendar', function()
+            awful.spawn({'xdg-open', calendar})
+        end},
+        {'Awesome WM', awesome_menu, beautiful.awesome_icon},
+        {'System', system_menu}
+    }
+})
 
-clock:disconnect_signal("mouse::enter", calendar.hover_on)
+local timer
+local function clock_update()
+    local now = DateTime.new_now(TimeZone.new_local())
+    clock:set_markup(markup.fg.color(text_color, now:format(clock_fmt)))
+    tooltip:set_markup(now:format(tooltip_fmt))
+    timer.timeout = calc_timeout()
+    timer:again()
+    return true
+end
+timer = gears.timer.weak_start_new(refresh, clock_update)
+timer:emit_signal('timeout')
+
 
 clock:buttons(gears.table.join(
-    awful.button({ }, 1, calendar.hover_on),
-    awful.button({ }, 2, calendar.hover_on),
+    awful.button({ }, 1, function() menu:toggle() end),
     awful.button({ }, 3, function()
-        awful.spawn("xdg-open https://calendar.google.com/")
-    end),
-    awful.button({ }, 5, calendar.prev),
-    awful.button({ }, 4, calendar.next)
+        awful.spawn("xdg-open "..calendar)
+    end)
 ))
 
 

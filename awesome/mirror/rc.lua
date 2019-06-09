@@ -36,7 +36,8 @@ ctlKey = "Control"
 shift  = "Shift"
 
 -- Make Tab go down a menu
-awful.menu.menu_keys.down = { "Down", "j", "Tab" }
+awful.menu.menu_keys.down = {'Down', 'j', 'Tab'}
+awful.menu.menu_keys.close = {'q'}
 awful.rules.rules = require("rules")
 
 --
@@ -44,7 +45,6 @@ awful.rules.rules = require("rules")
 --
 local battery    = require("widgets/battery")
 local brightness = require("widgets/brightness")
-local clock      = require("widgets/clock")
 local cpu        = require("widgets/cpu")
 local tray       = require("widgets/tray")
 local volume     = require("widgets/volume")
@@ -60,7 +60,10 @@ awful.screen.connect_for_each_screen(function(screen)
     -- Create the wibox
     screen.mywibar = display.create_wibar(
         screen,
-        { screen.mytaglist },
+        {
+            display.create_layout_widget(screen),
+            screen.mytaglist,
+        },
         { screen.mytasklist },
         {
             ArrowList { screen = screen, prefix = true, blocks = {
@@ -69,10 +72,8 @@ awful.screen.connect_for_each_screen(function(screen)
                 { widget = volume,  color = colors.blue,       primary_only = true },
                 { widget = tray,    color = colors.orange,     primary_only = true },
                 { widget = weather, color = colors.purple     },
-                --{ widget = timer,   color = colors.yellow     },
-                { widget = clock,   color = colors.blue       },
             } },
-            display.create_layout_widget(screen)
+            require('widgets/clock')
         })
 end)
 

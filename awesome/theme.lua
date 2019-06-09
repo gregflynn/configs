@@ -1,4 +1,5 @@
 local beautiful = require("beautiful")
+local theme_assets = beautiful.theme_assets
 local dpi = beautiful.xresources.apply_dpi
 
 local gears = require("gears")
@@ -156,5 +157,9 @@ theme.layout_cascade     = theme.lain_icons .. "cascade.png"
 theme.layout_cascadetile = theme.lain_icons .. "cascadetile.png" -- cascade.tile
 theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
 theme.layout_centerhwork = theme.lain_icons .. "centerworkh.png" -- centerwork.horizontal
+
+theme.awesome_icon = theme_assets.awesome_icon(
+    theme.menu_height, theme.bg_focus, theme.fg_focus
+)
 
 return theme
