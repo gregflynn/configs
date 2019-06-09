@@ -45,7 +45,7 @@ awful.rules.rules = require("rules")
 --
 local cpu        = require("widgets/cpu")
 local tray       = require("widgets/tray")
-local volume     = require("widgets/volume")
+local volume     = require('widgets/volume')
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
@@ -65,9 +65,9 @@ awful.screen.connect_for_each_screen(function(screen)
         {
             ArrowList { screen = screen, prefix = true, blocks = {
                 { widget = cpu,     color = colors.red        },
-                { widget = volume,  color = colors.blue,       primary_only = true },
                 { widget = tray,    color = colors.orange,     primary_only = true },
             } },
+            volume,
             require('widgets/battery'),
             require('widgets/weather'),
             require('widgets/clock')

@@ -11,16 +11,16 @@ local dpi    = beautiful.xresources.apply_dpi
 
 local gpmdp = require("widgets/gpmdp")
 
-
-local font_icon_headphones = "\u{f7ca}"
-local font_icon_mute = "\u{fc5d}"
-local font_icon_low = "\u{f026}"
-local font_icon_med = "\u{f027}"
-local font_icon_high = "\u{f028}"
-
-local volume_font_icon = FontIcon()
 local tooltip = awful.tooltip {}
-local fg_color = colors.background
+local fg_color = colors.blue
+local chart = wibox.widget {
+    max_value = 100,
+    thickness = dpi(4),
+    start_angle = (2 * math.pi) * 3 / 4,
+    bg = colors.gray,
+    colors = {fg_color},
+    widget = wibox.container.arcchart
+}
 
 local volume = lain.widget.pulsebar {
     width = dpi(60),
@@ -39,23 +39,12 @@ local volume = lain.widget.pulsebar {
     settings = function()
         if volume_now.muted == "yes" then
             tooltip.text = "Muted"
-            volume_font_icon:update(font_icon_mute, fg_color)
+            chart.values = {0}
         else
             local level = tonumber(volume_now.left)
+            chart.values = {level}
 
-            if volume_now.index ~= "0" then
-                volume_font_icon:update(font_icon_headphones, fg_color)
-                tooltip.text = string.format("Headphones: %s%%", level)
-            else
-                tooltip.text = string.format("Speakers: %s%%", level)
-                if level < 30 then
-                    volume_font_icon:update(font_icon_low, fg_color)
-                elseif level < 60 then
-                    volume_font_icon:update(font_icon_med, fg_color)
-                else
-                    volume_font_icon:update(font_icon_high, fg_color)
-                end
-            end
+            tooltip.text = string.format("Speakers: %s%%", level)
         end
     end
 }
@@ -78,21 +67,12 @@ volume.buttons = awful.util.table.join(
     end)
 )
 
--- round the corners
-volume.bar.shape = beautiful.border_shape
-volume.bar.bar_shape = beautiful.border_shape
-
-volume.bar:buttons(volume.buttons)
-volume_font_icon:buttons(volume.buttons)
-
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     gpmdp,
-    volume_font_icon,
-    wibox.container.margin(volume.bar, dpi(0), dpi(0), dpi(3), dpi(3))
+    wibox.container.margin(chart, dpi(3), dpi(8), dpi(5), dpi(5)),
 }
-
-volume.tooltip:remove_from_object(volume.bar)
+chart:buttons(volume.buttons)
 tooltip:add_to_object(container)
 
 container.globalkeys = gears.table.join(

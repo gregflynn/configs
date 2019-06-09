@@ -17,7 +17,9 @@ local colors = beautiful.colors
 
 local gpmdp_album_art_fmt = "/tmp/gpmcover-%s"
 local gpmdp_json = beautiful.home.."/.config/Google Play Music Desktop Player/json_store/playback.json"
-local gpmdp_default_icon = "\u{f001}"
+local icon_not_running = '\u{fa7d}'
+local icon_running_paused = '\u{f04c}'
+local icon_running_playing = '\u{f001}'
 
 local gpmdp = {
     notify        = "on",
@@ -30,7 +32,7 @@ local gpmdp = {
     notification  = nil,
     current_track = nil,
     current_album_art = nil,
-    font_icon = FontIcon {icon = gpmdp_default_icon, color = colors.background},
+    font_icon = FontIcon {icon = icon_not_running, color = colors.blue},
     running_counter = 0
 }
 
@@ -112,20 +114,16 @@ function gpmdp.get_now()
 end
 
 function gpmdp.render(widget, title, artist, album, is_playing)
-    local font_icon = gpmdp_default_icon
-    local title_color = colors.background
+    local font_icon = icon_running_playing
+    -- local title_color = colors.background
 
     if not is_playing then
-        font_icon = "\u{f04c}"
-        title_color = colors.gray
+        font_icon = icon_running_paused
+        -- title_color = colors.gray
     end
 
     -- update wibar display
-    gpmdp.font_icon:update(font_icon, colors.background)
-    widget:set_markup(string.format(
-        markup.italic("%s "),
-        markup.fg.color(title_color, trunc(title, 30))
-    ))
+    gpmdp.font_icon:update(font_icon, colors.blue)
 
     -- update tooltip
     tooltip.markup = string.format(
@@ -147,9 +145,9 @@ end
 function gpmdp.maybe_not_running(widget)
     gpmdp.running_counter = gpmdp.running_counter + 1
     if gpmdp.running_counter > 5 then
-        gpmdp.font_icon:update(gpmdp_default_icon, colors.background)
-        widget:set_markup("")
-        tooltip.text = "Music"
+        gpmdp.font_icon:update(icon_not_running, colors.blue)
+        widget:set_markup('')
+        tooltip.text = 'Music'
         gpmdp.current_track = nil
     end
 end
@@ -196,13 +194,6 @@ local buttons = gears.table.join(
 )
 
 gpmdp.font_icon:buttons(buttons)
-gpmdp.widget:buttons(buttons)
+tooltip:add_to_object(gpmdp.font_icon)
 
-local container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    gpmdp.font_icon,
-    wibox.container.margin(gpmdp.widget, dpi(3))
-}
-tooltip:add_to_object(container)
-
-return container
+return gpmdp.font_icon
