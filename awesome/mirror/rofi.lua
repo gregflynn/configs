@@ -1,5 +1,6 @@
-local awful     = require("awful")
-local gears     = require("gears")
+local awful     = require('awful')
+local beautiful = require('beautiful')
+local gears     = require('gears')
 
 
 local rofi = {}
@@ -45,6 +46,14 @@ rofi.globalkeys = gears.table.join(
     awful.key(
         {modkey}, 'e', function() awful.spawn('rofimoji') end,
         {description = 'Select an Emoji to copy or insert', group = 'awesome'}
+    ),
+    awful.key(
+        {modkey}, 's', function()
+            awful.spawn({
+                'python3', beautiful.dotsan_home..'/rofi/rofi_search.py'
+            })
+        end,
+        {description = 'Search the web', group = 'awesome'}
     )
 )
 

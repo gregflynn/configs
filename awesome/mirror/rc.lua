@@ -46,8 +46,6 @@ local battery    = require("widgets/battery")
 local brightness = require("widgets/brightness")
 local clock      = require("widgets/clock")
 local cpu        = require("widgets/cpu")
-local rofi       = require("widgets/rofi")
---local timer      = require("widgets/timer")
 local tray       = require("widgets/tray")
 local volume     = require("widgets/volume")
 local weather    = require("widgets/weather")
@@ -102,8 +100,8 @@ globalkeys = gears.table.join(
         {description = "Logout", group = "awesome"}
     ),
     awful.key(
-        {modkey}, "s", hotkeys_popup.show_help,
-        {description = "Show Keybindings", group = "awesome"}
+        {modkey, shift}, 's', hotkeys_popup.show_help,
+        {description = 'Show Keybindings', group = 'awesome'}
     ),
     awful.key(
         {modkey}, "Return", function() awful.spawn(terminal) end,
@@ -237,7 +235,7 @@ globalkeys = gears.table.join(
 
     -- Widget keys
     brightness.globalkeys,
-    rofi.globalkeys,
+    require('rofi').globalkeys,
     tray.globalkeys,
     volume.globalkeys
 )
