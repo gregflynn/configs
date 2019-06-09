@@ -23,6 +23,7 @@ local window_icon_overrides = {
     ["jetbrains-idea"]                   = "\u{e7b5}",
     ["jetbrains-pycharm"]                = "\u{e73c}",
     ["Google Play Music Desktop Player"] = "\u{f001}",
+    ['Ristretto']                        = '\u{f03e}',
     ["Slack"]                            = "\u{f198}",
     ["Steam"]                            = "\u{f1b6}",
     ["Thunar"]                           = "\u{f413}",

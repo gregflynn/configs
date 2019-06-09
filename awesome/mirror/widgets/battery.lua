@@ -19,11 +19,11 @@ local battery_icons = {
 }
 
 local battery_colors = {
-    plug    = colors.background,
-    full    = colors.background,
-    good    = colors.background,
-    low     = colors.background,
-    caution = colors.white,
+    plug    = colors.green,
+    full    = colors.green,
+    good    = colors.green,
+    low     = colors.orange,
+    caution = colors.red,
     empty   = colors.red,
 }
 
@@ -71,7 +71,7 @@ battery.lain_widget = lain.widget.bat {
         local color = battery_colors[status]
         battery.font_icon:update(battery_icons[status], color)
         widget:set_markup(string.format(
-            '<span color="%s">%s%%</span>', color, bat_now.perc
+            '<span color="%s">%s%%</span> ', color, bat_now.perc
         ))
     end
 }
