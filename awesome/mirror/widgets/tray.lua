@@ -3,8 +3,6 @@ local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
 
-local lain = require("lain")
-
 local Dropdown = require("util/dropdown")
 local file     = require("util/file")
 local Expand   = require("util/expand")
@@ -13,25 +11,6 @@ local number   = require("util/number")
 local Toggle   = require("util/toggle")
 
 local colors = beautiful.colors
-
-
---
--- redshift
---
-local redshift = FontIcon()
-local tooltip  = awful.tooltip {
-    objects = {redshift},
-    text    = "redshift"
-}
-lain.widget.contrib.redshift:attach(redshift, function(active)
-    if active then
-        tooltip.text = "Redshift: Active"
-        redshift:update("\u{f800}", colors.background)
-    else
-        tooltip.text = "Redshift: Inactive"
-        redshift:update("\u{f800}", colors.white)
-    end
-end)
 
 
 --

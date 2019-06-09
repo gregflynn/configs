@@ -1,7 +1,9 @@
 local awful     = require('awful')
 local beautiful = require('beautiful')
+local gears     = require('gears')
 local wibox     = require('wibox')
 
+local lain    = require('lain')
 local vicious = require('vicious')
 
 local file     = require('util/file')
@@ -45,10 +47,20 @@ if file.exists("/usr/bin/nvidia-smi") and not file.exists("/proc/acpi/bbswitch")
     )
 end
 
+local menu = awful.menu({
+    theme = {width = dpi(150)},
+    items = {
+        {'Toggle Redshift', function() lain.widget.contrib.redshift:toggle() end}
+    }
+})
+
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     gpu_icon,
     gpu_temp,
-    gpu_graph_container
+    gpu_graph_container,
+    buttons = gears.table.join(
+        awful.button({ }, 1, function() menu:toggle() end)
+    )
 }
 return wibox.container.margin(container, 0, dpi(4), 0, 0)
