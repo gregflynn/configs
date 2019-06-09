@@ -11,7 +11,9 @@ class Initializer(BaseInitializer):
             'lain-git',
             'vicious',
             'redshift',
-            'flameshot'
+            'flameshot',
+            'xsel',
+            'rofimoji-git'
         ]
 
     def build(self):

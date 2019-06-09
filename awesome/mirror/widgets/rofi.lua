@@ -41,6 +41,10 @@ rofi.globalkeys = gears.table.join(
     awful.key(
         {modkey}, "p", function() rofi:show("allwindows") end,
         {description = "Select Window (all tags)", group = "client"}
+    ),
+    awful.key(
+        {modkey}, 'e', function() awful.spawn('rofimoji') end,
+        {description = 'Select an Emoji to copy or insert', group = 'awesome'}
     )
 )
 
