@@ -10,7 +10,7 @@ local markup   = lain.util.markup
 
 local fonticon = FontIcon()
 local city_id = 4930956
-local color = beautiful.colors.background
+local color = beautiful.colors.purple
 
 -- https://openweathermap.org/weather-conditions
 local icon_map = {
@@ -46,7 +46,7 @@ local weather = lain.widget.weather {
         local icon_id = weather_now["weather"][1]["icon"]
         local description = weather_now["weather"][1]["description"]
 
-        widget:set_markup(markup.fg.color(color, string.format('%d°F', current_temp)))
+        widget:set_markup(markup.fg.color(color, string.format('%d°F ', current_temp)))
         tooltip.text = string.format("%s%% humidity and %s", humidity, description)
         fonticon:update(icon_map[icon_id], color)
 

@@ -44,7 +44,6 @@ awful.rules.rules = require("rules")
 -- Screen setup
 --
 local battery    = require("widgets/battery")
-local brightness = require("widgets/brightness")
 local cpu        = require("widgets/cpu")
 local tray       = require("widgets/tray")
 local volume     = require("widgets/volume")
@@ -71,8 +70,8 @@ awful.screen.connect_for_each_screen(function(screen)
                 { widget = cpu,     color = colors.red        },
                 { widget = volume,  color = colors.blue,       primary_only = true },
                 { widget = tray,    color = colors.orange,     primary_only = true },
-                { widget = weather, color = colors.purple     },
             } },
+            require('widgets/weather'),
             require('widgets/clock')
         })
 end)
@@ -235,7 +234,7 @@ globalkeys = gears.table.join(
     TagList { keys = true },
 
     -- Widget keys
-    brightness.globalkeys,
+    require('brightness').globalkeys,
     require('rofi').globalkeys,
     tray.globalkeys,
     volume.globalkeys
