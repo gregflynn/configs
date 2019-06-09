@@ -10,14 +10,21 @@ function factory(args)
     local arg = args or {}
 
     local width = args.width or dpi(25)
-    local color = args.color or colors.blue
     local tooltip_text = args.tooltip_text or ''
-
+    
     local graph = wibox.widget.graph {
         width = width,
     }
+
     graph.background_color = colors.background
-    graph.color = color
+    if args.color then
+        graph.color = args.color
+    end
+
+    if args.stack_colors then
+        graph.stack_colors = args.stack_colors
+        graph.stack = true
+    end
 
     graph.container = wibox.container.margin(graph, dpi(2), dpi(2), dpi(4), dpi(4))
     graph.tooltip = awful.tooltip { objects = {graph.container}, text = tooltip_text }

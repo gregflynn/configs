@@ -68,6 +68,7 @@ awful.screen.connect_for_each_screen(function(screen)
             require('widgets/cpu'),
             require('widgets/gpu'),
             require('widgets/mem'),
+            require('widgets/net'),
             volume,
             require('widgets/battery'),
             require('widgets/weather'),
