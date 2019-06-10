@@ -11,7 +11,7 @@ local dpi = beautiful.xresources.apply_dpi
 
 
 local color = beautiful.colors.red
-local cpu_icon = FontIcon {icon = '\u{f2db}', color = color}
+local cpu_icon = FontIcon {icon = '\u{fb19}', color = color}
 local cpu_temp_widget = awful.widget.watch("sensors", 15, function(widget, stdout)
     local temp = stdout:match("Package id 0:%s+%p(%d+%p%d)")
     if not temp then

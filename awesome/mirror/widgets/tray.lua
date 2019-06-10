@@ -14,48 +14,6 @@ local colors = beautiful.colors
 
 
 --
--- blinky
---
-local blinky_command = "blinky"
-local blinky_enabled = file.exists("/usr/bin/blinky")
-local blinky         = Toggle {
-    font_icon_enabled        = "\u{fbe6}",
-    font_icon_enabled_color  = colors.background,
-    font_icon_disabled       = "\u{fbe7}",
-    font_icon_disabled_color = colors.white,
-    default_enabled          = true,
-    tooltip_text             = "Toggle LED Backlights",
-    on_enable = function()
-        awful.spawn({blinky_command, "--on"})
-    end,
-    on_disable = function()
-        awful.spawn({blinky_command, "--off"})
-    end
-}
-
-
---
--- caffeine
---
-local caffeine = Toggle {
-    font_icon_enabled        = "\u{fbc8}",
-    font_icon_enabled_color  = colors.background,
-    font_icon_disabled       = "\u{f675}",
-    font_icon_disabled_color = colors.white,
-    default_enabled          = true,
-    tooltip_text             = "Toggle Screen Locking",
-    on_enable = function()
-        awful.spawn({"xautolock", "-enable"})
-        awful.spawn({"xset", "s", "on"})
-    end,
-    on_disable = function()
-        awful.spawn({"xautolock", "-disable"})
-        awful.spawn({"xset", "s", "off"})
-    end
-}
-
-
---
 -- wallpapers
 --
 local wallpapers_icon = Dropdown {
@@ -98,9 +56,6 @@ local systray = Expand {
 --
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
-    redshift,
-    blinky_enabled and blinky or nil,
-    caffeine,
     wallpapers_icon,
     arandr_enabled and arandr or nil,
     systray

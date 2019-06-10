@@ -47,20 +47,71 @@ if file.exists("/usr/bin/nvidia-smi") and not file.exists("/proc/acpi/bbswitch")
     )
 end
 
-local menu = awful.menu({
-    theme = {width = dpi(150)},
-    items = {
-        {'Toggle Redshift', function() lain.widget.contrib.redshift:toggle() end}
-    }
-})
+blinky_on = true
+function toggle_blinky()
+    if blinky_on then
+        awful.spawn({'blinky', '--off'})
+    else
+        awful.spawn({'blinky', '--on'})
+    end
+    blinky_on = not blinky_on
+end
 
-local container = wibox.widget {
+screen_lock_on = true
+function toggle_screen_lock()
+    if screen_lock_on then
+        awful.spawn({"xautolock", "-disable"})
+        awful.spawn({"xset", "s", "off"})
+    else
+        awful.spawn({"xautolock", "-enable"})
+        awful.spawn({"xset", "s", "on"})
+    end
+    screen_lock_on = not screen_lock_on
+end
+
+local container
+
+function menu_close()
+    container.prevmenu:hide()
+    container.prevmenu = nil
+end
+
+container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     gpu_icon,
     gpu_temp,
     gpu_graph_container,
     buttons = gears.table.join(
-        awful.button({ }, 1, function() menu:toggle() end)
+        awful.button({ }, 1, function()
+            if container.prevmenu then
+                menu_close()
+            else
+                -- open
+                local menu = awful.menu()
+                
+                menu:add({'Toggle Redshift', function()
+                    lain.widget.contrib.redshift:toggle()
+                    menu_close()
+                end})
+
+                menu:add({'Toggle Screen Lock', function()
+                    toggle_screen_lock()
+                    menu_close()
+                end})
+
+                if file.exists("/usr/bin/blinky") then
+                    menu:add({'Toggle Blinky LEDs', function()
+                        toggle_blinky()
+                        menu_close()
+                    end})
+                end
+
+                menu:show()
+                container.prevmenu = menu
+            end
+        end)
     )
 }
+
+
 return wibox.container.margin(container, 0, dpi(4), 0, 0)
