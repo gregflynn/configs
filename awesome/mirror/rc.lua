@@ -43,8 +43,7 @@ awful.rules.rules = require("rules")
 --
 -- Screen setup
 --
-local tray       = require("widgets/tray")
-local volume     = require('widgets/volume')
+local volume = require('widgets/volume')
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
@@ -62,9 +61,7 @@ awful.screen.connect_for_each_screen(function(screen)
         },
         { screen.mytasklist },
         {
-            ArrowList { screen = screen, prefix = true, blocks = {
-                { widget = tray,    color = colors.orange,     primary_only = true },
-            } },
+            require('widgets/tray'),
             require('widgets/cpu'),
             require('widgets/gpu'),
             require('widgets/mem'),
@@ -229,6 +226,12 @@ globalkeys = gears.table.join(
         end,
         {description = "Previous Screen", group = "screen"}
     ),
+    awful.key(
+        {modkey}, "o", function()
+            awful.spawn("flameshot gui")
+        end,
+        {description = "open flameshot", group = "screen"}
+    ),
 
     -- Tag Keys
     TagList { keys = true },
@@ -236,7 +239,6 @@ globalkeys = gears.table.join(
     -- Widget keys
     require('brightness').globalkeys,
     require('rofi').globalkeys,
-    tray.globalkeys,
     volume.globalkeys
 )
 

@@ -29,10 +29,10 @@ local function factory(args)
 
         if open then
             open = false
-            Expand:update(icon_name, colors.background)
+            Expand:update(icon_name, colors.yellow)
         else
             open = true
-            Expand:update("\u{f659}", colors.white)
+            Expand:update("\u{f659}", colors.red)
             container:add(expanded_widget)
         end
 

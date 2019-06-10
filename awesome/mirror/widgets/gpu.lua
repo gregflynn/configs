@@ -14,6 +14,9 @@ local Graph    = require('util/graph')
 local dpi = beautiful.xresources.apply_dpi
 
 
+local wallpapers_folder = beautiful.dotsan_home..'/private/wallpapers'
+local screenlayout_folder = beautiful.home..'/.screenlayout/'
+local folder_command = "ls -l %s | awk '{print $9}' | tail -n 35 | sort"
 local color = beautiful.colors.green
 local gpu_icon = FontIcon {icon = '\u{f878}', color = color}
 local gpu_temp
@@ -104,6 +107,48 @@ container = wibox.widget {
                         toggle_blinky()
                         menu_close()
                     end})
+                end
+
+                awful.spawn.easy_async_with_shell(
+                    string.format(folder_command, wallpapers_folder),
+                    function(stdout)
+                        local wp_menu = {}
+
+                        for item in stdout:gmatch("%S+") do
+                            wp_menu = gears.table.join(wp_menu, {{
+                                item,
+                                function()
+                                    local full_path = string.format("%s/%s", wallpapers_folder, item)
+                                    awful.screen.connect_for_each_screen(function(s)
+                                        gears.wallpaper.maximized(full_path, s)
+                                    end)
+                                end
+                            }})
+                        end
+
+                        menu:add({'Wallpapers', wp_menu})
+                    end
+                )
+
+                if file.exists(screenlayout_folder) then
+                    awful.spawn.easy_async_with_shell(
+                        string.format(folder_command, screenlayout_folder),
+                        function(stdout)
+                            local sl_menu = {}
+
+                            for item in stdout:gmatch("%S+") do
+                                sl_menu = gears.table.join(sl_menu, {{
+                                    item,
+                                    function()
+                                        local full_path = string.format("%s/%s", screenlayout_folder, item)
+                                        awful.spawn(string.format("bash %s", full_path))
+                                    end
+                                }})
+                            end
+
+                            menu:add({'Screen Layouts', sl_menu})
+                        end
+                    )
                 end
 
                 menu:show()
