@@ -7,12 +7,13 @@ local glib      = require("lgi").GLib
 
 local FontIcon = require('util/fonticon')
 
+local dpi       = beautiful.xresources.apply_dpi
 local DateTime  = glib.DateTime
 local TimeZone  = glib.TimeZone
 local markup    = lain.util.markup
 
 local calendar = 'https://calendar.google.com/'
-local clock_fmt = '%H:%M '
+local clock_fmt = '%H:%M'
 local tooltip_fmt = '%A %m/%d'
 local refresh = 60
 local text_color = beautiful.colors.blue
@@ -87,4 +88,4 @@ local container = wibox.widget {
 }
 tooltip:add_to_object(container)
 
-return container
+return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)

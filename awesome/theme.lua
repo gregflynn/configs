@@ -35,6 +35,7 @@ local theme = {
     bar_opacity   = 0.9,
     bar_margin    = dpi(2),
     border_width  = dpi(2),
+    widget_space  = dpi(5),
     font          = font_name.." 10",
     font_name     = font_name,
     wallpaper     = "{DS_WALLPAPER}",

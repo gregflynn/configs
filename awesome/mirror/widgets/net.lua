@@ -93,4 +93,4 @@ local container = wibox.widget {
     network_icon,
     network_graph.container
 }
-return wibox.container.margin(container, 0, dpi(4), 0, 0)
+return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)

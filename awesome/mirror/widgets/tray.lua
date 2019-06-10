@@ -22,4 +22,4 @@ local container = wibox.widget {
     systray
 }
 
-return container
+return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)

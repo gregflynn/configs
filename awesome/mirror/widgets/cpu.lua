@@ -35,4 +35,4 @@ local container = wibox.widget {
     cpu_temp_widget,
     cpu_load_widget.container
 }
-return wibox.container.margin(container, 0, dpi(4), 0, 0)
+return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)

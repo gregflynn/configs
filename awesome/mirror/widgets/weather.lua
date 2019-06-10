@@ -46,7 +46,7 @@ local weather = lain.widget.weather {
         local icon_id = weather_now["weather"][1]["icon"]
         local description = weather_now["weather"][1]["description"]
 
-        widget:set_markup(markup.fg.color(color, string.format('%d°F ', current_temp)))
+        widget:set_markup(markup.fg.color(color, string.format('%d°F', current_temp)))
         tooltip.text = string.format("%s%% humidity and %s", humidity, description)
         fonticon:update(icon_map[icon_id], color)
 
@@ -78,4 +78,4 @@ local container = wibox.widget {
 }
 tooltip:add_to_object(container)
 
-return container
+return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)

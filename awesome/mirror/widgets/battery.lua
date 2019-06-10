@@ -79,8 +79,8 @@ battery.lain_widget = lain.widget.bat {
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     battery.font_icon,
-    wibox.container.margin(battery.lain_widget.widget, dpi(0), dpi(3))
+    battery.lain_widget.widget
 }
 battery.tooltip:add_to_object(container)
 
-return container
+return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
