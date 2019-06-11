@@ -102,7 +102,6 @@ local function create_update_func(screen)
             )
             v:buttons(awful.widget.common.create_buttons(buttons, client))
             window_list:add(v)
-
         end
     end
 

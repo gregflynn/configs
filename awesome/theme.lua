@@ -36,11 +36,12 @@ local theme = {
     bar_margin    = dpi(2),
     border_width  = dpi(2),
     widget_space  = dpi(5),
+    widget_under  = dpi(2),
     font          = font_name.." 10",
     font_name     = font_name,
     wallpaper     = "{DS_WALLPAPER}",
     border_shape  = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, dpi(5))
+        gears.shape.rounded_rect(cr, w, h, dpi(0))
     end,
 }
 

@@ -9,9 +9,10 @@ local colors = beautiful.colors
 
 
 local function factory(args)
-    local args = args or {}
+    local args            = args or {}
     local expanded_widget = args.widget
-    local icon_name = args.font_icon
+    local icon_name       = args.font_icon
+    local color           = args.color or colors.yellow
 
     local Expand = FontIcon()
     local container = wibox.layout.fixed.horizontal()
@@ -29,7 +30,7 @@ local function factory(args)
 
         if open then
             open = false
-            Expand:update(icon_name, colors.yellow)
+            Expand:update(icon_name, color)
         else
             open = true
             Expand:update("\u{f659}", colors.red)

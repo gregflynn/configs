@@ -8,7 +8,6 @@ local lain = require('lain')
 local Graph    = require('util/graph')
 local FontIcon = require("util/fonticon")
 local number   = require("util/number")
-local Toggle   = require("util/toggle")
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi

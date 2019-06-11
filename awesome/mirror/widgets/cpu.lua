@@ -4,8 +4,9 @@ local wibox     = require('wibox')
 
 local vicious = require('vicious')
 
-local FontIcon = require('util/fonticon')
-local Graph    = require('util/graph')
+local FontIcon        = require('util/fonticon')
+local Graph           = require('util/graph')
+local SanityContainer = require('util/sanitycontainer')
 
 local dpi = beautiful.xresources.apply_dpi
 
@@ -35,4 +36,8 @@ local container = wibox.widget {
     cpu_temp_widget,
     cpu_load_widget.container
 }
-return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+
+return SanityContainer {
+    widget = container,
+    color = color
+}

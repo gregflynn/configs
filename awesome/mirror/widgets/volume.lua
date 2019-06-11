@@ -13,17 +13,9 @@ local gpmdp = require("widgets/gpmdp")
 
 local tooltip = awful.tooltip {}
 local fg_color = colors.blue
-local chart = wibox.widget {
-    max_value = 100,
-    thickness = dpi(4),
-    start_angle = (2 * math.pi) * 3 / 4,
-    bg = colors.gray,
-    colors = {fg_color},
-    widget = wibox.container.arcchart
-}
 
 local volume = lain.widget.pulsebar {
-    width = dpi(60),
+    width = dpi(50),
     margins = 4,
     paddings = 0,
     notification_preset = {
@@ -39,11 +31,8 @@ local volume = lain.widget.pulsebar {
     settings = function()
         if volume_now.muted == "yes" then
             tooltip.text = "Muted"
-            chart.values = {0}
         else
             local level = tonumber(volume_now.left)
-            chart.values = {level}
-
             tooltip.text = string.format("Speakers: %s%%", level)
         end
     end
@@ -70,10 +59,13 @@ volume.buttons = awful.util.table.join(
 local container = wibox.widget {
     layout = wibox.layout.fixed.horizontal,
     gpmdp,
-    wibox.container.margin(chart, dpi(3), dpi(8), dpi(5), dpi(5)),
+    wibox.container.margin(volume.bar, dpi(0), dpi(0), dpi(5), dpi(5)),
 }
-chart:buttons(volume.buttons)
+volume.bar.shape = beautiful.border_shape
+volume.bar.bar_shape = beautiful.border_shape
+volume.bar:buttons(volume.buttons)
 tooltip:add_to_object(container)
+volume.tooltip:remove_from_object(volume.bar)
 
 container.globalkeys = gears.table.join(
     awful.key({ }, "XF86AudioRaiseVolume", function()
@@ -90,4 +82,6 @@ container.globalkeys = gears.table.join(
     end)
 )
 
-return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+local real_container = wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+real_container.globalkeys = container.globalkeys
+return real_container
