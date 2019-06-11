@@ -1,19 +1,21 @@
-local awful     = require("awful")
-local beautiful = require("beautiful")
-local gears     = require("gears")
-local wibox     = require("wibox")
-local lain      = require("lain")
-local glib      = require("lgi").GLib
+local awful     = require('awful')
+local beautiful = require('beautiful')
+local gears     = require('gears')
+local glib      = require('lgi')
+local wibox     = require('wibox')
 
-local FontIcon = require('util/fonticon')
+local lain = require('lain')
+
+local FontIcon        = require('util/fonticon')
+local SanityContainer = require('util/sanitycontainer')
 
 local dpi       = beautiful.xresources.apply_dpi
-local DateTime  = glib.DateTime
-local TimeZone  = glib.TimeZone
+local DateTime  = glib.GLib.DateTime
+local TimeZone  = glib.GLib.TimeZone
 local markup    = lain.util.markup
 
 local calendar = 'https://calendar.google.com/'
-local clock_fmt = '%H:%M'
+local clock_fmt = '%H:%M %m/%d'
 local tooltip_fmt = '%A %m/%d'
 local refresh = 60
 local text_color = beautiful.colors.blue
@@ -24,7 +26,6 @@ end
 
 local clock_icon = FontIcon()
 local clock = wibox.widget.textbox()
-local tooltip = awful.tooltip {}
 local clock_map = {
     ['01'] = '\u{e382}',
     ['02'] = '\u{e383}',
@@ -37,7 +38,7 @@ local clock_map = {
     ['09'] = '\u{e38a}',
     ['10'] = '\u{e38b}',
     ['11'] = '\u{e38c}',
-    ['12'] = '\u{e38d}'
+    ['12'] = '\u{e381}'
 }
 
 local awesome_menu = {
@@ -61,13 +62,28 @@ local menu = awful.menu({
     }
 })
 
+sanitycontainer = SanityContainer {
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        clock_icon,
+        clock
+    },
+    color = text_color,
+    buttons = gears.table.join(
+        awful.button({ }, 1, function() menu:toggle() end),
+        awful.button({ }, 3, function()
+            awful.spawn({'xdg-open', calendar})
+        end)
+    )
+}
+
 local timer
 function clock_update()
     local now = DateTime.new_now(TimeZone.new_local())
     local icon = clock_map[now:format('%I')]
     clock_icon:update(icon, text_color)
     clock:set_markup(markup.fg.color(text_color, now:format(clock_fmt)))
-    tooltip:set_markup(now:format(tooltip_fmt))
+    sanitycontainer:set_tooltip_color(now:format(tooltip_fmt))
     timer.timeout = calc_timeout()
     timer:again()
     return true
@@ -75,17 +91,4 @@ end
 timer = gears.timer.weak_start_new(refresh, clock_update)
 timer:emit_signal('timeout')
 
-local container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    clock_icon,
-    clock,
-    buttons = gears.table.join(
-        awful.button({ }, 1, function() menu:toggle() end),
-        awful.button({ }, 3, function()
-            awful.spawn("xdg-open "..calendar)
-        end)
-    )
-}
-tooltip:add_to_object(container)
-
-return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+return sanitycontainer
