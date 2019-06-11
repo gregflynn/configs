@@ -1,10 +1,13 @@
-local awful     = require("awful")
-local lain      = require("lain")
-local beautiful = require("beautiful")
-local wibox     = require("wibox")
-local gears     = require("gears")
+local awful     = require('awful')
+local beautiful = require('beautiful')
+local gears     = require('gears')
+local wibox     = require('wibox')
 
-local FontIcon = require("util/fonticon")
+local lain = require('lain')
+
+local FontIcon        = require('util/fonticon')
+local SanityContainer = require('util/sanitycontainer')
+
 local markup   = lain.util.markup
 
 
@@ -34,7 +37,7 @@ local icon_map = {
     ["50n"] = "\u{e35d}",
 }
 
-local tooltip = awful.tooltip {}
+-- local tooltip = awful.tooltip {}
 
 local weather = lain.widget.weather {
     city_id = city_id,
@@ -47,7 +50,7 @@ local weather = lain.widget.weather {
         local description = weather_now["weather"][1]["description"]
 
         widget:set_markup(markup.fg.color(color, string.format('%d°F', current_temp)))
-        tooltip.text = string.format("%s%% humidity and %s", humidity, description)
+        container:set_tooltip_color(string.format('%s%% humidity and %s', humidity, description))
         fonticon:update(icon_map[icon_id], color)
 
     end,
@@ -64,9 +67,13 @@ local weather = lain.widget.weather {
     end
 }
 
-local container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    fonticon, weather.widget,
+container = SanityContainer {
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        fonticon,
+        weather.widget
+    },
+    color = color,
     buttons = gears.table.join(
         awful.button({ }, 1, function()
             weather.show(5)
@@ -76,6 +83,5 @@ local container = wibox.widget {
         end)
     )
 }
-tooltip:add_to_object(container)
 
-return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+return container
