@@ -35,7 +35,7 @@ awful.widget.watch(
         local total_bytes = tonumber(split[1])
         local used_bytes = tonumber(split[2])
         local used_raw_pct = used_bytes / total_bytes
-        local pct_used = number.round(used_raw_pct * 100, 1)
+        local pct_used = number.round(used_raw_pct * 100, 0)
 
         mem_pct:set_markup(markup.fg.color(color, string.format('%s%%', pct_used)))
         container:set_tooltip_color(string.format(

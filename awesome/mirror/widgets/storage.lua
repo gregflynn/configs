@@ -5,7 +5,6 @@ local lain = require('lain')
 
 local number          = require('util/number')
 local text            = require('util/text')
-local FontIcon        = require('util/fonticon')
 local Pie             = require('util/pie')
 local SanityContainer = require('util/sanitycontainer')
 
@@ -79,7 +78,6 @@ local root_pie = Pie {
 local container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        FontIcon {icon = '\u{f7c9}', color = color},
         root_pie.container,
         boot_pie.container
     },
