@@ -61,13 +61,14 @@ awful.screen.connect_for_each_screen(function(screen)
         },
         { screen.mytasklist },
         {
-            require('widgets/tray'),
             require('widgets/cpu'),
             require('widgets/gpu'),
             require('widgets/mem'),
+            require('widgets/storage'),
             require('widgets/net'),
             volume,
             require('widgets/battery'),
+            require('widgets/tray'),
             require('widgets/weather'),
             require('widgets/clock')
         })
