@@ -1,3 +1,4 @@
+local awful     = require('awful')
 local wibox     = require('wibox')
 local beautiful = require('beautiful')
 
@@ -6,9 +7,10 @@ local dpi    = beautiful.xresources.apply_dpi
 
 
 function factory(args)
-    local widget = args.widget
+    local widget   = args.widget
     local is_right = not args.left
-    local color = args.color or colors.white
+    local color    = args.color or colors.white
+    local tooltip  = args.tooltip or ''
 
     local left = 0
     local right = 0
@@ -28,6 +30,15 @@ function factory(args)
 
     function SanityContainer:set_color(color)
         ln.bg = color
+    end
+
+    SanityContainer.tooltip = awful.tooltip {
+        objects = SanityContainer,
+        text = tooltip
+    }
+
+    function SanityContainer:set_tooltip(text)
+        SanityContainer.tooltip.text = text
     end
 
     return SanityContainer

@@ -1,9 +1,9 @@
-local awful     = require("awful")
-local beautiful = require("beautiful")
-local lain      = require("lain")
-local wibox     = require("wibox")
+local beautiful = require('beautiful')
+local lain      = require('lain')
+local wibox     = require('wibox')
 
-local FontIcon = require("util/fonticon")
+local FontIcon        = require('util/fonticon')
+local SanityContainer = require('util/sanitycontainer')
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
@@ -29,8 +29,7 @@ local battery_colors = {
 
 local battery = {
     battery_enabled = false,
-    font_icon = FontIcon(),
-    tooltip = awful.tooltip {}
+    font_icon = FontIcon {icon = battery_icons['empty'], color = colors.yellow},
 }
 
 function battery:get_status()
@@ -51,24 +50,30 @@ end
 
 battery.lain_widget = lain.widget.bat {
     settings = function()
+        if not battery.sanitycontainer then
+            return
+        end
+
         if bat_now.perc == "N/A" then
             battery.font_icon:update(battery_icons["empty"], colors.gray)
             widget:set_markup(string.format("<span color='%s'>N/A</span>", colors.gray))
             return
         end
 
-        if bat_now.status == "Full" then
-            battery.tooltip.text = "Full"
-        elseif bat_now.status == "Charging" then
-            battery.tooltip.text = bat_now.time.." Until Full"
-        elseif bat_now.status == "Discharging" then
-            battery.tooltip.text = bat_now.time.." Until Empty"
+        if bat_now.status == 'Full' then
+            tooltip = 'Full'
+        elseif bat_now.status == 'Charging' then
+            tooltip = bat_now.time..' Until Full'
+        elseif bat_now.status == 'Discharging' then
+            tooltip = bat_now.time..' Until Empty'
         else
-            battery.tooltip.text = "N/A"
+            tooltip = 'N/A'
         end
+        battery.sanitycontainer:set_tooltip(tooltip)
 
         local status = battery:get_status()
         local color = battery_colors[status]
+        battery.sanitycontainer:set_color(color)
         battery.font_icon:update(battery_icons[status], color)
         widget:set_markup(string.format(
             '<span color="%s">%s%%</span> ', color, bat_now.perc
@@ -76,11 +81,14 @@ battery.lain_widget = lain.widget.bat {
     end
 }
 
-local container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    battery.font_icon,
-    battery.lain_widget.widget
+battery.sanitycontainer = SanityContainer {
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        battery.font_icon,
+        battery.lain_widget.widget
+    },
+    tooltip = '',
+    color   = colors.yellow
 }
-battery.tooltip:add_to_object(container)
 
-return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+return battery.sanitycontainer
