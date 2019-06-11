@@ -29,15 +29,13 @@ end)
 local cpu_load_widget = Graph {color = color}
 vicious.register(cpu_load_widget, vicious.widgets.cpu, "$1")
 
-
-local container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    cpu_icon,
-    cpu_temp_widget,
-    cpu_load_widget.container
-}
-
 return SanityContainer {
-    widget = container,
-    color = color
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        cpu_icon,
+        cpu_temp_widget,
+        cpu_load_widget.container
+    },
+    color = color,
+    tooltip = 'CPU Usage'
 }

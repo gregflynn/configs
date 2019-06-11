@@ -14,6 +14,7 @@ local DateTime  = glib.GLib.DateTime
 local TimeZone  = glib.GLib.TimeZone
 local markup    = lain.util.markup
 
+
 local calendar = 'https://calendar.google.com/'
 local clock_fmt = '%H:%M %m/%d'
 local tooltip_fmt = '%A %m/%d'

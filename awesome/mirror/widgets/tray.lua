@@ -12,5 +12,6 @@ local systray = Expand {
 
 return SanityContainer {
     widget = systray,
-    color = beautiful.colors.yellow
+    color = beautiful.colors.yellow,
+    tooltip = 'Systray'
 }

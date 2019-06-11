@@ -6,10 +6,11 @@ local wibox     = require('wibox')
 local lain    = require('lain')
 local vicious = require('vicious')
 
-local file     = require('util/file')
-local text     = require('util/text')
-local FontIcon = require('util/fonticon')
-local Graph    = require('util/graph')
+local file            = require('util/file')
+local text            = require('util/text')
+local FontIcon        = require('util/fonticon')
+local Graph           = require('util/graph')
+local SanityContainer = require('util/sanitycontainer')
 
 local dpi = beautiful.xresources.apply_dpi
 
@@ -33,7 +34,7 @@ if file.exists("/usr/bin/nvidia-smi") and not file.exists("/proc/acpi/bbswitch")
         end
     )
 
-    local gpu_graph = Graph {tooltip_text = 'GPU Usage', color = color}
+    local gpu_graph = Graph {color = color}
     gpu_graph_container = gpu_graph.container
 
     local gpu_load_command = "nvidia-smi --format=csv,nounits,noheader --query-gpu=utilization.gpu"
@@ -79,11 +80,15 @@ function menu_close()
     container.prevmenu = nil
 end
 
-container = wibox.widget {
-    layout = wibox.layout.fixed.horizontal,
-    gpu_icon,
-    gpu_temp,
-    gpu_graph_container,
+container = SanityContainer {
+    color = color,
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        gpu_icon,
+        gpu_temp,
+        gpu_graph_container,
+    },
+    tooltip = 'GPU Usage',
     buttons = gears.table.join(
         awful.button({ }, 1, function()
             if container.prevmenu then
@@ -157,6 +162,4 @@ container = wibox.widget {
         end)
     )
 }
-
-
-return wibox.container.margin(container, 0, beautiful.widget_space, 0, 0)
+return container

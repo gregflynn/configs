@@ -1,4 +1,3 @@
-local awful     = require('awful')
 local beautiful = require('beautiful')
 local wibox     = require('wibox')
 
@@ -10,7 +9,6 @@ function factory(args)
     local arg = args or {}
 
     local width = args.width or dpi(25)
-    local tooltip_text = args.tooltip_text or ''
     
     local graph = wibox.widget.graph {
         width = width,
@@ -27,7 +25,6 @@ function factory(args)
     end
 
     graph.container = wibox.container.margin(graph, dpi(2), dpi(2), dpi(4), dpi(4))
-    graph.tooltip = awful.tooltip { objects = {graph.container}, text = tooltip_text }
 
     return graph
 end
