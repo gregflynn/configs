@@ -6,6 +6,7 @@ local wibox     = require("wibox")
 local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local text     = require("util/text")
+local SanityContainer = require('util/sanitycontainer')
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
@@ -40,19 +41,27 @@ local function create_update_func(screen)
 
         for idx, client in ipairs(clients) do
             local cache = data[client]
-            local ib, tb, arr
+            local ib, tb, c
 
             if cache then
                 ib  = cache.ib
                 tb  = cache.tb
-                arr = cache.arr
+                c   = cache.c
             else
                 tb = wibox.widget.textbox()
-                arr = wibox.layout.fixed.horizontal()
             end
 
             local title, fg_color, bg_color, icon = client_details(client, tb, label, no_text)
-            tb:set_markup_silently('<span color="'..fg_color..'">'..text.trunc(title, 20)..'</span>')
+            
+            function is_focus()
+                return fg_color == beautiful.tasklist_fg_focus
+            end
+
+            if is_focus() then
+                tb:set_markup_silently('<span color="'..fg_color..'">'..text.trunc(title, 20)..'</span>')
+            else
+                tb:set_markup_silently('')
+            end
 
             -- Update the icon
             local icon_override = display.get_icon_for_client(client)
@@ -72,36 +81,30 @@ local function create_update_func(screen)
             if not cache then
                 ib.forced_width = dpi(24)
 
-                -- create the tooltip only once
-                awful.tooltip {
-                    objects = {arr},
-                    text = string.format('%s (%s)', client.name, client.class)
+                c = SanityContainer {
+                    widget = wibox.widget {
+                        layout = wibox.layout.fixed.horizontal,
+                        ib,
+                        tb
+                    },
+                    color   = fg_color,
+                    buttons = awful.widget.common.create_buttons(buttons, client)
                 }
-
-                -- add the icon and text only once
-                arr:add(ib)
-                arr:add(tb)
 
                 data[client] = {
-                    ib  = ib,
-                    tb  = tb,
-                    arr = arr
+                    ib = ib,
+                    tb = tb,
+                    c  = c
                 }
             end
 
-            local ln_color = bg_color
-            if client.minimized then
-                ln_color = colors.purple
-            elseif ln_color == colors.background then
-                ln_color = colors.gray
-            end
-            local ln = wibox.container.background(wibox.widget.base.make_widget(), ln_color)
-            ln.forced_height = 2
-            local v = wibox.layout.align.vertical(
-                nil, wibox.container.margin(arr, dpi(3), dpi(3), dpi(2), dpi(1)), ln
-            )
-            v:buttons(awful.widget.common.create_buttons(buttons, client))
-            window_list:add(v)
+            -- update the tooltip
+            c:set_tooltip(string.format('%s (%s)', client.name, client.class))
+
+            -- update the container color
+            c:set_color(fg_color)
+
+            window_list:add(c)
         end
     end
 
@@ -133,7 +136,7 @@ local function factory(args)
             end)
         ),
         update_function = create_update_func(screen),
-        layout   = {
+        layout = {
             spacing_widget = {
                 {
                     forced_width  = 5,

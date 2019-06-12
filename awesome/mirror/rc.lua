@@ -57,7 +57,7 @@ awful.screen.connect_for_each_screen(function(screen)
     screen.mywibar = display.create_wibar(
         screen,
         {screen.mytaglist},
-        { screen.mytasklist },
+        {screen.mytasklist},
         {
             require('widgets/cpu'),
             require('widgets/gpu'),

@@ -96,8 +96,7 @@ theme.taglist_bg_focus = colors.purple
 --
 -- Tasklist
 --
-theme.tasklist_fg_focus = colors.white
-theme.tasklist_bg_focus = colors.yellow
+theme.tasklist_fg_focus = colors.yellow
 theme.tasklist_fg_minimize = colors.purple
 theme.tasklist_plain_task_name = true
 
