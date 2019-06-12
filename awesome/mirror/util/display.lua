@@ -107,7 +107,7 @@ function display.create_layout_widget(screen)
         awful.button({ }, 5, display.decr_layout)
     ))
 
-    return wibox.container.margin(widget, dpi(8), dpi(4), dpi(6), dpi(6))
+    return wibox.container.margin(widget, dpi(0), dpi(0), dpi(4), dpi(4))
 end
 
 function display.create_wibar(screen, left, center, right)

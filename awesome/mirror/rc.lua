@@ -44,6 +44,7 @@ awful.rules.rules = require("rules")
 -- Screen setup
 --
 local volume = require('widgets/volume')
+local SanityContainer = require('util/sanitycontainer')
 
 awful.screen.connect_for_each_screen(function(screen)
     display.set_wallpaper(screen)
@@ -55,10 +56,7 @@ awful.screen.connect_for_each_screen(function(screen)
     -- Create the wibox
     screen.mywibar = display.create_wibar(
         screen,
-        {
-            display.create_layout_widget(screen),
-            screen.mytaglist,
-        },
+        {screen.mytaglist},
         { screen.mytasklist },
         {
             require('widgets/cpu'),
@@ -70,7 +68,8 @@ awful.screen.connect_for_each_screen(function(screen)
             require('widgets/battery'),
             require('widgets/tray'),
             require('widgets/weather'),
-            require('widgets/clock')
+            require('widgets/clock'),
+            SanityContainer {widget = display.create_layout_widget(screen)}
         })
 end)
 
