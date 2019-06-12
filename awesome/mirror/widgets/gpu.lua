@@ -73,14 +73,14 @@ function toggle_screen_lock()
     screen_lock_on = not screen_lock_on
 end
 
-local container
+local gpu_container
 
 function menu_close()
-    container.prevmenu:hide()
-    container.prevmenu = nil
+    gpu_container.prevmenu:hide()
+    gpu_container.prevmenu = nil
 end
 
-container = SanityContainer {
+gpu_container = SanityContainer {
     color = color,
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
@@ -91,7 +91,7 @@ container = SanityContainer {
     tooltip = 'GPU Usage',
     buttons = gears.table.join(
         awful.button({ }, 1, function()
-            if container.prevmenu then
+            if gpu_container.prevmenu then
                 menu_close()
             else
                 -- open
@@ -157,9 +157,9 @@ container = SanityContainer {
                 end
 
                 menu:show()
-                container.prevmenu = menu
+                gpu_container.prevmenu = menu
             end
         end)
     )
 }
-return container
+return gpu_container

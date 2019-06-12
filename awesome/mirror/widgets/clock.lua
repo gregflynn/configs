@@ -63,7 +63,7 @@ local menu = awful.menu({
     }
 })
 
-sanitycontainer = SanityContainer {
+clock_container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
         clock_icon,
@@ -84,7 +84,7 @@ function clock_update()
     local icon = clock_map[now:format('%I')]
     clock_icon:update(icon, text_color)
     clock:set_markup(markup.fg.color(text_color, now:format(clock_fmt)))
-    sanitycontainer:set_tooltip_color(now:format(tooltip_fmt))
+    clock_container:set_tooltip_color(now:format(tooltip_fmt))
     timer.timeout = calc_timeout()
     timer:again()
     return true
@@ -92,4 +92,4 @@ end
 timer = gears.timer.weak_start_new(refresh, clock_update)
 timer:emit_signal('timeout')
 
-return sanitycontainer
+return clock_container

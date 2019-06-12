@@ -10,11 +10,12 @@ local markup = lain.util.markup
 
 
 function factory(args)
-    local widget   = args.widget
-    local is_right = not args.left
-    local color    = args.color or colors.white
-    local tooltip  = args.tooltip or ''
-    local buttons  = args.buttons
+    local widget     = args.widget
+    local is_right   = not args.left
+    local color      = args.color or colors.white
+    local tooltip    = args.tooltip or ''
+    local buttons    = args.buttons
+    local globalkeys = args.globalkeys
 
     local left = 0
     local right = 0
@@ -63,6 +64,10 @@ function factory(args)
     --
     if buttons then
         SanityContainer:buttons(buttons)
+    end
+
+    if args.globalkeys then
+        SanityContainer.globalkeys = globalkeys
     end
 
     return SanityContainer

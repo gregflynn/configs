@@ -50,7 +50,7 @@ local weather = lain.widget.weather {
         local description = weather_now["weather"][1]["description"]
 
         widget:set_markup(markup.fg.color(color, string.format('%d°F', current_temp)))
-        container:set_tooltip_color(string.format('%s%% humidity and %s', humidity, description))
+        weather_container:set_tooltip_color(string.format('%s%% humidity and %s', humidity, description))
         fonticon:update(icon_map[icon_id], color)
 
     end,
@@ -67,7 +67,7 @@ local weather = lain.widget.weather {
     end
 }
 
-container = SanityContainer {
+weather_container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
         fonticon,
@@ -84,4 +84,4 @@ container = SanityContainer {
     )
 }
 
-return container
+return weather_container
