@@ -4,72 +4,72 @@ local gears     = require("gears")
 local wibox     = require("wibox")
 local lain      = require("lain")
 
-local Arrow    = require("util/arrow")
 local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local text     = require("util/text")
+local SanityContainer = require('util/sanitycontainer')
 
 local colors   = beautiful.colors
 local dpi      = beautiful.xresources.apply_dpi
 
 
 local taglist   = {"\u{f303}", "\u{f674}", "\u{e7a2}", "\u{e780}", "\u{f1d8}"}
-local fg_colors = {colors.background, colors.background, colors.background, colors.white, colors.background}
-local bg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.orange}
+local fg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.orange}
+local not_selected_color = colors.gray
 
-local function listupdate_tags(w, buttons, label, data, tags)
-    w:reset()
-    local prev_color = colors.background
+local function listupdate_tags(tag_container, buttons, label, data, tags)
+    tag_container:reset()
 
     for idx, tag in ipairs(tags) do
         local tn = tag.name
         local cache = data[tag]
-        local arr
+        local container, widget
 
         if cache then
-            arr = cache.arr
+            container = cache.c
+            widget    = cache.w
         else
-            local widget
             if tn:len() == 3 then
                 widget = FontIcon { icon = tn }
             else
                 widget = wibox.widget.textbox()
             end
 
-            arr = Arrow { widget = widget, right = true, no_right = idx ~= #tags }
+            container = SanityContainer {
+                widget = widget,
+                buttons = awful.widget.common.create_buttons(buttons, tag),
+                left = true
+            }
 
             data[tag] = {
-                arr = arr,
+                c = container,
+                w = widget
             }
         end
 
-        local title, bg = label(tag, arr.widget)
+        local title, bg = label(tag, widget)
+        local is_selected = text.split(title, "color")[2]
+        local fg_color = fg_colors[idx]
+
         if tn:len() == 3 then
-            local color_side = text.split(title, "color")[2]
-            if color_side then
+            if is_selected then
                 -- selected
-                -- local fg_color = text.select(color_side, "'")
-                local fg_color = fg_colors[idx]
-                arr.widget:update(tn, fg_color)
+                widget:update(tn, fg_color)
             else
                 -- not selected
-                arr.widget:update(tn, colors.white)
+                widget:update(tn, not_selected_color)
             end
         else
-            arr.widget:set_markup_silently(title)
+            widget:set_markup_silently(title)
         end
 
-        local arr_color = colors.background
-        if bg then
-            -- selected
-            arr_color = bg_colors[idx]
+        if is_selected then
+            container:set_color(fg_color)
+        else
+            container:set_color(not_selected_color)
         end
 
-        arr:update(arr_color, colors.background, prev_color)
-        prev_color = arr_color
-
-        arr:buttons(awful.widget.common.create_buttons(buttons, tag))
-        w:add(arr)
+        tag_container:add(container)
     end
 end
 
@@ -172,7 +172,7 @@ local function factory(args)
             awful.button({}, 1, function(t) t:view_only() end),
             awful.button({"Control"}, 1, function(t) awful.tag.viewtoggle(t) end)
         ),
-    }, 0, dpi(15))
+    }, 0, dpi(8))
 end
 
 return factory

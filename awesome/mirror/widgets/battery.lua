@@ -76,7 +76,7 @@ battery.lain_widget = lain.widget.bat {
         battery.sanitycontainer:set_color(color)
         battery.font_icon:update(battery_icons[status], color)
         widget:set_markup(string.format(
-            '<span color="%s">%s%%</span> ', color, bat_now.perc
+            '<span color="%s">%s%%</span>', color, bat_now.perc
         ))
     end
 }

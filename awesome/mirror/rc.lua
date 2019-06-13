@@ -56,8 +56,11 @@ awful.screen.connect_for_each_screen(function(screen)
     -- Create the wibox
     screen.mywibar = display.create_wibar(
         screen,
-        {screen.mytaglist},
-        {screen.mytasklist},
+        {
+            screen.mytaglist,
+            screen.mytasklist
+        },
+        {},
         {
             require('widgets/cpu'),
             require('widgets/gpu'),

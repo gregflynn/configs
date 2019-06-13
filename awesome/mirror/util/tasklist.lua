@@ -87,6 +87,7 @@ local function create_update_func(screen)
                         ib,
                         tb
                     },
+                    left    = true,
                     color   = fg_color,
                     buttons = awful.widget.common.create_buttons(buttons, client)
                 }
@@ -137,19 +138,6 @@ local function factory(args)
         ),
         update_function = create_update_func(screen),
         layout = {
-            spacing_widget = {
-                {
-                    forced_width  = 5,
-                    forced_height = 10,
-                    thickness     = 1,
-                    color         = '#777777',
-                    widget        = wibox.widget.separator
-                },
-                valign = 'center',
-                halign = 'center',
-                widget = wibox.container.place,
-            },
-            spacing = 20,
             fill_space = false,
             layout  = wibox.layout.fixed.horizontal
         }

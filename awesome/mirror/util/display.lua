@@ -124,7 +124,6 @@ function display.create_wibar(screen, left, center, right)
 
     wibar:setup {
         layout = wibox.layout.align.horizontal,
-        expand = 'none',
         left,
         center,
         right
