@@ -16,6 +16,7 @@ function factory(args)
     local tooltip    = args.tooltip or ''
     local buttons    = args.buttons
     local globalkeys = args.globalkeys
+    local no_tooltip = args.no_tooltip
 
     local left = 0
     local right = 0
@@ -42,21 +43,23 @@ function factory(args)
     --
     -- Tooltips
     --
-    SanityContainer.tooltip = awful.tooltip {
-        objects = {SanityContainer},
-        text = tooltip
-    }
+    if not no_tooltip then
+        SanityContainer.tooltip = awful.tooltip {
+            objects = {SanityContainer},
+            text = tooltip
+        }
 
-    function SanityContainer:set_tooltip(text)
-        SanityContainer.tooltip.text = text
-    end
+        function SanityContainer:set_tooltip(text)
+            SanityContainer.tooltip.text = text
+        end
 
-    function SanityContainer:set_markup(markup)
-        SanityContainer.tooltip:set_markup(markup)
-    end
+        function SanityContainer:set_markup(markup)
+            SanityContainer.tooltip:set_markup(markup)
+        end
 
-    function SanityContainer:set_tooltip_color(text)
-        SanityContainer:set_markup(markup.fg.color(color, text))
+        function SanityContainer:set_tooltip_color(text)
+            SanityContainer:set_markup(markup.fg.color(color, text))
+        end
     end
 
     --

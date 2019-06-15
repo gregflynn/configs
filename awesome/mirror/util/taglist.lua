@@ -38,7 +38,8 @@ local function listupdate_tags(tag_container, buttons, label, data, tags)
             container = SanityContainer {
                 widget = widget,
                 buttons = awful.widget.common.create_buttons(buttons, tag),
-                left = true
+                left = true,
+                no_tooltip = true
             }
 
             data[tag] = {
