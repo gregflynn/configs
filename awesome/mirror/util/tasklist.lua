@@ -57,11 +57,7 @@ local function create_update_func(screen)
                 return fg_color == beautiful.tasklist_fg_focus
             end
 
-            if is_focus() then
-                tb:set_markup_silently('<span color="'..fg_color..'">'..text.trunc(title, 20)..'</span>')
-            else
-                tb:set_markup_silently('')
-            end
+            tb:set_markup_silently('<span color="'..fg_color..'">'..text.trunc(title, 20)..'</span>')
 
             -- Update the icon
             local icon_override = display.get_icon_for_client(client)

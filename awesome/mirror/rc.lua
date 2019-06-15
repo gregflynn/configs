@@ -37,8 +37,8 @@ shift  = "Shift"
 
 -- Make Tab go down a menu
 awful.menu.menu_keys.down = {'Down', 'j', 'Tab'}
-awful.menu.menu_keys.close = {'q'}
-awful.rules.rules = require("rules")
+awful.menu.menu_keys.close = {'q', 'Escape'}
+awful.rules.rules = require('rules')
 
 --
 -- Screen setup

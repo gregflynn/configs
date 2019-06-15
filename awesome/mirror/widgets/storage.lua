@@ -1,12 +1,14 @@
 local beautiful = require('beautiful')
 local wibox     = require('wibox')
 
-local lain = require('lain')
+local lain    = require('lain')
+local vicious = require('vicious')
 
 local number          = require('util/number')
 local text            = require('util/text')
 local Pie             = require('util/pie')
 local SanityContainer = require('util/sanitycontainer')
+local Graph           = require('util/graph')
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
@@ -59,6 +61,7 @@ local function parse_command(stdout, disk)
     }
 end
 
+-- kept to update the tooltip
 local boot_pie = Pie {
    notification_title = "boot",
    command = create_storage_command("/boot"),
@@ -75,11 +78,15 @@ local root_pie = Pie {
     bg_color = colors.background,
 }
 
+local disk_load_widget = Graph {color = color}
+disk_load_widget.scale = true
+vicious.register(disk_load_widget, vicious.widgets.dio, "${nvme0n1 total_kb}")
+
 local container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
         root_pie.container,
-        boot_pie.container
+        disk_load_widget.container
     },
     color = color
 }
