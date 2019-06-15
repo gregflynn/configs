@@ -95,7 +95,7 @@ gpu_container = SanityContainer {
                 menu_close()
             else
                 -- open
-                local menu = awful.menu()
+                local menu = awful.menu({theme = {width = 200}})
 
                 menu:add({'Monitor Config', function()
                     awful.spawn('arandr')

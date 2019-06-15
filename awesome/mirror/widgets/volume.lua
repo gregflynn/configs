@@ -48,6 +48,15 @@ volume.bar.shape = beautiful.border_shape
 volume.bar.bar_shape = beautiful.border_shape
 volume.tooltip:remove_from_object(volume.bar)
 
+local menu = awful.menu({
+    theme = { width = 140 },
+    items = {
+        {'Volume Control', function() awful.spawn('pavucontrol') end},
+        {'Equalizer', function() awful.spawn('pulseeffects') end},
+        {'Bluetooth', function() awful.spawn('blueberry') end}
+    }
+})
+
 volume_container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
@@ -55,11 +64,8 @@ volume_container = SanityContainer {
         wibox.container.margin(volume.bar, dpi(0), dpi(0), dpi(4), dpi(4)),
     },
     color = fg_color,
-    tooltip = 'foo',
     buttons = gears.table.join(
-        awful.button({}, 1, function() -- left click
-            awful.spawn("pavucontrol")
-        end),
+        awful.button({}, 1, function() menu:toggle() end),
         awful.button({}, 3, function() -- right click
             awful.spawn(string.format("pactl set-sink-mute %d toggle", volume.device))
             volume.update()
