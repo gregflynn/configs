@@ -96,6 +96,11 @@ gpu_container = SanityContainer {
             else
                 -- open
                 local menu = awful.menu()
+
+                menu:add({'Monitor Config', function()
+                    awful.spawn('arandr')
+                    menu_close()
+                end})
                 
                 menu:add({'Toggle Redshift', function()
                     lain.widget.contrib.redshift:toggle()
