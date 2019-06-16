@@ -3,7 +3,10 @@
 compton -b -c
 
 /usr/bin/start-pulseaudio-x11
-pulseeffects --gapplication-service&
+
+if command -v pulseeffects > /dev/null; then
+    pulseeffects --gapplication-service&
+fi
 
 xautolock -time 15 -locker "bash {DS_LOCK}" &
 
