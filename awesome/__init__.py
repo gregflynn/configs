@@ -12,6 +12,7 @@ class Initializer(BaseInitializer):
             'vicious',
             'redshift',
             'flameshot',
+            'peek',
             'xsel',
             'rofimoji-git'
         ]

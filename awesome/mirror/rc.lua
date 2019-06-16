@@ -230,10 +230,12 @@ globalkeys = gears.table.join(
         {description = "Previous Screen", group = "screen"}
     ),
     awful.key(
-        {modkey}, "o", function()
-            awful.spawn("flameshot gui")
-        end,
-        {description = "open flameshot", group = "screen"}
+        {modkey}, 'o', function() awful.spawn('flameshot gui') end,
+        {description = 'take screenshot', group = 'screen'}
+    ),
+    awful.key(
+        {modkey, shift}, 'o', function() awful.spawn('peek') end,
+        {description = 'record screen', group = 'screen'}
     ),
 
     -- Tag Keys
