@@ -43,4 +43,8 @@ urgency.project.coefficient=0
 urgency.tags.coefficient=0
 urgency.active.coefficient=10
 
+urgency.uda.priority.H.coefficient=6.0
+urgency.uda.priority.M.coefficient=0
+urgency.uda.priority.L.coefficient=-1
+
 {TASKD}

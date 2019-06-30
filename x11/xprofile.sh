@@ -4,10 +4,6 @@ compton -b -c
 
 /usr/bin/start-pulseaudio-x11
 
-if command -v pulseeffects > /dev/null; then
-    pulseeffects --gapplication-service&
-fi
-
 xautolock -time 15 -locker "bash {DS_LOCK}" &
 
 export WINIT_HIDPI_FACTOR=1

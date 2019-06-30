@@ -12,10 +12,6 @@ local dpi    = beautiful.xresources.apply_dpi
 local colors = beautiful.colors
 
 
-local icon_not_running = '\u{fa7d}'
-local icon_running_paused = '\u{f04c}'
-local icon_running_playing = '\u{f001}'
-
 local gpmdp = {
     notification_preset = {
         title     = "Now playing",

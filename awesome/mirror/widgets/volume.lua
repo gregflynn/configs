@@ -11,7 +11,6 @@ local gpmdp           = require('widgets/gpmdp')
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
-local naughty = require('naughty')
 
 
 local font_icon_headphones = "\u{f7ca}"
@@ -21,8 +20,6 @@ local font_icon_med = "\u{f027}"
 local font_icon_high = "\u{f028}"
 local icon_running_paused = '\u{f04c}'
 local icon_running_playing = '\u{f001}'
-
-local tooltip = awful.tooltip {}
 local fg_color = colors.blue
 
 local icon = FontIcon {icon = font_icon_med, color = fg_color}
@@ -52,7 +49,7 @@ local menu = awful.menu({
     theme = { width = 140 },
     items = {
         {'Volume Control', function() awful.spawn('pavucontrol') end},
-        {'Equalizer', function() awful.spawn('pulseeffects') end},
+        {'Google Play Music', function() awful.spawn('gpmdp') end},
         {'Bluetooth', function() awful.spawn('blueberry') end}
     }
 })
