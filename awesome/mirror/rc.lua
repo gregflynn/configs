@@ -10,7 +10,6 @@ local naughty = require("naughty")
 
 local lain = require("lain")
 
-local ArrowList = require("util/arrowlist")
 local display   = require("util/display")
 local TagList   = require("util/taglist")
 local TaskList  = require("util/tasklist")
@@ -23,7 +22,6 @@ awesome.set_preferred_icon_size(42)
 naughty.config.padding = 30
 naughty.config.defaults.margin = 10
 
-local colors   = beautiful.colors
 local terminal = "alacritty"
 
 -- disable "AeroSnap" like feature

@@ -75,6 +75,16 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         {description = "Maximize Window", group = "client"}
+    ),
+    awful.key(
+        {modkey, ctlKey, shift}, "j",
+        function(c) c:move_to_screen() end,
+        {description = "Move client to Next Screen", group = "client"}
+    ),
+    awful.key(
+        {modkey, ctlKey, shift}, "k",
+        function(c) c:move_to_screen(c.screen.index-1) end,
+        {description = "Move client to Previous Screen", group = "client"}
     )
 )
 

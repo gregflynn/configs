@@ -94,7 +94,7 @@ function display.incr_layout()
 end
 
 function display.decr_layout()
-    display.incr_layout(-1)
+    display.adjust_layout(-1)
 end
 
 function display.create_layout_widget(screen)

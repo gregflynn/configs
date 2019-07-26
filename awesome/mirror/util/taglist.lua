@@ -127,7 +127,7 @@ local function factory(args)
             ),
             awful.key(
                 {modkey}, "Right", awful.tag.viewnext,
-                {description = "Next Tagt", group = "tag"}
+                {description = "Next Tag", group = "tag"}
             ),
             awful.key(
                 {modkey}, "Escape", awful.tag.history.restore,
