@@ -126,7 +126,8 @@ client.connect_signal("property::maximized", function(client)
 end)
 
 client.connect_signal("property::fullscreen", function(client)
-    -- TODO make this work with wibar.ontop
+    awful.screen.focused().mywibar.visible = not awful.screen.focused().mywibar.visible
+
     -- no idea why this only works with `client.maximized` but not `client.fullscreen`
     if client.maximized then
         client.border_width = 0

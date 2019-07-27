@@ -91,4 +91,7 @@ battery.sanitycontainer = SanityContainer {
     color   = colors.yellow
 }
 
+-- update the battery now that everything is setup
+battery.lain_widget.update()
+
 return battery.sanitycontainer

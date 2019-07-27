@@ -113,6 +113,7 @@ end
 function display.create_wibar(screen, left, center, right)
     local wibar = awful.wibar {
         position = 'top',
+        ontop    = true,
         screen   = screen,
         height   = beautiful.bar_height,
         opacity  = beautiful.bar_opacity
