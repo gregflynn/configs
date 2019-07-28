@@ -13,9 +13,10 @@ local colors   = beautiful.colors
 local dpi      = beautiful.xresources.apply_dpi
 
 
-local taglist   = {"\u{f303}", "\u{f674}", "\u{e7a2}", "\u{e780}", "\u{f1d8}"}
-local fg_colors = {colors.blue,       colors.green,      colors.yellow,     colors.red,   colors.orange}
+local taglist   = { "\u{f303}",   "\u{f674}",    "\u{e7a2}", "\u{e780}",    "\u{f1d8}"}
+local fg_colors = {colors.blue, colors.green, colors.yellow, colors.red, colors.orange}
 local not_selected_color = colors.gray
+local not_selected_color_ln = colors.background
 
 local function listupdate_tags(tag_container, buttons, label, data, tags)
     tag_container:reset()
@@ -29,11 +30,7 @@ local function listupdate_tags(tag_container, buttons, label, data, tags)
             container = cache.c
             widget    = cache.w
         else
-            if tn:len() == 3 then
-                widget = FontIcon { icon = tn }
-            else
-                widget = wibox.widget.textbox()
-            end
+            widget = FontIcon { icon = tn }
 
             container = SanityContainer {
                 widget = widget,
@@ -52,22 +49,12 @@ local function listupdate_tags(tag_container, buttons, label, data, tags)
         local is_selected = text.split(title, "color")[2]
         local fg_color = fg_colors[idx]
 
-        if tn:len() == 3 then
-            if is_selected then
-                -- selected
-                widget:update(tn, fg_color)
-            else
-                -- not selected
-                widget:update(tn, not_selected_color)
-            end
-        else
-            widget:set_markup_silently(title)
-        end
-
         if is_selected then
+            widget:update(tn, fg_color)
             container:set_color(fg_color)
         else
-            container:set_color(not_selected_color)
+            container:set_color(not_selected_color_ln)
+            widget:update(tn, not_selected_color)
         end
 
         tag_container:add(container)
@@ -156,7 +143,6 @@ local function factory(args)
     awful.tag(
         taglist, screen,
         {
---            awful.layout.suit.floating,
             screen_type == 'ultrawide' and awful.layout.suit.floating or awful.layout.suit.tile,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
             screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,

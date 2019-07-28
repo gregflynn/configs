@@ -60,7 +60,7 @@ theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 5
 theme.border_normal = colors.background
-theme.border_focus  = colors.yellow
+theme.border_focus  = colors.background
 theme.border_marked = colors.red
 
 --
@@ -84,7 +84,7 @@ theme.menu_width        = dpi(300)
 theme.notification_font         = font_name.." 12"
 theme.notification_fg           = colors.white
 theme.notification_border_width = dpi(4)
-theme.notification_border_color = colors.yellow
+theme.notification_border_color = colors.background
 theme.notification_shape        = theme.border_shape
 
 --

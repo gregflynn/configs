@@ -26,9 +26,35 @@ client.connect_signal("manage", function(c)
     c.shape = beautiful.border_shape
 end)
 
-function should_show_titlebars(client)
-    return not (client.requests_no_titlebar or not client.floating) and not client.maximized
+function should_show_titlebars(c)
+    -- maximized should not have titlebars
+    -- requesting no titlebars? no titlebars!
+    if c.maximized or c.requests_no_titlebar then return false end
+
+    -- floating? get ya titlebars
+    if c.floating then return true end
+
+    -- check if the tag layout is currently floating
+    local tag_floating = false
+    if c.first_tag then
+        local tag_layout_name = awful.layout.getname(c.first_tag.layout)
+        tag_floating = tag_layout_name == "floating"
+    end
+
+    return tag_floating
 end
+
+tag.connect_signal("property::layout", function(t)
+    for _, c in ipairs(t:clients()) do
+        c:emit_signal("request::titlebars")
+    end
+end)
+
+client.connect_signal("property::tags", function(c)
+    -- fixes new clients and moving clients between
+    -- tags not updating the titlebars
+    c:emit_signal("request::titlebars")
+end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
 client.connect_signal("request::titlebars", function(c)

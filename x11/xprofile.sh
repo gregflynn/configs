@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-compton -b -c
+compton -c -b -i 0.9 --inactive-dim 0.2
 
 /usr/bin/start-pulseaudio-x11
 

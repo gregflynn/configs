@@ -20,27 +20,8 @@ return {
             maximized_vertical = false,
             maximized_horizontal = false,
             maximized = false,
---            floating = true,
             border_width = beautiful.border_width,
             size_hints_honor = false
-        }
-    },
-    {
-        rule = { class = "jetbrains-pycharm", type = "normal" },
-        properties = {
-            floating = false
-        }
-    },
-    {
-        rule = { instance = "code", type = "normal"  },
-        properties = {
-            floating = false
-        }
-    },
-    {
-        rule = { class = "Alacritty" },
-        properties = {
-            floating = false
         }
     },
 }

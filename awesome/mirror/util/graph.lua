@@ -6,7 +6,7 @@ local colors = beautiful.colors
 
 
 function factory(args)
-    local arg = args or {}
+    local args = args or {}
 
     local width = args.width or dpi(25)
     
