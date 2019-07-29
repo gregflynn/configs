@@ -14,8 +14,14 @@ local dpi    = beautiful.xresources.apply_dpi
 local client_color = colors.gray
 local client_focus_color = colors.yellow
 local client_minimized_color = colors.purple
+local spacer = SanityContainer {
+    widget = FontIcon {icon = "\u{e216}", color = client_color},
+    color = colors.background,
+    left = true,
+    no_tooltip = true
+}
 
-local function create_update_func()
+local function create_update_func(s)
     local function client_icon(c, color)
         local ib, name
         local icon = c.icon
@@ -38,6 +44,9 @@ local function create_update_func()
 
     local function listupdate_windows(window_list, buttons, label, data, clients)
         window_list:reset()
+        if #clients > 0 then
+            window_list:add(spacer)
+        end
 
         for _, c in ipairs(clients) do
             local cache = data[c]
@@ -90,38 +99,36 @@ local function create_update_func()
             window_list:add(sc)
         end
 
-        local cache = data["NAME"]
-        local nb
+        if client.focus.screen == s then
+            local cache = data["NAME"]
+            local nb
 
-        if cache then
-            nb = cache.nb
-        else
-            nb = wibox.widget.textbox()
+            if cache then
+                nb = cache.nb
+            else
+                nb = wibox.widget.textbox()
+            end
+
+            window_list:add(spacer)
+
+            nb:set_markup_silently(string.format(
+                '<span color="%s">%s</span>',
+                client_focus_color, client.focus.name
+            ))
+
+            window_list:add(SanityContainer {
+                widget = wibox.widget {
+                    layout = wibox.layout.fixed.horizontal,
+                    client_icon(client.focus, client_focus_color),
+                    nb
+                },
+                left       = true,
+                color      = colors.background,
+                no_tooltip = true,
+                buttons    = awful.widget.common.create_buttons(buttons, client.focus)
+            })
         end
 
-        window_list:add(SanityContainer {
-            widget = FontIcon { icon = "\u{e216}", color = client_color },
-            color = colors.background,
-            left = true,
-            no_tooltip = true
-        })
-
-        nb:set_markup_silently(string.format(
-            '<span color="%s">%s</span>',
-            client_focus_color, client.focus.name
-        ))
-
-        window_list:add(SanityContainer {
-            widget = wibox.widget {
-                layout = wibox.layout.fixed.horizontal,
-                client_icon(client.focus, client_focus_color),
-                nb
-            },
-            left       = true,
-            color      = colors.background,
-            no_tooltip = true,
-            buttons    = awful.widget.common.create_buttons(buttons, client.focus)
-        })
     end
 
     return listupdate_windows
@@ -129,16 +136,6 @@ end
 
 local function factory(args)
     local screen = args.screen
-
-    -- HACK: produce a second widget for the master icon
-    if args.icon then
-        return SanityContainer {
-            widget = FontIcon { icon = "\u{e216}", color = client_color },
-            color = colors.background,
-            left = true,
-            no_tooltip = true
-        }
-    end
 
     return awful.widget.tasklist {
         screen = screen,
@@ -161,7 +158,7 @@ local function factory(args)
                 end
             end)
         ),
-        update_function = create_update_func(),
+        update_function = create_update_func(screen),
         layout = {
             fill_space = false,
             layout  = wibox.layout.fixed.horizontal
