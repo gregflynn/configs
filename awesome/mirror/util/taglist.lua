@@ -69,11 +69,9 @@ local function create_tag_keys(idx, override)
     end
 
     return gears.table.join(
-        globalkeys,
         awful.key(
             {modkey}, key, function()
-                local screen = awful.screen.focused()
-                local tag = screen.tags[idx]
+                local tag = awful.screen.focused().tags[idx]
                 if tag then
                     tag:view_only()
                 end
@@ -81,17 +79,7 @@ local function create_tag_keys(idx, override)
             {description = "View "..tag_name, group = "tag"}
         ),
         awful.key(
-            {modkey, "Control"}, key, function()
-                local screen = awful.screen.focused()
-                local tag = screen.tags[idx]
-                if tag then
-                    awful.tag.viewtoggle(tag)
-                end
-            end,
-            {description = "Toggle " .. tag_name, group = "tag"}
-        ),
-        awful.key(
-            {modkey, "Shift"}, key, function()
+            {modkey, shift}, key, function()
                 if client.focus then
                     local tag = client.focus.screen.tags[idx]
                     if tag then
@@ -99,7 +87,7 @@ local function create_tag_keys(idx, override)
                     end
                 end
             end,
-            {description = "Move Window to " .. tag_name, group = "tag"}
+            {description = "Move Window to "..tag_name, group = "tag"}
         )
     )
 end
@@ -115,10 +103,6 @@ local function factory(args)
             awful.key(
                 {modkey}, "Right", awful.tag.viewnext,
                 {description = "Next Tag", group = "tag"}
-            ),
-            awful.key(
-                {modkey}, "Escape", awful.tag.history.restore,
-                {description = "Restore Tag", group = "tag"}
             )
         )
 

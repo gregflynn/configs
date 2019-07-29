@@ -33,7 +33,7 @@ rofi.globalkeys = gears.table.join(
     ),
     awful.key(
         {modkey}, "c", function() rofi:show("calc") end,
-        {description = "Open Passwords", group = "awesome"}
+        {description = "Calculator", group = "awesome"}
     ),
     awful.key(
         {modkey}, "w", function() rofi:show("windows") end,
@@ -44,16 +44,16 @@ rofi.globalkeys = gears.table.join(
         {description = "Select Window (all tags)", group = "client"}
     ),
     awful.key(
-        {modkey}, 'e', function() awful.spawn('rofimoji') end,
-        {description = 'Select an Emoji to copy or insert', group = 'awesome'}
+        {modkey}, "e", function() awful.spawn("rofimoji") end,
+        {description = "Select an Emoji to copy or insert", group = "awesome"}
     ),
     awful.key(
-        {modkey}, 's', function()
+        {modkey}, "s", function()
             awful.spawn({
-                'python3', beautiful.dotsan_home..'/rofi/rofi_search.py'
+                "python3", beautiful.dotsan_home.."/rofi/rofi_search.py"
             })
         end,
-        {description = 'Search the web', group = 'awesome'}
+        {description = "Search the web", group = "awesome"}
     )
 )
 

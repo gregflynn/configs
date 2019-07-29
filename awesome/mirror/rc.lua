@@ -30,7 +30,7 @@ awful.mouse.snap.edge_enabled = false
 -- define keys, not local so widgets can use them
 modkey = "Mod4"
 altkey = "Mod1"
-ctlKey = "Control"
+ctlkey = "Control"
 shift  = "Shift"
 
 -- Make Tab go down a menu
@@ -86,7 +86,7 @@ globalkeys = gears.table.join(
     -- Awesome
     --
     awful.key(
-        {modkey, ctlKey}, "r", function()
+        {modkey, ctlkey}, "r", function()
             -- NOTE: pkill here to avoid flicker hell when restarting awesome
             -- and redshift is still running
             os.execute("pkill redshift")
@@ -95,19 +95,15 @@ globalkeys = gears.table.join(
         {description = "Reload Awesome", group = "awesome"}
     ),
     awful.key(
-        {modkey, shift}, "q", awesome.quit,
-        {description = "Logout", group = "awesome"}
-    ),
-    awful.key(
-        {modkey, shift}, 's', hotkeys_popup.show_help,
-        {description = 'Show Keybindings', group = 'awesome'}
+        {modkey}, "/", hotkeys_popup.show_help,
+        {description = 'Show Keybindings', group = "awesome"}
     ),
     awful.key(
         {modkey}, "Return", function() awful.spawn(terminal) end,
         {description = "Open Terminal", group = "awesome"}
     ),
     awful.key(
-        {}, "XF86Explorer", function() awful.spawn("thunar "..home) end
+        {}, "XF86Explorer", function() awful.spawn({"thunar", home}) end
     ),
     awful.key(
         {modkey}, "i", function() awful.spawn({"bash", beautiful.lock_script}) end,
@@ -127,30 +123,12 @@ globalkeys = gears.table.join(
         {description = "Last Window", group = "client"}
     ),
     awful.key(
-        { modkey,        }, "j",
-        function()
-            awful.client.focus.byidx(-1)
-        end,
-        {description = "Left Window in List", group = "client"}
+        {modkey}, "j", function() awful.client.focus.byidx(-1) end,
+        {description = "Previous Client", group = "client"}
     ),
     awful.key(
-        { modkey,        }, "k",
-        function()
-            awful.client.focus.byidx(1)
-        end,
-        {description = "Right Window in List", group = "client"}
-    ),
-    awful.key(
-        { modkey, ctlKey }, "n",
-        function()
-            local c = awful.client.restore()
-            -- Focus restored client
-            if c then
-                client.focus = c
-                c:raise()
-            end
-        end,
-        {description = "Restore Minimized Window", group = "client"}
+        {modkey}, "k", function() awful.client.focus.byidx(1) end,
+        {description = "Next Client", group = "client"}
     ),
 
     --
@@ -177,12 +155,12 @@ globalkeys = gears.table.join(
         {description = "Dec. Master Client Count", group = "layout"}
     ),
     awful.key(
-        {modkey, ctlKey}, "h",
+        {modkey, ctlkey}, "h",
         function() awful.tag.incncol(1, nil, true) end,
         {description = "Inc. Column Count", group = "layout"}
     ),
     awful.key(
-        {modkey, ctlKey}, "l",
+        {modkey, ctlkey}, "l",
         function() awful.tag.incncol(-1, nil, true) end,
         {description = "Dec. Column Count", group = "layout"}
     ),
@@ -201,48 +179,36 @@ globalkeys = gears.table.join(
     -- Screen
     --
     awful.key(
-        { modkey, shift  }, "]",
-        function()
-            lain.util.useless_gaps_resize(5)
-        end,
+        {modkey, shift}, "]", function() lain.util.useless_gaps_resize(5) end,
         {description = "Inc. Useless Gap", group = "screen"}
     ),
     awful.key(
-        { modkey, shift  }, "[",
-        function()
-            lain.util.useless_gaps_resize(-5)
-        end,
+        {modkey, shift}, "[", function() lain.util.useless_gaps_resize(-5) end,
         {description = "Dec. Useless Gap", group = "screen"}
     ),
     awful.key(
-        { modkey, ctlKey }, "j",
-        function()
-            awful.screen.focus_relative(1)
-        end,
+        {modkey, ctlkey}, "j", function() awful.screen.focus_relative(1) end,
         {description = "Next Screen", group = "screen"}
     ),
     awful.key(
-        { modkey, ctlKey }, "k",
-        function()
-            awful.screen.focus_relative(-1)
-        end,
+        {modkey, ctlkey}, "k", function() awful.screen.focus_relative(-1) end,
         {description = "Previous Screen", group = "screen"}
     ),
     awful.key(
-        {modkey}, 'o', function() awful.spawn('flameshot gui') end,
-        {description = 'take screenshot', group = 'screen'}
+        {modkey}, "o", function() awful.spawn({"flameshot", "gui"}) end,
+        {description = "take screenshot", group = "screen"}
     ),
     awful.key(
-        {modkey, shift}, 'o', function() awful.spawn('peek') end,
-        {description = 'record screen', group = 'screen'}
+        {modkey, shift}, "o", function() awful.spawn("peek") end,
+        {description = "record screen", group = "screen"}
     ),
 
     -- Tag Keys
-    TagList { keys = true },
+    TagList {keys = true},
 
     -- Widget keys
-    require('brightness').globalkeys,
-    require('rofi').globalkeys,
+    require("brightness").globalkeys,
+    require("rofi").globalkeys,
     volume.globalkeys
 )
 
