@@ -5,104 +5,123 @@ local wibox     = require("wibox")
 
 local display  = require("util/display")
 local FontIcon = require("util/fonticon")
-local text     = require("util/text")
 local SanityContainer = require('util/sanitycontainer')
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
 
 
-local max_full_clients = {
-    ["tall"] = 3,
-    ["square"] = 5,
-    ["widescreen"] = 6,
-    ["ultrawide"] = 20,
-}
+local client_color = colors.gray
+local client_focus_color = colors.yellow
+local client_minimized_color = colors.purple
 
-local function create_update_func(screen)
-    local screen = screen
-    local max_full_clients = max_full_clients[display.screen_type(screen)]
+local function create_update_func()
+    local function client_icon(c, color)
+        local ib, name
+        local icon = c.icon
+        local icon_override = display.get_icon_for_client(c)
 
-    local function client_details(client, tb, label, no_text)
-        local title, bg_color, _, icon = label(client, tb)
-        local fg_color = text.select(title, "'")
-        local name = client.name
+        if icon_override or not icon then
+            -- no true icon or we've overridden it
+            ib = FontIcon()
+            name = icon_override or display.get_default_client_icon()
+            ib:update(name, color)
+        elseif not ib then
+            -- going with the real app icon here, display the imagebox
+            ib = wibox.widget.imagebox()
+            ib:set_image(icon)
+        end
 
-        if no_text then name = '' end
-
-        -- title, fg color, bg color, icon
-        return name, fg_color, bg_color, icon
+        ib.forced_width = dpi(26)
+        return ib, name
     end
 
     local function listupdate_windows(window_list, buttons, label, data, clients)
         window_list:reset()
 
-        local no_text = #clients > max_full_clients
+        for _, c in ipairs(clients) do
+            local cache = data[c]
+            local ib, tb, sc, iname
 
-        for idx, client in ipairs(clients) do
-            local cache = data[client]
-            local ib, tb, c
+            local color = client_color
+
+            if client.focus == c then
+                color = client_focus_color
+            elseif c.minimized then
+                color = client_minimized_color
+            end
 
             if cache then
                 ib  = cache.ib
                 tb  = cache.tb
-                c   = cache.c
+                sc  = cache.sc
+                iname = cache.iname
             else
+                ib, iname = client_icon(c, color)
                 tb = wibox.widget.textbox()
-            end
-
-            local title, fg_color, bg_color, icon = client_details(client, tb, label, no_text)
-            
-            function is_focus()
-                return fg_color == beautiful.tasklist_fg_focus
-            end
-
-            tb:set_markup_silently('<span color="'..fg_color..'">'..text.trunc(title, 20)..'</span>')
-
-            -- Update the icon
-            local icon_override = display.get_icon_for_client(client)
-            if icon_override or not icon then
-                -- no true icon or we've overridden it
-                if not ib then
-                    ib = FontIcon()
-                end
-                local unicode = icon_override or display.get_default_client_icon()
-                ib:update(unicode, fg_color)
-            elseif not ib then
-                -- going with the real app icon here, display the imagebox
-                ib = wibox.widget.imagebox()
-                ib:set_image(icon)
-            end
-
-            if not cache then
-                ib.forced_width = dpi(24)
-
-                c = SanityContainer {
+                sc = SanityContainer {
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
                         ib,
-                        tb
+                        --tb
                     },
                     left    = true,
-                    color   = fg_color,
-                    buttons = awful.widget.common.create_buttons(buttons, client)
+                    color   = color,
+                    buttons = awful.widget.common.create_buttons(buttons, c)
                 }
-
-                data[client] = {
+                data[c] = {
                     ib = ib,
                     tb = tb,
-                    c  = c
+                    sc = sc,
+                    iname = iname
                 }
             end
 
+            if iname then
+                ib:update(iname, color)
+            end
+
             -- update the tooltip
-            c:set_tooltip(string.format('%s (%s)', client.name, client.class))
+            sc:set_tooltip(string.format('%s (%s)', c.name, c.class))
 
             -- update the container color
-            c:set_color(fg_color)
+            sc:set_color(color == client_color and colors.background or color)
 
-            window_list:add(c)
+            window_list:add(sc)
         end
+
+        local cache = data["NAME"]
+        local nb
+
+        if cache then
+            nb = cache.nb
+        else
+            nb = wibox.widget.textbox()
+        end
+
+        window_list:add(SanityContainer {
+            widget = FontIcon { icon = "\u{e216}", color = client_color },
+            color = colors.background,
+            left = true,
+            no_tooltip = true
+        })
+
+        nb:set_markup_silently(string.format(
+            '<span color="%s">%s</span>',
+            client_focus_color, client.focus.name
+        ))
+
+        window_list:add(SanityContainer {
+            widget = wibox.widget {
+                layout = wibox.layout.fixed.horizontal,
+                client_icon(client.focus, client_focus_color),
+                nb
+            },
+            left       = true,
+            color      = colors.background,
+            no_tooltip = true,
+            buttons    = awful.widget.common.create_buttons(buttons, client.focus)
+        })
     end
 
     return listupdate_windows
@@ -110,6 +129,16 @@ end
 
 local function factory(args)
     local screen = args.screen
+
+    -- HACK: produce a second widget for the master icon
+    if args.icon then
+        return SanityContainer {
+            widget = FontIcon { icon = "\u{e216}", color = client_color },
+            color = colors.background,
+            left = true,
+            no_tooltip = true
+        }
+    end
 
     return awful.widget.tasklist {
         screen = screen,
@@ -132,7 +161,7 @@ local function factory(args)
                 end
             end)
         ),
-        update_function = create_update_func(screen),
+        update_function = create_update_func(),
         layout = {
             fill_space = false,
             layout  = wibox.layout.fixed.horizontal

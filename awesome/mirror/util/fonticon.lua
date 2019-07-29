@@ -4,7 +4,7 @@ local wibox     = require("wibox")
 local dpi = beautiful.xresources.apply_dpi
 
 
-local fonticon_font = "Hack Nerd Font Mono 19"
+local fonticon_font = "Hack Nerd Font Mono 22"
 local margin_h = dpi(4)
 local margin_v = dpi(2)
 

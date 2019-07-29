@@ -56,6 +56,7 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
+            TaskList { icon = true },
             screen.mytasklist
         },
         {},

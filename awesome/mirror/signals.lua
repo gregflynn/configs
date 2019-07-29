@@ -188,3 +188,8 @@ end)
 client.connect_signal("property::urgent", function()
     awful.client.urgent.jumpto(false)
 end)
+
+client.connect_signal("untagged", function()
+    -- HACK: fix exiting from a fullscreen application
+    awful.screen.focused().mywibar.visible = true
+end)
