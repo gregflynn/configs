@@ -3,6 +3,7 @@ local beautiful = require("beautiful")
 local gears     = require("gears")
 local wibox     = require("wibox")
 
+local text     = require("util/text")
 local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local SanityContainer = require('util/sanitycontainer')
@@ -14,6 +15,8 @@ local dpi    = beautiful.xresources.apply_dpi
 local client_color = colors.gray
 local client_focus_color = colors.yellow
 local client_minimized_color = colors.purple
+local name_cache_key = "NAME"
+local name_width =  75
 local spacer = SanityContainer {
     widget = FontIcon {icon = "\u{e216}", color = client_color},
     color = colors.background,
@@ -100,33 +103,36 @@ local function create_update_func(s)
         end
 
         if client.focus.screen == s then
-            local cache = data["NAME"]
-            local nb
+            local cache = data[name_cache_key]
+            local nb, sc
 
             if cache then
                 nb = cache.nb
+                sc = cache.sc
             else
                 nb = wibox.widget.textbox()
+                sc = SanityContainer {
+                    widget = wibox.widget {
+                        layout = wibox.layout.fixed.horizontal,
+                        nb
+                    },
+                    left       = true,
+                    color      = colors.background,
+                    no_tooltip = true,
+                    buttons    = awful.widget.common.create_buttons(buttons, client.focus)
+                }
+                data[name_cache_key] = {
+                    nb = nb,
+                    sc = sc
+                }
             end
-
-            window_list:add(spacer)
 
             nb:set_markup_silently(string.format(
                 '<span color="%s">%s</span>',
-                client_focus_color, client.focus.name
+                client_focus_color, text.trunc(client.focus.name, name_width, false, true)
             ))
 
-            window_list:add(SanityContainer {
-                widget = wibox.widget {
-                    layout = wibox.layout.fixed.horizontal,
-                    client_icon(client.focus, client_focus_color),
-                    nb
-                },
-                left       = true,
-                color      = colors.background,
-                no_tooltip = true,
-                buttons    = awful.widget.common.create_buttons(buttons, client.focus)
-            })
+            window_list:add(sc)
         end
 
     end
