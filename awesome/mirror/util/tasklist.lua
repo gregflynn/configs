@@ -118,8 +118,7 @@ local function create_update_func(s)
                     },
                     left       = true,
                     color      = colors.background,
-                    no_tooltip = true,
-                    buttons    = awful.widget.common.create_buttons(buttons, client.focus)
+                    no_tooltip = true
                 }
                 data[name_cache_key] = {
                     nb = nb,
@@ -131,6 +130,7 @@ local function create_update_func(s)
                 '<span color="%s">%s</span>',
                 client_focus_color, text.trunc(client.focus.name, name_width, false, true)
             ))
+            sc:buttons(awful.widget.common.create_buttons(buttons, client.focus))
 
             window_list:add(sc)
         end
