@@ -1,4 +1,4 @@
-local io, os, string, table = io, os, string, table
+local os, string = os, string
 
 local beautiful = require('beautiful')
 local naughty   = require('naughty')
@@ -21,9 +21,15 @@ local gpmdp = {
     notification  = nil,
     current_track = nil,
     current_album_art = nil,
+    first_run = true
 }
 
 function gpmdp.notification_on(current)
+    if gpmdp.first_run then
+        gpmdp.first_run = false
+        return
+    end
+
     gpmdp.current_track = current.title
     music.get_album_art(current, function(album_art_path)
         local old_id
