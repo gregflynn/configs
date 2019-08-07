@@ -9,7 +9,51 @@ local FontIcon = require("util/fonticon")
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
 
--- Signal function to execute when a new client appears.
+local client_geos = {}
+
+function client_or_tag_floating(c)
+    if c.maximized then
+        return false
+    end
+
+    if c.floating then
+        return true
+    end
+
+    local tag_floating = false
+    if c.first_tag then
+        local tag_layout_name = awful.layout.getname(c.first_tag.layout)
+        tag_floating = tag_layout_name == "floating"
+    end
+
+    return tag_floating
+end
+
+function should_show_titlebars(c)
+    return not c.requests_no_titlebar and client_or_tag_floating(c)
+end
+
+function apply_geometry(c)
+    if client_or_tag_floating(c) and client_geos[c.window] ~= nil then
+        c:geometry(client_geos[c.window])
+    end
+end
+
+function save_geometry(c)
+    if client_or_tag_floating(c) then
+        client_geos[c.window] = c:geometry()
+    end
+end
+
+tag.connect_signal("property::layout", function(t)
+    for _, c in ipairs(t:clients()) do
+        if client_or_tag_floating(c) then
+            apply_geometry(c)
+        end
+        c:emit_signal("request::titlebars")
+    end
+end)
+
 client.connect_signal("manage", function(c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
@@ -24,30 +68,7 @@ client.connect_signal("manage", function(c)
     end
 
     c.shape = beautiful.border_shape
-end)
-
-function should_show_titlebars(c)
-    -- maximized should not have titlebars
-    -- requesting no titlebars? no titlebars!
-    if c.maximized or c.requests_no_titlebar then return false end
-
-    -- floating? get ya titlebars
-    if c.floating then return true end
-
-    -- check if the tag layout is currently floating
-    local tag_floating = false
-    if c.first_tag then
-        local tag_layout_name = awful.layout.getname(c.first_tag.layout)
-        tag_floating = tag_layout_name == "floating"
-    end
-
-    return tag_floating
-end
-
-tag.connect_signal("property::layout", function(t)
-    for _, c in ipairs(t:clients()) do
-        c:emit_signal("request::titlebars")
-    end
+    save_geometry(c)
 end)
 
 client.connect_signal("property::tags", function(c)
@@ -139,6 +160,7 @@ client.connect_signal("property::floating", function(c)
     else
         awful.titlebar.hide(c)
     end
+    apply_geometry(c)
 end)
 
 client.connect_signal("property::maximized", function(client)
@@ -193,3 +215,7 @@ client.connect_signal("untagged", function()
     -- HACK: fix exiting from a fullscreen application
     awful.screen.focused().mywibar.visible = true
 end)
+
+-- https://bbs.archlinux.org/viewtopic.php?pid=1106376#p1106376
+client.connect_signal("property::geometry", save_geometry)
+client.connect_signal("unmanage", function(c) client_geos[c.window] = nil end)

@@ -2,9 +2,7 @@ local awful     = require("awful")
 local beautiful = require("beautiful")
 local gears     = require("gears")
 local wibox     = require("wibox")
-local lain      = require("lain")
 
-local display  = require("util/display")
 local FontIcon = require("util/fonticon")
 local text     = require("util/text")
 local SanityContainer = require('util/sanitycontainer')
@@ -121,19 +119,8 @@ local function factory(args)
         return globalkeys
     end
 
-    local screen      = args.screen
-    local screen_type = display.screen_type(screen)
-
-    awful.tag(
-        taglist, screen,
-        {
-            screen_type == 'ultrawide' and awful.layout.suit.floating or awful.layout.suit.tile,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.tile,
-            screen_type == 'ultrawide' and lain.layout.centerwork or awful.layout.suit.fair,
-            awful.layout.suit.floating,
-            awful.layout.suit.floating
-        }
-    )
+    local screen = args.screen
+    awful.tag(taglist, screen, {awful.layout.suit.floating})
 
     return wibox.container.margin(awful.widget.taglist {
         screen = screen,

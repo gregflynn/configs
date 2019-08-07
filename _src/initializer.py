@@ -100,7 +100,7 @@ class BaseInitializer(object):
         Args:
             repo (str): git remote url passed to git clone
             dest (str): the path in the dist directory to clone to, or absolute
-                path if the absolute flag is set to true
+                path to anywhere on disk
         """
         absolute = os.path.isabs(dest)
         if absolute:

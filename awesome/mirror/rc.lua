@@ -9,6 +9,7 @@ local gears   = require("gears")
 local naughty = require("naughty")
 
 local lain = require("lain")
+local machi = require("layout-machi")
 
 local display   = require("util/display")
 local TagList   = require("util/taglist")
@@ -21,6 +22,9 @@ require("signals")
 awesome.set_preferred_icon_size(42)
 naughty.config.padding = 30
 naughty.config.defaults.margin = 10
+
+beautiful.layout_machi = machi.get_icon()
+machi.default_editor.set_gap(beautiful.useless_gap * 2, beautiful.useless_gap * 2)
 
 local terminal = "alacritty"
 
@@ -94,7 +98,7 @@ globalkeys = gears.table.join(
         {description = "Reload Awesome", group = "awesome"}
     ),
     awful.key(
-        {modkey}, "/", hotkeys_popup.show_help,
+        {modkey, shift}, "/", hotkeys_popup.show_help,
         {description = 'Show Keybindings', group = "awesome"}
     ),
     awful.key(
@@ -107,6 +111,12 @@ globalkeys = gears.table.join(
     awful.key(
         {modkey}, "i", function() awful.spawn({"bash", beautiful.lock_script}) end,
         {description = "Lock Screen", group = "awesome"}
+    ),
+    awful.key(
+        {modkey}, "y", function()
+            awful.screen.focused().mywibar.visible = not awful.screen.focused().mywibar.visible
+        end,
+        {description = "Toggle Top Bar", group = "awesome"}
     ),
 
     --
@@ -134,44 +144,19 @@ globalkeys = gears.table.join(
     -- Layout
     --
     awful.key(
-        {modkey}, "l",
-        function() awful.tag.incmwfact(0.05) end,
-        {description = "Inc. Master Width", group = "layout"}
+        {modkey}, "/", function () machi.default_editor.start_interactive() end,
+        {description = "Edit Layout", group = "layout"}
     ),
     awful.key(
-        {modkey}, "h",
-        function() awful.tag.incmwfact(-0.05) end,
-        {description = "Dec. Master Width", group = "layout"}
-    ),
-    awful.key(
-        {modkey, shift}, "h",
-        function() awful.tag.incnmaster(1, nil, true) end,
-        {description = "Inc. Master Client Count", group = "layout"}
-    ),
-    awful.key(
-        {modkey, shift}, "l",
-        function() awful.tag.incnmaster(-1, nil, true) end,
-        {description = "Dec. Master Client Count", group = "layout"}
-    ),
-    awful.key(
-        {modkey, ctlkey}, "h",
-        function() awful.tag.incncol(1, nil, true) end,
-        {description = "Inc. Column Count", group = "layout"}
-    ),
-    awful.key(
-        {modkey, ctlkey}, "l",
-        function() awful.tag.incncol(-1, nil, true) end,
-        {description = "Dec. Column Count", group = "layout"}
-    ),
-    awful.key(
-        {modkey, shift}, "k",
-        display.incr_layout,
-        {description = "Next Layout", group = "layout"}
-    ),
-    awful.key(
-        {modkey, shift}, "j",
-        display.decr_layout,
-        {description = "Previous Layout", group = "layout"}
+        {modkey}, "l", function ()
+            local l = awful.screen.focused().selected_tag.layout
+            if l.name == "floating" then
+                awful.screen.focused().selected_tag.layout = machi.default_layout
+            else
+                awful.screen.focused().selected_tag.layout = awful.layout.suit.floating
+            end
+        end,
+        {description = "Toggle Layout", group = "layout"}
     ),
 
     --

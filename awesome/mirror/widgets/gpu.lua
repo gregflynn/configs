@@ -132,6 +132,7 @@ gpu_container = SanityContainer {
                                     awful.screen.connect_for_each_screen(function(s)
                                         gears.wallpaper.maximized(full_path, s)
                                     end)
+                                    menu_close()
                                 end
                             }})
                         end
@@ -152,6 +153,7 @@ gpu_container = SanityContainer {
                                     function()
                                         local full_path = string.format("%s/%s", screenlayout_folder, item)
                                         awful.spawn(string.format("bash %s", full_path))
+                                        menu_close()
                                     end
                                 }})
                             end
