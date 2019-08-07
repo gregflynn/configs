@@ -25,12 +25,13 @@ local gpmdp = {
 }
 
 function gpmdp.notification_on(current)
+    gpmdp.current_track = current.title
+
     if gpmdp.first_run then
         gpmdp.first_run = false
         return
     end
 
-    gpmdp.current_track = current.title
     music.get_album_art(current, function(album_art_path)
         local old_id
     
