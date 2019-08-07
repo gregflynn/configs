@@ -144,11 +144,16 @@ globalkeys = gears.table.join(
     -- Layout
     --
     awful.key(
-        {modkey}, "/", function () machi.default_editor.start_interactive() end,
+        {modkey}, "/", function()
+            if awful.screen.focused().selected_tag.layout ~= machi.default_layout then
+                awful.screen.focused().selected_tag.layout = machi.default_layout
+            end
+            machi.default_editor.start_interactive()
+        end,
         {description = "Edit Layout", group = "layout"}
     ),
     awful.key(
-        {modkey}, "l", function ()
+        {modkey}, "l", function()
             local l = awful.screen.focused().selected_tag.layout
             if l.name == "floating" then
                 awful.screen.focused().selected_tag.layout = machi.default_layout
