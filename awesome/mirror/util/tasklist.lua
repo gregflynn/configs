@@ -15,8 +15,7 @@ local dpi    = beautiful.xresources.apply_dpi
 local client_color = colors.gray
 local client_focus_color = colors.yellow
 local client_minimized_color = colors.purple
-local name_cache_key = "NAME"
-local name_width =  75
+local name_width =  50
 local spacer = SanityContainer {
     widget = FontIcon {icon = "\u{e216}", color = client_color},
     color = colors.background,
@@ -75,7 +74,7 @@ local function create_update_func(s)
                     widget = wibox.widget {
                         layout = wibox.layout.fixed.horizontal,
                         ib,
-                        --tb
+                        tb
                     },
                     left    = true,
                     color   = color,
@@ -93,6 +92,13 @@ local function create_update_func(s)
                 ib:update(iname, color)
             end
 
+            -- update the client name and only show if it's focused
+            tb.visible = client.focus == c
+            tb:set_markup_silently(string.format(
+                '<span color="%s">%s</span>',
+                client_focus_color, text.trunc(client.focus.name, name_width, false, true)
+            ))
+
             -- update the tooltip
             sc:set_tooltip(string.format('%s (%s)', c.name, c.class))
 
@@ -101,40 +107,6 @@ local function create_update_func(s)
 
             window_list:add(sc)
         end
-
-        if client.focus.screen == s then
-            local cache = data[name_cache_key]
-            local nb, sc
-
-            if cache then
-                nb = cache.nb
-                sc = cache.sc
-            else
-                nb = wibox.widget.textbox()
-                sc = SanityContainer {
-                    widget = wibox.widget {
-                        layout = wibox.layout.fixed.horizontal,
-                        nb
-                    },
-                    left       = true,
-                    color      = colors.background,
-                    no_tooltip = true
-                }
-                data[name_cache_key] = {
-                    nb = nb,
-                    sc = sc
-                }
-            end
-
-            nb:set_markup_silently(string.format(
-                '<span color="%s">%s</span>',
-                client_focus_color, text.trunc(client.focus.name, name_width, false, true)
-            ))
-            sc:buttons(awful.widget.common.create_buttons(buttons, client.focus))
-
-            window_list:add(sc)
-        end
-
     end
 
     return listupdate_windows
