@@ -66,7 +66,7 @@ theme.border_marked = colors.red
 --
 -- Hotkeys
 --
-theme.hotkeys_font             = font_name.." 14"
+theme.hotkeys_font             = font_name.." 16"
 theme.hotkeys_description_font = font_name.." 12"
 theme.hotkeys_fg               = colors.white
 theme.hotkeys_modifiers_fg     = colors.blue

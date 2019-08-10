@@ -61,7 +61,7 @@ local weather = lain.widget.weather {
         local desc = wn["weather"][1]["description"]
 
         return string.format(
-            '<b>%s</b>: <span color="%s">%d</span>/<span color="%s">%d</span> %s',
+            '<b>%s</b>: <span color="%s">%d</span> <span color="%s">%d</span> %s',
             day, beautiful.colors.red, tmax, beautiful.colors.blue, tmin, desc
         )
     end

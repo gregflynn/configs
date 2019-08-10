@@ -74,7 +74,10 @@ awful.screen.connect_for_each_screen(function(screen)
             require('widgets/tray'),
             require('widgets/weather'),
             require('widgets/clock'),
-            SanityContainer {widget = display.create_layout_widget(screen)}
+            SanityContainer {
+                widget = display.create_layout_widget(screen),
+                no_tooltip = true
+            }
         })
 end)
 

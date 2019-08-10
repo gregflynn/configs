@@ -11,7 +11,6 @@ local Graph           = require('util/graph')
 local SanityContainer = require('util/sanitycontainer')
 
 local colors = beautiful.colors
-local dpi    = beautiful.xresources.apply_dpi
 
 
 local color = colors.orange
@@ -20,7 +19,6 @@ local wifi_connected  = "\u{faa8}"
 local wired_connected = "\u{f6ff}"
 
 local network_icon    = FontIcon { icon = no_connection, color = colors.white }
-local network_tooltip = awful.tooltip { objects = {network_icon} }
 local network_graph   = Graph {stack_colors = {color, colors.red}}
 network_graph.scale = true
 

@@ -9,13 +9,12 @@ local text            = require('util/text')
 local Pie             = require('util/pie')
 local SanityContainer = require('util/sanitycontainer')
 local Graph           = require('util/graph')
+local FontIcon        = require("util/fonticon")
 
 local colors = beautiful.colors
-local dpi    = beautiful.xresources.apply_dpi
 local markup = lain.util.markup
-
-
 local color = colors.purple
+
 
 local function create_storage_command(grep)
     return string.format("df -B1 %s | tail -n 1 | awk '{ print $2,$3,$4 }'", grep)
@@ -85,7 +84,8 @@ vicious.register(disk_load_widget, vicious.widgets.dio, "${nvme0n1 total_kb}")
 local container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        root_pie.container,
+        FontIcon {icon = "\u{f6b7}", color = color},
+        --root_pie.container,
         disk_load_widget.container
     },
     color = color

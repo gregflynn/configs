@@ -4,7 +4,6 @@ local gears     = require('gears')
 local wibox     = require('wibox')
 
 local lain    = require('lain')
-local vicious = require('vicious')
 
 local file            = require('util/file')
 local text            = require('util/text')
@@ -12,16 +11,14 @@ local FontIcon        = require('util/fonticon')
 local Graph           = require('util/graph')
 local SanityContainer = require('util/sanitycontainer')
 
-local dpi = beautiful.xresources.apply_dpi
-
-
 local wallpapers_folder = beautiful.dotsan_home..'/private/wallpapers'
 local screenlayout_folder = beautiful.home..'/.screenlayout/'
 local folder_command = "ls -l %s | awk '{print $9}' | tail -n 35 | sort"
 local color = beautiful.colors.green
-local gpu_icon = FontIcon {icon = '\u{f878}', color = color}
+local gpu_icon = FontIcon {icon = '\u{f03d}', color = color}
 local gpu_temp
 local gpu_graph_container
+
 
 if file.exists("/usr/bin/nvidia-smi") and not file.exists("/proc/acpi/bbswitch") then
     gpu_temp = awful.widget.watch(

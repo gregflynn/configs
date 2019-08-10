@@ -6,9 +6,6 @@ local FontIcon        = require('util/fonticon')
 local SanityContainer = require('util/sanitycontainer')
 
 local colors = beautiful.colors
-local dpi    = beautiful.xresources.apply_dpi
-
-
 local battery_icons = {
     plug    = "\u{f1e6}",
     full    = "\u{f240}",
@@ -17,7 +14,6 @@ local battery_icons = {
     caution = "\u{f243}",
     empty   = "\u{f244}",
 }
-
 local battery_colors = {
     plug    = colors.green,
     full    = colors.green,
@@ -26,11 +22,11 @@ local battery_colors = {
     caution = colors.red,
     empty   = colors.red,
 }
-
 local battery = {
     battery_enabled = false,
     font_icon = FontIcon {icon = battery_icons['empty'], color = colors.yellow},
 }
+
 
 function battery:get_status()
     local pct = bat_now.perc or 0
@@ -70,6 +66,8 @@ battery.lain_widget = lain.widget.bat {
             tooltip = 'N/A'
         end
         battery.sanitycontainer:set_tooltip(tooltip)
+
+        widget.visible = bat_now.perc < 100
 
         local status = battery:get_status()
         local color = battery_colors[status]

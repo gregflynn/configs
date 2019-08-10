@@ -9,7 +9,6 @@ local number          = require('util/number')
 local FontIcon        = require('util/fonticon')
 local SanityContainer = require('util/sanitycontainer')
 
-local dpi    = beautiful.xresources.apply_dpi
 local markup = lain.util.markup
 
 

@@ -2,17 +2,11 @@ local awful     = require("awful")
 local wibox     = require("wibox")
 local beautiful = require("beautiful")
 local gears     = require("gears")
-local lain      = require("lain")
 
 local dpi = beautiful.xresources.apply_dpi
 
 
 local display = {}
-local default_layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.fair,
-    awful.layout.suit.floating,
-}
 local window_icon_overrides = {
     ["Alacritty"]                        = "\u{f489}",
     ["Android Messages"]                 = "\u{f869}",
@@ -55,20 +49,6 @@ function display.screen_type(screen)
     end
 end
 
-function display.layouts_for_screen(type)
-    if type == 'ultrawide' then
-        return {
-            awful.layout.suit.floating,
-            lain.layout.centerwork,
-            awful.layout.suit.tile,
-            awful.layout.suit.tile.left,
-            awful.layout.suit.fair
-        }
-    else
-        return default_layouts
-    end
-end
-
 -- Set the given screen's wallpaper
 function display.set_wallpaper(screen)
     if beautiful.wallpaper then
@@ -81,31 +61,8 @@ function display.set_wallpaper(screen)
     end
 end
 
-function display.adjust_layout(amt)
-    local screen = awful.screen.focused()
-    local screen_type = display.screen_type(screen)
-    local screen_layouts = display.layouts_for_screen(screen_type)
-    awful.layout.inc(amt, screen, screen_layouts)
-end
-
-function display.incr_layout()
-    display.adjust_layout(1)
-end
-
-function display.decr_layout()
-    display.adjust_layout(-1)
-end
-
 function display.create_layout_widget(screen)
     local widget = awful.widget.layoutbox(screen)
-
-    widget:buttons(gears.table.join(
-        awful.button({ }, 1, display.incr_layout),
-        awful.button({ }, 3, display.decr_layout),
-        awful.button({ }, 4, display.incr_layout),
-        awful.button({ }, 5, display.decr_layout)
-    ))
-
     return wibox.container.margin(widget, dpi(0), dpi(0), dpi(4), dpi(4))
 end
 

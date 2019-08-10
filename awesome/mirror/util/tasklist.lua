@@ -15,7 +15,7 @@ local dpi    = beautiful.xresources.apply_dpi
 local client_color = colors.gray
 local client_focus_color = colors.yellow
 local client_minimized_color = colors.purple
-local name_width =  50
+local name_width = 25
 local spacer = SanityContainer {
     widget = FontIcon {icon = "\u{e216}", color = client_color},
     color = colors.background,

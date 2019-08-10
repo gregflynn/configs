@@ -9,15 +9,15 @@ local lain = require('lain')
 local FontIcon        = require('util/fonticon')
 local SanityContainer = require('util/sanitycontainer')
 
-local dpi       = beautiful.xresources.apply_dpi
 local DateTime  = glib.GLib.DateTime
 local TimeZone  = glib.GLib.TimeZone
 local markup    = lain.util.markup
 
 
+-- http://man7.org/linux/man-pages/man3/strptime.3.html
 local calendar = 'https://calendar.google.com/'
 local clock_fmt = '%H:%M %m/%d'
-local tooltip_fmt = '%A %m/%d'
+local tooltip_fmt = '%A %B %d'
 local refresh = 60
 local text_color = beautiful.colors.blue
 
@@ -49,6 +49,11 @@ local awesome_menu = {
     end}
 }
 local system_menu = {
+    {'Sleep', function()
+        awful.spawn({"bash", beautiful.lock_script})
+        os.execute('sleep 1')
+        awful.spawn({'systemctl', 'suspend'})
+    end},
     {'Reboot', 'reboot'},
     {'Shutdown', 'shutdown -h now'}
 }
