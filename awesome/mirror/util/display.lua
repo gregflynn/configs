@@ -9,7 +9,6 @@ local dpi = beautiful.xresources.apply_dpi
 local display = {}
 local window_icon_overrides = {
     ["Alacritty"]                        = "\u{f489}",
-    ["Android Messages"]                 = "\u{f869}",
     ["Code"]                             = "\u{e70c}",
     ["Google-chrome"]                    = "\u{f268}",
     ["firefox"]                          = "\u{f269}",
@@ -21,7 +20,6 @@ local window_icon_overrides = {
     ["Slack"]                            = "\u{f198}",
     ["Steam"]                            = "\u{f1b6}",
     ["Thunar"]                           = "\u{f413}",
-    ["Trello"]                           = "\u{fa31}"
 }
 local window_icon_fallback = "\u{fb13}"
 
