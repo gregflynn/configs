@@ -49,11 +49,7 @@ local awesome_menu = {
     end}
 }
 local system_menu = {
-    {'Sleep', function()
-        awful.spawn({"bash", beautiful.lock_script})
-        os.execute('sleep 1')
-        awful.spawn({'systemctl', 'suspend'})
-    end},
+    {'Sleep', 'systemctl suspend'},
     {'Reboot', 'reboot'},
     {'Shutdown', 'shutdown -h now'}
 }

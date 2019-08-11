@@ -94,10 +94,12 @@ local function create_update_func(s)
 
             -- update the client name and only show if it's focused
             tb.visible = client.focus == c
-            tb:set_markup_silently(string.format(
-                '<span color="%s">%s</span>',
-                client_focus_color, text.trunc(client.focus.name, name_width, false, true)
-            ))
+            if client.focus == c then
+                tb:set_markup_silently(string.format(
+                        '<span color="%s">%s</span>',
+                        client_focus_color, text.trunc(client.focus.name, name_width, false, true)
+                ))
+            end
 
             -- update the tooltip
             sc:set_tooltip(string.format('%s (%s)', c.name, c.class))
