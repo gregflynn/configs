@@ -30,7 +30,7 @@ local volume = lain.widget.pulsebar {
     notification_preset = {
         position = 'bottom_middle',
         title    = 'volume',
-        font     = 'Hack 12'
+        font     = 'Hack 16'
     },
     colors = {
         background = beautiful.colors.gray,
@@ -39,7 +39,11 @@ local volume = lain.widget.pulsebar {
     },
     settings = function()
         update_volume(volume_now)
-    end
+    end,
+    tick = "█",
+    tick_pre = "\u{e0b2}",
+    tick_post = "\u{e0b0}",
+    tick_none = " "
 }
 volume.bar.shape = beautiful.border_shape
 volume.bar.bar_shape = beautiful.border_shape

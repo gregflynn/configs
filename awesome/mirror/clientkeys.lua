@@ -33,12 +33,6 @@ clientkeys = gears.table.join(
         {description = "Toggle Floating", group = "client"}
     ),
     awful.key(
-        {modkey, shift}, "m", function(c)
-            c:swap(awful.client.getmaster())
-        end,
-        {description = "Move Window to Master", group = "client"}
-    ),
-    awful.key(
         {modkey}, "t", function(c)
             c.ontop = not c.ontop
         end,

@@ -6,8 +6,6 @@ local gears = require("gears")
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
 
-local lain = require("lain")
-local sep = lain.util.separators
 local home = os.getenv("HOME")
 local dotsan_home = "{DS_HOME}"
 local lock_script = "{DS_LOCK}"
@@ -33,8 +31,7 @@ local theme = {
     colors        = colors,
     bar_height    = dpi(28),
     bar_opacity   = 0.9,
-    bar_margin    = dpi(2),
-    border_width  = dpi(2),
+    border_width  = dpi(3),
     widget_space  = dpi(5),
     widget_under  = dpi(2),
     font          = font_name.." 10",
@@ -44,8 +41,6 @@ local theme = {
         gears.shape.rounded_rect(cr, w, h, dpi(0))
     end,
 }
-
-sep.width = dpi(9)
 
 theme.bg_normal     = colors.background
 theme.bg_focus      = colors.background
@@ -60,7 +55,7 @@ theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 5
 theme.border_normal = colors.background
-theme.border_focus  = colors.background
+theme.border_focus  = colors.yellow
 theme.border_marked = colors.red
 
 --
@@ -131,33 +126,6 @@ theme.titlebar_minimize_button_normal_press = assets.."/minimize_press.png"
 theme.titlebar_minimize_button_focus = assets.."/minimize_focus.png"
 theme.titlebar_minimize_button_focus_hover = assets.."/minimize_hover.png"
 theme.titlebar_minimize_button_focus_press = assets.."/minimize_press.png"
-
-
-
-theme.layout_fairh = themes_path.."zenburn/layouts/fairh.png"
-theme.layout_fairv = themes_path.."zenburn/layouts/fairv.png"
-theme.layout_floating  = themes_path.."zenburn/layouts/floating.png"
-theme.layout_magnifier = themes_path.."zenburn/layouts/magnifier.png"
-theme.layout_max = themes_path.."zenburn/layouts/max.png"
-theme.layout_fullscreen = themes_path.."zenburn/layouts/fullscreen.png"
-theme.layout_tilebottom = themes_path.."zenburn/layouts/tilebottom.png"
-theme.layout_tileleft   = themes_path.."zenburn/layouts/tileleft.png"
-theme.layout_tile = themes_path.."zenburn/layouts/tile.png"
-theme.layout_tiletop = themes_path.."zenburn/layouts/tiletop.png"
-theme.layout_spiral  = themes_path.."zenburn/layouts/spiral.png"
-theme.layout_dwindle = themes_path.."zenburn/layouts/dwindle.png"
-theme.layout_cornernw = themes_path.."zenburn/layouts/cornernw.png"
-theme.layout_cornerne = themes_path.."zenburn/layouts/cornerne.png"
-theme.layout_cornersw = themes_path.."zenburn/layouts/cornersw.png"
-theme.layout_cornerse = themes_path.."zenburn/layouts/cornerse.png"
-
-theme.lain_icons         = "/usr/share/lua/5.3/lain/icons/layout/zenburn/"
-theme.layout_termfair    = theme.lain_icons .. "termfair.png"
-theme.layout_centerfair  = theme.lain_icons .. "centerfair.png"  -- termfair.center
-theme.layout_cascade     = theme.lain_icons .. "cascade.png"
-theme.layout_cascadetile = theme.lain_icons .. "cascadetile.png" -- cascade.tile
-theme.layout_centerwork  = theme.lain_icons .. "centerwork.png"
-theme.layout_centerhwork = theme.lain_icons .. "centerworkh.png" -- centerwork.horizontal
 
 theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, theme.bg_focus, theme.fg_focus
