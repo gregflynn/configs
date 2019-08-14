@@ -131,4 +131,6 @@ theme.awesome_icon = theme_assets.awesome_icon(
     theme.menu_height, theme.bg_focus, theme.fg_focus
 )
 
+theme.layout_floating  = themes_path.."zenburn/layouts/floating.png"
+
 return theme
