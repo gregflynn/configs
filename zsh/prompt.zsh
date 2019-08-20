@@ -19,7 +19,7 @@ _is_ssh() {
 
 _prompt_userpath() {
     local user_color="%{$fg[blue]%}"
-    local me=""
+    local me="$USER"
 
     # check for superuser
     if _is_root; then
@@ -27,12 +27,8 @@ _prompt_userpath() {
         me='root'
     fi
 
-    if _is_ssh; then
-        user_color="%{$fg[yellow]%}"
-    fi
-
     if [[ "$me" != "" ]]; then
-        echo -n "$user_color$me %{$fg[magenta]%}$__right "
+        echo -n " $user_color$me %{$fg[magenta]%}$__right "
     fi
 
     # replace home dir with tilde
@@ -46,10 +42,19 @@ _prompt_userpath() {
     echo -n "%{$fg[magenta]%}$path "
 }
 
+_git_prompt_info() {
+    local ref hide_status
+    hide_status="$(git config --get oh-my-zsh.hide-status 2>/dev/null)"
+    if [[ $hide_status != 1 ]]; then
+        ref="$(git symbolic-ref HEAD 2>/dev/null)" || ref="$(git rev-parse --short HEAD 2>/dev/null)" || return 0
+        echo "${ref#refs/heads/}$(parse_git_dirty)"
+    fi
+}
+
 _prompt_git() {
-    local git_status="$(git_prompt_info)"
+    local git_status="$(_git_prompt_info)"
     if [[ "$git_status" != "" ]]; then
-        echo -n "%{$fg[magenta]%}$__right $git_status%{$reset_color%} "
+        echo -n "%{$fg[magenta]%}$__right %{$fg[cyan]%}$git_status%{$reset_color%} "
     fi
 }
 
@@ -75,10 +80,8 @@ _prompt_carrot() {
 
 _prompt_rc="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
 _prompt_host() {
-    local color='yellow'
     if _is_ssh; then
-        color='red'
-        echo -n "%{$fg[$color]%}$(hostname)%{$reset_color%}"
+        echo -n "%{$fg[yellow]%}$(hostname)%{$reset_color%} "
     fi
 }
 
@@ -96,5 +99,5 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[white]%}◒ "
 
 PROMPT='
 %{$reset_color%}$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)%{$reset_color%}
-$(_prompt_carrot) '
-RPROMPT='$_prompt_rc $(_prompt_host)'
+
+$(_prompt_host)$(_prompt_carrot) '
