@@ -23,7 +23,7 @@ export FZF_DEFAULT_OPTS='
 
 # oh-my-zsh packages
 antigen use oh-my-zsh
-antigen bundle aws
+#antigen bundle aws
 antigen bundle fzf
 antigen bundle git
 

@@ -94,10 +94,10 @@ local function create_update_func(s)
 
             -- update the client name and only show if it's focused
             tb.visible = client.focus == c
-            if client.focus == c then
+            if client.focus == c and c.name then
                 tb:set_markup_silently(string.format(
                         '<span color="%s">%s</span>',
-                        client_focus_color, text.trunc(client.focus.name, name_width, false, true)
+                        client_focus_color, text.trunc(c.name, name_width, false, true)
                 ))
             end
 
