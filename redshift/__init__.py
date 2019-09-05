@@ -8,7 +8,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_base('redshift.conf', '.config/redshift/redshift.conf')
-
-
-def initializer():
-    return Initializer

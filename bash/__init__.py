@@ -15,7 +15,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_dist('bashrc.sh', '.bashrc')
-
-
-def initializer():
-    return Initializer

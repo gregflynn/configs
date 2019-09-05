@@ -22,7 +22,7 @@ class Module(object):
 
         module = import_module(self.name)
 
-        return module.initializer()(self.name)
+        return module.Initializer(self.name)
 
     @property
     def _full_path(self):

@@ -45,7 +45,3 @@ class Initializer(BaseInitializer):
 
     def _uninstall_extension(self, extension):
         self.run('code --uninstall-extension {}'.format(extension))
-
-
-def initializer():
-    return Initializer

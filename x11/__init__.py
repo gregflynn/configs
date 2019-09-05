@@ -18,7 +18,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_dist('xprofile.sh', '.xprofile')
-
-
-def initializer():
-    return Initializer

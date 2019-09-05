@@ -52,7 +52,3 @@ class Initializer(BaseInitializer):
             bash_comp=self.dist_path('aur-completions.bash'),
             zsh_comp=self.dist_path('aur-completions.zsh')
         )
-
-
-def initializer():
-    return Initializer

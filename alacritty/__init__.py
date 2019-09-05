@@ -11,7 +11,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_dist('alacritty.yml', '.config/alacritty/alacritty.yml')
-
-
-def initializer():
-    return Initializer

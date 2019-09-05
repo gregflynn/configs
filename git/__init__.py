@@ -14,7 +14,3 @@ class Initializer(BaseInitializer):
         self.link_base('gitconfig', '.gitconfig')
         self.link_base('gitignore', '.gitignore')
         self.shell_base('git.sh')
-
-
-def initializer():
-    return Initializer

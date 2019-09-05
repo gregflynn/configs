@@ -26,7 +26,3 @@ class Initializer(BaseInitializer):
         self.shell_base('tasks.sh')
         self.link_dist('taskrc', '.taskrc')
         self.bin('taskqm', self.dist_path('taskqm/taskqm'))
-
-
-def initializer():
-    return Initializer

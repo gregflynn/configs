@@ -39,7 +39,3 @@ class Initializer(BaseInitializer):
                     --showhelp false \
                     --trayicon false
         """.format(settings.Colors.YELLOW, settings.Colors.BACKGROUND))
-
-
-def initializer():
-    return Initializer

@@ -13,7 +13,3 @@ class Initializer(BaseInitializer):
         config = '.config/rofi/'
         self.link_base('rofi.config', config + 'config')
         self.link_dist('rofi-theme.rasi', config + 'dotsanity.rasi')
-
-
-def initializer():
-    return Initializer

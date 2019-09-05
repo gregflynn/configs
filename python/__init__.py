@@ -12,7 +12,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.shell_base('python.sh')
-
-
-def initializer():
-    return Initializer

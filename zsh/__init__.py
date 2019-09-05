@@ -22,7 +22,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_dist('zshrc.zsh', '.zshrc')
-
-
-def initializer():
-    return Initializer

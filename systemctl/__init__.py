@@ -17,7 +17,3 @@ class Initializer(BaseInitializer):
             bash_comp=self.base_path('sys-completions.bash'),
             zsh_comp=self.base_path('sys-completions.zsh')
         )
-
-
-def initializer():
-    return Initializer

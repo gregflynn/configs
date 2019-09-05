@@ -26,7 +26,3 @@ class Initializer(BaseInitializer):
         self.inject(
             'index.html', dest='test_index.html', inject_map=TEST_INJECT_MAP
         )
-
-
-def initializer():
-    return Initializer

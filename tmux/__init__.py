@@ -21,7 +21,3 @@ class Initializer(BaseInitializer):
     @property
     def _tpm_path(self):
         return self.home_path(*self.TPM_PATH)
-
-
-def initializer():
-    return Initializer

@@ -8,7 +8,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_base('config.ini', '.config/networkmanager-dmenu/config.ini')
-
-
-def initializer():
-    return Initializer

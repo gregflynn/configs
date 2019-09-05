@@ -24,7 +24,3 @@ class Initializer(BaseInitializer):
         )
         self.link_dist(self.VIM_PLUG + '/plug.vim', '.vim/autoload/plug.vim')
         self.run('vim +PlugUpdate +qall')
-
-
-def initializer():
-    return Initializer

@@ -20,7 +20,3 @@ class Initializer(BaseInitializer):
             'dotsan',
             '. {}; __dotsan $@'.format(self.base_path('dotsan.sh'))
         )
-
-
-def initializer():
-    return Initializer
