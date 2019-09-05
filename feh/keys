@@ -1,0 +1,14 @@
+remove
+delete
+
+toggle_filenames f
+jump_random r
+
+save_image
+save_filelist
+
+reload_image C-r
+toggle_fullscreen C-f
+
+quit C-q
+close q

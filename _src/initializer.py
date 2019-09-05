@@ -240,7 +240,7 @@ class BaseInitializer(object):
     def _inject_line(line, inject_map):
         for name, value in inject_map.items():
             holder = '{{{}}}'.format(name)
-            line = line.replace(holder, value)
+            line = line.replace(holder, str(value))
         return line
 
     def _assert_dist(self):

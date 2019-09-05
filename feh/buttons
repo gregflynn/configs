@@ -1,0 +1,6 @@
+# make scroll wheel (mousewheel up and down) zoom, instead of flipping images
+zoom_in C-4
+zoom_out C-5
+
+scroll_up 4
+scroll_down 5
