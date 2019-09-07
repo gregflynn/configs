@@ -4,3 +4,6 @@ zoom_out C-5
 
 scroll_up 4
 scroll_down 5
+
+toggle_menu
+prev_img 3
