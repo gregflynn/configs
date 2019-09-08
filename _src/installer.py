@@ -3,6 +3,7 @@ import traceback
 from subprocess import check_output
 
 from .logger import LogLevel, Logger
+from .machine import Machine
 from .package_manager import PackageManager
 
 
@@ -21,12 +22,14 @@ class Installer(object):
         self._is_cli_install = self._is_root or self._is_ssh
 
         self._pkger = PackageManager()
+        self._machine = Machine()
 
     def install(self):
         """Install all modules
         """
         for module in self._modules:
             self._install_module(module)
+        self._machine.save()
 
     def _install_module(self, module):
         """
@@ -38,7 +41,16 @@ class Installer(object):
         try:
             initializer = module.load()
 
-            if not self._meets_requirements(initializer, logger):
+            if not self._machine.is_module_configured(module):
+                if logger.prompt('Enable Module?'):
+                    self._machine.enable_module(module)
+                else:
+                    self._machine.disable_module(module)
+
+            if (
+                not self._machine.is_module_enabled(module)
+                or not self._meets_requirements(initializer, logger)
+            ):
                 return
 
             initializer.build()

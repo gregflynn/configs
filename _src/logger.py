@@ -26,13 +26,26 @@ class Logger(object):
         self._module_name = module_name
 
     def log(self, level, message=''):
-        level_color = self.LEVEL_COLORS[level]
-        print('{} {} {}'.format(
-            self.color(level_color, '[{}]'.format(level)),
-            self.color(TextColor.BLUE, self._module_name),
-            self.color(level_color, message)
-        ))
+        print(self._format_message(level, message))
+
+    def prompt(self, message):
+        while True:
+            response = input(
+                self._format_message(LogLevel.WARN, message + ' [Y/N] ')
+            )
+            if response in {'Y', 'y'}:
+                return True
+            if response in {'N', 'n'}:
+                return False
 
     @staticmethod
     def color(color, text):
         return '\033[{}m{}\033[0m'.format(color, text)
+
+    def _format_message(self, level, message):
+        level_color = self.LEVEL_COLORS[level]
+        return '{} {} {}'.format(
+            self.color(level_color, '[{}]'.format(level)),
+            self.color(TextColor.BLUE, self._module_name),
+            self.color(level_color, message)
+        )
