@@ -29,6 +29,13 @@ ydb() {
     gmb "yo_dawg_i_heard_you_like_$@"
 }
 
+squash() {
+    local base_branch="${1:-master}"
+    local current_branch=$(git branch --show-current)
+    local num_commits=$(git log ${base_branch}..${current_branch} | grep commit | wc -l)
+    git rebase -i HEAD~$num_commits
+}
+
 if [[ "$ZSH_VERSION" == "" ]]; then
     if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
         . /usr/share/git/completion/git-completion.bash
