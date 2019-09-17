@@ -1,4 +1,4 @@
-__right=$'\uE0B1'
+__right=""
 
 
 _is_root() {
@@ -43,18 +43,56 @@ _prompt_userpath() {
 }
 
 _git_prompt_info() {
-    local ref hide_status
-    hide_status="$(git config --get oh-my-zsh.hide-status 2>/dev/null)"
-    if [[ $hide_status != 1 ]]; then
-        ref="$(git symbolic-ref HEAD 2>/dev/null)" || ref="$(git rev-parse --short HEAD 2>/dev/null)" || return 0
-        echo "${ref#refs/heads/}$(parse_git_dirty)"
-    fi
+    local gitstatus=`git status -s -b --porcelain 2>/dev/null`
+    [[ "$?" -ne 0 ]] && return 0
+
+    local branch=""
+    local untracked=0
+    local conflicted=0
+    local changes=0
+    local staged=0
+
+    # shamelessly stolen from https://github.com/magicmonty/bash-git-prompt/blob/master/gitstatus.sh#L27-L49
+    while IFS='' read -r line || [[ -n "$line" ]]; do
+        local gstatus=${line:0:2}
+        while [[ -n $gstatus ]]; do
+            case "$gstatus" in
+                #two fixed character matches, loop finished
+                \#\#) branch="${line/\.\.\./^}"; break ;;
+                \?\?) ((untracked=1)); break ;;
+                U?) ((conflicted=1)); break;;
+                ?U) ((conflicted=1)); break;;
+                DD) ((conflicted=1)); break;;
+                AA) ((conflicted=1)); break;;
+                #two character matches, first loop
+                ?M) ((changes=1)) ;;
+                ?D) ((changes=1)) ;;
+                ?\ ) ;;
+                #single character matches, second loop
+                U) ((conflicted=1)) ;;
+                \ ) ;;
+                *) ((staged=1)) ;;
+            esac
+            gstatus=${gstatus:0:(${#gstatus}-1)}
+        done
+    done <<< "$gitstatus"
+
+    local statuses=""
+    if [ "$staged" = "1" ]; then statuses="$statuses %{$fg[green]%}+"; fi
+    if [ "$conflicted" = "1" ]; then statuses="$statuses %{$fg[red]%}M"; fi
+    if [ "$changes" = "1" ]; then statuses="$statuses %{$fg[red]%}*"; fi
+    if [ "$untracked" = "1" ]; then statuses="$statuses %{$fg[red]%}u"; fi
+
+    # handle stashes
+    if ! test -z "$(git stash list 2>/dev/null)"; then statuses="$statuses %{$fg[magenta]%}s"; fi
+    branch=$(echo "${branch/\#\# }" | cut -f1 -d"^")
+    echo -n "$branch$statuses"
 }
 
 _prompt_git() {
     local git_status="$(_git_prompt_info)"
     if [[ "$git_status" != "" ]]; then
-        echo -n "%{$fg[magenta]%}$__right %{$fg[cyan]%}$git_status%{$reset_color%} "
+        echo -n "%{$fg[cyan]%}$__right $git_status%{$reset_color%} "
     fi
 }
 
@@ -75,7 +113,7 @@ _prompt_carrot() {
     else
         echo -n "%{$fg[yellow]%}"
     fi
-    echo -n $'\uf061'
+    echo -n "$__right$__right$__right"
 }
 
 _prompt_rc="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"

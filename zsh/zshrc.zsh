@@ -13,24 +13,25 @@ bindkey -e
 # If you come from bash you might have to change your $PATH.
 export PATH=/usr/local/bin:$PATH
 
-SHOW_AWS_PROMPT=false
-export FZF_DEFAULT_OPTS='
-    --color 16,fg:-1,bg:-1,hl:4,fg+:3,bg+:-1,hl+:4
-    --color info:5,prompt:3,pointer:3,marker:1,spinner:2,header:1
-'
-
 . '{ANTIGEN_INSTALL}'
 
 # oh-my-zsh packages
 antigen use oh-my-zsh
 #antigen bundle aws
-antigen bundle fzf
-antigen bundle git
+#antigen bundle fzf
+#antigen bundle git
 
 # github packages
 antigen bundle zsh-users/zsh-syntax-highlighting
-
 antigen apply
+
+# FZF setup
+export FZF_DEFAULT_OPTS='
+    --color 16,fg:-1,bg:-1,hl:4,fg+:3,bg+:-1,hl+:4
+    --color info:5,prompt:3,pointer:3,marker:1,spinner:2,header:1
+'
+source "/usr/share/fzf/completion.zsh"
+source "/usr/share/fzf/key-bindings.zsh"
 
 # fix home and end keys
 bindkey '\e[1~' beginning-of-line
