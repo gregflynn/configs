@@ -2,6 +2,8 @@ zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle :compinstall filename '{HOME}/.zshrc'
 
 autoload -Uz compinit
+autoload -U colors && colors
+setopt prompt_subst
 compinit
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
@@ -13,15 +15,7 @@ bindkey -e
 # If you come from bash you might have to change your $PATH.
 export PATH=/usr/local/bin:$PATH
 
-. '{ANTIGEN_INSTALL}'
-
-# oh-my-zsh packages
-antigen use oh-my-zsh
-#antigen bundle aws
-#antigen bundle fzf
-#antigen bundle git
-
-# github packages
+source '{ANTIGEN_INSTALL}'
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
 
