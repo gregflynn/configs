@@ -1,23 +1,37 @@
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle :compinstall filename '{HOME}/.zshrc'
 
-autoload -Uz compinit
-autoload -U colors && colors
-setopt prompt_subst
-compinit
-# End of lines added by compinstall
-# Lines configured by zsh-newuser-install
+autoload -Uz compinit && compinit
+autoload -Uz colors && colors
+
+# history
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=50000
+SAVEHIST=10000
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt inc_append_history     # add commands to HISTFILE in order of execution
+setopt share_history          # share command history data
+
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# If you come from bash you might have to change your $PATH.
 export PATH=/usr/local/bin:$PATH
 
 source '{ANTIGEN_INSTALL}'
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen apply
+
+# completions
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z-_}={A-Za-z_-}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' special-dirs true
+zstyle ':completion:*' list-colors ''
+unsetopt menu_complete
+unsetopt flowcontrol
+setopt auto_menu
+setopt complete_in_word
+setopt always_to_end
 
 # FZF setup
 export FZF_DEFAULT_OPTS='
@@ -30,6 +44,13 @@ source "/usr/share/fzf/key-bindings.zsh"
 # fix home and end keys
 bindkey '\e[1~' beginning-of-line
 bindkey '\e[4~' end-of-line
+
+# fix forward/backward word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
+
+# fix delete key
+bindkey "^[[3~" delete-char
 
 alias compreinit='rm -f ~/.zcompdump; compinit'
 
@@ -46,6 +67,7 @@ ZSH_HIGHLIGHT_STYLES[function]='fg=yellow'
 ZSH_HIGHLIGHT_STYLES[path]='fg=magenta'
 
 # Theme
+setopt prompt_subst
 . '{ZSH_PROMPT}'
 
 # fork colored man pages to fix some terrible colors
