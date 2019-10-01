@@ -15,6 +15,7 @@ local window_icon_overrides = {
     ["firefox"]                          = "\u{f269}",
     ["jetbrains-idea"]                   = "\u{e7b5}",
     ["jetbrains-pycharm"]                = "\u{e73c}",
+    ["jetbrains-toolbox"]                = "\u{f425}",
     ["Google Play Music Desktop Player"] = "\u{f001}",
     ["Mousepad"]                         = "\u{f40e}",
     ["Slack"]                            = "\u{f198}",

@@ -6,7 +6,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return [
             'lightdm',
-            'ffmpeg',
             'xautolock',
             'i3lock-color',
             'compton'
