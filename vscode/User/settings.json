@@ -96,5 +96,6 @@
     "problems.decorations.enabled": false,
     "explorer.confirmDragAndDrop": false,
     "workbench.tips.enabled": false,
-    "workbench.tree.indent": 30
+    "workbench.tree.indent": 30,
+    "breadcrumbs.enabled": false
 }
