@@ -9,10 +9,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['task']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def build(self):
         taskd = settings.ds_path('private', 'taskd', 'taskd_client')
         taskd = 'include {}'.format(taskd) if os.path.isfile(taskd) else ''

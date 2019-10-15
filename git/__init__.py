@@ -6,10 +6,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['git']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def install(self):
         self.link_base('gitconfig', '.gitconfig')
         self.link_base('gitignore', '.gitignore')

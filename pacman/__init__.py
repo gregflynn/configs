@@ -29,10 +29,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['pacman']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def build(self):
         self.inject('pacman.sh', inject_map=INJECT_MAP)
         self.inject('aur.sh', inject_map=INJECT_MAP)

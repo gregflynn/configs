@@ -6,10 +6,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['bash']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def build(self):
         self.inject('vars.sh')
 

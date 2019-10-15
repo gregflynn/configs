@@ -6,9 +6,5 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['python']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def install(self):
         self.shell_base('python.sh')

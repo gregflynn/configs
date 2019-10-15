@@ -6,10 +6,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['systemd']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def install(self):
         self.bin(
             'sys',

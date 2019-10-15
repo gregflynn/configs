@@ -32,15 +32,6 @@ class BaseInitializer(object):
         """
         return []
 
-    @property
-    def install_in_cli(self):
-        """Return true to indicate this module applies to CLI-only environments
-
-        Returns:
-            bool:
-        """
-        return False
-
     def build(self):
         """Build phase of initialization
         """

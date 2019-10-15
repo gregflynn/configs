@@ -8,10 +8,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['zsh', 'fzf']
 
-    @property
-    def install_in_cli(self):
-        return True
-
     def build(self):
         inject_map = {
             'ANTIGEN_INSTALL': self.dist_path(self.ANTIGEN),

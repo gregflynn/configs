@@ -66,10 +66,6 @@ class Installer(object):
         Args:
             initializer (BaseInitializer):
         """
-        if self._is_cli_install and not initializer.install_in_cli:
-            logger.log(LogLevel.WARN, "Not enabled in CLI-Only environment")
-            return False
-
         missing_requirements = set()
 
         for requirement in initializer.requirements:
