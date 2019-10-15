@@ -26,8 +26,6 @@ naughty.config.defaults.margin = 10
 beautiful.layout_machi = machi.get_icon()
 machi.default_editor.set_gap(beautiful.useless_gap * 2, beautiful.useless_gap * 2)
 
-local terminal = "alacritty"
-
 -- disable "AeroSnap" like feature
 awful.mouse.snap.edge_enabled = false
 
@@ -105,7 +103,20 @@ globalkeys = gears.table.join(
         {description = 'Show Keybindings', group = "awesome"}
     ),
     awful.key(
-        {modkey}, "Return", function() awful.spawn(terminal) end,
+        {modkey}, "Return", function()
+            -- try to find a terminal on this tag already
+            for _, c in ipairs(client.get()) do
+                if c.class == "Alacritty" then
+                    for _, t in ipairs(c:tags()) do
+                        if t == awful.screen.focused().selected_tag then
+                            c:jump_to(false)
+                            return
+                        end
+                    end
+                end
+            end
+            awful.spawn("alacritty")
+        end,
         {description = "Open Terminal", group = "awesome"}
     ),
     awful.key(
