@@ -16,7 +16,7 @@ local markup    = lain.util.markup
 
 -- http://man7.org/linux/man-pages/man3/strptime.3.html
 local calendar = 'https://calendar.google.com/'
-local clock_fmt = '%H:%M %m/%d'
+local clock_fmt = '%I:%M %a %m/%d'
 local tooltip_fmt = '%A %B %d'
 local refresh = 60
 local text_color = beautiful.colors.blue
