@@ -4,9 +4,8 @@ local wibox     = require("wibox")
 local dpi = beautiful.xresources.apply_dpi
 
 
-local fonticon_font = "Hack Nerd Font Mono 20"
 local margin_h = dpi(4)
-local margin_v = dpi(2)
+local margin_v = dpi(0)
 
 function factory(args)
     local args = args or {}
@@ -18,7 +17,7 @@ function factory(args)
 
     function FontIcon:update(icon, color)
         local prefix = string.format(
-            "<span font='%s'%s>", fonticon_font,
+            "<span font='%s'%s>", beautiful.font_icon,
             color and string.format(" color='%s'", color) or ""
         )
         local suffix = "</span>"

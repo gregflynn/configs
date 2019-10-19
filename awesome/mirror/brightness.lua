@@ -1,4 +1,5 @@
 local awful = require("awful")
+local beautiful = require("beautiful")
 local gears = require("gears")
 local naughty = require("naughty")
 
@@ -17,7 +18,7 @@ function brightness.update()
         local preset = {
             position = "bottom_middle",
             title    = "brightness",
-            font     = "Hack 16"
+            font     = beautiful.font_notif
         }
 
         local level = math.modf((tonumber(stdout) / 100) * brightness.width)

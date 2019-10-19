@@ -30,7 +30,7 @@ local volume = lain.widget.pulsebar {
     notification_preset = {
         position = 'bottom_middle',
         title    = 'volume',
-        font     = 'Hack 16'
+        font     = beautiful.font_notif
     },
     colors = {
         background = beautiful.colors.gray,
@@ -45,8 +45,11 @@ local volume = lain.widget.pulsebar {
     tick_post = "\u{e0b0}",
     tick_none = " "
 }
-volume.bar.shape = beautiful.border_shape
-volume.bar.bar_shape = beautiful.border_shape
+local shape = function(cr, w, h)
+    gears.shape.rounded_rect(cr, w, h, dpi(5))
+end
+volume.bar.shape = shape
+volume.bar.bar_shape = shape
 volume.tooltip:remove_from_object(volume.bar)
 
 local menu = awful.menu({

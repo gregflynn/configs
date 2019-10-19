@@ -29,13 +29,14 @@ local theme = {
     dotsan_home   = dotsan_home,
     lock_script   = lock_script,
     colors        = colors,
-    bar_height    = dpi(28),
+    bar_height    = dpi(26),
     bar_opacity   = 0.9,
     border_width  = dpi(3),
     widget_space  = dpi(5),
-    widget_under  = dpi(2),
+    widget_under  = dpi(3),
     font          = font_name.." 10",
-    font_name     = font_name,
+    font_notif    = font_name.." 14",
+    font_icon     = font_name.." 20",
     wallpaper     = "{DS_WALLPAPER}",
     border_shape  = function(cr, w, h)
         gears.shape.rounded_rect(cr, w, h, dpi(0))
@@ -76,7 +77,7 @@ theme.menu_width        = dpi(300)
 --
 -- Notifications
 --
-theme.notification_font         = font_name.." 12"
+theme.notification_font         = theme.font_notif
 theme.notification_fg           = colors.white
 theme.notification_border_width = dpi(4)
 theme.notification_border_color = colors.background

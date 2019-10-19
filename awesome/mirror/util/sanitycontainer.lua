@@ -29,7 +29,7 @@ function factory(args)
     local ln = wibox.container.background(wibox.widget.base.make_widget(), color)
     ln.forced_height = beautiful.widget_under
 
-    local widget_container = wibox.container.margin(widget, dpi(2), dpi(2), dpi(2), dpi(1))
+    local widget_container = wibox.container.margin(widget, dpi(2), dpi(2), dpi(0), dpi(0))
     local vertical = wibox.layout.align.vertical(nil, widget_container, ln)
     local SanityContainer = wibox.container.margin(vertical, left, right)
 
