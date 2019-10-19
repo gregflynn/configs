@@ -15,3 +15,7 @@ if command -v xmodmap > /dev/null; then
     fi
 fi
 
+# HACK for autostarting libinput-gestures
+if [[ -e "$HOME/.config/libinput-gestures.conf" ]]; then
+    libinput-gestures-setup start
+fi

@@ -15,9 +15,11 @@ class Installer(object):
         """
         self._modules = modules
 
-        self._is_root = (
-            check_output('whoami').decode('utf-8').strip() == 'root'
-        )
+        self._user = check_output('whoami').decode('utf-8').strip()
+        self._groups = set(
+            check_output('groups').decode('utf-8').strip().split())
+
+        self._is_root = self._user == 'root'
         self._is_ssh = os.getenv('SSH_CLIENT') or os.getenv('SSH_TTY')
         self._is_cli_install = self._is_root or self._is_ssh
 
@@ -39,7 +41,7 @@ class Installer(object):
         logger = Logger(module.name)
 
         try:
-            initializer = module.load()
+            initializer = module.load(self._user)
 
             if not self._machine.is_module_configured(module):
                 if logger.prompt('Enable Module?'):
@@ -66,17 +68,30 @@ class Installer(object):
         Args:
             initializer (BaseInitializer):
         """
-        missing_requirements = set()
-
-        for requirement in initializer.requirements:
-            if not self._pkger.is_installed(requirement):
-                missing_requirements.add(requirement)
+        missing_requirements = {
+            requirement
+            for requirement in initializer.requirements
+            if not self._pkger.is_installed(requirement)
+        }
 
         if missing_requirements:
-            logger.log(
-                LogLevel.WARN,
+            logger.warn(
                 'Missing Packages: {}'.format(missing_requirements)
             )
             return False
-        else:
-            return True
+
+        missing_groups = {
+            req_group
+            for req_group in initializer.user_groups
+            if req_group not in self._groups
+        }
+
+        if missing_groups:
+            logger.warn("""
+                User not in '{}' group(s).
+                $ sudo usermod -a -G GROUP {}
+            """.format(missing_groups, self._user))
+            return False
+
+        return True
+

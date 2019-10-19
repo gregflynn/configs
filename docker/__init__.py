@@ -6,6 +6,10 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return ['docker']
 
+    @property
+    def user_groups(self):
+        return ['docker']
+
     def install(self):
         self.bin(
             'dock',

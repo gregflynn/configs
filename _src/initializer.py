@@ -9,11 +9,12 @@ from .logger import Logger
 class BaseInitializer(object):
     """Base initializer for modules
     """
-    def __init__(self, name):
+    def __init__(self, name, user):
         """
         Args:
             name (str): Name of the module and its subdirectory
         """
+        self.user = user
         self.name = name
         self.logger = Logger(name)
         self._dist_exists = None
@@ -25,10 +26,19 @@ class BaseInitializer(object):
 
     @property
     def requirements(self):
-        """Get the list of required packages to initialize this module
+        """The list of required packages to initialize this module
 
         Returns:
-            list[str]: package names that need to be installed
+            (list[str]) package names that need to be installed
+        """
+        return []
+
+    @property
+    def user_groups(self):
+        """The list of required groups for the user to be in
+
+        Returns:
+            (list[str]) group names
         """
         return []
 

@@ -28,6 +28,12 @@ class Logger(object):
     def log(self, level, message=''):
         print(self._format_message(level, message))
 
+    def warn(self, message):
+        self.log(LogLevel.WARN, message)
+
+    def error(self, message):
+        self.log(LogLevel.ERROR, message)
+
     def prompt(self, message):
         while True:
             response = input(

@@ -17,6 +17,10 @@ class Initializer(BaseInitializer):
             'rofimoji-git'
         ]
 
+    @property
+    def user_groups(self):
+        return ['video']
+
     def build(self):
         self.inject('theme.lua')
         self.checkout(

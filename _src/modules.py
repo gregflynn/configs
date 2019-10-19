@@ -16,13 +16,13 @@ class Module(object):
             and os.path.isfile('{}/__init__.py'.format(full_path))
         )
 
-    def load(self):
+    def load(self, user):
         if not self.is_valid():
             raise Exception('Attempted to load an invalid module')
 
         module = import_module(self.name)
 
-        return module.Initializer(self.name)
+        return module.Initializer(self.name, user)
 
     @property
     def _full_path(self):
