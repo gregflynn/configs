@@ -41,6 +41,12 @@ awful.menu.menu_keys.close = {'q', 'Escape'}
 awful.rules.rules = require('rules')
 
 --
+-- Services
+--
+local brightness_service = require("services/brightness")
+local rofi_service       = require("services/rofi")
+
+--
 -- Screen setup
 --
 local volume = require('widgets/volume')
@@ -58,9 +64,10 @@ awful.screen.connect_for_each_screen(function(screen)
         screen,
         {
             screen.mytaglist,
+        },
+        {
             screen.mytasklist
         },
-        {},
         {
             require('widgets/cpu'),
             require('widgets/gpu'),
@@ -206,12 +213,48 @@ globalkeys = gears.table.join(
         {description = "record screen", group = "screen"}
     ),
 
+    --
+    -- Rofi
+    --
+    awful.key(
+        {modkey}, " ", rofi_service.run,
+        {description = "Launch Program", group = "awesome"}
+    ),
+    awful.key(
+        {modkey}, "u", rofi_service.pass,
+        {description = "Open Passwords", group = "awesome"}
+    ),
+    awful.key(
+        {modkey}, "c", rofi_service.calc,
+        {description = "Calculator", group = "awesome"}
+    ),
+    awful.key(
+        {modkey}, "w", rofi_service.tagwindows,
+        {description = "Select Window", group = "client"}
+    ),
+    awful.key(
+        {modkey}, "p", rofi_service.allwindows,
+        {description = "Select Window (all tags)", group = "client"}
+    ),
+    awful.key(
+        {modkey}, "e", rofi_service.emoji,
+        {description = "Select an Emoji to copy or insert", group = "awesome"}
+    ),
+    awful.key(
+        {modkey}, "s", rofi_service.websearch,
+        {description = "Search the web", group = "awesome"}
+    ),
+
+    --
+    -- Brightness Control
+    --
+    awful.key({}, "XF86MonBrightnessUp", brightness_service.up),
+    awful.key({}, "XF86MonBrightnessDown", brightness_service.down),
+
     -- Tag Keys
     TagList {keys = true},
 
     -- Widget keys
-    require("brightness").globalkeys,
-    require("rofi").globalkeys,
     volume.globalkeys
 )
 

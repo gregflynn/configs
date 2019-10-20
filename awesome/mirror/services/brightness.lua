@@ -1,6 +1,5 @@
 local awful = require("awful")
 local beautiful = require("beautiful")
-local gears = require("gears")
 local naughty = require("naughty")
 
 local brightness = {
@@ -12,8 +11,9 @@ local tick = "█"
 local tick_pre = "\u{e0b2}"
 local tick_post = "\u{e0b0}"
 local tick_none = " "
+local step_amount = "10"
 
-function brightness.update()
+local function brightness_update()
     awful.spawn.easy_async("light", function(stdout)
         local preset = {
             position = "bottom_middle",
@@ -41,21 +41,16 @@ function brightness.update()
     end)
 end
 
-brightness.globalkeys = gears.table.join(
-    awful.key(
-        { }, "XF86MonBrightnessDown",
-        function()
-            awful.spawn("light -U 10")
-            brightness.update()
-        end
-    ),
-    awful.key(
-        { }, "XF86MonBrightnessUp",
-        function()
-            awful.spawn("light -A 10")
-            brightness.update()
-        end
-    )
-)
+function brightness:up()
+    awful.spawn.easy_async("light -U "..step_amount, function()
+        brightness_update()
+    end)
+end
+
+function brightness:down()
+    awful.spawn.easy_async("light -A "..step_amount, function()
+        brightness_update()
+    end)
+end
 
 return brightness
