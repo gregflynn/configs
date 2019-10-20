@@ -7,6 +7,7 @@ beautiful.init(home.."/.config/awesome/theme.lua")
 local awful   = require("awful")
 local gears   = require("gears")
 local naughty = require("naughty")
+local wibox   = require("wibox")
 
 local lain = require("lain")
 local machi = require("layout-machi")
@@ -60,30 +61,39 @@ awful.screen.connect_for_each_screen(function(screen)
     screen.mytasklist = TaskList { screen = screen }
 
     -- Create the wibox
-    screen.mywibar = display.create_wibar(
-        screen,
+    screen.mywibar = awful.wibar {
+        position = "top",
+        ontop    = true,
+        screen   = screen,
+        height   = beautiful.bar_height,
+        opacity  = beautiful.bar_opacity
+    }
+
+    screen.mywibar:setup {
+        layout = wibox.layout.align.horizontal,
         {
+            layout = wibox.layout.fixed.horizontal,
             screen.mytaglist,
         },
+        screen.mytasklist,
         {
-            screen.mytasklist
-        },
-        {
-            require('widgets/cpu'),
-            require('widgets/gpu'),
-            require('widgets/mem'),
-            require('widgets/storage'),
-            require('widgets/net'),
+            layout = wibox.layout.fixed.horizontal,
+            require("widgets/cpu"),
+            require("widgets/gpu"),
+            require("widgets/mem"),
+            require("widgets/storage"),
+            require("widgets/net"),
             volume,
-            require('widgets/battery'),
-            require('widgets/tray'),
-            require('widgets/weather'),
-            require('widgets/clock'),
+            require("widgets/battery"),
+            require("widgets/tray"),
+            require("widgets/weather"),
+            require("widgets/clock"),
             SanityContainer {
                 widget = display.create_layout_widget(screen),
                 no_tooltip = true
             }
-        })
+        }
+    }
 end)
 
 

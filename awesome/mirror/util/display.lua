@@ -17,7 +17,9 @@ local window_icon_overrides = {
     ["jetbrains-pycharm"]                = "\u{e73c}",
     ["jetbrains-toolbox"]                = "\u{f425}",
     ["Google Play Music Desktop Player"] = "\u{f001}",
+    ["Lollypop"]                         = "\u{f001}",
     ["Mousepad"]                         = "\u{f40e}",
+    ["Polari"]                           = "\u{f869}",
     ["Slack"]                            = "\u{f198}",
     ["Steam"]                            = "\u{f1b6}",
     ["Thunar"]                           = "\u{f413}",
@@ -64,29 +66,6 @@ end
 function display.create_layout_widget(screen)
     local widget = awful.widget.layoutbox(screen)
     return wibox.container.margin(widget, dpi(0), dpi(0), dpi(4), dpi(4))
-end
-
-function display.create_wibar(screen, left, center, right)
-    local wibar = awful.wibar {
-        position = 'top',
-        ontop    = true,
-        screen   = screen,
-        height   = beautiful.bar_height,
-        opacity  = beautiful.bar_opacity
-    }
-
-    left.layout = wibox.layout.fixed.horizontal
-    center.layout = wibox.layout.fixed.horizontal
-    right.layout = wibox.layout.fixed.horizontal
-
-    wibar:setup {
-        layout = wibox.layout.align.horizontal,
-        left,
-        center,
-        right
-    }
-
-    return wibar
 end
 
 function display.get_icon_for_client(client)
