@@ -42,13 +42,13 @@ local function brightness_update()
 end
 
 function brightness:up()
-    awful.spawn.easy_async("light -U "..step_amount, function()
+    awful.spawn.easy_async("light -A "..step_amount, function()
         brightness_update()
     end)
 end
 
 function brightness:down()
-    awful.spawn.easy_async("light -A "..step_amount, function()
+    awful.spawn.easy_async("light -U "..step_amount, function()
         brightness_update()
     end)
 end
