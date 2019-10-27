@@ -7,15 +7,12 @@ local display         = require("util/display")
 local FontIcon        = require("util/fonticon")
 local SanityContainer = require("util/sanitycontainer")
 
-local rofi_service = require("services/rofi")
-
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
 
 local client_color = colors.gray
 local client_focus_color = colors.yellow
 local client_minimized_color = colors.purple
-local client_maximized_color = colors.green
 local icon_width = 26
 
 --
@@ -39,59 +36,51 @@ local function client_button(c)
 end
 
 --
--- Un-minimize all minimized clients
+-- Mini widget for client icons
 --
-local function unminimize_all()
-    for _, c in ipairs(client.get()) do
-        if c.minimized then
-            client_button(c)
-        end
+local function create_client_window_icon()
+    local icon_container = wibox.layout.fixed.horizontal()
+
+    local client_icon = wibox.widget.imagebox()
+    local client_fonticon = FontIcon()
+
+    local container = SanityContainer {
+        widget = wibox.widget {
+            layout = wibox.layout.fixed.horizontal,
+            icon_container
+        },
+        left = true,
+    }
+
+    function container.set_icon(icon, color)
+        icon_container:reset()
+        container:set_color(color)
+        icon_container:add(client_icon)
+
+        client_icon:set_image(icon)
+        client_icon.forced_width = dpi(icon_width)
+        icon_container.forced_width = dpi(icon_width)
     end
+
+    function container.set_font_icon(name, color)
+        icon_container:reset()
+        container:set_color(color)
+        icon_container:add(client_fonticon)
+
+        client_fonticon:update(name or display.get_default_client_icon(), color)
+        client_fonticon.forced_width = dpi(icon_width)
+        icon_container.forced_width = dpi(icon_width)
+    end
+
+    return container
 end
 
-local window_icon = FontIcon {icon = "\u{fab1}", color = client_focus_color}
-local window_count = wibox.widget.textbox()
-local window_count_container = SanityContainer {
-    widget = wibox.widget {
-        layout = wibox.layout.fixed.horizontal,
-        window_icon,
-        window_count
-    },
-    color = client_focus_color,
-    left = true,
-    tooltip = "Show clients on tag",
-    buttons = gears.table.join(awful.button({}, 1, rofi_service.tagwindows))
-}
-
-local minimized_window_icon = FontIcon {icon = "\u{faaf}", color = client_minimized_color}
-local minimized_count = wibox.widget.textbox()
-local minimized_count_container = SanityContainer {
-    widget = wibox.widget {
-        layout = wibox.layout.fixed.horizontal,
-        minimized_window_icon,
-        minimized_count
-    },
-    color = client_minimized_color,
-    left = true,
-    tooltip = "Unminimize clients",
-    buttons = gears.table.join(awful.button({}, 1, unminimize_all))
-}
-
-local focused_client_icon = wibox.widget.imagebox()
-local focused_client_fonticon = FontIcon()
+--local focused_client_fonticon = FontIcon()
 local focused_client_name = wibox.widget.textbox()
-local focused_client_container_icon = SanityContainer {
-    widget = wibox.widget {
-        layout = wibox.layout.fixed.horizontal,
-        focused_client_icon,
-        focused_client_name
-    },
-    left = true,
-}
 local focused_client_container_fonticon = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        focused_client_fonticon,
+        --focused_client_fonticon,
         focused_client_name
     },
     left = true,
@@ -104,50 +93,46 @@ local function update_func(window_list, buttons, label, data, clients)
         return
     end
 
-    -- window count
-    window_count:set_markup_silently(string.format(
-        '<span color="%s">%s</span>', client_focus_color, #clients
-    ))
-    window_list:add(window_count_container)
-
-    -- minimized count
-    local num_minimized = 0
-    for _, c in ipairs(clients) do
-        if c.minimized then
-            num_minimized = num_minimized + 1
-        end
+    if not data.client_icons then
+        data["client_icons"] = {}
     end
-    if num_minimized > 0 then
-        minimized_count:set_markup_silently(string.format(
-            '<span color="%s">%s</span>', client_minimized_color, num_minimized
-        ))
-        window_list:add(minimized_count_container)
+
+    -- window icons
+    local previous_client = awful.client.focus.history.get()
+    for idx, c in ipairs(clients) do
+        local client_icon = c.icon
+        local icon_override = display.get_icon_for_client(c)
+        local color = client_color
+
+        if c == client.focus then
+            color = client_focus_color
+        elseif c.minimized then
+            color = client_minimized_color
+        elseif c == previous_client then
+            color = colors.green
+        end
+
+        local container = data.client_icons[idx] or create_client_window_icon()
+        data.client_icons[idx] = container
+
+        if icon_override or not client_icon then
+            -- no true icon or we've overridden it
+            container.set_font_icon(icon_override, color)
+        else
+            -- going with the real app icon here, display the imagebox
+            container.set_icon(client_icon, color)
+        end
+
+        container:buttons(awful.widget.common.create_buttons(buttons, c))
+        window_list:add(container)
     end
 
     -- focused client
     if client.focus then
         local client_name = client.focus.name
-        local client_icon = client.focus.icon
         local color = client_focus_color
 
-        if client.focus.maximized then
-            color = client_maximized_color
-        end
-
-        local container
-        local icon_override = display.get_icon_for_client(client.focus)
-        if icon_override or not client_icon then
-            -- no true icon or we've overridden it
-            container = focused_client_container_fonticon
-            local name = icon_override or display.get_default_client_icon()
-            focused_client_fonticon:update(name, color)
-            focused_client_fonticon.forced_width = dpi(icon_width)
-        else
-            -- going with the real app icon here, display the imagebox
-            container = focused_client_container_icon
-            focused_client_icon:set_image(client_icon)
-            focused_client_icon.forced_width = dpi(icon_width)
-        end
+        local container = focused_client_container_fonticon
 
         -- update the client name and only show if it's focused or last
         if client_name then
@@ -163,7 +148,6 @@ local function update_func(window_list, buttons, label, data, clients)
         -- update the container color
         container:set_color(color == client_color and colors.background or color)
 
-        container.forced_width = dpi(300)
         container:buttons(awful.widget.common.create_buttons(buttons, client.focus))
 
         window_list:add(container)
