@@ -126,6 +126,7 @@ local function create_update_function(s)
             end
 
             container:buttons(awful.widget.common.create_buttons(buttons, c))
+            container:set_tooltip(string.format('%s (%s)', c.name, c.class))
             window_list:add(container)
         end
 
