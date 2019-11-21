@@ -3,6 +3,11 @@ zstyle :compinstall filename '{HOME}/.zshrc'
 
 autoload -Uz compinit && compinit
 autoload -Uz colors && colors
+autoload -U edit-command-line
+
+# command line editor
+zle -N edit-command-line
+bindkey '^e' edit-command-line
 
 # history
 HISTFILE=~/.histfile
