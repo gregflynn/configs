@@ -28,7 +28,7 @@ font:
     style: Regular
 
 cursor:
-  style: Beam
+  style: Block
   unfocused_hollow: true
 
 colors:
