@@ -10,7 +10,6 @@
      */
     "editor.fontFamily": "'Hack Nerd Font'",
     "window.zoomLevel": 0,
-    "editor.fontSize": 15,
     "editor.renderIndentGuides": true,
     "editor.codeLens": false,
     "editor.minimap.enabled": false,
@@ -97,5 +96,6 @@
     "explorer.confirmDragAndDrop": false,
     "workbench.tips.enabled": false,
     "workbench.tree.indent": 30,
-    "breadcrumbs.enabled": false
+    "breadcrumbs.enabled": false,
+    "vsicons.dontShowNewVersionMessage": true
 }
