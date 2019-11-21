@@ -128,7 +128,7 @@ function! CreateInPreview()
 endf
 
 " NOTE: cursorline is disabled for now because it's hiding the cursor on me
-"set cursorline
+set cursorline
 set mouse=a
 
 " Make background transparent

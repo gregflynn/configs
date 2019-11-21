@@ -13,6 +13,14 @@ let s:green   = {'hex': '#A9DC76', 'term': 150}
 let g:airline#themes#monokaipro#palette = {}
 
 
+" Fix line number colors for the current line
+"hi CursorLineNR cterm=bold
+hi CursorLineNR cterm=bold ctermfg=221 ctermbg=59 cterm=NONE guifg=#ffd866 guibg=#423f42 gui=NONE
+augroup CLNRSet
+    "autocmd! ColorScheme * hi CursorLineNR
+    autocmd! ColorScheme * hi CursorLineNR cterm=bold ctermfg=221 ctermbg=59 cterm=NONE guifg=#ffd866 guibg=#423f42 gui=NONE
+augroup END
+
 
 " Normal mode
 let s:N1 = [s:background['hex'], s:yellow['hex'], s:background['term'], s:yellow['term']]
