@@ -6,6 +6,7 @@ alias gaa='git add --all'
 alias gc='git checkout'
 alias pull='git pull'
 alias undo='git reset HEAD~'
+alias gb="git branch --show-current | tr -d '[:space:]' | clip"
 
 _concat_branch() {
     echo "$@" | sed 's/ /_/g'
