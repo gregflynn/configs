@@ -8,7 +8,7 @@ class Initializer(BaseInitializer):
             'lightdm',
             'xautolock',
             'i3lock-color',
-            'compton'
+            'picom'
         ]
 
     def build(self):
