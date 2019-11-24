@@ -25,3 +25,4 @@ class Initializer(BaseInitializer):
         if PackageManager().is_installed('neovim'):
             self.link_base('neovim.vim', '.config/nvim/init.vim')
             self.run('nvim +PlugUpdate +qall')
+            self.shell_base('neovim.sh')
