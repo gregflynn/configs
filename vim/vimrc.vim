@@ -23,7 +23,7 @@ map <C-B> :CtrlPBuffer<cr>
 map <C-F> :CtrlPTag<cr>
 
 " Airline config options
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 0
 let g:airline_skip_empty_sections = 1
 function! AirlineInit()
     let g:airline_section_b = airline#section#create(['%{getcwd()}'])

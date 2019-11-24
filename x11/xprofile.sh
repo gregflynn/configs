@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-compton --config '{DS_HOME}/x11/compton.conf' -b
+picom --config '{DS_HOME}/x11/picom.conf' -b
 
 /usr/bin/start-pulseaudio-x11
 
