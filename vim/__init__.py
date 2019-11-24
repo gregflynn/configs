@@ -1,4 +1,5 @@
 from _src.initializer import BaseInitializer
+from _src.package_manager import PackageManager
 
 
 class Initializer(BaseInitializer):
@@ -20,3 +21,7 @@ class Initializer(BaseInitializer):
         )
         self.link_dist(self.VIM_PLUG + '/plug.vim', '.vim/autoload/plug.vim')
         self.run('vim +PlugUpdate +qall')
+
+        if PackageManager().is_installed('neovim'):
+            self.link_base('neovim.vim', '.config/nvim/init.vim')
+            self.run('nvim +PlugUpdate +qall')
