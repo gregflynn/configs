@@ -1,6 +1,24 @@
 __right=""
 
 
+if [[ "$ZSH_VERSION" == "" ]]; then
+    _RED=$'\e[31m'
+    _GREEN=$'\e[32m'
+    _YELLOW=$'\e[33m'
+    _BLUE=$'\e[34m'
+    _PURPLE=$'\e[35m'
+    _ORANGE=$'\e[36m'
+    _WHITE=$'\e[37m'
+else
+    _RED="%{$fg[red]%}"
+    _GREEN="%{$fg[green]%}"
+    _YELLOW="%{$fg[yellow]%}"
+    _BLUE="%{$fg[blue]%}"
+    _PURPLE="%{$fg[magenta]%}"
+    _ORANGE="%{$fg[cyan]%}"
+    _WHITE="%{$fg[white]%}"
+fi
+
 _is_root() {
     if [[ "$USER" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
         return 0
@@ -18,17 +36,22 @@ _is_ssh() {
 }
 
 _prompt_userpath() {
-    local user_color="%{$fg[blue]%}"
+    local user_color="$_BLUE"
     local me="$USER"
 
     # check for superuser
     if _is_root; then
-        user_color="%{$fg[red]%}"
+        user_color="$_RED"
         me='root'
     fi
 
     if [[ "$me" != "" ]]; then
-        echo -n " $user_color$me %{$fg[magenta]%}$__right "
+        echo -n " $user_color$me "
+    fi
+
+    # print host on ssh
+    if _is_ssh; then
+        echo -n "$_YELLOW$__right $(hostname) "
     fi
 
     # replace home dir with tilde
@@ -39,7 +62,7 @@ _prompt_userpath() {
     # from: https://superuser.com/a/1172745
     local path=$(echo $P | perl -pe 's/(\w)[^\/]+\//\1\//g')
 
-    echo -n "%{$fg[magenta]%}$path "
+    echo -n "$_PURPLE$__right $path "
 }
 
 _git_prompt_info() {
@@ -78,21 +101,29 @@ _git_prompt_info() {
     done <<< "$gitstatus"
 
     local statuses=""
-    if [ "$staged" = "1" ]; then statuses="$statuses %{$fg[green]%}+"; fi
-    if [ "$conflicted" = "1" ]; then statuses="$statuses %{$fg[red]%}M"; fi
-    if [ "$changes" = "1" ]; then statuses="$statuses %{$fg[red]%}*"; fi
-    if [ "$untracked" = "1" ]; then statuses="$statuses %{$fg[red]%}u"; fi
+    if [ "$staged" = "1" ]; then statuses="$statuses ${_GREEN}"; fi
+    if [ "$conflicted" = "1" ]; then statuses="$statuses ${_RED}"; fi
+    if [ "$changes" = "1" ]; then statuses="$statuses ${_RED}~"; fi
+    if [ "$untracked" = "1" ]; then statuses="$statuses ${_RED}"; fi
 
     # handle stashes
-    if ! test -z "$(git stash list 2>/dev/null)"; then statuses="$statuses %{$fg[magenta]%}s"; fi
+    if ! test -z "$(git stash list 2>/dev/null)"; then
+        statuses="$statuses ${_PURPLE}"
+    fi
+
     branch=$(echo "${branch/\#\# }" | cut -f1 -d"^")
+
+    # add a happy little checkmark
+    if [[ "$statuses" == "" ]] && [[ "$branch" != "" ]]; then
+        statuses=" ${_GREEN}"
+    fi
     echo -n "$branch$statuses"
 }
 
 _prompt_git() {
     local git_status="$(_git_prompt_info)"
     if [[ "$git_status" != "" ]]; then
-        echo -n "%{$fg[cyan]%}$__right $git_status%{$reset_color%} "
+        echo -n "$_ORANGE$__right $git_status "
     fi
 }
 
@@ -103,26 +134,46 @@ _prompt_venv() {
         venv_name="$VIRTUAL_ENV"
     fi
     if [[ "$venv_name" != "" ]]; then
-        echo -n "%{$fg[green]%}$__right %{$fg[green]%}py:$venv_name"
+        echo -n "$_GREEN$__right py:$venv_name"
     fi
 }
 
 _prompt_carrot() {
+    local color="$_YELLOW"
     if _is_root; then
-        echo -n "%{$fg[red]%}"
-    else
-        echo -n "%{$fg[yellow]%}"
+        color="$_RED"
     fi
-    echo -n "$__right$__right$__right"
+    echo -n "$color$__right$__right$__right"
 }
 
 _prompt_host() {
     if _is_ssh; then
-        echo -n "%{$fg[yellow]%}$(hostname)%{$reset_color%} "
+        echo -n "$_YELLOW$(hostname) "
     fi
 }
 
-PROMPT='
+if [[ $(tty) == /dev/pts/* ]]; then
+    if [[ "$ZSH_VERSION" == "" ]]; then
+        ME="$(whoami)"
+
+        # resets the color _after_ the user input
+        normalcol="$(tput sgr0)"
+        trap 'echo -n "$normalcol"' DEBUG
+
+        if [ "$ME" == "root" ]; then
+            prompt_color=$'\e[31m'
+        else
+            prompt_color=$'\e[33m'
+        fi
+
+        PS1=$'
+$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)
+
+\[$prompt_color\]bash $__right$__right$__right '
+    else
+    PROMPT='
 %{$reset_color%}$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)%{$reset_color%}
 
-$(_prompt_host)$(_prompt_carrot) '
+$(_prompt_carrot) '
+    fi
+fi

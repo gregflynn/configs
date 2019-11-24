@@ -5,7 +5,7 @@
 [[ "$-" != *i* ]] && return
 
 
-source "{DS_HOME}/bash/prompt.sh"
+source "{DS_HOME}/zsh/prompt.zsh"
 
 if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
     source /usr/share/nvm/init-nvm.sh
