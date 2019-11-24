@@ -8,4 +8,3 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.shell_base('python.sh')
-        self.bin('charm', '{} $@'.format(self.base_path('charm.sh')))
