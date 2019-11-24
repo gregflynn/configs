@@ -14,7 +14,6 @@ local client_color           = colors.gray
 local client_focus_color     = colors.yellow
 local client_minimized_color = colors.purple
 local client_previous_color  = colors.white
-local icon_width = 26
 
 --
 -- Function for when you click on a client in the task bar
@@ -59,8 +58,6 @@ local function create_client_window_icon()
         icon_container:add(client_icon)
 
         client_icon:set_image(icon)
-        client_icon.forced_width = dpi(icon_width)
-        icon_container.forced_width = dpi(icon_width)
     end
 
     function container.set_font_icon(name, color)
@@ -69,8 +66,6 @@ local function create_client_window_icon()
         icon_container:add(client_fonticon)
 
         client_fonticon:update(name or display.get_default_client_icon(), color)
-        client_fonticon.forced_width = dpi(icon_width)
-        icon_container.forced_width = dpi(icon_width)
     end
 
     return container

@@ -4,7 +4,7 @@
     "keyboard.dispatch": "keyCode",
     "editor.multiCursorModifier": "ctrlCmd",
     "workbench.startupEditor": "none",
-
+    
     /**
      * Editor
      */
@@ -73,10 +73,8 @@
     "terminal.integrated.fontSize": 14,
     "workbench.colorCustomizations": {
         "[Monokai Pro]": {
-            "sideBar.background": "#2D2A2E",
-            "editorGroupHeader.tabsBackground": "#1e1f1c",
-            "statusBar.background": "#1e1f1c",
-            "editorGutter.background": "#1e1f1c"
+            "activityBar.activeBorder": "#1e1e1e",
+            "activityBar.foreground": "#FFD866",
         },
         "terminal.background": "#2D2A2E",
         "terminal.foreground": "#FCFCFA",
@@ -97,5 +95,4 @@
     "workbench.tips.enabled": false,
     "workbench.tree.indent": 30,
     "breadcrumbs.enabled": false,
-    "vsicons.dontShowNewVersionMessage": true
 }

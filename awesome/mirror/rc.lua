@@ -137,6 +137,10 @@ globalkeys = gears.table.join(
         {description = "Open Terminal", group = "awesome"}
     ),
     awful.key(
+        {modkey, shift}, "Return", function() awful.spawn("alacritty") end,
+        {description = "", group = "awesome"}
+    ),
+    awful.key(
         {}, "XF86Explorer", function() awful.spawn({"thunar", home}) end
     ),
     awful.key(
@@ -178,8 +182,9 @@ globalkeys = gears.table.join(
         {modkey}, "/", function()
             if awful.screen.focused().selected_tag.layout ~= machi.default_layout then
                 awful.screen.focused().selected_tag.layout = machi.default_layout
+            else
+                machi.default_editor.start_interactive()
             end
-            machi.default_editor.start_interactive()
         end,
         {description = "Edit Layout", group = "layout"}
     ),

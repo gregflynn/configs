@@ -94,4 +94,3 @@ class Installer(object):
             return False
 
         return True
-

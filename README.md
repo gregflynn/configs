@@ -24,7 +24,7 @@ this is a, mediocre at best, attempt to keep my configuration files in a managea
 - Python 3.4+
 
 ## install
-```
+```bash
 git clone https://github.com/gregflynn/dotsanity.git ~/.sanity
 bash ~/.sanity/setup.sh
 ```

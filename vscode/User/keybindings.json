@@ -114,5 +114,9 @@
     {
         "key": "ctrl+shift+c",
         "command": "workbench.action.files.copyPathOfActiveFile",
+    },
+    {
+        "key": "ctrl+r",
+        "command": "editor.action.startFindReplaceAction"
     }
 ]
