@@ -3,13 +3,6 @@
 
 __dotsan() {
     case $1 in
-        reload)
-            if [[ "$ZSH_VERSION" == "" ]]; then
-                . $HOME/.bashrc
-            else
-                . $HOME/.zshrc
-            fi
-        ;;
         code)
             code ${__dotsan__home}
         ;;
@@ -36,10 +29,9 @@ __dotsan() {
             pushd ${__dotsan__home} > /dev/null
             # shamelessly stolen from https://stackoverflow.com/a/3278427/625802
             git remote update
-            UPSTREAM=${2:-'@{u}'}
             LOCAL=$(git rev-parse @)
-            REMOTE=$(git rev-parse "$UPSTREAM")
-            BASE=$(git merge-base @ "$UPSTREAM")
+            REMOTE=$(git rev-parse @{u})
+            BASE=$(git merge-base @ @{u})
 
             R=$'\e[31m'
             G=$'\e[32m'
@@ -66,23 +58,6 @@ __dotsan() {
             fi
             popd > /dev/null
         ;;
-        dpi)
-            case $2 in
-                high)
-                    echo "Xft.dpi: 192" > ~/.Xresources
-                    cat ~/.Xresources
-                    echo "Logout for changes to take effect (Super+Shift+Q)"
-                ;;
-                low)
-                    echo "Xft.dpi: 96" > ~/.Xresources
-                    cat ~/.Xresources
-                    echo "Logout for changes to take effect (Super+Shift+Q)"
-                ;;
-                *)
-                    cat ~/.Xresources
-                ;;
-            esac
-        ;;
         watch)
             module="$2"
 
@@ -97,8 +72,7 @@ __dotsan() {
             done
         ;;
         help|*)
-            echo "Usage: dotsan [reload|diff|commit|update|version]"
-            echo "       dotsan dpi [high|low]"
+            echo "Usage: dotsan [cd|code|update|version|watch|install]"
         ;;
     esac
 }

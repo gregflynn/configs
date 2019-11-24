@@ -149,7 +149,7 @@ __dsc__success() {
     __dsc__echo "$1" green
 }
 
-colors() {
+color_display() {
     for x in {0..8}; do
         for i in {30..37}; do
             for a in {40..47}; do
@@ -161,7 +161,7 @@ colors() {
     echo
 }
 
-gradient() {
+color_gradient() {
     awk 'BEGIN{
         s="/\\/\\/\\/\\/\\"; s=s s s s s s s s s s s s s s s s s s s s s s s;
         for (colnum = 0; colnum<256; colnum++) {
