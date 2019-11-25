@@ -14,8 +14,11 @@ ENGINE_MAP = {
 
 
 def main():
-    rofi_args = ['rofi', '-dmenu', '-p', 'Web Search']
-    rofi_output = check_output(rofi_args).decode('utf8').strip() or ''
+    options = b'\n'.join(k.encode() for k in ENGINE_MAP.keys())
+    rofi_output = check_output(
+        ['rofi', '-dmenu', '-p', 'Web Search'],
+        input=options
+    ).decode('utf8').strip() or ''
 
     if not rofi_output:
         return

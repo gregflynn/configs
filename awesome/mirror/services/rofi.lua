@@ -56,4 +56,11 @@ function rofi:websearch()
     awful.spawn({ "python3", beautiful.dotsan_home.."/rofi/rofi_search.py" })
 end
 
+--
+-- Project Manager
+--
+function rofi:projects()
+    awful.spawn({ "python3", beautiful.dotsan_home.."/rofi/rofi_project.py" })
+end
+
 return rofi

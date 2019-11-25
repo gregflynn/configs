@@ -251,6 +251,10 @@ globalkeys = gears.table.join(
         {modkey}, "s", rofi_service.websearch,
         {description = "Search the web", group = "awesome"}
     ),
+    awful.key(
+        {modkey, shift}, "p", rofi_service.projects,
+        {description = "Open Projects", group = "awesome"}
+    ),
 
     --
     -- Brightness Control
