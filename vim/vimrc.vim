@@ -23,7 +23,7 @@ map <C-B> :CtrlPBuffer<cr>
 map <C-F> :CtrlPTag<cr>
 
 " Airline config options
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 let g:airline_skip_empty_sections = 1
 function! AirlineInit()
     let g:airline_section_b = airline#section#create(['%{getcwd()}'])
@@ -58,7 +58,7 @@ set colorcolumn=80,120
 " Git Gutter
 let g:gitgutter_override_sign_column_highlight = 0
 map <Leader>d :GitGutterLineHighlightsToggle<cr>
-hi SignColumn guibg=NONE ctermbg=NONE
+hi SignColumn guibg=#2D2A2E ctermbg=246
 hi link GitGutterAdd Function
 hi link GitGutterChange String
 hi link GitGutterDelete Define
@@ -94,16 +94,6 @@ nnoremap <C-D> dd
 inoremap <C-D> <Esc>dd
 vnoremap <C-D> <Esc>dd
 
-" quit
-nnoremap <Leader>q <Esc>:q<CR>
-inoremap <Leader>q <Esc>:q<CR>
-vnoremap <Leader>q <Esc>:q<CR>
-
-" save file
-nnoremap <Leader>s <Esc>:w<CR>
-inoremap <Leader>s <Esc>:w<CR>
-vnoremap <Leader>s <Esc>:w<CR>
-
 " indent in visual mode like a champ
 vnoremap < <gv
 vnoremap > >gv
@@ -127,11 +117,9 @@ function! CreateInPreview()
   redraw!
 endf
 
-" NOTE: cursorline is disabled for now because it's hiding the cursor on me
 set cursorline
 set mouse=a
 
-" Make background transparent
-hi Normal guibg=NONE ctermbg=NONE
-hi NonText guibg=NONE ctermbg=NONE
+set showmatch
+nnoremap ; :
 

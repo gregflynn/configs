@@ -24,6 +24,14 @@
 
 [diff]
     tool = vimdiff
+[merge]
+    tool = vimdiff
+[mergetool "vimdiff"]
+    cmd = nvim -d $LOCAL $BASE
 
 [alias]
     tree = log --graph --pretty='format:%C(yellow)%h%C(reset): %C(blue)%an%C(reset), %ar%C(auto)%d%n    %s'
+    d = difftool
+[difftool]
+    prompt = true
+
