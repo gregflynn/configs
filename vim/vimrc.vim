@@ -19,8 +19,7 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\.so$\|\.dat$\|\.DS_Store$\|\.pyc$\|\.gz$\|\.class$'
   \ }
 map <C-P> :CtrlP<cr>
-map <C-B> :CtrlPBuffer<cr>
-map <C-F> :CtrlPTag<cr>
+map <C-T> :CtrlPTag<cr>
 
 " Airline config options
 let g:airline_powerline_fonts = 1
@@ -42,9 +41,9 @@ map <C-\> :Lexplore<cr>
 
 " syntax highlighting setup
 syntax enable
+:silent! set termguicolors
 :silent! colorscheme monokai_pro
 :silent! set t_Co=256
-:silent! set termguicolors
 let g:monokai_term_italic = 1
 let g:monokai_gui_italic = 1
 set background=dark
@@ -58,7 +57,6 @@ set colorcolumn=80,120
 " Git Gutter
 let g:gitgutter_override_sign_column_highlight = 0
 map <Leader>d :GitGutterLineHighlightsToggle<cr>
-hi SignColumn guibg=#2D2A2E ctermbg=246
 hi link GitGutterAdd Function
 hi link GitGutterChange String
 hi link GitGutterDelete Define
@@ -123,3 +121,7 @@ set mouse=a
 set showmatch
 nnoremap ; :
 
+hi Normal guibg=NONE ctermbg=NONE
+hi NonText guibg=NONE ctermbg=NONE
+hi LineNr guibg=NONE ctermbg=NONE
+hi SignColumn guibg=NONE ctermbg=NONE
