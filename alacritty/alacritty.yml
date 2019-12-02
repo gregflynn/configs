@@ -1,5 +1,5 @@
-#env:
-    #TERM: screen-256color
+env:
+    TERM: screen-256color
 
 window:
   dimensions:
