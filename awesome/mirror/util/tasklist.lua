@@ -7,9 +7,7 @@ local display         = require("util/display")
 local FontIcon        = require("util/fonticon")
 local SanityContainer = require("util/sanitycontainer")
 
-local colors = beautiful.colors
-local dpi    = beautiful.xresources.apply_dpi
-
+local colors                 = beautiful.colors
 local client_color           = colors.gray
 local client_focus_color     = colors.yellow
 local client_minimized_color = colors.purple

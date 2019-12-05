@@ -54,6 +54,20 @@ tag.connect_signal("property::layout", function(t)
     end
 end)
 
+tag.connect_signal('request::screen', function(t)
+    for s in screen do
+        if s ~= t.screen then
+            local t2 = awful.tag.find_by_name(s, t.name)
+            if t2 then
+                t:swap(t2)
+            else
+                t.screen = s
+            end
+            return
+        end
+    end
+end)
+
 client.connect_signal("manage", function(c)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
@@ -219,3 +233,9 @@ end)
 -- https://bbs.archlinux.org/viewtopic.php?pid=1106376#p1106376
 client.connect_signal("property::geometry", save_geometry)
 client.connect_signal("unmanage", function(c) client_geos[c.window] = nil end)
+
+screen.connect_signal('primary_changed', function(s)
+    -- to avoid all tags being active on the new screen after the tag screen
+    -- handler swaps all the tags to the new screen
+    awful.tag.viewidx(0, s)
+end)
