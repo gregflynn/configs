@@ -21,7 +21,7 @@ function text.trim_after(str, trim_char, max_len)
     end
 end
 
--- Trim a string before the first occurance of a certain character
+-- Trim a string before the first occurrence of a certain character
 -- @returns the truncated string
 function text.trim_before(str, trim_char)
     local trim_loc = text.find(str, trim_char)

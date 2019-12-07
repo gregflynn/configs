@@ -2,6 +2,10 @@ local gears = require("gears")
 local awful = require("awful")
 
 
+local minimize_instead_of_kill = {
+    'Slack'
+}
+
 clientkeys = gears.table.join(
     awful.key(
         {modkey, shift}, "f", function(c)
@@ -11,8 +15,16 @@ clientkeys = gears.table.join(
         {description = "Fullscreen", group = "client"}
     ),
     awful.key(
-        {modkey}, "q", function(c) c:kill() end,
-        {description = "Quit", group = "client"}
+        {modkey}, 'q', function(c)
+            for _, class in ipairs(minimize_instead_of_kill) do
+                if c.class == class then
+                    c.minimized = true
+                    return
+                end
+            end
+            c:kill()
+        end,
+        {description = 'Quit', group = 'client'}
     ),
     awful.key(
         {modkey, shift}, "c", function(c)

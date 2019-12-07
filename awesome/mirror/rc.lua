@@ -44,8 +44,8 @@ awful.rules.rules = require('rules')
 --
 -- Services
 --
-local brightness_service = require("services/brightness")
-local rofi_service       = require("services/rofi")
+local brightness_service = require("util/brightness")
+local rofi_service       = require("util/rofi")
 
 --
 -- Screen setup
@@ -85,6 +85,7 @@ awful.screen.connect_for_each_screen(function(screen)
             require("widgets/net"),
             volume,
             require("widgets/battery"),
+            require('widgets/slack'),
             require("widgets/tray"),
             require("widgets/weather"),
             require("widgets/clock"),
