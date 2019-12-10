@@ -14,7 +14,6 @@ alias open='xdg-open'
 alias dict='sdcv'
 alias xmds="xmodmap $__dotsan__home/x11/xmodmap"
 alias ds='dotsan'
-alias reload='dotsan reload'
 alias clip='xsel -i --clipboard'
 
 bl() {

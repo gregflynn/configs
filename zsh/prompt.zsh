@@ -152,6 +152,17 @@ _prompt_host() {
     fi
 }
 
+_prompt_input_mode() {
+    case "$KEYMAP" in
+        vicmd)
+            echo -n "$_YELLOW NORMAL"
+        ;;
+        viins|main)
+            echo -n "$_BLUE INSERT"
+        ;;
+    esac
+}
+
 if [[ $(tty) == /dev/pts/* ]]; then
     if [[ "$ZSH_VERSION" == "" ]]; then
         ME="$(whoami)"
@@ -171,9 +182,10 @@ $(_prompt_userpath)$(_prompt_git)$(_prompt_venv)
 
 \[$prompt_color\]bash $__right$__right$__right '
     else
-    PROMPT='
+        PROMPT='
 %{$reset_color%}$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)%{$reset_color%}
 
 $(_prompt_carrot) '
+        RPROMPT='$(_prompt_input_mode)'
     fi
 fi

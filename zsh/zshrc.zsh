@@ -21,11 +21,13 @@ setopt hist_verify            # show command with history expansion to user befo
 setopt inc_append_history     # add commands to HISTFILE in order of execution
 setopt share_history          # share command history data
 
-bindkey -e
+bindkey -v
+export KEYTIMEOUT=1
 export PATH=/usr/local/bin:$PATH
 
 source '{ANTIGEN_INSTALL}'
 antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle woefe/vi-mode.zsh
 antigen apply
 
 # completions
