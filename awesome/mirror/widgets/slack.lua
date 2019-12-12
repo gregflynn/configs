@@ -42,7 +42,9 @@ function slack_update()
 
     if not slack_client then
         set_slack_color(colors.gray)
+        slack_container:hide()
     else
+        slack_container:show()
         local name_parts = text.split(slack_client.name, '|')
         local title = text.trim(name_parts[2])
         local slack_notification = title:sub(1, 1)

@@ -13,6 +13,8 @@ local client_focus_color     = colors.yellow
 local client_minimized_color = colors.purple
 local client_previous_color  = colors.white
 
+local client_width = 75
+
 --
 -- Function for when you click on a client in the task bar
 --
@@ -41,11 +43,14 @@ local function create_client_window_icon()
 
     local client_icon = wibox.widget.imagebox()
     local client_fonticon = FontIcon()
+    local client_name = wibox.widget.textbox()
+    client_name.forced_width = client_width
 
     local container = SanityContainer {
         widget = wibox.widget {
             layout = wibox.layout.fixed.horizontal,
-            icon_container
+            icon_container,
+            client_name
         },
         left = true,
     }
@@ -66,19 +71,14 @@ local function create_client_window_icon()
         client_fonticon:update(name or display.get_default_client_icon(), color)
     end
 
+    function container.set_name(name, color)
+        client_name:set_markup_silently(string.format(
+            '<span color="%s">%s</span>', color, name
+        ))
+    end
+
     return container
 end
-
---local focused_client_fonticon = FontIcon()
-local focused_client_name = wibox.widget.textbox()
-local focused_client_container_fonticon = SanityContainer {
-    widget = wibox.widget {
-        layout = wibox.layout.fixed.horizontal,
-        --focused_client_fonticon,
-        focused_client_name
-    },
-    left = true,
-}
 
 local function create_update_function(s)
     local function update_func(window_list, buttons, label, data, clients)
@@ -118,34 +118,9 @@ local function create_update_function(s)
                 container.set_icon(client_icon, color)
             end
 
+            container.set_name(c.name, color)
             container:buttons(awful.widget.common.create_buttons(buttons, c))
             container:set_tooltip(string.format('%s (%s)', c.name, c.class))
-            window_list:add(container)
-        end
-
-        -- focused client
-        if client.focus then
-            local client_name = client.focus.name
-            local color = client_focus_color
-
-            local container = focused_client_container_fonticon
-
-            -- update the client name and only show if it's focused or last
-            if client_name then
-                focused_client_name:set_markup_silently(string.format(
-                    '<span color="%s">%s</span>',
-                    color, client_name
-                ))
-            end
-
-            -- update the tooltip
-            container:set_tooltip(string.format('%s (%s)', client_name, client.focus.class))
-
-            -- update the container color
-            container:set_color(color == client_color and colors.background or color)
-
-            container:buttons(awful.widget.common.create_buttons(buttons, client.focus))
-
             window_list:add(container)
         end
     end

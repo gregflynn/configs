@@ -73,6 +73,21 @@ function factory(args)
         SanityContainer.globalkeys = globalkeys
     end
 
+    --
+    -- Visibility
+    --
+    function SanityContainer:toggle()
+        SanityContainer.visible = not SanityContainer.visible
+    end
+
+    function SanityContainer:show()
+        SanityContainer.visible = true
+    end
+
+    function SanityContainer:hide()
+        SanityContainer.visible = false
+    end
+
     return SanityContainer
 end
 
