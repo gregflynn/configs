@@ -186,6 +186,6 @@ $(_prompt_userpath)$(_prompt_git)$(_prompt_venv)
 %{$reset_color%}$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)%{$reset_color%}
 
 $(_prompt_carrot) '
-        RPROMPT='$(_prompt_input_mode)'
+        RPROMPT='$(_prompt_input_mode)%{$reset_color%}'
     fi
 fi
