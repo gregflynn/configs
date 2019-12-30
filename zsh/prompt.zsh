@@ -19,8 +19,16 @@ else
     _WHITE="%{$fg[white]%}"
 fi
 
+_get_user() {
+    if [[ "$ME" != "" ]]; then
+        echo -n "$ME"
+    else
+        echo -n "$USER"
+    fi
+}
+
 _is_root() {
-    if [[ "$ME" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
+    if [[ "$(_get_user)" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
         return 0
     else
         return 1
@@ -37,7 +45,7 @@ _is_ssh() {
 
 _prompt_userpath() {
     local user_color="$_BLUE"
-    local me="$ME"
+    local me="$(_get_user)"
 
     # check for superuser
     if _is_root; then
