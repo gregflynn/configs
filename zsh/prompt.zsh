@@ -143,6 +143,11 @@ _prompt_carrot() {
     if _is_root; then
         color="$_RED"
     fi
+    case "$KEYMAP" in
+        vicmd)
+            color="$_BLUE"
+        ;;
+    esac
     echo -n "$color$__right$__right$__right"
 }
 
@@ -150,17 +155,6 @@ _prompt_host() {
     if _is_ssh; then
         echo -n "$_YELLOW$(hostname) "
     fi
-}
-
-_prompt_input_mode() {
-    case "$KEYMAP" in
-        vicmd)
-            echo -n "$_YELLOW NORMAL"
-        ;;
-        viins|main)
-            echo -n "$_BLUE INSERT"
-        ;;
-    esac
 }
 
 if [[ $(tty) == /dev/pts/* ]]; then
@@ -186,6 +180,5 @@ $(_prompt_userpath)$(_prompt_git)$(_prompt_venv)
 %{$reset_color%}$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)%{$reset_color%}
 
 $(_prompt_carrot) '
-        RPROMPT='$(_prompt_input_mode)%{$reset_color%}'
     fi
 fi
