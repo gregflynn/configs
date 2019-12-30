@@ -6,8 +6,8 @@ window:
     columns: 100
     lines: 36
   padding:
-    x: 7
-    y: 2
+    x: 10
+    y: 10
   decorations: full
 
 scrolling:
