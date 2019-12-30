@@ -63,6 +63,7 @@ hi link GitGutterDelete Define
 hi link GitGutterChangeDelete Define
 let g:gitgutter_sign_modified = '>'
 let g:gitgutter_sign_modified_removed = '>'
+set signcolumn=yes
 
 " Key mappings
 :let mapleader = "\\"
