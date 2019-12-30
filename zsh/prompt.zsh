@@ -20,7 +20,7 @@ else
 fi
 
 _is_root() {
-    if [[ "$USER" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
+    if [[ "$ME" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
         return 0
     else
         return 1
