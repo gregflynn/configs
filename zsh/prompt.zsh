@@ -54,7 +54,7 @@ _prompt_userpath() {
     fi
 
     if [[ "$me" != "" ]]; then
-        echo -n " $user_color$me "
+        echo -n "$user_color$__right $me "
     fi
 
     # print host on ssh
