@@ -37,7 +37,7 @@ _is_ssh() {
 
 _prompt_userpath() {
     local user_color="$_BLUE"
-    local me="$USER"
+    local me="$ME"
 
     # check for superuser
     if _is_root; then
