@@ -19,16 +19,8 @@ else
     _WHITE="%{$fg[white]%}"
 fi
 
-_get_user() {
-    if [[ "$ME" != "" ]]; then
-        echo -n "$ME"
-    else
-        echo -n "$USER"
-    fi
-}
-
 _is_root() {
-    if [[ "$(_get_user)" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
+    if [[ "$(whoami)" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
         return 0
     else
         return 1
@@ -44,8 +36,13 @@ _is_ssh() {
 }
 
 _prompt_userpath() {
+    # check our shell name
+    if [[ "$ZSH_VERSION" == "" ]]; then
+        echo -n "$_YELLOW$__right bash "
+    fi
+
     local user_color="$_BLUE"
-    local me="$(_get_user)"
+    local me="$(whoami)"
 
     # check for superuser
     if _is_root; then
@@ -167,13 +164,11 @@ _prompt_host() {
 
 if [[ $(tty) == /dev/pts/* ]]; then
     if [[ "$ZSH_VERSION" == "" ]]; then
-        ME="$(whoami)"
-
         # resets the color _after_ the user input
         normalcol="$(tput sgr0)"
         trap 'echo -n "$normalcol"' DEBUG
 
-        if [ "$ME" == "root" ]; then
+        if [ "$(whoami)" == "root" ]; then
             prompt_color=$'\e[31m'
         else
             prompt_color=$'\e[33m'
@@ -182,7 +177,7 @@ if [[ $(tty) == /dev/pts/* ]]; then
         PS1=$'
 $(_prompt_userpath)$(_prompt_git)$(_prompt_venv)
 
-\[$prompt_color\]bash $__right$__right$__right '
+\[$prompt_color\]$__right$__right$__right '
     else
         PROMPT='
 %{$reset_color%}$(_prompt_userpath)$(_prompt_git)$(_prompt_venv)%{$reset_color%}
