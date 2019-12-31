@@ -40,6 +40,10 @@ let g:netrw_winsize = 20
 map <C-\> :Lexplore<cr>
 
 " syntax highlighting setup
+" set Vim-specific sequences for RGB colors
+" https://github.com/vim/vim/issues/993
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 syntax enable
 :silent! set termguicolors
 :silent! colorscheme monokai_pro
