@@ -31,6 +31,9 @@ function __pac__help {
         $(__pac__hl help)
             - show this help message
 
+        $(__pac__hl news)
+            - show the latest news posts
+
         $(__pac__hl install) $opt_pkgs
             - install one or more packages from the official repositories
 
@@ -90,6 +93,7 @@ function __pac {
         search)  __pac__search  "$pkgs" ;;
         update)  __pac__update  ;;
         web)     __pac__web     "$pkgs";;
+        news)    __pac__news    ;;
         *)       __pac__help    ;;
     esac
 }
@@ -102,6 +106,11 @@ function __pac {
 
 function __pac__pm {
     sudo pacman --color auto $@
+}
+
+
+function __pac__news {
+    curl -s -o - https://www.archlinux.org/feeds/news/ | python $__dotsan__home/pacman/arch_news.py
 }
 
 
