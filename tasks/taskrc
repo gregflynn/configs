@@ -43,6 +43,10 @@ urgency.project.coefficient=0
 urgency.tags.coefficient=0
 urgency.active.coefficient=10
 
+uda.priority.default=M
+uda.priority.type=string
+uda.priority.label=Priority
+uda.priority.values=H,M,L
 urgency.uda.priority.H.coefficient=6.0
 urgency.uda.priority.M.coefficient=0
 urgency.uda.priority.L.coefficient=-1
