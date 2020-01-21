@@ -148,11 +148,6 @@ _prompt_carrot() {
     if _is_root; then
         color="$_RED"
     fi
-    case "$KEYMAP" in
-        vicmd)
-            color="$_BLUE"
-        ;;
-    esac
     echo -n "$color$__right$__right$__right"
 }
 
