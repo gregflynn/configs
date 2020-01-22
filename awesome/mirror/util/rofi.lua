@@ -11,7 +11,7 @@ end
 -- Program launcher mode for Rofi
 --
 function rofi:run()
-    rofi_show("drun")
+    rofi_show("drun -drun-show-actions")
 end
 
 --

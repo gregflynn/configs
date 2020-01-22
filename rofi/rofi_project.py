@@ -27,21 +27,27 @@ COMMAND_HANDLERS = {
     'charm': pycharm,
     'pycharm': pycharm
 }
+ROFI_OPTIONS = [
+    'rofi', '-dmenu',
+    '-matching', 'fuzzy',
+]
+
+
+def rofi(prompt, options, message):
+    options = b'\n'.join(k.encode() for k in options)
+    return check_output(
+        ROFI_OPTIONS + ['-p', prompt, '-mesg', message],
+        input=options
+    ).decode('utf8').strip() or ''
 
 
 def main():
     db = load_projects()
-
-    options = b'\n'.join(k.encode() for k in db.keys())
-    rofi_output = check_output(
-        ['rofi', '-dmenu', '-p', 'Open Project'],
-        input=options
-    ).decode('utf8').strip() or ''
+    command = None
+    rofi_output = rofi('Open Project', db.keys(), 'Add: +name;command')
 
     if not rofi_output:
         return
-
-    command = None
 
     if rofi_output.startswith(ADD_PROJECT_PREFIX):
         rofi_output = rofi_output.replace(ADD_PROJECT_PREFIX, '')
@@ -70,7 +76,7 @@ def load_projects():
 def save_projects(db):
     with open(PROJECT_DB_LOCATION, 'w') as f:
         f.write(json.dumps(db))
-        
+
 
 if __name__ == '__main__':
     main()
