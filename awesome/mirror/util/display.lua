@@ -23,6 +23,8 @@ local window_icon_overrides = {
     ["Slack"]                            = "\u{f198}",
     ["Steam"]                            = "\u{f1b6}",
     ["Thunar"]                           = "\u{f413}",
+    ["VirtualBox"]                       = "\u{fcbe}",
+    ["VirtualBox Manager"]               = "\u{fcbe}",
 }
 local window_icon_fallback = "\u{fb13}"
 
