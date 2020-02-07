@@ -60,7 +60,7 @@ __sys__help() {
 __sys() {
     case $1 in
         help) __sys__help ;;
-        log)  __sys__log  ;;
+        log)  __sys__log $2 ;;
         last) sudo journalctl --boot=-1 ;;
         list) __sys__list $2 ;;
         start)

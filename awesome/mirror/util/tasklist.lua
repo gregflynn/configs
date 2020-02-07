@@ -73,7 +73,7 @@ local function create_client_window_icon()
 
     function container.set_name(name, color)
         client_name:set_markup_silently(string.format(
-            '<span color="%s">%s</span>', color, name
+            '<span color="%s">%s</span>', color, name or ""
         ))
     end
 

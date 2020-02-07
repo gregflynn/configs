@@ -19,6 +19,7 @@ local window_icon_overrides = {
     ["Google Play Music Desktop Player"] = "\u{f001}",
     ["Lollypop"]                         = "\u{f001}",
     ["Mousepad"]                         = "\u{f40e}",
+    ["plexmediaplayer"]                  = "\u{fbb8}",
     ["Polari"]                           = "\u{f869}",
     ["Slack"]                            = "\u{f198}",
     ["Steam"]                            = "\u{f1b6}",
