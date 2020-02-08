@@ -124,7 +124,7 @@ __dock__down() {
 
 __dock__edit() {
     # edit the current docker compose
-    vim -c ":lcd %:p:h" docker-compose.y*
+    vim docker-compose.y*
 }
 
 
