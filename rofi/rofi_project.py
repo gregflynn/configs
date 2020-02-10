@@ -44,7 +44,7 @@ def rofi(prompt, options, message):
 def main():
     db = load_projects()
     command = None
-    rofi_output = rofi('Open Project', db.keys(), 'Add: +name;command')
+    rofi_output = rofi('project', db.keys(), 'Add: +name;command')
 
     if not rofi_output:
         return

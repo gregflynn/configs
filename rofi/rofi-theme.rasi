@@ -11,7 +11,6 @@
 }
 
 window {
-    background-color: @background;
     padding: 0;
 }
 
@@ -25,28 +24,27 @@ mainbox {
 //
 inputbar {
     background-color: @background;
-    padding: 20px;
-    border: 0 0 2px 0;
-    border-color: @yellow;
-    children: [textbox-prompt-colon, entry, prompt];
+    children: [prompt, textbox-prompt-colon, entry];
 }
 
 prompt {
-    background-color: @background;
-    text-color: @purple;
+    background-color: @purple;
+    text-color: @background;
+    padding: 20px;
 }
 
 entry {
     background-color: @background;
-    text-color: @yellow;
+    text-color: @purple;
+    padding: 20px 0 20px 0;
 }
 
 textbox-prompt-colon {
     background-color: @background;
     expand:     false;
-    str:        "";
-    margin:     0 0.2em 0 0;
-    text-color: @yellow;
+    str:        "";
+    text-color: @purple;
+    padding: 20px;
 }
 
 //
@@ -73,40 +71,33 @@ listview {
     background-color: @background;
     text-color: @white;
     fixed-height: false;
-    spacing: 2px ;
-    padding: 20px;
+    spacing: 4px;
+    padding: 10px 0 10px 0;
     dynamic: true;
-    lines: 7;
+    lines: 10;
 }
 
 element {
     // A single item in the listview
+    border: 0 0 0 8px;
     background-color: @background;
-    padding: 10px ;
+    padding: 10px 0 10px 15px;
 }
 
 element.normal.normal, element.alternate.normal {
-    background-color: @background;
     text-color: @white;
 }
 
-element.selected.normal {
-    background-color: @purple;
-    text-color: @white;
+element.selected.normal, element.selected.active, element.selected.urgent {
+    text-color: @purple;
+    border-color: @purple;
 }
 
 element.normal.active, element.alternate.active {
     text-color: @green;
 }
-element.selected.active {
-    background-color: @purple;
-    text-color: @white;
-}
 
 element.normal.urgent, element.alternate.urgent {
     text-color: @red;
-}
-element.selected.urgent {
-    background-color: @purple;
-    text-color: @red;
+    border-color: @red;
 }
