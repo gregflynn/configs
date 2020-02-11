@@ -17,6 +17,8 @@ window {
 mainbox {
     background-color: @background;
     padding: 0;
+    border: 4px;
+    border-color: @yellow;
 }
 
 //
@@ -28,14 +30,14 @@ inputbar {
 }
 
 prompt {
-    background-color: @purple;
+    background-color: @yellow;
     text-color: @background;
     padding: 20px;
 }
 
 entry {
     background-color: @background;
-    text-color: @purple;
+    text-color: @yellow;
     padding: 20px 0 20px 0;
 }
 
@@ -43,7 +45,7 @@ textbox-prompt-colon {
     background-color: @background;
     expand:     false;
     str:        "";
-    text-color: @purple;
+    text-color: @yellow;
     padding: 20px;
 }
 
@@ -88,16 +90,25 @@ element.normal.normal, element.alternate.normal {
     text-color: @white;
 }
 
-element.selected.normal, element.selected.active, element.selected.urgent {
-    text-color: @purple;
-    border-color: @purple;
+element.selected.normal {
+    text-color: @yellow;
+    border-color: @yellow;
 }
 
 element.normal.active, element.alternate.active {
     text-color: @green;
 }
 
+element.selected.active {
+    text-color: @green;
+    border-color:  @green;
+}
+
 element.normal.urgent, element.alternate.urgent {
+    text-color: @red;
+}
+
+element.selected.urgent {
     text-color: @red;
     border-color: @red;
 }

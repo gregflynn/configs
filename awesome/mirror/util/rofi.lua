@@ -7,6 +7,10 @@ local function rofi_show(show)
     awful.spawn("rofi -show "..show.." -scroll-method 1 -matching normal")
 end
 
+local function rofi_script(script_name)
+    awful.spawn({"python3", beautiful.dotsan_home.."/rofi/"..script_name})
+end
+
 --
 -- Program launcher mode for Rofi
 --
@@ -53,14 +57,22 @@ end
 -- Web Search
 --
 function rofi:websearch()
-    awful.spawn({ "python3", beautiful.dotsan_home.."/rofi/rofi_search.py" })
+    rofi_script("rofi_search.py")
 end
 
 --
 -- Project Manager
 --
 function rofi:projects()
-    awful.spawn({ "python3", beautiful.dotsan_home.."/rofi/rofi_project.py" })
+    rofi_script("rofi_project.py")
+end
+
+function rofi:network()
+    rofi_script("rofi_network.py")
+end
+
+function rofi:vpn()
+    awful.spawn({"bash", beautiful.dotsan_home.."/rofi/rofi_vpn.sh"})
 end
 
 return rofi
