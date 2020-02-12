@@ -7,14 +7,13 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return [
             'awesome',
-            'gpmdp',
             'lain-git',
             'vicious',
             'redshift',
             'flameshot',
             'peek',
             'xsel',
-            'rofimoji-git'
+            'rofi'
         ]
 
     @property

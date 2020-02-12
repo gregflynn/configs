@@ -4,23 +4,20 @@ local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
 
-local music           = require('util/music')
 local FontIcon        = require('util/fonticon')
 local SanityContainer = require('util/sanitycontainer')
-local gpmdp           = require('widgets/gpmdp')
+local Pie             = require('util/pie')
 
 local colors = beautiful.colors
 local dpi    = beautiful.xresources.apply_dpi
-
 
 local font_icon_headphones = "\u{f7ca}"
 local font_icon_mute = "\u{fc5d}"
 local font_icon_low = "\u{f026}"
 local font_icon_med = "\u{f027}"
 local font_icon_high = "\u{f028}"
-local icon_running_paused = '\u{f04c}'
-local icon_running_playing = '\u{f001}'
 local fg_color = colors.blue
+local vol_pie = Pie { colors = {fg_color}, thickness = 4}
 
 local icon = FontIcon {icon = font_icon_med, color = fg_color}
 local volume = lain.widget.pulsebar {
@@ -45,18 +42,11 @@ local volume = lain.widget.pulsebar {
     tick_post = "\u{e0b0}",
     tick_none = " "
 }
-local shape = function(cr, w, h)
-    gears.shape.rounded_rect(cr, w, h, dpi(5))
-end
-volume.bar.shape = shape
-volume.bar.bar_shape = shape
-volume.tooltip:remove_from_object(volume.bar)
 
 local menu = awful.menu({
     theme = { width = 140 },
     items = {
         {'Volume Control', function() awful.spawn('pavucontrol') end},
-        {'Google Play Music', function() awful.spawn('gpmdp') end},
         {'Bluetooth', function() awful.spawn('blueberry') end}
     }
 })
@@ -65,7 +55,7 @@ volume_container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
         icon,
-        wibox.container.margin(volume.bar, dpi(0), dpi(0), dpi(4), dpi(4)),
+        vol_pie,
     },
     color = fg_color,
     buttons = gears.table.join(
@@ -100,45 +90,35 @@ volume_container = SanityContainer {
 }
 
 function update_volume(volume_now)
-    music.get_current_track(function(current)
-        local is_muted = volume_now.muted == 'yes'
+    local is_muted = volume_now.muted == 'yes'
 
-        -- tooltips
-        local vol_tooltip = 'Muted'
-        if not is_muted then
-            local level = tonumber(volume_now.left)
-            vol_tooltip = string.format('Speakers: %s%%', level)
-        end
+    -- tooltips
+    local vol_tooltip = 'Muted'
+    if is_muted then
+        icon:update(font_icon_mute, fg_color)
+        vol_pie:update(0)
+    else
+        local level = tonumber(volume_now.left)
+        local level_icon = font_icon_high
+        vol_tooltip = string.format('Speakers: %s%%', level)
 
-        if current then
-            local music_tooltip = gpmdp.get_tooltip(current)
-            volume_container:set_markup(string.format('%s\n\n%s', vol_tooltip, music_tooltip))
-
-            
-        else
-            volume_container:set_markup(vol_tooltip)
-        end
-        
-        -- icon
-        if is_muted then
-            icon:update(font_icon_mute, fg_color)
-        else
-            if current then
-                if current.playing then
-                    icon:update(icon_running_playing, fg_color)
-                else
-                    icon:update(icon_running_paused, fg_color)
-                end
-            else
-                icon:update(font_icon_high, fg_color)
+        if volume_now.device == 'front:0' then
+            -- default speaker device
+            if level <= 30 then
+                level_icon = font_icon_low
+            elseif level <= 70 then
+                level_icon = font_icon_med
             end
+        else
+            -- assume anything else is bluetooth headphones
+            level_icon = font_icon_headphones
         end
-        
-        -- notifications
-        if current then
-            gpmdp.update_notification(current)
-        end
-    end)
+
+        icon:update(level_icon, fg_color)
+        vol_pie:update(level / 100)
+    end
+
+    volume_container:set_markup(vol_tooltip)
 end
 
 return volume_container
