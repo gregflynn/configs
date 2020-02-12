@@ -1,81 +1,42 @@
+local awful     = require('awful')
 local beautiful = require('beautiful')
 local wibox     = require('wibox')
 
-local lain    = require('lain')
 local vicious = require('vicious')
 
-local number          = require('util/number')
 local text            = require('util/text')
 local Pie             = require('util/pie')
 local SanityContainer = require('util/sanitycontainer')
 local Graph           = require('util/graph')
-local FontIcon        = require("util/fonticon")
 
 local colors = beautiful.colors
-local markup = lain.util.markup
 local color = colors.purple
 
+local root_pie = Pie { colors = {color}, }
+local boot_pie = Pie { colors = {color}, }
 
-local function create_storage_command(grep)
-    return string.format("df -B1 %s | tail -n 1 | awk '{ print $2,$3,$4 }'", grep)
-end
+awful.widget.watch(
+        {awful.util.shell, "-c", "df -B1 | tail -n +2 | awk '{ print $6,$5 }'"},
+        5,
+        function(_, stdout)
+            -- stdout is all drives, "mount pct"
+            local boot_pct = "?%"
+            local root_pct = "?%"
 
-local function notif_row(label, bytes, color, pct)
-    return string.format(
-        '%s: %s %s',
-        markup.bold(text.pad(label, 6)),
-        markup.fg.color(color, text.pad(number.human_bytes(bytes), 7)),
-        pct and string.format("(%s%%)", pct) or ""
-    )
-end
+            for _, df in ipairs(text.split(stdout, '\n')) do
+                local dfParts = text.split(df)
 
-local disks = {
-    ['root'] = 0,
-    ['boot'] = 0,
-}
+                if dfParts[1] == '/boot' then
+                    boot_pct = dfParts[2]
+                elseif dfParts[1] == '/' then
+                    root_pct = dfParts[2]
+                end
+            end
 
-local function parse_command(stdout, disk)
-    local split       = text.split(stdout)
-    local total_bytes = tonumber(split[1])
-    local used_bytes  = tonumber(split[2])
-    local free_bytes  = tonumber(split[3])
-
-    local used_raw_pct = used_bytes / total_bytes
-    local pct_used     = number.round(used_raw_pct * 100, 1)
-    local pct_free     = number.round(100 * free_bytes / total_bytes, 1)
-
-    disks[disk] = used_raw_pct
-    update_tooltip()
-
-    return {
-        values              = {used_raw_pct},
-        notification_preset = {
-            text = string.format(
-                "%s\n%s\n%s",
-                notif_row("Free", free_bytes, colors.green, pct_free),
-                notif_row("Used", used_bytes, colors.red, pct_used),
-                notif_row("Total", total_bytes, colors.blue)
-            )
-        }
-    }
-end
-
--- kept to update the tooltip
-local boot_pie = Pie {
-   notification_title = "boot",
-   command = create_storage_command("/boot"),
-   parse_command = function(stdout) return parse_command(stdout, 'boot') end,
-   colors = {color},
-   bg_color = colors.background,
-}
-
-local root_pie = Pie {
-    notification_title = "root",
-    command = create_storage_command("/"),
-    parse_command = function(stdout) return parse_command(stdout, 'root') end,
-    colors = {color},
-    bg_color = colors.background,
-}
+            root_pie:update(tonumber(string.sub(root_pct, 1, -2)) / 100)
+            boot_pie:update(tonumber(string.sub(boot_pct, 1, -2)) / 100)
+            update_tooltip(boot_pct, root_pct)
+        end)
 
 local disk_load_widget = Graph {color = color}
 disk_load_widget.scale = true
@@ -84,17 +45,17 @@ vicious.register(disk_load_widget, vicious.widgets.dio, "${nvme0n1 total_kb}")
 local container = SanityContainer {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        FontIcon {icon = "\u{f6b7}", color = color},
-        --root_pie.container,
+        root_pie,
+        boot_pie,
         disk_load_widget.container
     },
     color = color
 }
 
-function update_tooltip()
-    local fmt = '%s: %s%% Used'
-    local root = string.format(fmt, 'root', number.round(disks['root'] * 100, 1))
-    local boot = string.format(fmt, 'boot', number.round(disks['boot'] * 100, 1))
+function update_tooltip(boot_pct, root_pct)
+    local fmt = '%s: %s Used'
+    local root = string.format(fmt, 'root', root_pct)
+    local boot = string.format(fmt, 'boot', boot_pct)
     container:set_tooltip_color(string.format('%s\n%s', root, boot))
 end
 

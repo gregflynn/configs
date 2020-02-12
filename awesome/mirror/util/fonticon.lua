@@ -26,17 +26,16 @@ function factory(args)
 
     FontIcon:update(icon, color)
 
-    local container = wibox.container.margin(
+    local font_icon_container = wibox.container.margin(
         FontIcon, margin_h, margin_h, margin_v, margin_v
     )
 
-    function container:update(icon, color)
+    function font_icon_container:update(icon, color)
         FontIcon:update(icon, color)
     end
 
-    container.font_icon = FontIcon
-    return container
+    font_icon_container.font_icon = FontIcon
+    return font_icon_container
 end
-
 
 return factory

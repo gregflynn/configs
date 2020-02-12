@@ -23,6 +23,7 @@ local vpn_icon      = FontIcon { icon = "\u{f983}", color = color }
 local network_icon  = FontIcon { icon = no_connection, color = colors.white }
 local network_graph = Graph {stack_colors = {color, colors.red}}
 network_graph.scale = true
+vpn_icon.visible = false
 
 local container = SanityContainer {
     widget = wibox.widget {
