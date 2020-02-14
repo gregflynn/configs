@@ -56,6 +56,7 @@ battery.lain_widget = lain.widget.bat {
             return
         end
 
+        local tooltip
         if bat_now.status == 'Full' then
             tooltip = 'Full'
         elseif bat_now.status == 'Charging' then
@@ -65,7 +66,7 @@ battery.lain_widget = lain.widget.bat {
         else
             tooltip = 'N/A'
         end
-        battery.sanitycontainer:set_tooltip(tooltip)
+        battery.sanitycontainer:set_tooltip_color('Battery', tooltip)
 
         widget.visible = bat_now.perc < 100
 
@@ -85,7 +86,6 @@ battery.sanitycontainer = SanityContainer {
         battery.font_icon,
         battery.lain_widget.widget
     },
-    tooltip = '',
     color   = colors.yellow
 }
 

@@ -69,10 +69,11 @@ local function update_network_tooltip(network, up, down, wifi_signal)
         elseif wifi_signal <= -100 then quality = 0
         else                            quality = 2 * (wifi_signal + 100) end
         signal = string.format('%s%% (%s dBm)', quality, wifi_signal)
+        network = string.format('SSID: %s', network)
     end
 
-    container:set_tooltip_color(string.format(
-        'Network: %s%s\n%s \u{f63b} %s \u{f63e}', network, signal, down, up
+    container:set_tooltip_color('Network', string.format(
+        '%s%s\n%s \u{f63b} %s \u{f63e}', network, signal, down, up
     ))
 end
 

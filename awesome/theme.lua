@@ -14,6 +14,7 @@ local font_name = "Hack Nerd Font Mono"
 
 local colors = {
     background = "#{DS_BACKGROUND}",
+    black      = "#{DS_BLACK}",
     blue       = "#{DS_BLUE}",
     green      = "#{DS_GREEN}",
     gray       = "#{DS_GRAY}",
@@ -29,7 +30,7 @@ local theme = {
     dotsan_home   = dotsan_home,
     lock_script   = lock_script,
     colors        = colors,
-    bar_height    = dpi(26),
+    bar_height    = dpi(28),
     bar_opacity   = 1.0,
     border_width  = dpi(3),
     widget_space  = dpi(5),

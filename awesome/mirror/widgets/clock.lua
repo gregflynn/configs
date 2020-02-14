@@ -85,7 +85,7 @@ function clock_update()
     local icon = clock_map[now:format('%I')]
     clock_icon:update(icon, text_color)
     clock:set_markup(markup.fg.color(text_color, now:format(clock_fmt)))
-    clock_container:set_tooltip_color(now:format(tooltip_fmt))
+    clock_container:set_tooltip_color('Time / Date', now:format(tooltip_fmt))
     timer.timeout = calc_timeout()
     timer:again()
     return true

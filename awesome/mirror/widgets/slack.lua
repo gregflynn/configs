@@ -40,10 +40,17 @@ local timer
 function slack_update()
     local slack_client = get_slack_client()
 
-    if not slack_client then
+    function hide_slack()
         set_slack_color(colors.gray)
         slack_container:hide()
+    end
+
+    if not slack_client then
+        hide_slack()
     else
+        if not slack_client.name then
+            hide_slack()
+        end
         slack_container:show()
         local name_parts = text.split(slack_client.name, '|')
         local title = text.trim(name_parts[2])

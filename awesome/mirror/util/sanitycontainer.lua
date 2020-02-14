@@ -46,7 +46,6 @@ function factory(args)
     if not no_tooltip then
         SanityContainer.tooltip = awful.tooltip {
             objects = {SanityContainer},
-            text = tooltip
         }
 
         function SanityContainer:set_tooltip(text)
@@ -57,9 +56,15 @@ function factory(args)
             SanityContainer.tooltip:set_markup(markup)
         end
 
-        function SanityContainer:set_tooltip_color(text)
-            SanityContainer:set_markup(markup.fg.color(color, text))
+        function SanityContainer:set_tooltip_color(title, text)
+            local body = markup.big(title)
+            if text then
+                body = string.format('%s \n\n%s', body, text)
+            end
+            SanityContainer:set_markup(markup.fg.color(color, body))
         end
+
+        SanityContainer:set_tooltip_color(tooltip)
     end
 
     --

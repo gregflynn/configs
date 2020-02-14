@@ -4,6 +4,7 @@ local beautiful = require("beautiful")
 local wibox     = require("wibox")
 local gears     = require("gears")
 
+local text            = require('util/text')
 local FontIcon        = require('util/fonticon')
 local SanityContainer = require('util/sanitycontainer')
 local Pie             = require('util/pie')
@@ -17,7 +18,7 @@ local font_icon_low = "\u{f026}"
 local font_icon_med = "\u{f027}"
 local font_icon_high = "\u{f028}"
 local fg_color = colors.blue
-local vol_pie = Pie { colors = {fg_color}, thickness = 4}
+local vol_pie = Pie { color = fg_color, thickness = 4}
 
 local icon = FontIcon {icon = font_icon_med, color = fg_color}
 local volume = lain.widget.pulsebar {
@@ -93,16 +94,17 @@ function update_volume(volume_now)
     local is_muted = volume_now.muted == 'yes'
 
     -- tooltips
-    local vol_tooltip = 'Muted'
+    local state = 'Muted'
+    local device = volume_now.device
     if is_muted then
         icon:update(font_icon_mute, fg_color)
         vol_pie:update(0)
     else
         local level = tonumber(volume_now.left)
         local level_icon = font_icon_high
-        vol_tooltip = string.format('Speakers: %s%%', level)
+        state = string.format('On: %s%%', level)
 
-        if volume_now.device == 'front:0' then
+        if text.split(device, ':')[1] == 'front' then
             -- default speaker device
             if level <= 30 then
                 level_icon = font_icon_low
@@ -118,7 +120,7 @@ function update_volume(volume_now)
         vol_pie:update(level / 100)
     end
 
-    volume_container:set_markup(vol_tooltip)
+    volume_container:set_tooltip_color('Volume', string.format('%s %s', device, state))
 end
 
 return volume_container

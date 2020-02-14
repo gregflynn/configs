@@ -37,8 +37,6 @@ local icon_map = {
     ["50n"] = "\u{e35d}",
 }
 
--- local tooltip = awful.tooltip {}
-
 local weather = lain.widget.weather {
     city_id = city_id,
     units = 'imperial',
@@ -50,7 +48,7 @@ local weather = lain.widget.weather {
         local description = weather_now["weather"][1]["description"]
 
         widget:set_markup(markup.fg.color(color, string.format('%d°F', current_temp)))
-        weather_container:set_tooltip_color(string.format('%s%% humidity and %s', humidity, description))
+        weather_container:set_tooltip_color('Weather', string.format('%s%% humidity and %s', humidity, description))
         fonticon:update(icon_map[icon_id], color)
 
     end,

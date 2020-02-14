@@ -8,8 +8,8 @@ local dpi    = beautiful.xresources.apply_dpi
 function factory(args)
     local args = args or {}
 
-    local bg_color             = args.bg_color or colors.gray
-    local pie_colors           = args.colors or {colors.blue }
+    local bg_color             = args.bg_color or colors.background
+    local pie_color            = args.color or colors.blue
     local thickness            = args.thickness or 8
     local max_value            = args.max_value or 1
 
@@ -18,9 +18,9 @@ function factory(args)
         thickness = dpi(thickness),
         start_angle = (2 * math.pi) * 3 / 4,
         bg = bg_color,
-        border_color = colors.background,
-        border_width = dpi(1),
-        colors = pie_colors,
+        border_color = pie_color,
+        border_width = dpi(2),
+        colors = {colors.black},
         widget = wibox.container.arcchart
     }
     local p = 2

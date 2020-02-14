@@ -3,11 +3,14 @@ local beautiful = require("beautiful")
 local gears     = require("gears")
 local wibox     = require("wibox")
 
+local lain = require('lain')
+
 local display         = require("util/display")
 local FontIcon        = require("util/fonticon")
 local SanityContainer = require("util/sanitycontainer")
 
 local colors                 = beautiful.colors
+local markup                 = lain.util.markup
 local client_color           = colors.gray
 local client_focus_color     = colors.yellow
 local client_minimized_color = colors.purple
@@ -72,9 +75,9 @@ local function create_client_window_icon()
     end
 
     function container.set_name(name, color)
-        client_name:set_markup_silently(string.format(
-            '<span color="%s">%s</span>', color, name or ""
-        ))
+        local title = name or ''
+        title = title:gsub('&', '&amp;') -- without this, set markup can silently fail
+        client_name:set_markup_silently(markup.fg.color(color, title))
     end
 
     return container

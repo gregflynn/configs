@@ -12,12 +12,12 @@ local Graph           = require('util/graph')
 local colors = beautiful.colors
 local color = colors.purple
 
-local root_pie = Pie { colors = {color}, }
-local boot_pie = Pie { colors = {color}, }
+local root_pie = Pie { color = color, }
+local boot_pie = Pie { color = color, }
 
 awful.widget.watch(
         {awful.util.shell, "-c", "df -B1 | tail -n +2 | awk '{ print $6,$5 }'"},
-        5,
+        5 * 60,
         function(_, stdout)
             -- stdout is all drives, "mount pct"
             local boot_pct = "?%"
@@ -56,7 +56,7 @@ function update_tooltip(boot_pct, root_pct)
     local fmt = '%s: %s Used'
     local root = string.format(fmt, 'root', root_pct)
     local boot = string.format(fmt, 'boot', boot_pct)
-    container:set_tooltip_color(string.format('%s\n%s', root, boot))
+    container:set_tooltip_color('Storage', string.format('%s\n%s', root, boot))
 end
 
 return container
