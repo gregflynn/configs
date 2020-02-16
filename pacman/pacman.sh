@@ -133,7 +133,7 @@ function __pac__update {
     if [[ "$?" == "0" ]]; then
 
         # check for watched packages
-        local searchstr=$(echo "$__pac__watch__list" | sed 's/ /\\\|/g')
+        local searchstr=$(echo "$__pac__watch__list" | sed 's/ / \\\|/g')
         local watched_updates=$(pacman -Qu | grep "$searchstr")
         if [[ "$watched_updates" != "" ]]; then
             echo

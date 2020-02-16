@@ -13,7 +13,9 @@ __pac__is__aur__pkg() {{
 }}
 """.format(AUR_HOME)
 PACKAGE_WATCH_LIST = {
-    'alacritty', 'awesome', 'linux', 'nvidia', 'python', 'systemd'
+    'alacritty', 'awesome', 'bash', 'docker', 'feh', 'git', 'gnome-keyring',
+    'libinput-gestures', 'linux', 'neovim', 'nvidia', 'pacman', 'python',
+    'redshift', 'rofi', 'systemd', 'task', 'tmux', 'vim', 'zsh'
 }
 INJECT_MAP = {
     'PACMAN_CACHE': PACMAN_CACHE,
