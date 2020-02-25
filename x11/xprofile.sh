@@ -4,7 +4,7 @@ picom --config '{DS_HOME}/x11/picom.conf' -b
 
 /usr/bin/start-pulseaudio-x11
 
-xautolock -time 15 -locker "bash {DS_LOCK}" &
+xautolock -notify 60 -detectsleep -time 15 -locker "bash {DS_LOCK}" &
 
 export WINIT_HIDPI_FACTOR=1
 
