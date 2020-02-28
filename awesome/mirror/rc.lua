@@ -85,7 +85,6 @@ awful.screen.connect_for_each_screen(function(screen)
             require("widgets/net"),
             volume,
             require("widgets/battery"),
-            require('widgets/slack'),
             require("widgets/tray"),
             require("widgets/weather"),
             require("widgets/clock"),
