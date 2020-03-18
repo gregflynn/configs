@@ -23,7 +23,7 @@ font:
     x: 0
     y: 0
   normal:
-    family: Hack
+    family: "Hack Nerd Font Mono"
     style: Regular
 
 cursor:
