@@ -4,7 +4,7 @@ from _src.initializer import BaseInitializer
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['rofi', 'rofi-calc', 'rofimoji-git', 'rofi-pass', 'networkmanager']
+        return ['rofi', 'rofi-calc', 'rofimoji', 'rofi-pass', 'networkmanager']
 
     def build(self):
         self.inject('rofi-theme.rasi')

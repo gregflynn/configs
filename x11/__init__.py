@@ -5,6 +5,7 @@ class Initializer(BaseInitializer):
     @property
     def requirements(self):
         return [
+            'xorg-server',
             'lightdm',
             'xautolock',
             'i3lock-color',
@@ -17,3 +18,4 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.link_dist('xprofile.sh', '.xprofile')
+        self.link_base('xmodmap', '.Xmodmap')
