@@ -7,7 +7,6 @@ class Initializer(BaseInitializer):
     def requirements(self):
         return [
             'awesome',
-            'lain-git',
             'vicious',
             'redshift',
             'flameshot',
@@ -21,19 +20,17 @@ class Initializer(BaseInitializer):
         return ['video']
 
     def build(self):
-        self.inject('theme.lua')
-        self.checkout(
-            'https://github.com/xinhaoyuan/layout-machi.git', 'layout-machi'
-        )
+        self.inject('dstheme.lua')
+        self.checkout('https://github.com/xinhaoyuan/layout-machi.git', 'layout-machi')
+        self.checkout('https://github.com/lcpz/lain.git', 'lain')
 
     def install(self):
-        self.link_base('mirror', '.config/awesome')
+        self.link_base('rc.lua', '.config/awesome/rc.lua')
+        self.link_dist('dstheme.lua', '.config/awesome/dstheme.lua')
 
-        # HACK: this symlink is git-ignored
-        self.link_dist('theme.lua', '.config/awesome/theme.lua')
-
-        # HACK: this symlink is also git ignored
+        self.link_base('sanity', '.config/awesome/sanity')
         self.link_dist('layout-machi', '.config/awesome/layout-machi')
+        self.link_dist('lain', '.config/awesome/lain')
 
         self.run("""
             flameshot config \
@@ -42,3 +39,5 @@ class Initializer(BaseInitializer):
                     --showhelp false \
                     --trayicon false
         """.format(settings.Colors.YELLOW, settings.Colors.BACKGROUND))
+
+        self.link_base('redshift.conf', '.config/redshift/redshift.conf')
