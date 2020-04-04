@@ -4,6 +4,10 @@ mode="$1"
 blinky_status=$(/usr/bin/blinky --status 2>/dev/null)
 
 if [[ $mode == "pre" ]] || [[ $mode == "" ]]; then
+    if pgrep i3lock > /dev/null; then
+        exit 0
+    fi
+
     # turn blinky off, if installed and on
     if [[ "$blinky_status" != "" ]] && [[ "$blinky_status" != "#000000" ]]; then
         blinky --off &
