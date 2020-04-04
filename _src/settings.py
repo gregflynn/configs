@@ -24,7 +24,7 @@ def dist_path(module_name, *extra):
 
 DOTSAN_HOME = ds_path()
 DOTSAN_LOCK = dist_path('x11', 'i3lock.sh')
-DOTSAN_WALLPAPER = module_path('private', 'wallpapers', 'light_lanes.png')
+DOTSAN_WALLPAPER = module_path('private', 'wallpapers', '10-12.jpg')
 
 
 class Colors:
