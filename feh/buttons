@@ -2,6 +2,9 @@
 zoom_in C-4
 zoom_out C-5
 
+next_img 1
+prev_img 3
+
 scroll_up 4
 scroll_down 5
 
