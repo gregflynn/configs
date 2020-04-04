@@ -13,9 +13,6 @@ window:
 scrolling:
   history: 100000
   multiplier: 3
-  auto_scroll: false
-
-tabspaces: 8
 
 font:
   size: 10
