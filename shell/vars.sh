@@ -2,7 +2,7 @@
 
 export __dotsan__home="{DS_HOME}"
 export LS_COLORS='di=32;10:ln=34;10:so=33;10:pi=33;10:ex=31;10:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=0;42:ow=0;43:'
-export PATH="{DS_BIN}:$HOME/go/bin:$PATH"
+export PATH="{DS_BIN}:$HOME/.bin:$HOME/go/bin:$PATH"
 
 
 alias df='df -h'
