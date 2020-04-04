@@ -9,7 +9,9 @@ ENGINE_MAP = {
     'ddg': '+duckduckgo',
     'duckduckgo': 'https://duckduckgo.com/?q={}',
     'giphy': 'https://giphy.com/search/?q={}',
-    'gif': '+giphy'
+    'gif': '+giphy',
+    'w': 'https://en.wikipedia.org/w/index.php?search={}',
+    'aw': 'https://wiki.archlinux.org/index.php?search={}'
 }
 
 
