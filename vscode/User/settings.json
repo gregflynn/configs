@@ -95,4 +95,6 @@
     "workbench.tips.enabled": false,
     "workbench.tree.indent": 30,
     "breadcrumbs.enabled": false,
+    "update.showReleaseNotes": false,
+    "update.mode": "none"
 }

@@ -10,9 +10,8 @@ class Initializer(BaseInitializer):
 
     def build(self):
         self.inject('themes', inject_map={
-            'WIDTH': 1280,
+            'WIDTH': 1800,
             'HEIGHT': 1024,
-            'THUMBSIZE': 200
         })
 
     def install(self):

@@ -1,9 +1,8 @@
 view --auto-zoom --scale-down --stretch --zoom full --no-menus \
         --image-bg "#{DS_BACKGROUND}" --geometry {WIDTH}x{HEIGHT} \
-        --sort mtime
+        --sort mtime --title %N
 
 dirthumb --auto-zoom --scale-down --stretch --zoom full \
         --image-bg "#{DS_BACKGROUND}" --bg trans --geometry {WIDTH}x{HEIGHT} \
         -q --sort mtime --thumbnails --index-info "" --no-menus \
-        --cache-thumbnails --cache-size 2048 \
-        --thumb-height {THUMBSIZE} --thumb-width {THUMBSIZE} --limit-width {WIDTH}
+        --cache-thumbnails --cache-size 2048 --limit-width {WIDTH}
