@@ -2,6 +2,7 @@ import os
 
 
 HOME = os.getenv('HOME')
+DOTSAN_CONFIG_HOME = os.getenv('DOTSAN_CONFIG_HOME')
 MODULE_DIST_DIR = 'dist'
 DOTSAN_DIR = '.sanity'
 
@@ -14,12 +15,16 @@ def ds_path(*extra):
     return home_path(DOTSAN_DIR, *extra)
 
 
+def ds_config_path(*extra):
+    return os.path.join(DOTSAN_CONFIG_HOME, *extra)
+
+
 def module_path(module_name, *extra):
     return ds_path(module_name, *extra)
 
 
 def dist_path(module_name, *extra):
-    return module_path(module_name, MODULE_DIST_DIR, *extra)
+    return ds_config_path('dists', module_name, *extra)
 
 
 DOTSAN_HOME = ds_path()
@@ -42,9 +47,9 @@ class Colors:
     YELLOW = 'FFD866'
 
 
-DOTSAN_SHELL_BIN = ds_path('_bin')
-DOTSAN_SHELL_COMP = ds_path('_comp')
-DOTSAN_SHELL_SOURCES = ds_path('_shell')
+DOTSAN_SHELL_BIN = ds_config_path('bin')
+DOTSAN_SHELL_COMP = ds_config_path('comp')
+DOTSAN_SHELL_SOURCES = ds_config_path('shell')
 DOTSAN_SHELL_COMP_BASH = DOTSAN_SHELL_COMP + '/bash'
 DOTSAN_SHELL_COMP_ZSH = DOTSAN_SHELL_COMP + '/zsh'
 

@@ -1,9 +1,4 @@
 private
 .idea/
-**/dist/**
-
-_shell
-_bin
-_comp
 
 machine.json

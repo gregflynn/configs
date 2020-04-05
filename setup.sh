@@ -1,9 +1,33 @@
 #!/usr/bin/env bash
 
-pushd $(dirname $0) > /dev/null
+if [[ "$DOTSAN_CONFIG_HOME" == "" ]]; then
+    # default the configuration home
+    DOTSAN_CONFIG_HOME="$HOME/.config/sanity"
+fi
+export DOTSAN_CONFIG_HOME
+
+if ! [[ -e "$DOTSAN_CONFIG_HOME" ]]; then
+    echo "Creating $DOTSAN_CONFIG_HOME"
+    mkdir -p "$DOTSAN_CONFIG_HOME"
+fi
+
+if ! [[ -e "$DOTSAN_CONFIG_HOME/venv" ]]; then
+    python3 -m venv "$DOTSAN_CONFIG_HOME/venv"
+fi
+
+echo "Activing venv"
+. "$DOTSAN_CONFIG_HOME/venv/bin/activate"
+
+cd "$(dirname $0)" || exit 1
+
+echo "Installing dependencies"
+pip install --upgrade pip
+pip install -r _src/requirements.txt
+
 if [[ "$@" == "" ]]; then
     python3 -m _src
 else
-    python3 -m _src --module $@
+    python3 -m _src --module "$@"
 fi
-popd > /dev/null
+
+deactivate

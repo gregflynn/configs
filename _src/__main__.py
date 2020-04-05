@@ -1,26 +1,19 @@
-from argparse import ArgumentParser
+import click
 
 from .installer import Installer
 from .modules import Modules
 
 
-parser = ArgumentParser()
-parser.add_argument(
-    '--module',
-    help='Module name to install or update',
-    required=False
-)
-
-
-def main():
-    args = parser.parse_args()
-
+@click.command()
+@click.option('-m', '--module')
+def main(module):
     modules = Modules.get_modules()
-    if args.module:
-        modules = [m for m in modules if m.name == args.module]
+    if module:
+        modules = [m for m in modules if m.name == module]
 
     installer = Installer(modules)
     installer.install()
 
 
-main()
+if __name__ == '__main__':
+    main()
