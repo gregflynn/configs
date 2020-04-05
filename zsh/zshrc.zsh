@@ -38,8 +38,14 @@ export FZF_DEFAULT_OPTS='
     --color 16,fg:-1,bg:-1,hl:4,fg+:3,bg+:-1,hl+:4
     --color info:5,prompt:3,pointer:3,marker:1,spinner:2,header:1
 '
-source "/usr/share/fzf/completion.zsh"
-source "/usr/share/fzf/key-bindings.zsh"
+
+if [ -e '/usr/share/doc/fzf/examples/key-bindings.zsh' ]; then
+    # hack because debian put this in a weird spot
+    source /usr/share/doc/fzf/examples/key-bindings.zsh
+else
+    source /usr/share/fzf/completion.zsh
+    source /usr/share/fzf/key-bindings.zsh
+fi
 
 # fix home and end keys
 bindkey '\e[1~' beginning-of-line
