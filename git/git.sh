@@ -37,12 +37,12 @@ squash() {
     git rebase -i HEAD~$num_commits
 }
 
-#if [[ "$ZSH_VERSION" == "" ]]; then
-#    if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
-#        . /usr/share/git/completion/git-completion.bash
-#    fi
-#else
-#    if [[ -e /usr/share/git/completion/git-completion.zsh ]]; then
-#        fpath=(/usr/share/git/completion/git-completion.zsh $fpath)
-#    fi
-#fi
+if [[ "$ZSH_VERSION" == "" ]]; then
+    if [[ -e /usr/share/git/completion/git-completion.bash ]]; then
+        . /usr/share/git/completion/git-completion.bash
+    fi
+else
+    if [[ -e /usr/share/git/completion/git-completion.zsh ]]; then
+        fpath=(/usr/share/git/completion/git-completion.zsh $fpath)
+    fi
+fi
