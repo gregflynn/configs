@@ -20,3 +20,8 @@ fi
 if [[ -e "$HOME/.config/libinput-gestures.conf" ]]; then
     libinput-gestures-setup start
 fi
+
+# start thunar in daemon mode
+if command -v thunar > /dev/null; then
+    thunar --daemon &
+fi
