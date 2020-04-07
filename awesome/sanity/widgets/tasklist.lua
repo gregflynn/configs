@@ -5,6 +5,7 @@ local gears     = require('gears')
 local FontIcon  = require('sanity/util/fonticon')
 local Container = require('sanity/util/container')
 local display   = require('sanity/util/display')
+local text      = require('sanity/util/text')
 
 local fixed    = require('wibox.layout.fixed')
 local imagebox = require('wibox.widget.imagebox')
@@ -94,7 +95,9 @@ local function update_func(window_list, buttons, _, data, clients)
         end
 
         container:set_icon_container_color(color)
-        container:set_tooltip_color(string.format('%s (%s)', c.name, c.class), nil, client_focus_color)
+        container:set_tooltip_color(
+            string.format('%s (%s)', text.trim(c.name), c.class), nil, client_focus_color
+        )
         window_list:add(container)
     end
 end
