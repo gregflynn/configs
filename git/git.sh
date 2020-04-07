@@ -13,11 +13,32 @@ _concat_branch() {
 }
 
 gmb() {
+    # turn all the args into the branch name
     local b=$(_concat_branch $@)
+
+    # make sure something is specified
     if ! [[ "$b" ]]; then
         echo "no branch name specified"
         return 1
     fi
+
+    # check if there was a TP ticket at the beginning
+    if ! [[ $b == TP* ]]; then
+        local tp_number
+        echo -n "TP #: "
+        read tp_number
+
+        # don't require tp number
+        if [[ "$tp_number" != "" ]]; then
+            if [[ $tp_number =~ ^[Tt][Pp].* ]]; then
+                b="${tp_number}_${b}"
+            else
+                b="TP${tp_number}_${b}"
+            fi
+        fi
+    fi
+
+    # grab the YYYYMM portion
     date="$(date '+%Y%m')"
     git checkout -b "${date}_gf_$b"
 }
