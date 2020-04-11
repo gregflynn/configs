@@ -19,6 +19,8 @@ else
     _WHITE="%{$fg[white]%}"
 fi
 
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 _is_root() {
     if [[ "$(whoami)" == "root" ]] || [[ "$DS_ROOT" != "" ]]; then
         return 0
