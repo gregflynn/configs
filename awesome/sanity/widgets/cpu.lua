@@ -26,7 +26,7 @@ local tooltip_lines     = {}
 local cpu_temp_widget = watch('sensors', 5, function(w, stdout)
     local temp = stdout:match('Package id 0:%s+%p(%d+%p%d)')
     if not temp then
-        temp = stdout:match('temp1:%s+%p(%d+%p%d)')
+        temp = stdout:match('Tdie:%s+%p(%d+%p%d)')
     end
 
     if not temp then
