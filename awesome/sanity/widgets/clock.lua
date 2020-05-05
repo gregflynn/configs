@@ -100,7 +100,7 @@ local clock_container = Container {
     )
 }
 
-local day_of_month_fmt = ' %d '
+local day_of_month_fmt = '%d'
 local cal_command      = 'cal | tail -n +2'
 local cal_table        = {}
 
@@ -126,7 +126,7 @@ function clock_update()
         end
 
         local padded_cal = table.concat(cal_table, empty_str, 1, cal_table_idx-1)
-        local dom_str = strip_leading_zero(now:format(day_of_month_fmt))
+        local dom_str = string.format(' %s ', strip_leading_zero(now:format(day_of_month_fmt)))
 
         padded_cal = padded_cal:gsub(
             dom_str,
