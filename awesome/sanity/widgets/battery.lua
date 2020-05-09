@@ -68,7 +68,7 @@ function battery_update()
         status = bat_now.status
     end
 
-    if not status then
+    if not status or status == bat_perc_na then
         battery.container.visible = false
     else
         battery.container.visible = true
