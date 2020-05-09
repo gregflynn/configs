@@ -99,6 +99,7 @@ awful.screen.connect_for_each_screen(function(screen)
         screen.mytasklist,
         {
             layout = wibox.layout.fixed.vertical,
+            require('sanity/widgets/tray'),
             require('sanity/widgets/cpu'),
             require('sanity/widgets/gpu'),
             require('sanity/widgets/storage'),
@@ -108,7 +109,6 @@ awful.screen.connect_for_each_screen(function(screen)
             require('sanity/widgets/battery'),
             require('sanity/widgets/weather'),
             require('sanity/widgets/clock'),
-            require('sanity/widgets/tray'),
         }
     }
 end)

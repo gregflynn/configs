@@ -9,7 +9,7 @@ local fixed  = require('wibox.layout.fixed')
 local widget = require('wibox.widget')
 
 local layout_font_icons = {
-    ['machi']    = '﩯',
+    ['machi']    = '',
     ['floating'] = '',
 }
 
@@ -60,21 +60,28 @@ local function update(screen)
     local layout_font_icon = cache.lfi
     local icon_container   = cache.c
 
-    local tn       = awful.screen.focused().selected_tag.name
-    local fg_color = tag_colors[tonumber(tn)]
-    local layout   = awful.layout.getname(awful.layout.get(screen))
+    if awful.screen.focused().selected_tag then
+        local tn       = awful.screen.focused().selected_tag.name
+        local fg_color = tag_colors[tonumber(tn)]
+        local layout   = awful.layout.getname(awful.layout.get(screen))
 
-    tag_font_icon:update(tn, fg_color)
-    layout_font_icon:update(layout_font_icons[layout], fg_color)
-    icon_container:set_color(fg_color)
-    icon_container:set_tooltip_color(string.format('%s: %s', tn, layout), nil, fg_color)
+        tag_font_icon:update(tn, fg_color)
+        layout_font_icon:update(layout_font_icons[layout], fg_color)
+        icon_container:set_color(fg_color)
+        icon_container:set_tooltip_color(string.format('%s: %s', tn, layout), nil, fg_color)
+    end
 
     return icon_container
 end
 
-local function update_from_tag()
-    if boxes[screen] then
-        update(screen)
+local function get_screen(s)
+    return s and screen[s]
+end
+
+local function update_from_tag(t)
+    local s = get_screen(t.screen)
+    if boxes[s] then
+        update(s)
     end
 end
 

@@ -78,11 +78,9 @@ function display.get_default_client_icon()
     return window_icon_fallback
 end
 
-local expand_outside = 'outside'
-
 function display.center(widget)
     local ctr = horizontal(nil, widget, nil)
-    ctr.expand = expand_outside
+    ctr.expand = 'outside'
     return ctr
 end
 
