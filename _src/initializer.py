@@ -1,8 +1,11 @@
 import os
-import stat
 from subprocess import check_call
 
-from . import settings
+from .settings import (
+    home_path, module_path, dist_path, ExecWrapper, assert_dir,
+    DOTSAN_SHELL_COMP_BASH, DOTSAN_SHELL_COMP_ZSH, DEFAULT_INJECT_MAP,
+    DOTSAN_SHELL_SOURCES,
+)
 from .logger import Logger
 
 
@@ -56,43 +59,43 @@ class BaseInitializer(object):
 
     @staticmethod
     def home_path(*extra):
-        return settings.home_path(*extra)
+        return home_path(*extra)
 
     def base_path(self, *extra):
-        return settings.module_path(self.name, *extra)
+        return module_path(self.name, *extra)
 
     def dist_path(self, *extra):
-        return settings.dist_path(self.name, *extra)
+        return dist_path(self.name, *extra)
 
     #
     # Public helpers
     #
 
-    def bin(self, name, executable, bash_comp=None, zsh_comp=None):
+    def bin(
+            self, name: str, executable: str,
+            bash_comp: str = None,
+            zsh_comp: str = None,
+            bin_type: ExecWrapper = ExecWrapper.BASH):
         """Add an executable to the path with shell completion support
 
         Args:
-            name (str): name of the executable on the PATH
-            executable (str): appended to the wrapper script to execute, this
-                can be any bash required to start the executable
-            bash_comp (str): absolute path to bash completions for this command
-            zsh_comp (str): absolute path to zsh completions for this command
+            name: name of the executable on the PATH
+            executable: appended to the wrapper script to execute, this can be
+                any bash required to start the executable
+            bash_comp: absolute path to bash completions for this command
+            zsh_comp: absolute path to zsh completions for this command
+            bin_type: type of bin script, either python or bash
         """
-        bin_path = os.path.join(settings.DOTSAN_SHELL_BIN, name)
-        self._assert_dir(bin_path)
-        with open(bin_path, 'w') as ex:
-            ex.write(settings.BIN_WRAPPERS['default'])
-            ex.write(executable)
-        os.chmod(bin_path, stat.S_IRWXU)
+        ExecWrapper.render(bin_type, executable, name)
 
         if bash_comp:
             self.link(
-                bash_comp, os.path.join(settings.DOTSAN_SHELL_COMP_BASH, name)
+                bash_comp, os.path.join(DOTSAN_SHELL_COMP_BASH, name)
             )
         if zsh_comp:
             self.link(
                 zsh_comp,
-                os.path.join(settings.DOTSAN_SHELL_COMP_ZSH, '_' + name)
+                os.path.join(DOTSAN_SHELL_COMP_ZSH, '_' + name)
             )
 
     def checkout(self, repo, dest):
@@ -105,7 +108,7 @@ class BaseInitializer(object):
         """
         absolute = os.path.isabs(dest)
         if absolute:
-            self._assert_dir(dest)
+            assert_dir(dest)
         else:
             self._assert_dist()
 
@@ -129,10 +132,10 @@ class BaseInitializer(object):
         self._assert_dist()
         infile = self.base_path(source)
         outfile = self.dist_path(source if dest is None else dest)
-        self._assert_dir(outfile)
+        assert_dir(outfile)
 
         final_inject_map = {}
-        final_inject_map.update(settings.DEFAULT_INJECT_MAP)
+        final_inject_map.update(DEFAULT_INJECT_MAP)
         final_inject_map.update(inject_map or {})
 
         with open(infile, 'r') as rf, open(outfile, 'w') as wf:
@@ -153,7 +156,7 @@ class BaseInitializer(object):
             if os.path.isabs(link_location)
             else cls.home_path(link_location)
         )
-        cls._assert_dir(link)
+        assert_dir(link)
         if os.path.islink(link):
             if os.readlink(link) == points_to:
                 # link already exists and is correct
@@ -209,7 +212,7 @@ class BaseInitializer(object):
         if init:
             name = '00_' + name
 
-        self.link(points_to, os.path.join(settings.DOTSAN_SHELL_SOURCES, name))
+        self.link(points_to, os.path.join(DOTSAN_SHELL_SOURCES, name))
 
     def shell_base(self, points_to_from_base, init=False):
         """Register a source script that the configured shell should source
@@ -248,9 +251,3 @@ class BaseInitializer(object):
         if not self._dist_exists:
             self.mkdir(self.dist_path())
             self._dist_exists = True
-
-    @classmethod
-    def _assert_dir(cls, path):
-        dir_path = os.path.dirname(path)
-        if not os.path.exists(dir_path):
-            cls.mkdir(dir_path)

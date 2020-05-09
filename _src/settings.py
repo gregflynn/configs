@@ -1,4 +1,6 @@
 import os
+import stat
+from enum import Enum, auto
 
 
 HOME = os.getenv('HOME')
@@ -25,6 +27,12 @@ def module_path(module_name, *extra):
 
 def dist_path(module_name, *extra):
     return ds_config_path('dists', module_name, *extra)
+
+
+def assert_dir(path):
+    dir_path = os.path.dirname(path)
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path, exist_ok=True)
 
 
 DOTSAN_HOME = ds_path()
@@ -86,12 +94,38 @@ DEFAULT_INJECT_MAP = {
     'DS_YELLOW': Colors.YELLOW
 }
 
-BASH_WRAPPER = """
-#!/usr/bin/env bash
-{ds_src_script}
-__ds__src {ds_src}
-""".format(ds_src_script=DOTSAN_SOURCE_SCRIPT, ds_src=DOTSAN_SHELL_SOURCES)
+
+class ExecWrapper(Enum):
+    BASH = auto()
+    PYTHON = auto()
+
+    @staticmethod
+    def render(bin_type: 'ExecWrapper', executable: str, name: str):
+        """Render an exec wrapper to a file
+
+        Args:
+            bin_type:
+            executable:
+            name:
+        """
+        bin_path = os.path.join(DOTSAN_SHELL_BIN, name)
+        assert_dir(bin_path)
+        with open(bin_path, 'w') as ex:
+            wrapper = BIN_WRAPPERS[bin_type]
+            ex.write(wrapper.replace(BIN_WRAPPER_PLACEHOLDER, executable))
+        os.chmod(bin_path, stat.S_IRWXU)
+
+
+BIN_WRAPPER_PLACEHOLDER = 'DS_EXEC_DS'
 BIN_WRAPPERS = {
-    'default': BASH_WRAPPER,
-    'bash': BASH_WRAPPER
+    ExecWrapper.BASH: f"""#!/usr/bin/env bash
+        {DOTSAN_SOURCE_SCRIPT}
+        __ds__src {DOTSAN_SHELL_SOURCES}
+        {BIN_WRAPPER_PLACEHOLDER}
+        """,
+    ExecWrapper.PYTHON: f"""#!/usr/bin/env bash
+        . "{DOTSAN_CONFIG_HOME}/venv/bin/activate"
+        python3 {BIN_WRAPPER_PLACEHOLDER} $@
+        deactivate
+        """
 }
