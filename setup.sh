@@ -22,12 +22,12 @@ cd "$(dirname $0)" || exit 1
 
 echo "Installing dependencies"
 pip install --upgrade pip
-pip install -r _src/requirements.txt
+pip install -e .
 
 if [[ "$@" == "" ]]; then
-    python3 -m _src
+    python3 -m sanity
 else
-    python3 -m _src --module "$@"
+    python3 -m sanity --module "$@"
 fi
 
 deactivate

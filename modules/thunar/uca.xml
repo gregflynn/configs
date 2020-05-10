@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+	<action>
+		<icon>utilities-terminal</icon>
+		<name>Open Terminal Here</name>
+		<unique-id>1498694924875471-1</unique-id>
+		<command>exo-open --working-directory %f --launch TerminalEmulator</command>
+		<description>Open a terminal here</description>
+		<patterns>*</patterns>
+		<startup-notify/>
+		<directories/>
+	</action>
+	<action>
+		<icon>image</icon>
+		<name>Thumbnail</name>
+		<unique-id>1585481970584074-1</unique-id>
+		<command>{DS_HOME}/modules/feh/thumb.sh %f</command>
+		<description>Open images in thumbnails</description>
+		<patterns>*</patterns>
+		<directories/>
+		<image-files/>
+	</action>
+	<action>
+		<icon>visual-studio-code</icon>
+		<name>Open in Visual Studio Code</name>
+		<unique-id>1586127094627004-1</unique-id>
+		<command>code %f</command>
+		<description>Open the directory as a Visual Studio Code project</description>
+		<patterns>*</patterns>
+		<directories/>
+		<other-files/>
+		<text-files/>
+	</action>
+	<action>
+		<icon>text-x-python</icon>
+		<name>Open in PyCharm</name>
+		<unique-id>1586127125073690-2</unique-id>
+		<command>{DS_CHARM} %f</command>
+		<description>Open the directory as a PyCharm project</description>
+		<patterns>*</patterns>
+		<directories/>
+		<other-files/>
+		<text-files/>
+	</action>
+</actions>
