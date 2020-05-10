@@ -10,7 +10,7 @@ class Initializer(BaseInitializer):
         return ['task']
 
     def build(self):
-        taskd = settings.ds_path('private', 'taskd', 'taskd_client')
+        taskd = settings.module_path('private', 'taskd', 'taskd_client')
         taskd = 'include {}'.format(taskd) if os.path.isfile(taskd) else ''
         self.inject('taskrc', inject_map={
             'TASK_THEME': self.base_path('tasks.theme'),
