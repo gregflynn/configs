@@ -12,8 +12,8 @@ __dotsan() {
         update)
             pushd ${__dotsan__home} > /dev/null
             git pull
-            if [ -e 'private' ]; then
-                pushd private > /dev/null
+            if [ -e 'modules/private' ]; then
+                pushd modules/private > /dev/null
                 git pull
                 popd > /dev/null
             fi
