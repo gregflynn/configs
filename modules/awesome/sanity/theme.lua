@@ -52,13 +52,15 @@ theme.fg_urgent     = colors.red
 theme.fg_minimize   = colors.purple
 
 theme.useless_gap   = 3
-theme.border_normal = colors.background
+theme.border_normal = colors.gray
 theme.border_focus  = colors.background
 theme.border_marked = colors.red
 theme.border_ontop  = colors.yellow
 
-theme.normal_opacity = 0.9
+theme.normal_opacity = 1.0
 theme.focus_opacity  = 1.0
+
+theme.titlebar_bg_normal = colors.gray
 
 --
 -- Hotkeys
