@@ -9,6 +9,18 @@ from .settings import (
 from .logger import Logger
 
 
+DESKTOP_PATH = home_path('.local/share/applications')
+DESKTOP_TEMPLATE = """
+[Desktop Entry]
+Type=Application
+Version=1.0
+
+Name={name}
+Exec={exec}
+Icon={icon}
+"""
+
+
 class BaseInitializer(object):
     """Base initializer for modules
     """
@@ -106,18 +118,40 @@ class BaseInitializer(object):
             dest (str): the path in the dist directory to clone to, or absolute
                 path to anywhere on disk
         """
-        absolute = os.path.isabs(dest)
-        if absolute:
-            assert_dir(dest)
-        else:
-            self._assert_dist()
-
-        checkout_path = dest if absolute else self.dist_path(dest)
+        checkout_path = self._relative_dist_or_abs(dest)
 
         if os.path.isdir(checkout_path):
             check_call(['git', 'pull'], cwd=checkout_path)
         else:
             check_call(['git', 'clone', repo, checkout_path])
+
+    def desktop(self, name: str, exec_path: str, icon_path: str = None):
+        """Write a desktop entry to launch an application with
+
+        Args:
+            name: the name of application
+            exec_path: path to the executable for the program
+            icon_path: path to the icon for the program
+        """
+        assert_dir(self.home_path('.local/share/applications'))
+
+        with open(os.path.join(DESKTOP_PATH, f'{name}.desktop'), 'w') as d:
+            d.write(DESKTOP_TEMPLATE.format(
+                name=name, exec=exec_path, icon=icon_path
+            ))
+
+    def download(self, url: str, dest: str):
+        """Download a file
+
+        Args:
+            url: url to download
+            dest: path to download the file to, either absolute or relative to
+                the module dist folder
+        """
+        download_path = self._relative_dist_or_abs(dest)
+
+        if not os.path.exists(download_path):
+            check_call(['curl', url, '-o', download_path])
 
     def inject(self, source, dest=None, inject_map=None):
         """Inject variables into a configuration file
@@ -251,3 +285,12 @@ class BaseInitializer(object):
         if not self._dist_exists:
             self.mkdir(self.dist_path())
             self._dist_exists = True
+
+    def _relative_dist_or_abs(self, path):
+        absolute = os.path.isabs(path)
+        if absolute:
+            assert_dir(path)
+        else:
+            self._assert_dist()
+
+        return path if absolute else self.dist_path(path)
