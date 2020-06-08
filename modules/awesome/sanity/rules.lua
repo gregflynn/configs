@@ -2,6 +2,13 @@ local awful     = require('awful')
 local beautiful = require('beautiful')
 local gears     = require('gears')
 
+local function floating_rule(class)
+    return {
+        rule = { class = class },
+        properties = { floating = true }
+    }
+end
+
 return {
     {
         rule = { },
@@ -26,4 +33,7 @@ return {
             size_hints_honor = false
         }
     },
+    floating_rule('Blueberry.py'),
+    floating_rule('Pavucontrol'),
+    floating_rule('pulse-sms'),
 }

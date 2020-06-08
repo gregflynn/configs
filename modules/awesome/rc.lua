@@ -37,6 +37,8 @@ shift  = 'Shift'
 
 graph_interval = 2
 
+terminal = 'kitty'
+
 function create_key(k, group, desc, f)
     return awful.key({modkey}, k, f, {description = desc, group = group})
 end
@@ -131,15 +133,15 @@ globalkeys = gears.table.join(
     create_key('Return', 'awesome', 'Raise/Open Terminal', function()
         -- try to find a terminal on this tag already
         for _, c in ipairs(awful.screen.focused().selected_tag:clients()) do
-            if c.class == 'Alacritty' then
+            if c.class == terminal then
                 c:jump_to(false)
                 return
             end
         end
-        awful.spawn('alacritty')
+        awful.spawn(terminal)
     end),
     create_mod_key(shift, 'Return', 'awesome', 'Open New Terminal', function()
-        awful.spawn('alacritty')
+        awful.spawn(terminal)
     end),
     create_key('i', 'awesome', 'Lock Screen', function()
         awful.spawn({'bash', beautiful.lock_script})
