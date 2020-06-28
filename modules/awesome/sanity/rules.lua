@@ -36,4 +36,5 @@ return {
     floating_rule('Blueberry.py'),
     floating_rule('Pavucontrol'),
     floating_rule('pulse-sms'),
+    floating_rule('Arandr'),
 }

@@ -1,4 +1,3 @@
-import os
 import traceback
 from subprocess import check_output
 
@@ -18,10 +17,6 @@ class Installer(object):
         self._user = check_output('whoami').decode('utf-8').strip()
         self._groups = set(
             check_output('groups').decode('utf-8').strip().split())
-
-        self._is_root = self._user == 'root'
-        self._is_ssh = os.getenv('SSH_CLIENT') or os.getenv('SSH_TTY')
-        self._is_cli_install = self._is_root or self._is_ssh
 
         self._pkger = PackageManager()
         self._machine = Machine()
