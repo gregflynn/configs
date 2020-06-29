@@ -10,6 +10,8 @@ setup(
     provides=['sanity'],
     install_requires=[
         'click==7.1.2',
+        'dataset==1.3.1',
+        'requests==2.24.0',
         'wheel'
     ]
 )
