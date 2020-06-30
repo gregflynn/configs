@@ -1,4 +1,5 @@
 from sanity.initializer import BaseInitializer
+from sanity.settings import ExecWrapper
 
 
 class Initializer(BaseInitializer):
@@ -7,9 +8,4 @@ class Initializer(BaseInitializer):
         return ['systemd']
 
     def install(self):
-        self.bin(
-            'sys',
-            '. {}\n__sys $@'.format(self.base_path('sys.sh')),
-            bash_comp=self.base_path('sys-completions.bash'),
-            zsh_comp=self.base_path('sys-completions.zsh')
-        )
+        self.bin('sys', self.base_path('sys.py'), bin_type=ExecWrapper.PYTHON)

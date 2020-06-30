@@ -1,4 +1,5 @@
 from sanity.initializer import BaseInitializer
+from sanity.settings import ExecWrapper
 
 
 class Initializer(BaseInitializer):
@@ -11,9 +12,5 @@ class Initializer(BaseInitializer):
         return ['docker']
 
     def install(self):
-        self.bin(
-            'dock',
-            'source {}\n__dock $@'.format(self.base_path('dock.sh')),
-            bash_comp=self.base_path('dock-completions.bash'),
-            zsh_comp=self.base_path('dock-completions.zsh')
-        )
+        self.bin('dock', self.base_path('dock.py'),
+                 bin_type=ExecWrapper.PYTHON)
