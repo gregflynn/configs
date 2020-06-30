@@ -21,8 +21,8 @@ echo "Activing venv"
 cd "$(dirname $0)" || exit 1
 
 echo "Installing dependencies"
-pip install --upgrade pip
-pip install -e .
+pip install -q --upgrade pip
+pip install -q -e .
 
 if [[ "$@" == "" ]]; then
     python3 -m sanity

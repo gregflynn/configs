@@ -2,6 +2,7 @@ import os
 import re
 import sys
 import json
+import shutil
 from datetime import datetime
 from subprocess import CalledProcessError, check_call, check_output, DEVNULL
 from pathlib import Path
@@ -50,7 +51,10 @@ def update():
     """Update all the packages on the system
     """
     _pac('-Syy')
-    updates = [p for p in get_output('pacman', '-Qu').split('\n')]
+    try:
+        updates = [p for p in get_output('pacman', '-Qu').split('\n')]
+    except CalledProcessError:
+        updates = []
 
     if not updates:
         return
@@ -84,7 +88,7 @@ def remove(package_names):
         if p in aur_package_names:
             aur_path = Path(AUR_HOME) / p
             if aur_path.exists():
-                aur_path.rmdir()
+                shutil.rmtree(str(aur_path))
 
 
 #
@@ -285,8 +289,6 @@ def info():
     """Print general information about the local pacman package cache
     """
     secho_line(('Pacman Package Cache ', 'blue'), (PACMAN_CACHE, 'green'))
-    # secho('Pacman Package Cache ', fg='blue', nl=False)
-    # secho(PACMAN_CACHE, fg='green')
     _pac_cache_info()
 
 
