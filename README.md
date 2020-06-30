@@ -2,10 +2,8 @@
 this is a, mediocre at best, attempt to keep my configuration files in a manageable place
 
 ## current features
-* [Alacritty](https://github.com/jwilm/alacritty) config
-* [rofi](https://github.com/DaveDavenport/rofi) configuration and Awesome-WM integrations
-* Pacman wrapper with AUR support
-  * `pac [update|install|remove|search] [package_name]`
+* [Pacman](https://wiki.archlinux.org/index.php/Pacman) wrapper with [AUR](https://wiki.archlinux.org/index.php/Arch_User_Repository) support.
+* [Rofi](https://github.com/DaveDavenport/rofi) configuration and custom menus.
 * bashrc
   * supports private variable sourcing
   * multi file organization

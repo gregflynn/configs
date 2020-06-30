@@ -59,9 +59,6 @@ alias compreinit='rm -f ~/.zcompdump; compinit'
 __ds__src "{DS_SOURCES}"
 fpath=({DS_COMP_ZSH} $fpath)
 
-# HACK: enable auto-completion for click scripts
-eval "$(_PAC_COMPLETE=source_zsh pac)"
-
 # ZSH Syntax Highlighting
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
 ZSH_HIGHLIGHT_STYLES[command]='fg=yellow'

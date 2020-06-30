@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from subprocess import check_call
 
 from .settings import (
@@ -83,8 +84,7 @@ class BaseInitializer(object):
     # Public helpers
     #
 
-    def bin(
-            self, name: str, executable: str,
+    def bin(self, name: str, executable: str,
             bash_comp: str = None,
             zsh_comp: str = None,
             bin_type: ExecWrapper = ExecWrapper.BASH):
@@ -100,15 +100,25 @@ class BaseInitializer(object):
         """
         ExecWrapper.render(bin_type, executable, name)
 
-        if bash_comp:
-            self.link(
-                bash_comp, os.path.join(DOTSAN_SHELL_COMP_BASH, name)
+        if bin_type == ExecWrapper.PYTHON:
+            bash_comp_path = Path(DOTSAN_SHELL_COMP_BASH) / name
+            zsh_comp_path = Path(DOTSAN_SHELL_COMP_ZSH) / f'_{name}'
+            upper_name = name.upper().replace('-', '_')
+            self.run(
+                f'_{upper_name}_COMPLETE=source_zsh {name} > {zsh_comp_path}')
+            self.run(
+                f'_{upper_name}_COMPLETE=source_bash {name} > {bash_comp_path}'
             )
-        if zsh_comp:
-            self.link(
-                zsh_comp,
-                os.path.join(DOTSAN_SHELL_COMP_ZSH, '_' + name)
-            )
+        else:
+            if bash_comp:
+                self.link(
+                    bash_comp, os.path.join(DOTSAN_SHELL_COMP_BASH, name)
+                )
+            if zsh_comp:
+                self.link(
+                    zsh_comp,
+                    os.path.join(DOTSAN_SHELL_COMP_ZSH, '_' + name)
+                )
 
     def checkout(self, repo, dest):
         """Clone or pull a remote repository
