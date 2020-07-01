@@ -70,6 +70,7 @@ ZSH_HIGHLIGHT_STYLES[path]='fg=magenta'
 # Theme
 setopt prompt_subst
 . '{ZSH_PROMPT}'
+. '{ZSH_ALIASES}'
 
 # fork colored man pages to fix some terrible colors
 # from: https://github.com/robbyrussell/oh-my-zsh/blob/master/plugins/colored-man-pages/colored-man-pages.plugin.zsh

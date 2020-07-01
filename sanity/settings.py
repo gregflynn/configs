@@ -4,7 +4,8 @@ from enum import Enum, auto
 
 
 HOME = os.getenv('HOME')
-DOTSAN_CONFIG_HOME = os.getenv('DOTSAN_CONFIG_HOME')
+DOTSAN_CONFIG_HOME = (os.getenv('DOTSAN_CONFIG_HOME')
+                      or os.path.join(HOME, '.config', 'sanity'))
 MODULE_DIST_DIR = 'dist'
 DOTSAN_DIR = '.sanity'
 
@@ -99,6 +100,7 @@ DEFAULT_INJECT_MAP = {
 class ExecWrapper(Enum):
     BASH = auto()
     PYTHON = auto()
+    NONE = auto()
 
     @staticmethod
     def render(bin_type: 'ExecWrapper', executable: str, name: str):
@@ -120,14 +122,20 @@ class ExecWrapper(Enum):
 BIN_WRAPPER_PLACEHOLDER = 'DS_EXEC_DS'
 BIN_WRAPPERS = {
     ExecWrapper.BASH: f"""#!/usr/bin/env bash
-        {DOTSAN_SOURCE_SCRIPT}
-        __ds__src {DOTSAN_SHELL_SOURCES}
-        {BIN_WRAPPER_PLACEHOLDER}
-        """,
+{DOTSAN_SOURCE_SCRIPT}
+__ds__src {DOTSAN_SHELL_SOURCES}
+{BIN_WRAPPER_PLACEHOLDER}
+""",
     ExecWrapper.PYTHON: f"""#!/usr/bin/env bash
-        export DOTSAN_CONFIG_HOME={DOTSAN_CONFIG_HOME}
-        . "{DOTSAN_CONFIG_HOME}/venv/bin/activate"
-        python3 {BIN_WRAPPER_PLACEHOLDER} $@
-        deactivate
-        """
+export DOTSAN_CONFIG_HOME={DOTSAN_CONFIG_HOME}
+. "{DOTSAN_CONFIG_HOME}/venv/bin/activate"
+python3 {BIN_WRAPPER_PLACEHOLDER} $@
+deactivate
+""",
+    ExecWrapper.NONE: f"""#!/usr/bin/env bash
+export DOTSAN_CONFIG_HOME={DOTSAN_CONFIG_HOME}
+. "{DOTSAN_CONFIG_HOME}/venv/bin/activate"
+{BIN_WRAPPER_PLACEHOLDER} $@
+deactivate
+"""
 }

@@ -1,9 +1,11 @@
 import traceback
 from subprocess import check_output
 
-from .logger import LogLevel, Logger
-from .machine import Machine
-from .package_manager import PackageManager
+from sanity.settings import ExecWrapper
+from sanity.initializer import BaseInitializer
+from sanity.logger import LogLevel, Logger
+from sanity.machine import Machine
+from sanity.package_manager import PackageManager
 
 
 class Installer(object):
@@ -27,6 +29,9 @@ class Installer(object):
         for module in self._modules:
             self._install_module(module)
         self._machine.save()
+
+        initializer = BaseInitializer('sanity', 'foo')
+        initializer.bin('dotsan', 'dotsan', bin_type=ExecWrapper.NONE)
 
     def _install_module(self, module):
         """

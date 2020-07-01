@@ -13,5 +13,9 @@ setup(
         'dataset==1.3.1',
         'requests==2.24.0',
         'wheel'
-    ]
+    ],
+    entry_points='''
+        [console_scripts]
+        dotsan=sanity.command:dotsan
+    ''',
 )

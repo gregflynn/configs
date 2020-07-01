@@ -24,10 +24,6 @@ echo "Installing dependencies"
 pip install -q --upgrade pip
 pip install -q -e .
 
-if [[ "$@" == "" ]]; then
-    python3 -m sanity
-else
-    python3 -m sanity --module "$@"
-fi
+dotsan install
 
 deactivate

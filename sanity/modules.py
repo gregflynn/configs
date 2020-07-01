@@ -1,19 +1,20 @@
 import os
 from importlib import import_module
+from pathlib import Path
 
-from .settings import module_path
+from sanity.settings import module_path
 
 
 class Module(object):
     def __init__(self, name):
         self.name = name
+        self.path = Path(module_path(name))
 
     def is_valid(self):
-        full_path = module_path(self.name)
-        return (
-            os.path.isdir(full_path)
-            and os.path.isfile(f'{full_path}/__init__.py')
-        )
+        return self.path.is_dir() and (self.path / '__init__.py').is_file()
+
+    def is_remote(self):
+        return (self.path / '.git').exists()
 
     def load(self, user):
         if not self.is_valid():

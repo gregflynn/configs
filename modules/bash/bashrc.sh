@@ -3,7 +3,8 @@
 # If not running interactively, don't do anything
 [[ "$-" != *i* ]] && return
 
-source "{DS_HOME}/modules/zsh/prompt.zsh"
+source "{ALIASES}"
+source "{PROMPT}"
 
 if [[ -e /usr/share/nvm/init-nvm.sh ]]; then
     source /usr/share/nvm/init-nvm.sh

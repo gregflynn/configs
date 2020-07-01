@@ -103,6 +103,8 @@ class BaseInitializer(object):
         if bin_type == ExecWrapper.PYTHON:
             bash_comp_path = Path(DOTSAN_SHELL_COMP_BASH) / name
             zsh_comp_path = Path(DOTSAN_SHELL_COMP_ZSH) / f'_{name}'
+            assert_dir(bash_comp_path)
+            assert_dir(zsh_comp_path)
             upper_name = name.upper().replace('-', '_')
             self.run(
                 f'_{upper_name}_COMPLETE=source_zsh {name} > {zsh_comp_path}')
