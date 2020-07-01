@@ -14,3 +14,4 @@ class Initializer(BaseInitializer):
     def install(self):
         self.bin('dock', self.base_path('dock.py'),
                  bin_type=ExecWrapper.PYTHON)
+        self.bin_autocomplete_click('dock')

@@ -1,11 +1,9 @@
 import os
-from pathlib import Path
-from subprocess import check_call
+from subprocess import check_call, CalledProcessError
 
 from .settings import (
     home_path, module_path, dist_path, ExecWrapper, assert_dir,
-    DOTSAN_SHELL_COMP_BASH, DOTSAN_SHELL_COMP_ZSH, DEFAULT_INJECT_MAP,
-    DOTSAN_SHELL_SOURCES,
+    DEFAULT_INJECT_MAP, DOTSAN_SHELL_SOURCES, ShellType,
 )
 from .logger import Logger
 
@@ -25,13 +23,14 @@ Icon={icon}
 class BaseInitializer(object):
     """Base initializer for modules
     """
-    def __init__(self, name, user):
+    def __init__(self, name, user, machine):
         """
         Args:
             name (str): Name of the module and its subdirectory
         """
         self.user = user
         self.name = name
+        self.machine = machine
         self.logger = Logger(name)
         self._dist_exists = None
         self._shell_sources_exists = None
@@ -85,8 +84,6 @@ class BaseInitializer(object):
     #
 
     def bin(self, name: str, executable: str,
-            bash_comp: str = None,
-            zsh_comp: str = None,
             bin_type: ExecWrapper = ExecWrapper.BASH):
         """Add an executable to the path with shell completion support
 
@@ -94,33 +91,39 @@ class BaseInitializer(object):
             name: name of the executable on the PATH
             executable: appended to the wrapper script to execute, this can be
                 any bash required to start the executable
-            bash_comp: absolute path to bash completions for this command
-            zsh_comp: absolute path to zsh completions for this command
             bin_type: type of bin script, either python or bash
         """
         ExecWrapper.render(bin_type, executable, name)
 
-        if bin_type == ExecWrapper.PYTHON:
-            bash_comp_path = Path(DOTSAN_SHELL_COMP_BASH) / name
-            zsh_comp_path = Path(DOTSAN_SHELL_COMP_ZSH) / f'_{name}'
-            assert_dir(bash_comp_path)
-            assert_dir(zsh_comp_path)
+    def bin_autocomplete(self, shell_type: ShellType, name: str, path: str):
+        """Link an autocomplete script for an executable
+
+        Args:
+            shell_type: which shell type to install the autocomplete for
+            name: name of the executable to install autocomplete for
+            path:
+        """
+        comp_path = ShellType.completion_path(shell_type, name)
+        self.link(path, comp_path)
+
+    def bin_autocomplete_click(self, name: str):
+        """Write an autocomplete file for a click executable
+
+        Args:
+            name: name of the executable to install autocomplete for
+        """
+        for shell_type in ShellType:
+            comp_path = ShellType.completion_path(shell_type, name)
+            shell_name = ShellType.shell_name(shell_type)
+            assert_dir(comp_path)
             upper_name = name.upper().replace('-', '_')
-            self.run(
-                f'_{upper_name}_COMPLETE=source_zsh {name} > {zsh_comp_path}')
-            self.run(
-                f'_{upper_name}_COMPLETE=source_bash {name} > {bash_comp_path}'
-            )
-        else:
-            if bash_comp:
-                self.link(
-                    bash_comp, os.path.join(DOTSAN_SHELL_COMP_BASH, name)
-                )
-            if zsh_comp:
-                self.link(
-                    zsh_comp,
-                    os.path.join(DOTSAN_SHELL_COMP_ZSH, '_' + name)
-                )
+            try:
+                self.run(f'_{upper_name}_COMPLETE=source_{shell_name} {name}'
+                         f' > {comp_path}')
+            except CalledProcessError:
+                # hack: autocomplete for dotsan returns status 1 even though it
+                # wrote the file just fine
+                pass
 
     def checkout(self, repo, dest):
         """Clone or pull a remote repository

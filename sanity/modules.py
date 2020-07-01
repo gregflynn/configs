@@ -16,13 +16,13 @@ class Module(object):
     def is_remote(self):
         return (self.path / '.git').exists()
 
-    def load(self, user):
+    def load(self, user, machine):
         if not self.is_valid():
             raise Exception('Attempted to load an invalid module')
 
         module = import_module(f'modules.{self.name}')
 
-        return module.Initializer(self.name, user)
+        return module.Initializer(self.name, user, machine)
 
 
 class Modules(object):

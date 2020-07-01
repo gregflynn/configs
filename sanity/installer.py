@@ -1,11 +1,11 @@
 import traceback
-from subprocess import check_output
 
 from sanity.settings import ExecWrapper
 from sanity.initializer import BaseInitializer
 from sanity.logger import LogLevel, Logger
 from sanity.machine import Machine
 from sanity.package_manager import PackageManager
+from sanity.util.shell import get_output
 
 
 class Installer(object):
@@ -16,9 +16,8 @@ class Installer(object):
         """
         self._modules = modules
 
-        self._user = check_output('whoami').decode('utf-8').strip()
-        self._groups = set(
-            check_output('groups').decode('utf-8').strip().split())
+        self._user = get_output('whoami').strip()
+        self._groups = set(get_output('groups').strip().split())
 
         self._pkger = PackageManager()
         self._machine = Machine()
@@ -28,10 +27,12 @@ class Installer(object):
         """
         for module in self._modules:
             self._install_module(module)
-        self._machine.save()
+        self._install_dotsan()
 
-        initializer = BaseInitializer('sanity', 'foo')
+    def _install_dotsan(self):
+        initializer = BaseInitializer('sanity', self._user, self._machine)
         initializer.bin('dotsan', 'dotsan', bin_type=ExecWrapper.NONE)
+        initializer.bin_autocomplete_click('dotsan')
 
     def _install_module(self, module):
         """
@@ -41,7 +42,7 @@ class Installer(object):
         logger = Logger(module.name)
 
         try:
-            initializer = module.load(self._user)
+            initializer = module.load(self._user, self._machine)
 
             if not self._machine.is_module_configured(module):
                 if logger.prompt('Enable Module?'):

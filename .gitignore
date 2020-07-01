@@ -1,5 +1,4 @@
 modules/private
 .idea/
 
-machine.json
 *.egg-info

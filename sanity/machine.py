@@ -1,39 +1,53 @@
 
-import json
-import os
+import dataset
 
-from .settings import ds_path
+from sanity.settings import ds_config_path
 
 
-MACHINE_JSON = ds_path('machine.json')
+DATABASE_PATH = ds_config_path('machine.db')
 
 
 class Machine(object):
     def __init__(self):
-        if os.path.exists(MACHINE_JSON):
-            with open(MACHINE_JSON, 'r') as f:
-                self._machine = json.loads(f.read())
-        else:
-            self._machine = {}
+        self._db = dataset.connect(f'sqlite:///{DATABASE_PATH}')
 
-    def save(self):
-        with open(MACHINE_JSON, 'w') as f:
-            f.write(json.dumps(self._machine, sort_keys=True, indent=4))
+    @property
+    def _modules_db(self):
+        return self._db['modules']
+
+    @property
+    def _settings_db(self):
+        return self._db['settings']
 
     def is_module_configured(self, module):
-        return module.name in self._machine
+        module_entry = self._modules_db.find_one(name=module.name)
+        return module_entry is not None
 
     def is_module_enabled(self, module):
-        return (self._machine.get(module.name) or {}).get('enabled', False)
+        module_entry = self._modules_db.find_one(name=module.name)
+        return module_entry is not None and module_entry['enabled'] is True
 
     def enable_module(self, module):
-        if module.name not in self._machine:
-            self._machine[module.name] = {}
-
-        self._machine[module.name]['enabled'] = True
+        self._modules_db.upsert({'name': module.name, 'enabled': True},
+                                ['name'])
 
     def disable_module(self, module):
-        if module.name not in self._machine:
-            self._machine[module.name] = {}
+        self._modules_db.upsert({'name': module.name, 'enabled': False},
+                                ['name'])
 
-        self._machine[module.name]['enabled'] = False
+    def get_settings(self):
+        return {s['name']: s['value'] for s in self._settings_db.all()}
+
+    def get_setting_value(self, name):
+        row = self._settings_db.find_one(name=name)
+        if row is None:
+            return None
+        else:
+            return row['value']
+
+    def set_setting_value(self, name, value):
+        self._settings_db.upsert({'name': name, 'value': value}, ['name'])
+
+    def delete_setting(self, name):
+        if name:
+            self._settings_db.delete(name=name)

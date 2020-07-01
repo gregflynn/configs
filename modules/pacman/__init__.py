@@ -9,3 +9,4 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.bin('pac', self.base_path('pac.py'), bin_type=ExecWrapper.PYTHON)
+        self.bin_autocomplete_click('pac')

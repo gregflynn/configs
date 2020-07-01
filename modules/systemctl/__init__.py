@@ -9,3 +9,4 @@ class Initializer(BaseInitializer):
 
     def install(self):
         self.bin('sys', self.base_path('sys.py'), bin_type=ExecWrapper.PYTHON)
+        self.bin_autocomplete_click('sys')

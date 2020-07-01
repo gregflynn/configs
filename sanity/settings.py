@@ -1,7 +1,7 @@
 import os
 import stat
 from enum import Enum, auto
-
+from pathlib import Path
 
 HOME = os.getenv('HOME')
 DOTSAN_CONFIG_HOME = (os.getenv('DOTSAN_CONFIG_HOME')
@@ -39,7 +39,6 @@ def assert_dir(path):
 DOTSAN_HOME = ds_path()
 MODULE_HOME_DIR = ds_path('modules')
 DOTSAN_LOCK = dist_path('x11', 'i3lock.sh')
-DOTSAN_WALLPAPER = module_path('private', 'wallpapers', '10-12.jpg')
 
 
 class Colors:
@@ -75,7 +74,6 @@ DEFAULT_INJECT_MAP = {
     'HOME': HOME,
     'DS_HOME': DOTSAN_HOME,
     'DS_LOCK': DOTSAN_LOCK,
-    'DS_WALLPAPER': DOTSAN_WALLPAPER,
     'DS_SOURCE': DOTSAN_SOURCE_SCRIPT,
     'DS_BIN': DOTSAN_SHELL_BIN,
     'DS_SOURCES': DOTSAN_SHELL_SOURCES,
@@ -95,6 +93,34 @@ DEFAULT_INJECT_MAP = {
     'DS_RED': Colors.RED,
     'DS_YELLOW': Colors.YELLOW
 }
+
+
+class ShellType(Enum):
+    BASH = auto()
+    ZSH = auto()
+
+    @staticmethod
+    def completion_path(shell_type: 'ShellType', name: str) -> str:
+        """Return the absolute path to completions for this executable
+
+        Args:
+            shell_type: type of the shell
+            name: name of the executable
+
+        Returns:
+            absolute path to the executable's completion
+        """
+        if shell_type == ShellType.BASH:
+            return str(Path(DOTSAN_SHELL_COMP_BASH) / name)
+        elif shell_type == ShellType.ZSH:
+            return Path(DOTSAN_SHELL_COMP_ZSH) / f'_{name}'
+
+    @staticmethod
+    def shell_name(shell_type: 'ShellType') -> str:
+        if shell_type == ShellType.BASH:
+            return 'bash'
+        elif shell_type == ShellType.ZSH:
+            return 'zsh'
 
 
 class ExecWrapper(Enum):

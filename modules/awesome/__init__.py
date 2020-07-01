@@ -1,27 +1,25 @@
 from sanity import settings
 from sanity.initializer import BaseInitializer
+from sanity.settings import module_path
 
 
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return [
-            'awesome',
-            'vicious',
-            'redshift',
-            'flameshot',
-            'peek',
-            'xsel',
-            'rofi'
-        ]
+        return ['awesome', 'flameshot', 'peek', 'redshift', 'rofi', 'vicious',
+                'xsel']
 
     @property
     def user_groups(self):
         return ['video']
 
     def build(self):
-        self.inject('dstheme.lua')
-        self.checkout('https://github.com/xinhaoyuan/layout-machi.git', 'layout-machi')
+        self.inject('dstheme.lua', inject_map={
+            'DS_WALLPAPER': (self.machine.get_setting_value('DS_WALLPAPER')
+                             or module_path('private', 'wallpapers',
+                                            '10-12.jpg'))})
+        self.checkout('https://github.com/xinhaoyuan/layout-machi.git',
+                      'layout-machi')
         self.checkout('https://github.com/lcpz/lain.git', 'lain')
 
     def install(self):
