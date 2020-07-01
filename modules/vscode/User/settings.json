@@ -96,5 +96,6 @@
     "workbench.tree.indent": 30,
     "breadcrumbs.enabled": false,
     "update.showReleaseNotes": false,
-    "update.mode": "none"
+    "update.mode": "none",
+    "editor.fontSize": 16
 }

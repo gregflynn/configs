@@ -30,6 +30,8 @@ def install(module=None, clean=False):
         shutil.rmtree(DOTSAN_SHELL_COMP)
         shutil.rmtree(DOTSAN_SHELL_SOURCES)
 
+    check_call(['pip', 'install', '-q', '-e', '.'])
+
     os.chdir(settings.DOTSAN_HOME)
     modules = Modules.get_modules()
 
