@@ -1,5 +1,3 @@
-local FontIcon = require('sanity/util/fonticon')
-
 local arcchart = require('wibox.container.arcchart')
 local margin   = require('wibox.container.margin')
 local widget   = require('wibox.widget')
@@ -12,20 +10,16 @@ function factory(args)
 
     local bg_color  = args.bg_color or default_bg_color
     local pie_color = args.color or default_fg_color
-    local thickness = args.thickness or 5
     local max_value = args.max_value or 1
-    local font_icon = args.icon
 
-    local icon_widget = FontIcon {size = 18, margin_l = 5, margin_b = 1}
     local pie_widget = widget {
         max_value    = max_value,
-        thickness    = thickness,
+        thickness    = 20,
         start_angle  = (2 * math.pi) * 3 / 4,
         bg           = bg_color,
         border_color = pie_color,
         colors       = {pie_color},
         widget       = arcchart,
-        rounded_edge = true,
         values       = {0}
     }
     pie_widget:set_children({icon_widget})
@@ -47,10 +41,6 @@ function factory(args)
         else
             icon_widget.visible = false
         end
-    end
-
-    if font_icon then
-        pie_container:update_icon(font_icon, pie_color)
     end
 
     return pie_container

@@ -141,8 +141,8 @@ gpu_container = Container {
     color = color,
     widget = gpu_has_metrics and widget {
         layout = fixed.vertical,
-        display.center(gpu_temp),
         gpu_graph_container,
+        display.center(gpu_temp),
     } or display.center(gpu_icon),
     buttons = gears.table.join(
         button({}, 1, function() gpu_menu:toggle() end),

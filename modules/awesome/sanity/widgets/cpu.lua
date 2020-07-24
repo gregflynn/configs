@@ -33,11 +33,11 @@ vicious.register(cpu_load_widget, vicious.widgets.cpu, '$1', graph_interval)
 cpu_container = Container {
     widget = widget {
         layout = fixed.vertical,
-        display.center(cpu_temp_widget),
         cpu_load_widget.container,
+        display.center(cpu_temp_widget),
     },
     color = color,
+    no_tooltip = true,
 }
-cpu_container:set_tooltip_color(' Processor ')
 
 return cpu_container

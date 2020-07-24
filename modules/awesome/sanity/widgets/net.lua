@@ -2,6 +2,7 @@ local string = string
 
 local gears        = require('gears')
 local Container    = require('sanity/util/container')
+local DoubleWide   = require('sanity/util/doublewide')
 local FontIcon     = require('sanity/util/fonticon')
 local Graph        = require('sanity/util/graph')
 local icon         = require('sanity/util/icon')
@@ -46,11 +47,11 @@ local net_menu = menu({
 local container = Container {
     widget = widget {
         layout = fixed.vertical,
-        widget {
-            layout = fixed.horizontal,
-            network_icon, vpn_icon
+        network_graph.container,
+        DoubleWide {
+            left_widget = network_icon,
+            right_widget = vpn_icon,
         },
-        network_graph.container
     },
     color = color,
     buttons = gears.table.join(
@@ -113,7 +114,7 @@ local function network_update()
         end
     end
 
-    query_nmcli(tunnel_name, function(stdout)
+    query_nmcli('VPN', function(stdout)
         local is_vpn_enabled = stdout ~= empty_str
 
         if is_vpn_enabled then

@@ -3,7 +3,6 @@ local os, string, table = os, string, table
 local gears     = require('gears')
 local glib      = require('lgi')
 local Container = require('sanity/util/container')
-local FontIcon  = require('sanity/util/fonticon')
 local display   = require('sanity/util/display')
 local text      = require('sanity/util/text')
 local icon      = require('sanity/util/icon')
@@ -36,26 +35,9 @@ local function calc_timeout()
     return refresh - os.time() % refresh
 end
 
-local clock_icon = FontIcon {large = true}
 local time_text  = textbox()
 local week_text  = textbox()
 local date_text  = textbox()
-
-local clock_map_fmt = '%I'
-local clock_map     = {
-    ['01'] = '\u{e382}',
-    ['02'] = '\u{e383}',
-    ['03'] = '\u{e384}',
-    ['04'] = '\u{e385}',
-    ['05'] = '\u{e386}',
-    ['06'] = '\u{e387}',
-    ['07'] = '\u{e388}',
-    ['08'] = '\u{e389}',
-    ['09'] = '\u{e38a}',
-    ['10'] = '\u{e38b}',
-    ['11'] = '\u{e38c}',
-    ['12'] = '\u{e381}'
-}
 
 local awesome_menu = {
     {'Reload', function()
@@ -88,7 +70,6 @@ end
 local clock_container = Container {
     widget = widget {
         layout = fixed.vertical,
-        display.center(clock_icon),
         display.center(week_text),
         display.center(time_text),
         display.center(date_text),
@@ -108,7 +89,6 @@ local timer
 function clock_update()
     local now = DateTime.new_now(TimeZone.new_local())
 
-    clock_icon:update(clock_map[now:format(clock_map_fmt)], text_color)
     time_text:set_markup(markup.fg.color(text_color, strip_leading_zero(now:format(time_fmt))))
     week_text:set_markup(markup.fg.color(text_color, now:format(week_fmt)))
     date_text:set_markup(markup.fg.color(text_color, strip_leading_zero(now:format(date_fmt))))

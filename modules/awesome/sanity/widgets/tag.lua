@@ -1,77 +1,103 @@
-local next, string, tag_colors, tonumber = next, string, tag_colors, tonumber
+local next, tag_colors = next, tag_colors
 
-local awful     = require('awful')
-local gears     = require('gears')
-local FontIcon  = require('sanity/util/fonticon')
-local Container = require('sanity/util/container')
+local awful      = require('awful')
+local beautiful  = require('beautiful')
+local gears      = require('gears')
+local FontIcon   = require('sanity/util/fonticon')
+local Container  = require('sanity/util/container')
+local DoubleWide = require('sanity/util/doublewide')
+local display    = require('sanity/util/display')
 
 local fixed  = require('wibox.layout.fixed')
-local widget = require('wibox.widget')
+
+local colors = beautiful.colors
 
 local layout_font_icons = {
     ['machi']    = '',
     ['floating'] = '',
 }
 
+local layout_font_icon = FontIcon {}
+local layout_font_icon_container = Container {
+    widget = display.center(layout_font_icon),
+    top = true,
+    no_tooltip = true,
+    buttons = gears.table.join(
+        awful.button({}, 1, toggle_layout),
+        awful.button({}, 3, toggle_layout)
+    )
+}
 local boxes = setmetatable({}, {__mode = 'kv'})
 
-local function next_tag()
-    awful.tag.viewnext()
-end
-
-local function prev_tag()
-    awful.tag.viewprev()
-end
-
 local function create_screen_widgets(screen)
-    local tag_font_icon    = FontIcon {small = true, size = 16, margin_l = 4}
-    local layout_font_icon = FontIcon {small = true}
-    local icon_container   = Container {
-        widget = widget {
-            layout = fixed.horizontal,
-            tag_font_icon,
-            layout_font_icon
-        },
-        top     = true,
-        buttons = gears.table.join(
-            awful.button({}, 1, next_tag),
-            awful.button({}, 3, prev_tag),
-            awful.button({}, 4, next_tag),
-            awful.button({}, 5, prev_tag),
-            awful.button({}, 6, prev_tag),
-            awful.button({}, 7, next_tag)
-        ),
-    }
-    boxes[screen] = {
-        tfi = tag_font_icon,
-        lfi = layout_font_icon,
-        c   = icon_container
-    }
+    boxes[screen] = {}
+
+    for tag_idx=1, #screen.tags do
+        local tag_font_icon      = FontIcon {small = true, size = 16, margin_l = 4}
+        local tag_name_font_icon = FontIcon {small = true}
+        local icon_container     = Container {
+            widget = DoubleWide {
+                left_widget = tag_name_font_icon,
+                right_widget = tag_font_icon,
+            },
+            top     = true,
+            buttons = gears.table.join(
+                awful.button({}, 1, function() screen.tags[tag_idx]:view_only() end),
+                awful.button({}, 3, function() screen.tags[tag_idx]:view_only() end),
+                awful.button({}, 5, function() awful.tag.viewnext() end),
+                awful.button({}, 4, function() awful.tag.viewprev() end)
+            ),
+            no_tooltip = true
+        }
+        boxes[screen][tag_idx] = {
+            tfi  = tag_font_icon,
+            tnfi = tag_name_font_icon,
+            c    = icon_container
+        }
+    end
 end
 
-local function update(screen)
+local function update(screen, container)
+    local focused_screen = awful.screen.focused()
+    local selected_tag_name = focused_screen.selected_tag and focused_screen.selected_tag.name or ''
+
     local cache = boxes[screen]
     if not cache then
         create_screen_widgets(screen)
         cache = boxes[screen]
     end
 
-    local tag_font_icon    = cache.tfi
-    local layout_font_icon = cache.lfi
-    local icon_container   = cache.c
+    for tag_idx=1, #screen.tags do
+        local tag = screen.tags[tag_idx]
+        local tag_name = tag.name
+        local num_tag_clients = #tag:clients()
+        local tag_cache = cache[tag_idx]
 
-    if awful.screen.focused().selected_tag then
-        local tn       = awful.screen.focused().selected_tag.name
-        local fg_color = tag_colors[tonumber(tn)]
-        local layout   = awful.layout.getname(awful.layout.get(screen))
+        local tag_font_icon    = tag_cache.tfi
+        local tag_name_font_icon = tag_cache.tnfi
+        local icon_container   = tag_cache.c
 
-        tag_font_icon:update(tn, fg_color)
-        layout_font_icon:update(layout_font_icons[layout], fg_color)
-        icon_container:set_color(fg_color)
-        icon_container:set_tooltip_color(string.format('%s: %s', tn, layout), nil, fg_color)
+        local fg_color = colors.gray
+        local bg_color = colors.background
+
+        if tag_name == selected_tag_name then
+            fg_color = tag_colors[tag_idx]
+            bg_color = fg_color
+
+            -- update the layout icon too
+            local layout = screen.tags[tag_idx].layout.name
+            layout_font_icon:update(layout_font_icons[layout], fg_color)
+            layout_font_icon_container:set_color(fg_color)
+        end
+
+        tag_font_icon:update(num_tag_clients, fg_color)
+        tag_name_font_icon:update(tag_name, fg_color)
+        icon_container:set_color(bg_color)
+
+        if container then
+            container:add(icon_container)
+        end
     end
-
-    return icon_container
 end
 
 local function get_screen(s)
@@ -103,7 +129,8 @@ local function factory(args)
         filter = awful.widget.taglist.filter.all,
         update_function = function(tag_container)
             tag_container:reset()
-            tag_container:add(update(s))
+            update(s, tag_container)
+            tag_container:add(layout_font_icon_container)
         end,
         layout = fixed.vertical
     }

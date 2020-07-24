@@ -26,8 +26,8 @@ machi.default_editor.set_gap(beautiful.useless_gap * 2, beautiful.useless_gap * 
 -- disable 'AeroSnap' like feature
 awful.mouse.snap.edge_enabled = false
 
-tags       = {         '1',         '2',           '3',           '4',        '5'}
-tag_colors = {colors.green, colors.blue, colors.yellow, colors.orange, colors.red}
+tags       = {         '',         '',          '',           '',        ''}
+tag_colors = {colors.green, colors.blue, colors.white, colors.orange, colors.red}
 
 -- define keys, not local so widgets can use them
 modkey = 'Mod4'
@@ -38,6 +38,15 @@ shift  = 'Shift'
 graph_interval = 2
 
 terminal = 'kitty'
+
+function toggle_layout()
+    local l = awful.screen.focused().selected_tag.layout
+    if l.name == 'floating' then
+        awful.screen.focused().selected_tag.layout = machi.default_layout
+    else
+        awful.screen.focused().selected_tag.layout = awful.layout.suit.floating
+    end
+end
 
 function create_key(k, group, desc, f)
     return awful.key({modkey}, k, f, {description = desc, group = group})
@@ -88,29 +97,49 @@ awful.screen.connect_for_each_screen(function(screen)
         ontop    = true,
         screen   = screen,
         width    = beautiful.bar_height,
-        opacity  = beautiful.bar_opacity
+        opacity  = beautiful.bar_opacity,
+        bg       = '#00000000',
     }
 
     screen.mywibar:setup {
         layout = wibox.layout.align.vertical,
         {
-            layout = wibox.layout.fixed.vertical,
-            screen.mytaglist,
-            Divider {top = true}
+            widget = wibox.container.background,
+            bg     = colors.background,
+            shape  = function(cr, w, h)
+                gears.shape.partially_rounded_rect(cr, w, h, false, false, true, false, 5)
+            end,
+            {
+                widget = wibox.container.margin,
+                bottom = 10,
+                {
+                    layout = wibox.layout.fixed.vertical,
+                    screen.mytaglist,
+                    Divider {top = true},
+                    screen.mytasklist,
+                }
+            }
         },
-        screen.mytasklist,
+        nil,
         {
-            layout = wibox.layout.fixed.vertical,
-            require('sanity/widgets/tray'),
-            require('sanity/widgets/cpu'),
-            require('sanity/widgets/gpu'),
-            require('sanity/widgets/storage'),
-            require('sanity/widgets/net'),
-            require('sanity/widgets/mem'),
-            volume,
-            require('sanity/widgets/battery'),
-            require('sanity/widgets/weather'),
-            require('sanity/widgets/clock'),
+            widget = wibox.container.background,
+            bg     = colors.background,
+            shape  = function(cr, w, h)
+                gears.shape.partially_rounded_rect(cr, w, h, false, true, false, false, 5)
+            end,
+            {
+                layout = wibox.layout.fixed.vertical,
+                require('sanity/widgets/tray'),
+                require('sanity/widgets/cpu'),
+                require('sanity/widgets/mem'),
+                require('sanity/widgets/gpu'),
+                require('sanity/widgets/storage'),
+                require('sanity/widgets/net'),
+                volume,
+                require('sanity/widgets/battery'),
+                require('sanity/widgets/weather'),
+                require('sanity/widgets/clock'),
+            }
         }
     }
 end)
@@ -183,12 +212,7 @@ globalkeys = gears.table.join(
         end
     end),
     create_key('l', 'layout', 'Toggle Layout', function()
-        local l = awful.screen.focused().selected_tag.layout
-        if l.name == 'floating' then
-            awful.screen.focused().selected_tag.layout = machi.default_layout
-        else
-            awful.screen.focused().selected_tag.layout = awful.layout.suit.floating
-        end
+        toggle_layout()
     end),
 
     --

@@ -3,6 +3,8 @@ local string = string
 local beautiful = require('beautiful')
 local gears     = require('gears')
 local Container = require('sanity/util/container')
+local DoubleWide = require('sanity/util/doublewide')
+local FontIcon  = require('sanity/util/fonticon')
 local Pie       = require('sanity/util/pie')
 local icon      = require('sanity/util/icon')
 local text      = require('sanity/util/text')
@@ -22,6 +24,7 @@ local fg_color = colors.blue
 local wn_color = colors.yellow
 local al_color = colors.red
 
+local vol_icon = FontIcon {small = true, color = fg_color, icon = font_icon_mute}
 local vol_pie  = Pie {
     color     = fg_color,
     icon      = font_icon_mute
@@ -64,7 +67,11 @@ local vol_menu = menu({
 })
 
 local volume_container = Container {
-    widget  = vol_pie,
+    widget = DoubleWide {
+        left_widget = vol_icon,
+        right_widget = vol_pie,
+    },
+    no_tooltip = true,
     color   = fg_color,
     buttons = gears.table.join(
         button({}, 1, function() vol_menu:toggle() end),
@@ -84,39 +91,32 @@ volume_container.lain_widget = volume
 function update_volume(volume_now)
     local is_muted = volume_now.muted == 'yes'
     local color    = al_color
+    local level = tonumber(volume_now.left)
+    local level_icon = font_icon_high
 
-    -- tooltips
-    local state = 'Muted'
     local device = volume_now.device
     if is_muted then
-        vol_pie:update_icon(font_icon_mute, fg_color)
-        vol_pie:update(0, fg_color)
-        volume_container:set_color(fg_color)
+        color = colors.gray
+        level = 0
+        level_icon = font_icon_mute
     else
-        local level = tonumber(volume_now.left)
-        local level_icon = font_icon_high
-        state = string.format('%s%%', level)
-
-        if text.split(device, ':')[1] == 'front' then
+        if #text.split(device, ':') == 6 then
+            level_icon = font_icon_headphones
+        else
             -- default speaker device
-            if level <= 30 then
+            if level <= 40 then
                 level_icon = font_icon_low
                 color = fg_color
-            elseif level <= 70 then
+            elseif level <= 75 then
                 level_icon = font_icon_med
                 color = wn_color
             end
-        else
-            -- assume anything else is bluetooth headphones
-            level_icon = font_icon_headphones
         end
-
-        vol_pie:update(level / 100, color)
-        vol_pie:update_icon(level_icon, color)
-        volume_container:set_color(color)
+        level = level / 100
     end
-
-    volume_container:set_tooltip_color(' Volume ', string.format(' %s \n %s ', device, state))
+    vol_pie:update(level, color)
+    vol_icon:update(level_icon, color)
+    volume_container:set_color(color)
 end
 
 return volume_container

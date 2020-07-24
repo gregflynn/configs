@@ -2,8 +2,10 @@ local string = string
 
 local bat = require('lain.widget.bat')
 
-local Pie       = require('sanity/util/pie')
-local Container = require('sanity/util/container')
+local Pie        = require('sanity/util/pie')
+local DoubleWide = require('sanity/util/doublewide')
+local FontIcon   = require('sanity/util/fonticon')
+local Container  = require('sanity/util/container')
 
 local battery_state_plug    = 'plug'
 local battery_state_full    = 'full'
@@ -32,6 +34,7 @@ local battery_colors = {
 
 local battery = {
     battery_enabled = false,
+    font_icon       = FontIcon {small = true},
     pie             = Pie {
         color     = battery_colors.plug,
         icon      = battery_icons.plug,
@@ -40,7 +43,10 @@ local battery = {
 }
 
 battery.container = Container {
-    widget = battery.pie,
+    widget = DoubleWide {
+        left_widget  = battery.font_icon,
+        right_widget = battery.pie,
+    },
     color  = colors.yellow
 }
 
@@ -101,7 +107,7 @@ function battery_update()
     )
 
     battery.pie:update(bat_now.perc, color)
-    battery.pie:update_icon(battery_icons[bs], color)
+    battery.font_icon:update(battery_icons[bs], color)
 end
 
 battery.lain_widget = bat {

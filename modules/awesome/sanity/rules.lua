@@ -37,4 +37,6 @@ return {
     floating_rule('Pavucontrol'),
     floating_rule('pulse-sms'),
     floating_rule('Arandr'),
+    floating_rule('File-roller'),
+    floating_rule('Thunar'),
 }

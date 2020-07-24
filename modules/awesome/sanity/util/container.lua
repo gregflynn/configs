@@ -24,6 +24,7 @@ function factory(args)
     local color      = args.color or default_color
     local tt_text    = args.tooltip or default_text
     local buttons    = args.buttons
+    local no_tooltip = args.no_tooltip or false
 
     local top = 0
     local bottom = 0
@@ -48,32 +49,34 @@ function factory(args)
     --
     -- Tooltips
     --
-    Container.tooltip = tooltip {objects = {Container}}
+    if not no_tooltip then
+        Container.tooltip = tooltip {objects = {Container}}
 
-    function Container:set_tooltip(text)
-        Container.tooltip.text = text
-    end
-
-    function Container:set_markup(m)
-        Container.tooltip:set_markup(m)
-    end
-
-    function Container:set_tooltip_color(title, text, c)
-        local body
-        local clr  = c or color
-
-        if text then
-            body = string.format(
-                tooltip_fmt, markup.fg.color(clr, markup.big(title)), markup.fg.color(default_color, text)
-            )
-        else
-            body = markup.fg.color(clr, markup.big(title))
+        function Container:set_tooltip(text)
+            Container.tooltip.text = text
         end
 
-        Container:set_markup(body)
-    end
+        function Container:set_markup(m)
+            Container.tooltip:set_markup(m)
+        end
 
-    Container:set_tooltip_color(tt_text)
+        function Container:set_tooltip_color(title, text, c)
+            local body
+            local clr  = c or color
+
+            if text then
+                body = string.format(
+                    tooltip_fmt, markup.fg.color(clr, markup.big(title)), markup.fg.color(default_color, text)
+                )
+            else
+                body = markup.fg.color(clr, markup.big(title))
+            end
+
+            Container:set_markup(body)
+        end
+
+        Container:set_tooltip_color(tt_text)
+    end
 
     --
     -- Buttons

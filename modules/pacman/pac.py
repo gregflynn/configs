@@ -207,7 +207,7 @@ def _build_aur_package(path: Path):
 def _install_built_package(path: Path):
     os.chdir(str(path))
     latest_version = _aur_latest_version(path)
-    package_path = list(path.glob(f'*{latest_version}*'))[0]
+    package_path = list(path.glob(f'*{latest_version}*.zst'))[0]
     _pac('-U', package_path, '--needed', '--noconfirm')
 
 

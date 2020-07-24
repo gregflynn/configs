@@ -97,5 +97,8 @@
     "breadcrumbs.enabled": false,
     "update.showReleaseNotes": false,
     "update.mode": "none",
-    "editor.fontSize": 16
+    "editor.fontSize": 16,
+    "window.restoreWindows": "none",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
 }
