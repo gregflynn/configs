@@ -5,13 +5,13 @@ local margin     = require('wibox.container.margin')
 local base       = require('wibox.widget.base')
 
 local ln = background(base.make_widget(), colors.gray)
-ln.forced_height = 1
+ln.forced_height = beautiful.widget_line
 
 local inlet = 8
 
 function factory(args)
     local args = args or {}
-    local is_bottom = not args.top
+    local is_bottom = args.bottom
 
     local top = 0
     local bottom = 0

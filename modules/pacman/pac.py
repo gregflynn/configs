@@ -82,9 +82,9 @@ def remove(package_names):
     """Remove packages from the system
     """
     aur_package_names = _aur_package_names()
-    for p in package_names:
-        _pac('-Rs', p)
+    _pac('-Rs', *package_names)
 
+    for p in package_names:
         if p in aur_package_names:
             aur_path = Path(AUR_HOME) / p
             if aur_path.exists():

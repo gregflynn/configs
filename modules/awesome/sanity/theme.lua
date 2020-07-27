@@ -29,7 +29,7 @@ local theme = {
     bar_opacity   = 1.0,
     border_width  = 2,
     widget_space  = 5,
-    widget_under  = 3,
+    widget_line   = 3,
     font_name     = font_name,
     font          = font_name..' 10',
     font_notif    = font_name..' 14',
@@ -46,7 +46,7 @@ theme.bg_urgent     = colors.background
 theme.bg_minimize   = colors.background
 theme.bg_systray    = colors.background
 
-theme.fg_normal     = colors.white
+theme.fg_normal     = colors.gray
 theme.fg_focus      = colors.yellow
 theme.fg_urgent     = colors.red
 theme.fg_minimize   = colors.purple
@@ -60,6 +60,7 @@ theme.border_ontop  = colors.yellow
 theme.normal_opacity = 1.0
 theme.focus_opacity  = 1.0
 
+theme.titlebar_fg_normal = colors.gray
 theme.titlebar_bg_normal = colors.background
 
 --
@@ -86,9 +87,9 @@ theme.menu_bg_normal    = colors.background
 -- Notifications
 --
 theme.notification_font         = theme.font_notif
-theme.notification_fg           = colors.white
-theme.notification_border_width = 2
-theme.notification_border_color = colors.yellow
+theme.notification_fg           = colors.yellow
+theme.notification_border_width = 5
+theme.notification_border_color = colors.background
 theme.notification_shape        = theme.border_shape
 
 --

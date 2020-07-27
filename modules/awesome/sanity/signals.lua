@@ -114,7 +114,7 @@ client.connect_signal('request::titlebars', function(c)
             margin_l = 4,
             margin_t = 0,
             margin_b = 0,
-            color    = colors.white
+            color    = colors.gray
         }
         icon_widget = wibox.container.margin(
             font_icon,

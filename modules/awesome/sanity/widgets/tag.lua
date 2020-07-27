@@ -6,30 +6,18 @@ local gears      = require('gears')
 local FontIcon   = require('sanity/util/fonticon')
 local Container  = require('sanity/util/container')
 local DoubleWide = require('sanity/util/doublewide')
-local display    = require('sanity/util/display')
 
 local fixed  = require('wibox.layout.fixed')
 
 local colors = beautiful.colors
 
-local layout_font_icons = {
-    ['machi']    = '',
-    ['floating'] = '',
-}
-
-local layout_font_icon = FontIcon {}
-local layout_font_icon_container = Container {
-    widget = display.center(layout_font_icon),
-    top = true,
-    no_tooltip = true,
-    buttons = gears.table.join(
-        awful.button({}, 1, toggle_layout),
-        awful.button({}, 3, toggle_layout)
-    )
-}
 local boxes = setmetatable({}, {__mode = 'kv'})
 
 local function create_screen_widgets(screen)
+    if not screen then
+        return
+    end
+
     boxes[screen] = {}
 
     for tag_idx=1, #screen.tags do
@@ -40,7 +28,6 @@ local function create_screen_widgets(screen)
                 left_widget = tag_name_font_icon,
                 right_widget = tag_font_icon,
             },
-            top     = true,
             buttons = gears.table.join(
                 awful.button({}, 1, function() screen.tags[tag_idx]:view_only() end),
                 awful.button({}, 3, function() screen.tags[tag_idx]:view_only() end),
@@ -83,11 +70,6 @@ local function update(screen, container)
         if tag_name == selected_tag_name then
             fg_color = tag_colors[tag_idx]
             bg_color = fg_color
-
-            -- update the layout icon too
-            local layout = screen.tags[tag_idx].layout.name
-            layout_font_icon:update(layout_font_icons[layout], fg_color)
-            layout_font_icon_container:set_color(fg_color)
         end
 
         tag_font_icon:update(num_tag_clients, fg_color)
@@ -130,7 +112,6 @@ local function factory(args)
         update_function = function(tag_container)
             tag_container:reset()
             update(s, tag_container)
-            tag_container:add(layout_font_icon_container)
         end,
         layout = fixed.vertical
     }

@@ -45,7 +45,6 @@ local function create_client_window_icon(c)
 
     local container = Container {
         widget = display.center(icon_container),
-        top = true,
     }
 
     if using_font_icon then
@@ -102,6 +101,8 @@ local function update_func(window_list, buttons, _, data, clients)
         )
         window_list:add(container)
     end
+
+    window_list:add(divider)
 end
 
 local function factory(args)

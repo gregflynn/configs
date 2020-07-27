@@ -39,4 +39,5 @@ return {
     floating_rule('Arandr'),
     floating_rule('File-roller'),
     floating_rule('Thunar'),
+    floating_rule('Com.github.alainm23.planner')
 }

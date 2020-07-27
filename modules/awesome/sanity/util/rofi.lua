@@ -60,7 +60,7 @@ end
 --
 -- Web Search
 --
-local rofi_web_cmd = rofi_script_fmt..'rofi_search.py'
+local rofi_web_cmd = rofi_script_fmt..'rofi_actions.py search'
 function rofi:websearch()
     spawn(rofi_web_cmd)
 end
@@ -81,6 +81,11 @@ end
 local rofi_vpn_cmd = string.format('bash %s/modules/rofi/rofi_vpn.sh', beautiful.dotsan_home)
 function rofi:vpn()
     spawn(rofi_vpn_cmd)
+end
+
+local rofi_system_actions = rofi_script_fmt..'rofi_actions.py actions'
+function rofi:actions()
+    spawn(rofi_system_actions)
 end
 
 return rofi

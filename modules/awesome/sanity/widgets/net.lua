@@ -1,18 +1,12 @@
 local string = string
 
-local gears        = require('gears')
 local Container    = require('sanity/util/container')
 local DoubleWide   = require('sanity/util/doublewide')
 local FontIcon     = require('sanity/util/fonticon')
 local Graph        = require('sanity/util/graph')
-local icon         = require('sanity/util/icon')
 local number       = require('sanity/util/number')
-local rofi_service = require('sanity/util/rofi')
 local text         = require('sanity/util/text')
-local timer        = require('sanity/util/timer')
 
-local button = require('awful.button')
-local menu   = require('awful.menu')
 local spawn  = require('awful.spawn')
 local net    = require('lain.widget.net')
 local fixed  = require('wibox.layout.fixed')
@@ -32,18 +26,6 @@ local network_graph = Graph {color = color, scale = true}
 
 local empty_str = ''
 
-local net_menu = menu({
-    theme = { width = 120 },
-    items = {
-        {'Networks', function()
-            timer.delay(rofi_service.network)
-        end, icon.get_path('devices', 'network-wireless')},
-        {'VPN', function()
-            timer.delay(rofi_service.vpn)
-        end, icon.get_path('devices', 'network-vpn')},
-    }
-})
-
 local container = Container {
     widget = widget {
         layout = fixed.vertical,
@@ -54,11 +36,6 @@ local container = Container {
         },
     },
     color = color,
-    buttons = gears.table.join(
-        button({}, 1, function()
-            net_menu:toggle()
-        end)
-    )
 }
 
 local nmcli_command = 'nmcli -t | grep %s | grep connect | awk \'{ print $4,$5,$6,$7,$8,$9 }\''

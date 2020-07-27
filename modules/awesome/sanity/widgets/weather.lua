@@ -1,14 +1,9 @@
-local math, os, string = math, os, string
+local math, string = math, string
 
-local gears     = require('gears')
 local Container = require('sanity/util/container')
 local FontIcon  = require('sanity/util/fonticon')
 local display   = require('sanity/util/display')
-local icon      = require('sanity/util/icon')
 
-local button  = require('awful.button')
-local menu    = require('awful.menu')
-local spawn   = require('awful.spawn')
 local markup  = require('lain.util.markup')
 local weather = require('lain.widget.weather')
 local fixed   = require('wibox.layout.fixed')
@@ -85,30 +80,7 @@ local lain_weather = weather {
         fonticon:update(icon_map[icon_id], color)
 
     end,
-    notification_text_fun = function(wn)
-        local day  = os.date('%a %d', wn['dt'])
-        local tmin = math.floor(wn['temp']['min'])
-        local tmax = math.floor(wn['temp']['max'])
-        local desc = wn['weather'][1]['description']
-
-        return string.format(
-            '<b>%s</b>: %s/%s %s',
-            day, temp(tmax, 'high'), temp(tmin, 'low'), desc
-        )
-    end
 }
-
-local weather_menu = menu({
-    theme = { width = 200 },
-    items = {
-        {'Week Forecast', function()
-            lain_weather.show(5)
-        end, icon.get_path('status', 'weather-clear-symbolic', 'symbolic')},
-        {'Radar', function()
-            spawn('xdg-open https://darksky.net/forecast/42.3501,-71.0591/us12/en')
-        end, icon.get_path('places', 'internet-radio-symbolic', 'symbolic')},
-    }
-})
 
 weather_container = Container {
     widget = widget {
@@ -117,10 +89,6 @@ weather_container = Container {
         display.center(weather_text),
     },
     color = color,
-    buttons = gears.table.join(
-        button({}, 1, function() weather_menu:toggle() end),
-        button({}, 3, function() weather_menu:toggle() end)
-    )
 }
 
 return weather_container

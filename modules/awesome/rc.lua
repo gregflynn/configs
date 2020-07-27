@@ -19,6 +19,8 @@ require('sanity/signals')
 awesome.set_preferred_icon_size(42)
 naughty.config.padding = 30
 naughty.config.defaults.margin = 10
+naughty.config.defaults.position = 'bottom_left'
+naughty.config.presets.critical = {fg = colors.background, bg = colors.red, timeout = 0}
 
 beautiful.layout_machi = machi.get_icon()
 machi.default_editor.set_gap(beautiful.useless_gap * 2, beautiful.useless_gap * 2)
@@ -74,7 +76,7 @@ local rofi_service       = require('sanity/util/rofi')
 --
 -- Screen setup
 --
-local Divider = require('sanity/widgets/divider')
+divider       = require('sanity/widgets/divider')()
 local TagList = require('sanity/widgets/tag')
 local volume  = require('sanity/widgets/volume')
 
@@ -103,44 +105,38 @@ awful.screen.connect_for_each_screen(function(screen)
 
     screen.mywibar:setup {
         layout = wibox.layout.align.vertical,
-        {
-            widget = wibox.container.background,
-            bg     = colors.background,
-            shape  = function(cr, w, h)
-                gears.shape.partially_rounded_rect(cr, w, h, false, false, true, false, 5)
-            end,
-            {
-                widget = wibox.container.margin,
-                bottom = 10,
-                {
-                    layout = wibox.layout.fixed.vertical,
-                    screen.mytaglist,
-                    Divider {top = true},
-                    screen.mytasklist,
-                }
-            }
-        },
+        expand = 'outside',
         nil,
         {
             widget = wibox.container.background,
             bg     = colors.background,
             shape  = function(cr, w, h)
-                gears.shape.partially_rounded_rect(cr, w, h, false, true, false, false, 5)
+                gears.shape.partially_rounded_rect(cr, w, h, false, true, true, false, 5)
             end,
             {
-                layout = wibox.layout.fixed.vertical,
-                require('sanity/widgets/tray'),
-                require('sanity/widgets/cpu'),
-                require('sanity/widgets/mem'),
-                require('sanity/widgets/gpu'),
-                require('sanity/widgets/storage'),
-                require('sanity/widgets/net'),
-                volume,
-                require('sanity/widgets/battery'),
-                require('sanity/widgets/weather'),
-                require('sanity/widgets/clock'),
+                widget = wibox.container.margin,
+                bottom = 5,
+                {
+                    layout = wibox.layout.fixed.vertical,
+                    screen.mytaglist,
+                    divider,
+                    screen.mytasklist,
+                    require('sanity/widgets/cpu'),
+                    require('sanity/widgets/mem'),
+                    require('sanity/widgets/gpu'),
+                    require('sanity/widgets/storage'),
+                    require('sanity/widgets/net'),
+                    volume,
+                    require('sanity/widgets/screenlock'),
+                    require('sanity/widgets/redshift'),
+                    require('sanity/widgets/battery'),
+                    require('sanity/widgets/weather'),
+                    require('sanity/widgets/clock'),
+                    require('sanity/widgets/tray'),
+                }
             }
-        }
+        },
+        nil
     }
 end)
 
@@ -241,6 +237,7 @@ globalkeys = gears.table.join(
     create_key('p', 'awesome', 'Select Window (all tags)', rofi_service.allwindows),
     create_key('e', 'awesome', 'Select Emoji', rofi_service.emoji),
     create_key('s', 'awesome', 'Search Web', rofi_service.websearch),
+    create_key('a', 'awesome', 'System Actions', rofi_service.actions),
     create_mod_key(shift, 'p', 'awesome', 'Open Projects', rofi_service.projects),
 
     --

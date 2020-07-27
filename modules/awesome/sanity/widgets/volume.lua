@@ -1,16 +1,14 @@
 local string = string
 
-local beautiful = require('beautiful')
-local gears     = require('gears')
-local Container = require('sanity/util/container')
+local beautiful  = require('beautiful')
+local gears      = require('gears')
+local Container  = require('sanity/util/container')
 local DoubleWide = require('sanity/util/doublewide')
-local FontIcon  = require('sanity/util/fonticon')
-local Pie       = require('sanity/util/pie')
-local icon      = require('sanity/util/icon')
-local text      = require('sanity/util/text')
+local FontIcon   = require('sanity/util/fonticon')
+local Pie        = require('sanity/util/pie')
+local text       = require('sanity/util/text')
 
 local button   = require('awful.button')
-local menu     = require('awful.menu')
 local spawn    = require('awful.spawn')
 local pulsebar = require('lain.widget.pulsebar')
 
@@ -26,8 +24,8 @@ local al_color = colors.red
 
 local vol_icon = FontIcon {small = true, color = fg_color, icon = font_icon_mute}
 local vol_pie  = Pie {
-    color     = fg_color,
-    icon      = font_icon_mute
+    color = fg_color,
+    icon  = font_icon_mute
 }
 
 local volume = pulsebar {
@@ -35,7 +33,7 @@ local volume = pulsebar {
     margins = 4,
     paddings = 0,
     notification_preset = {
-        position = 'bottom_middle',
+        position = 'bottom_left',
         title    = 'volume',
         font     = beautiful.font_notif
     },
@@ -48,23 +46,12 @@ local volume = pulsebar {
         update_volume(volume_now)
     end,
     tick = '█',
-    tick_pre = '',
-    tick_post = '',
-    tick_none = ' '
 }
 
-local vol_menu = menu({
-    theme = { width = 170 },
-    items = {
-        {'Bluetooth', function() spawn('blueberry') end, icon.get_path('devices', 'bluetooth')},
-        {'Media Player', function() spawn('plexmediaplayer --windowed --desktop') end, icon.get_path('apps', 'multimedia-audio-player')},
-        {'Volume Control', function() spawn('pavucontrol') end, icon.get_path('devices', 'audio-card')},
-        {'Mute', function()
-            spawn(string.format('pactl set-sink-mute %d toggle', volume.device))
-            volume.update()
-        end}
-    }
-})
+function toggle_mute()
+    spawn(string.format('pactl set-sink-mute %d toggle', volume.device))
+    volume.update()
+end
 
 local volume_container = Container {
     widget = DoubleWide {
@@ -74,16 +61,8 @@ local volume_container = Container {
     no_tooltip = true,
     color   = fg_color,
     buttons = gears.table.join(
-        button({}, 1, function() vol_menu:toggle() end),
-        button({}, 3, function() vol_menu:toggle() end),
-        button({}, 4, function()
-            spawn(string.format('pactl set-sink-volume %d +1%%', volume.device))
-            volume.update()
-        end),
-        button({}, 5, function()
-            spawn(string.format('pactl set-sink-volume %d -1%%', volume.device))
-            volume.update()
-        end)
+        button({}, 1, toggle_mute),
+        button({}, 3, toggle_mute)
     ),
 }
 volume_container.lain_widget = volume

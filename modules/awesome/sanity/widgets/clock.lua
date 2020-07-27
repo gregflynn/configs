@@ -5,13 +5,10 @@ local glib      = require('lgi')
 local Container = require('sanity/util/container')
 local display   = require('sanity/util/display')
 local text      = require('sanity/util/text')
-local icon      = require('sanity/util/icon')
 
 local DateTime  = glib.GLib.DateTime
 local TimeZone  = glib.GLib.TimeZone
 
-local button  = require('awful.button')
-local menu    = require('awful.menu')
 local spawn   = require('awful.spawn')
 local markup  = require('lain.util.markup')
 local textbox = require('wibox.widget.textbox')
@@ -19,7 +16,6 @@ local fixed   = require('wibox.layout.fixed')
 local widget  = require('wibox.widget')
 
 -- http://man7.org/linux/man-pages/man3/strptime.3.html
-local calendar = 'https://calendar.google.com/'
 local time_fmt = '%I:%M'
 local week_fmt = '%a'
 local date_fmt = '%m/%d'
@@ -39,30 +35,6 @@ local time_text  = textbox()
 local week_text  = textbox()
 local date_text  = textbox()
 
-local awesome_menu = {
-    {'Reload', function()
-        os.execute('pkill redshift')
-        awesome.restart()
-    end, icon.get_path('actions', 'view-refresh')}
-}
-local system_menu = {
-    {'Sleep', 'systemctl suspend', icon.get_path('actions', 'media-playback-pause')},
-    {'Reboot', 'reboot', icon.get_path('actions', 'system-reboot')},
-    {'Shutdown', 'shutdown -h now', icon.get_path('actions', 'system-shutdown')}
-}
-local clock_menu = menu({
-    theme = { width = 150 },
-    items = {
-        {'Calendar', function() spawn({'xdg-open', calendar}) end, icon.get_path('apps', 'office-calendar')},
-        {'Awesome WM', awesome_menu},
-        {'System', system_menu, icon.get_path('categories', 'applications-system')}
-    }
-})
-
-function toggle_menu()
-    clock_menu:toggle()
-end
-
 function strip_leading_zero(s)
     return s:gsub('^0', empty_str, 1)
 end
@@ -75,10 +47,6 @@ local clock_container = Container {
         display.center(date_text),
     },
     color = text_color,
-    buttons = gears.table.join(
-        button({}, 1, toggle_menu),
-        button({}, 3, toggle_menu)
-    )
 }
 
 local day_of_month_fmt = '%d'

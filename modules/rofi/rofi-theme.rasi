@@ -17,7 +17,7 @@ window {
 mainbox {
     background-color: @background;
     padding: 0;
-    border: 4px;
+    border: 0px;
     border-color: @yellow;
 }
 
