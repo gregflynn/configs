@@ -11,9 +11,11 @@ local markup = require('lain.util.markup')
 local widget = require('wibox.widget')
 local fixed  = require('wibox.layout.fixed')
 
-local color = colors.green
+local color   = colors.green
+local visible = false
 
 if file.exists('/usr/bin/nvidia-smi') and not file.exists('/proc/acpi/bbswitch') then
+    visible = true
     local gpu_graph = Graph {color = color}
     local gpu_temp = watch(
         'nvidia-smi --format=csv,nounits,noheader --query-gpu=temperature.gpu,utilization.gpu',
@@ -27,14 +29,18 @@ if file.exists('/usr/bin/nvidia-smi') and not file.exists('/proc/acpi/bbswitch')
             gpu_graph:add_value(tonumber(load) / 100.0)
         end
     )
-
-    return Container {
-        color = color,
-        widget = widget {
-            layout = fixed.vertical,
-            gpu_graph.container,
-            display.center(gpu_temp)
-        },
-        no_tooltip = true
-    }
 end
+
+local gpu_container = Container {
+    color = color,
+    widget = visible and widget {
+        layout = fixed.vertical,
+        gpu_graph.container,
+        display.center(gpu_temp)
+    } or nil,
+    no_tooltip = true
+}
+
+gpu_container.visible = visible
+
+return gpu_container
