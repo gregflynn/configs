@@ -86,6 +86,7 @@ local function update_func(window_list, buttons, _, data, clients)
             bg_color = client_focus_color
         elseif c.minimized then
             color = client_minimized_color
+            bg_color = client_minimized_color
         end
 
         local container = data.client_icons[c]
