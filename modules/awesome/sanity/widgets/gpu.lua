@@ -40,7 +40,7 @@ if file.exists('/usr/bin/nvidia-smi') and not file.exists('/proc/acpi/bbswitch')
         no_tooltip = true
     }
 else
-    gpu_container = Container()
+    gpu_container = Container {}
 end
 
 
