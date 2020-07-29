@@ -13,6 +13,7 @@ local fixed  = require('wibox.layout.fixed')
 
 local color   = colors.green
 local visible = false
+local gpu_container
 
 if file.exists('/usr/bin/nvidia-smi') and not file.exists('/proc/acpi/bbswitch') then
     visible = true
@@ -29,17 +30,19 @@ if file.exists('/usr/bin/nvidia-smi') and not file.exists('/proc/acpi/bbswitch')
             gpu_graph:add_value(tonumber(load) / 100.0)
         end
     )
+    gpu_container = Container {
+        color = color,
+        widget = visible and widget {
+            layout = fixed.vertical,
+            gpu_graph.container,
+            display.center(gpu_temp)
+        } or nil,
+        no_tooltip = true
+    }
+else
+    gpu_container = Container()
 end
 
-local gpu_container = Container {
-    color = color,
-    widget = visible and widget {
-        layout = fixed.vertical,
-        gpu_graph.container,
-        display.center(gpu_temp)
-    } or nil,
-    no_tooltip = true
-}
 
 gpu_container.visible = visible
 
