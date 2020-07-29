@@ -19,7 +19,6 @@ require('sanity/signals')
 awesome.set_preferred_icon_size(42)
 naughty.config.padding = 30
 naughty.config.defaults.margin = 10
-naughty.config.defaults.position = 'bottom_left'
 naughty.config.presets.critical = {fg = colors.background, bg = colors.red, timeout = 0}
 
 beautiful.layout_machi = machi.get_icon()
