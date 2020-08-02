@@ -30,9 +30,7 @@ local function create_screen_widgets(screen)
             },
             buttons = gears.table.join(
                 awful.button({}, 1, function() screen.tags[tag_idx]:view_only() end),
-                awful.button({}, 3, function() screen.tags[tag_idx]:view_only() end),
-                awful.button({}, 5, function() awful.tag.viewnext() end),
-                awful.button({}, 4, function() awful.tag.viewprev() end)
+                awful.button({}, 3, function() screen.tags[tag_idx]:view_only() end)
             ),
             no_tooltip = true
         }

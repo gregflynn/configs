@@ -62,7 +62,15 @@ local volume_container = Container {
     color   = fg_color,
     buttons = gears.table.join(
         button({}, 1, toggle_mute),
-        button({}, 3, toggle_mute)
+        button({}, 3, toggle_mute),
+        button({}, 4, function()
+            spawn(string.format('pactl set-sink-volume %d +1%%', volume.device))
+            volume.update()
+        end),
+        button({}, 5, function()
+            spawn(string.format('pactl set-sink-volume %d -1%%', volume.device))
+            volume.update()
+        end)
     ),
 }
 volume_container.lain_widget = volume
