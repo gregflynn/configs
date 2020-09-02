@@ -70,6 +70,10 @@ local function update(screen, container)
             bg_color = fg_color
         end
 
+        if num_tag_clients > 9 then
+            num_tag_clients = '*'
+        end
+
         tag_font_icon:update(num_tag_clients, fg_color)
         tag_name_font_icon:update(tag_name, fg_color)
         icon_container:set_color(bg_color)
