@@ -3,7 +3,6 @@ local string = string
 local Container    = require('sanity/util/container')
 local DoubleWide   = require('sanity/util/doublewide')
 local FontIcon     = require('sanity/util/fonticon')
-local Graph        = require('sanity/util/graph')
 local number       = require('sanity/util/number')
 local text         = require('sanity/util/text')
 
@@ -22,14 +21,12 @@ local vpn_disabled     = ''
 
 local network_icon  = FontIcon {icon = no_connection, color = color, small = true}
 local vpn_icon      = FontIcon {icon = vpn_disabled,  color = color, small = true}
-local network_graph = Graph {color = color, scale = true}
 
 local empty_str = ''
 
 local container = Container {
     widget = widget {
         layout = fixed.vertical,
-        network_graph.container,
         DoubleWide {
             left_widget = network_icon,
             right_widget = vpn_icon,
@@ -72,7 +69,6 @@ end
 local tunnel_name = 'tun0'
 
 local function network_update()
-    network_graph:add_value(tonumber(net_now.received + net_now.sent), 0)
     local down = number.human_bytes(net_now.received, 0, 2)
     local up   = number.human_bytes(net_now.sent, 0, 2)
 

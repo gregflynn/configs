@@ -3,7 +3,7 @@ local gears = require('gears')
 local timer = {}
 
 function timer.delay(f, amount)
-    gears.timer.weak_start_new(amount or 0.2, function()
+    return gears.timer.weak_start_new(amount or 0.2, function()
         f()
         return false
     end)

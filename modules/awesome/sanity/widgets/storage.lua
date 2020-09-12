@@ -1,67 +1,24 @@
-local beautiful = require('beautiful')
-local gears     = require('gears')
-local vicious   = require('vicious')
 local Container = require('sanity/util/container')
-local Graph     = require('sanity/util/graph')
-local display   = require('sanity/util/display')
-local icon      = require('sanity/util/icon')
-local text      = require('sanity/util/text')
+local DoubleWide = require('sanity/util/doublewide')
+local FontIcon   = require('sanity/util/fonticon')
+local Pie        = require('sanity/util/pie')
 
-local button = require('awful.button')
-local menu   = require('awful.menu')
 local util   = require('awful.util')
-local spawn  = require('awful.spawn')
 local watch  = require('awful.widget.watch')
-local markup = require('lain.util.markup')
-local widget = require('wibox.widget')
-local fixed  = require('wibox.layout.fixed')
 
 local color       = colors.purple
-local storage_cmd = 'df -B1 | tail -n +2 | awk \'{ print $6,$5 }\''
+local storage_cmd = "df -B1 | awk '{ print $6,$5 }' | grep '/ ' | tr -d '%' | tr -d '/ '"
+local storage_pie = Pie {color = color}
 
-local storage_menu = menu({
-    theme = { width = 100 },
-    items = {
-        {'Root', function()
-            spawn({'xdg-open', '/'})
-        end, icon.get_path('devices', 'drive-harddisk')},
-        {'Home', function()
-            spawn({'xdg-open', beautiful.home})
-        end, icon.get_path('places', 'user-home')},
-    }
-})
-
-local initial_pct = '?%'
-
-local root_pct_textbox = watch({util.shell, '-c', storage_cmd}, 60, function(w, stdout)
-    -- stdout is all drives, 'mount pct'
-    local lines    = text.split(stdout, '\n')
-    local root_pct = initial_pct
-
-    for i=1, #lines do
-        local dfParts = text.split(lines[i])
-
-        if dfParts[1] == '/' then
-            root_pct = dfParts[2]
-        end
-    end
-
-    w:set_markup(markup.fg.color(color, root_pct))
+watch({util.shell, '-c', storage_cmd}, 60, function(_, stdout)
+    storage_pie:update((tonumber(stdout) or 0) / 100)
 end)
 
-local disk_load_widget = Graph {color = color, scale = true}
-vicious.register(disk_load_widget, vicious.widgets.dio, '${nvme0n1 total_kb}', graph_interval)
-
 return Container {
-    widget  = widget {
-        layout = fixed.vertical,
-        disk_load_widget.container,
-        display.center(root_pct_textbox),
+    widget = DoubleWide {
+        left_widget = FontIcon {icon = '', color = color, small = true},
+        right_widget = storage_pie,
     },
     color   = color,
-    buttons = gears.table.join(
-        button({}, 1, function() storage_menu:toggle() end),
-        button({}, 3, function() storage_menu:toggle() end)
-    ),
     no_tooltip = true
 }

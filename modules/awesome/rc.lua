@@ -27,7 +27,7 @@ machi.default_editor.set_gap(beautiful.useless_gap * 2, beautiful.useless_gap * 
 -- disable 'AeroSnap' like feature
 awful.mouse.snap.edge_enabled = false
 
-tags       = {         '',         '',          '',           '',        ''}
+tags       = {         '',         '',          '',           '',        ''}
 tag_colors = {colors.green, colors.blue, colors.white, colors.orange, colors.red}
 
 -- define keys, not local so widgets can use them
@@ -35,8 +35,6 @@ modkey = 'Mod4'
 altkey = 'Mod1'
 ctlkey = 'Control'
 shift  = 'Shift'
-
-graph_interval = 2
 
 terminal = 'kitty'
 
@@ -75,7 +73,6 @@ local rofi_service       = require('sanity/util/rofi')
 --
 -- Screen setup
 --
-divider       = require('sanity/widgets/divider')()
 local TagList = require('sanity/widgets/tag')
 local volume  = require('sanity/widgets/volume')
 
@@ -118,7 +115,6 @@ awful.screen.connect_for_each_screen(function(screen)
                 {
                     layout = wibox.layout.fixed.vertical,
                     screen.mytaglist,
-                    divider,
                     screen.mytasklist,
                     require('sanity/widgets/cpu'),
                     require('sanity/widgets/mem'),
@@ -129,7 +125,6 @@ awful.screen.connect_for_each_screen(function(screen)
                     require('sanity/widgets/screenlock'),
                     require('sanity/widgets/redshift'),
                     require('sanity/widgets/battery'),
-                    require('sanity/widgets/weather'),
                     require('sanity/widgets/clock'),
                     require('sanity/widgets/tray'),
                 }
@@ -139,6 +134,11 @@ awful.screen.connect_for_each_screen(function(screen)
     }
 end)
 
+
+--
+-- Client Switcher
+--
+local switcher = require('sanity/util/switcher')
 
 --
 -- Keybindings
@@ -178,11 +178,11 @@ globalkeys = gears.table.join(
     --
     -- Client
     --
-    create_key('Tab', 'client', 'Last Window', function()
-        awful.client.focus.history.previous()
-        if client.focus then
-            client.focus:raise()
-        end
+    create_key('Tab', 'client', 'Last Client', function()
+        switcher.switch(1, modkey, 'Super_L', shift, 'Tab')
+    end),
+    create_mod_key(shift, 'Tab', 'client', 'Next Client', function()
+        switcher.switch(-1, modkey, 'Super_L', shift, 'Tab')
     end),
     create_key('j', 'client', 'Previous Client', function()
         awful.client.focus.byidx(-1)
@@ -213,12 +213,6 @@ globalkeys = gears.table.join(
     --
     -- Screen
     --
-    create_mod_key(ctlkey, 'j', 'screen', 'Next Screen', function()
-        awful.screen.focus_relative(1)
-    end),
-    create_mod_key(ctlkey, 'k', 'screen', 'Previous Screen', function()
-        awful.screen.focus_relative(-1)
-    end),
     create_key('o', 'screen', 'Take Screenshot', function()
         awful.spawn({'flameshot', 'gui'})
     end),

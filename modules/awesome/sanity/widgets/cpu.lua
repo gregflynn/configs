@@ -1,19 +1,14 @@
 local math, string = math, string
 
-local vicious   = require('vicious')
 local Container = require('sanity/util/container')
-local Graph     = require('sanity/util/graph')
 local display   = require('sanity/util/display')
 
 local watch  = require('awful.widget.watch')
 local markup = require('lain.util.markup')
-local widget = require('wibox.widget')
-local fixed  = require('wibox.layout.fixed')
 
 local color  = colors.red
 
 local cpu_container
-local cpu_load_widget = Graph {color = color}
 
 local cpu_temp_widget = watch('sensors', 5, function(w, stdout)
     local temp = stdout:match('Package id 0:%s+%p(%d+%p%d)')
@@ -28,14 +23,9 @@ local cpu_temp_widget = watch('sensors', 5, function(w, stdout)
     w:set_markup(markup.fg.color(color, string.format('%s°C', math.floor(temp))))
 end)
 
-vicious.register(cpu_load_widget, vicious.widgets.cpu, '$1', graph_interval)
 
 cpu_container = Container {
-    widget = widget {
-        layout = fixed.vertical,
-        cpu_load_widget.container,
-        display.center(cpu_temp_widget),
-    },
+    widget = display.center(cpu_temp_widget),
     color = color,
     no_tooltip = true,
 }

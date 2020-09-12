@@ -102,8 +102,6 @@ local function update_func(window_list, buttons, _, data, clients)
         )
         window_list:add(container)
     end
-
-    window_list:add(divider)
 end
 
 local function factory(args)
