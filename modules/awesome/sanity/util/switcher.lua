@@ -123,7 +123,7 @@ function _M.populateAltTabTable()
             client = clients[i],
             opacity = clients[i].opacity
         })
-        local fi = FontIcon {size = 48}
+        local fi = FontIcon {size = 100}
         table.insert(_M.popup_icons, fi)
         _M.popup_icons_container:add(wibox.container.margin(fi, _M.fonticon_margin, _M.fonticon_margin))
 	end

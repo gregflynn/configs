@@ -19,7 +19,7 @@ local floating_tags = {'', '', '', '', ''}
 local tag_icons = {}
 for idx=1, #tags do
     tag_icons[idx] = FontIcon {
-        icon = tags[idx], size = 48, color = colors.background
+        icon = tags[idx], size = 100, color = colors.background
     }
 end
 
