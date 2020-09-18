@@ -54,6 +54,7 @@ local tag_popup = awful.popup {
     shape        = gears.shape.rounded_rect,
     visible      = false,
     ontop        = true,
+    opacity      = 0.9
 }
 
 local function show_popup(tag_idx)
@@ -63,22 +64,19 @@ local function show_popup(tag_idx)
             c = tag_colors[idx]
         end
         tag_icons[idx]:update(tags[idx], c)
-        --tag_margins[idx].color = c
     end
 
     tag_popup.visible = true
     if last_timer then
         last_timer:stop()
     end
-    last_timer = timer.delay(function() tag_popup.visible = false end, 1)
+    last_timer = timer.delay(function() tag_popup.visible = false end, 0.5)
 end
 
 local function create_screen_widgets(screen)
     if not screen then
         return
     end
-
-    --boxes[screen] = {}
 
     local tag_name_font_icon = FontIcon {large = true}
     local icon_container     = Container {

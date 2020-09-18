@@ -51,7 +51,7 @@ _M.altTabIndex = 1
 _M.source = string.sub(debug.getinfo(1,'S').source, 2)
 _M.path = string.sub(_M.source, 1, string.find(_M.source, "/[^/]*$"))
 
-_M.fonticon_margin = 10
+_M.fonticon_margin = 20
 _M.popup_text = textbox()
 _M.popup_icons = {}
 _M.popup_icons_container = wibox.layout.fixed.horizontal()
@@ -69,6 +69,7 @@ _M.popup = awful.popup {
     shape        = gears.shape.rounded_rect,
     visible      = false,
     ontop        = true,
+    opacity      = 0.9
 }
 
 -- simple function for counting the size of a table
@@ -123,7 +124,7 @@ function _M.populateAltTabTable()
             client = clients[i],
             opacity = clients[i].opacity
         })
-        local fi = FontIcon {size = 100}
+        local fi = FontIcon {size = 90}
         table.insert(_M.popup_icons, fi)
         _M.popup_icons_container:add(wibox.container.margin(fi, _M.fonticon_margin, _M.fonticon_margin))
 	end
@@ -191,7 +192,9 @@ function _M.cycle(dir)
             idx == _M.altTabIndex and colors.yellow or colors.gray
         )
     end
-    _M.popup_text:set_markup(markup.fg.color(colors.yellow, string.format('%s (%s)', text.trim(current_client.name), current_client.class)))
+    _M.popup_text:set_markup(markup.fg.color(colors.yellow, markup.big(
+		string.format('%s (%s)', text.trim(current_client.name), current_client.class))
+	))
 end
 
 function _M.switch(dir, mod_key1, release_key, mod_key2, key_switch)
