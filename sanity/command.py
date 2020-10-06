@@ -33,6 +33,7 @@ def install(module=None, clean=False):
         shutil.rmtree(DOTSAN_SHELL_SOURCES)
 
     os.chdir(settings.DOTSAN_HOME)
+    check_call(['pip', 'install', '--upgrade', 'pip', '-q'])
     check_call(['pip', 'install', '-q', '-e', '.'])
     modules = Modules.get_modules()
 
