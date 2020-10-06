@@ -44,21 +44,27 @@ def install(module=None, clean=False):
 
 
 @dotsan.command()
-def update():
+@click.pass_context
+def update(ctx):
     """Update to latest
     """
     os.chdir(settings.DOTSAN_HOME)
     try:
         check_call(['git', 'pull'])
     except CalledProcessError:
+        click.secho(f'sanity is dirty', fg='red', err=True)
         return
 
     for module in Modules.get_modules():
         if module.is_remote():
             os.chdir(module.path)
-            check_call(['git', 'pull'])
+            try:
+                check_call(['git', 'pull'])
+            except CalledProcessError:
+                click.secho(f'{module.name} is dirty', fg='red', err=True)
+                return
 
-    install()
+    ctx.invoke(install)
 
 
 @dotsan.command()
