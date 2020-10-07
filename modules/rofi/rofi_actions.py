@@ -1,8 +1,9 @@
 import os
+import json
 import sys
 from pathlib import Path
 from argparse import ArgumentParser
-from subprocess import check_call, check_output, CalledProcessError
+from subprocess import check_call, check_output, CalledProcessError, run
 from urllib.parse import quote_plus
 
 
@@ -12,6 +13,38 @@ ROFI_OPTIONS = [
 ]
 ROFI_PATH = os.path.dirname(sys.argv[0])
 DISPLAY_LAYOUTS_FOLDER = Path(HOME) / '.screenlayout'
+
+DEFAULT_ENGINE = 'duckduckgo'
+ENGINE_MAP = {
+    'g': '+google',
+    'google': 'https://www.google.com/search?q={}',
+    'ddg': '+duckduckgo',
+    'duckduckgo': 'https://duckduckgo.com/?q={}',
+    'giphy': 'https://giphy.com/search/?q={}',
+    'gif': '+giphy',
+    'w': 'https://en.wikipedia.org/w/index.php?search={}',
+    'aw': 'https://wiki.archlinux.org/index.php?search={}'
+}
+ENGINE_ICONS = {
+    'giphy': 'image-x-generic',
+    'gif': 'image-x-generic',
+    'w': 'accessories-dictionary',
+    'aw': 'accessories-dictionary',
+}
+
+PROJECT_DB_LOCATION = os.path.join(HOME, '.rofiprojects')
+ADD_PROJECT_PREFIX = '+'
+PROJECT_COMMAND_ALIASES = {
+    'charm': os.path.join(HOME, '.bin', 'pycharm'),
+    'pycharm': os.path.join(HOME, '.bin', 'pycharm'),
+    'idea': os.path.join(HOME, '.bin', 'idea')
+}
+PROJECT_ICONS = {
+    'code': '/usr/share/icons/visual-studio-code.png',
+    'charm': os.path.join(HOME, '.local/share/JetBrains/Toolbox/apps/PyCharm-P/ch-0/.icon.svg'),
+    'pycharm': os.path.join(HOME, '.local/share/JetBrains/Toolbox/apps/PyCharm-P/ch-0/.icon.svg'),
+    'idea': os.path.join(HOME, '.local/share/JetBrains/Toolbox/apps/IDEA-U/ch-0/.icon.svg')
+}
 
 
 def encode_rofi_option(option):
@@ -83,11 +116,55 @@ def display_layouts():
 
 
 def project():
-    pass
+    db = load_projects()
+    options = []
+    command = None
+
+    for name in sorted(db.keys()):
+        command_head, _ = db[name].split(' ', maxsplit=1)
+        options.append((PROJECT_ICONS[command_head], name)
+                       if command_head in PROJECT_ICONS
+                       else name)
+
+    rofi_output = rofi('project', options, 'Add: +name;command')
+
+    if not rofi_output:
+        return
+
+    if rofi_output.startswith(ADD_PROJECT_PREFIX):
+        rofi_output = rofi_output.replace(ADD_PROJECT_PREFIX, '')
+        keyword, command = rofi_output.split(';', maxsplit=1)
+        db[keyword] = command
+        save_projects(db)
+    elif rofi_output in db:
+        command = db[rofi_output]
+
+    if command:
+        command_head, suffix = command.split(' ', maxsplit=1)
+        if command_head in PROJECT_COMMAND_ALIASES:
+            command_head = PROJECT_COMMAND_ALIASES[command_head]
+        run(f'{command_head} {suffix}', shell=True)
+
+
+def load_projects():
+    if not os.path.isfile(PROJECT_DB_LOCATION):
+        return {}
+
+    with open(PROJECT_DB_LOCATION, 'r') as f:
+        return json.loads(f.read())
+
+
+def save_projects(db):
+    with open(PROJECT_DB_LOCATION, 'w') as f:
+        f.write(json.dumps(db))
 
 
 def search():
-    output = rofi('search', ENGINE_MAP.keys(),
+    options = [
+        (ENGINE_ICONS[e], e) if e in ENGINE_ICONS else ('system-search', e)
+        for e in ENGINE_MAP.keys()
+    ]
+    output = rofi('search', options,
                   'Choose a prefix followed by a search term')
 
     if not output:
@@ -96,19 +173,6 @@ def search():
     url = _get_url(output)
 
     check_call(['xdg-open', url])
-
-
-DEFAULT_ENGINE = 'duckduckgo'
-ENGINE_MAP = {
-    'g': '+google',
-    'google': 'https://www.google.com/search?q={}',
-    'ddg': '+duckduckgo',
-    'duckduckgo': 'https://duckduckgo.com/?q={}',
-    'giphy': 'https://giphy.com/search/?q={}',
-    'gif': '+giphy',
-    'w': 'https://en.wikipedia.org/w/index.php?search={}',
-    'aw': 'https://wiki.archlinux.org/index.php?search={}'
-}
 
 
 def _get_url(line):

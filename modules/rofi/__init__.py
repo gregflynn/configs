@@ -11,6 +11,6 @@ class Initializer(BaseInitializer):
 
     def install(self):
         config = '.config/rofi/'
-        self.link_base('rofi.config', config + 'config')
+        self.link_base('config.rasi', config + 'config.rasi')
         self.link_dist('rofi-theme.rasi', config + 'dotsanity.rasi')
         self.link_base('config.ini', '.config/networkmanager-dmenu/config.ini')

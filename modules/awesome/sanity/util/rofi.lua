@@ -68,7 +68,7 @@ end
 --
 -- Project Manager
 --
-local rofi_projects_cmd = rofi_script_fmt..'rofi_project.py'
+local rofi_projects_cmd = rofi_script_fmt..'rofi_actions.py project'
 function rofi:projects()
     spawn(rofi_projects_cmd)
 end
