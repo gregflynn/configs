@@ -48,11 +48,12 @@ def log(unit=None):
 
 @sys.command()
 @click.argument('unit')
-def start(unit):
+@click.pass_context
+def start(ctx, unit):
     """Start a systemctl unit
     """
     _systemctl('start', unit)
-    status(unit)
+    ctx.invoke(status, unit=unit)
 
 
 @sys.command()
