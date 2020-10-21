@@ -1,32 +1,24 @@
+import click
+
+
 class LogLevel(object):
     ERROR = 'ER'
     WARN = 'WN'
     OK = 'OK'
 
 
-class TextColor(object):
-    BLACK = '30'
-    RED = '31'
-    GREEN = '32'
-    YELLOW = '33'
-    BLUE = '34'
-    PURPLE = '35'
-    ORANGE = '36'
-    WHITE = '37'
-
-
 class Logger(object):
     LEVEL_COLORS = {
-        LogLevel.ERROR: TextColor.RED,
-        LogLevel.WARN: TextColor.YELLOW,
-        LogLevel.OK: TextColor.GREEN
+        LogLevel.ERROR: 'red',
+        LogLevel.WARN: 'yellow',
+        LogLevel.OK: 'green',
     }
 
     def __init__(self, module_name):
         self._module_name = module_name
 
     def log(self, level, message=''):
-        print(self._format_message(level, message))
+        click.secho(self._format_message(level, message))
 
     def warn(self, message):
         self.log(LogLevel.WARN, message)
@@ -44,14 +36,10 @@ class Logger(object):
             if response in {'N', 'n'}:
                 return False
 
-    @staticmethod
-    def color(color, text):
-        return '\033[{}m{}\033[0m'.format(color, text)
-
     def _format_message(self, level, message):
         level_color = self.LEVEL_COLORS[level]
         return '{} {} {}'.format(
-            self.color(level_color, '[{}]'.format(level)),
-            self.color(TextColor.BLUE, self._module_name),
-            self.color(level_color, message)
+            click.style('[{}]'.format(level), fg=level_color),
+            click.style(self._module_name, fg='blue'),
+            click.style(message, fg=level_color)
         )

@@ -9,7 +9,7 @@ configuration {
 	show-icons: true;
 	parse-known-hosts: false;
 	hide-scrollbar: true;
-	window-format: "{w} {t}";
+	window-format: " {t}";
 	theme: "dotsanity";
 	display-window: "clients";
 	display-windowcd: "tag";

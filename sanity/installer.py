@@ -61,7 +61,7 @@ class Installer(object):
 
             logger.log(LogLevel.OK)
         except Exception as e:
-            logger.log(LogLevel.ERROR, e)
+            logger.log(LogLevel.ERROR, str(e))
             print(traceback.format_exc())
 
     def _meets_requirements(self, initializer, logger):
