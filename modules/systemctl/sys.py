@@ -47,6 +47,17 @@ def log(unit=None):
 
 
 @sys.command()
+@click.argument('unit', required=False)
+def tail(unit):
+    """Tail the system or a unit's log
+    """
+    if unit:
+        _journalctl('-fxeu', unit)
+    else:
+        _journalctl('-fxe')
+
+
+@sys.command()
 @click.argument('unit')
 @click.pass_context
 def start(ctx, unit):
