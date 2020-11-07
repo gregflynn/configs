@@ -23,12 +23,12 @@ local gears = require('gears')
 local wibox = require('wibox')
 local textbox = require('wibox.widget.textbox')
 local client = client
+local beautiful = require('beautiful')
 awful.client = require('awful.client')
 
 local FontIcon = require('sanity/util/fonticon')
 local display  = require('sanity/util/display')
 local text     = require('sanity/util/text')
-local markup   = require('lain.util.markup')
 
 local string = string
 local debug = debug
@@ -192,9 +192,16 @@ function _M.cycle(dir)
             idx == _M.altTabIndex and colors.yellow or colors.gray
         )
     end
-    _M.popup_text:set_markup(markup.fg.color(colors.yellow, markup.big(
-		string.format('%s (%s)', text.trim(current_client.name), current_client.class))
-	))
+    _M.popup_text:set_markup(
+		string.format(
+			'<span font="%s %d" color="%s">%s (%s)</span>',
+			beautiful.font_name,
+			20,
+			colors.yellow,
+			text.trunc(text.trim(current_client.name), 30, nil, true),
+			current_client.class
+		)
+	)
 end
 
 function _M.switch(dir, mod_key1, release_key, mod_key2, key_switch)

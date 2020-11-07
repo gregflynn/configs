@@ -84,7 +84,7 @@ awful.screen.connect_for_each_screen(function(screen)
         screen_type == 'ultrawide' and awful.layout.suit.floating or machi.default_layout
     })
 
-    screen.mytaglist = TagList { screen = screen }
+    screen.mytaglist = TagList.factory { screen = screen }
 
     -- Create a tasklist widget
     screen.mytasklist = require('sanity/widgets/tasklist') { screen = screen }
@@ -274,7 +274,11 @@ local function create_tag_keys(idx, override)
         create_key(key, 'tag', 'View '..tag_name, function()
             local tag = awful.screen.focused().tags[idx]
             if tag then
-                tag:view_only()
+                if tag == awful.screen.focused().selected_tag then
+                    TagList.show_popup(idx)
+                else
+                    tag:view_only()
+                end
             end
         end),
         create_mod_key(shift, key, 'tag', 'Move client to '..tag_name, function()

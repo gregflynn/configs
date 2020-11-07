@@ -57,7 +57,7 @@ local tag_popup = awful.popup {
     opacity      = 0.9
 }
 
-local function show_popup(tag_idx)
+function show_popup(tag_idx)
     for idx=1, #tags do
         local c = colors.gray
         if idx == tag_idx then
@@ -70,7 +70,7 @@ local function show_popup(tag_idx)
     if last_timer then
         last_timer:stop()
     end
-    last_timer = timer.delay(function() tag_popup.visible = false end, 0.5)
+    last_timer = timer.delay(function() tag_popup.visible = false end, 0.3)
 end
 
 local function create_screen_widgets(screen)
@@ -172,4 +172,7 @@ local function factory(args)
     }
 end
 
-return factory
+return {
+    factory = factory,
+    show_popup = show_popup,
+}
