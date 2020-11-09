@@ -12,23 +12,11 @@ local icon_fmt     = '<span font="%s %d" color="%s">%s</span>'
 function factory(args)
     local args = args or {}
 
-    if args.small then
-        args.size = args.size or 18
-        args.margin_l = args.margin_l or 6
-        args.margin_t = args.margin_t or -3
-        args.margin_b = args.margin_b or -3
-    end
-
-    if args.large then
-        args.margin_t = args.margin_t or -5
-        args.margin_b = args.margin_b or -5
-    end
-
     local icon     = args.icon or default_icon
     local color    = args.color or default_color
-    local size     = args.size or 28
-    local margin_l = args.margin_l or 0
-    local margin_r = args.margin_r or 0
+    local size     = args.size or 20
+    local margin_l = args.margin_l or 2
+    local margin_r = args.margin_r or 2
     local margin_t = args.margin_t or 0
     local margin_b = args.margin_b or 0
 

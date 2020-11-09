@@ -1,18 +1,13 @@
 local math, string = math, string
-
+local wibox = require('wibox')
 local Container = require('sanity/util/container')
 local FontIcon  = require('sanity/util/fonticon')
-local display   = require('sanity/util/display')
-
 local markup  = require('lain.util.markup')
 local weather = require('lain.widget.weather')
-local fixed   = require('wibox.layout.fixed')
-local textbox = require('wibox.widget.textbox')
-local widget  = require('wibox.widget')
 
-local fonticon = FontIcon {large = true}
+local fonticon = FontIcon {}
 local city_id  = 4930956
-local color    = colors.purple
+local color    = colors.background
 local hi_color = colors.red
 local lo_color = colors.blue
 
@@ -50,7 +45,6 @@ function temp(value, type)
 end
 
 local weather_container
-local weather_text = textbox()
 local lain_weather = weather {
     city_id   = city_id,
     units     = 'imperial',
@@ -64,9 +58,9 @@ local lain_weather = weather {
         local description = weather_now['weather'][1]['description']
         local wind_speed = weather_now['wind']['speed']
 
-        weather_text:set_markup(markup.fg.color(color, temp(current_temp)))
-        weather_container:set_tooltip_color(
-            ' Weather',
+        widget:set_markup(markup.fg.color(color, temp(current_temp)))
+        --weather_text:set_markup(markup.fg.color(color, temp(current_temp)))
+        weather_container:set_markup(
             string.format(
                 ' %d°F (%s/%s) \n %s mph wind \n %s%% humidity \n %s ',
                 current_temp,
@@ -78,15 +72,14 @@ local lain_weather = weather {
             )
         )
         fonticon:update(icon_map[icon_id], color)
-
     end,
 }
 
 weather_container = Container {
-    widget = widget {
-        layout = fixed.vertical,
-        display.center(fonticon),
-        display.center(weather_text),
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        fonticon,
+        lain_weather.widget,
     },
     color = color,
 }

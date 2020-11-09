@@ -1,9 +1,6 @@
 local beautiful = require('beautiful')
 local gears     = require('gears')
-
-local align = require('wibox.layout.align')
-
-local horizontal = align.horizontal
+local wibox     = require('wibox')
 
 local display = {}
 local window_icon_overrides = {
@@ -88,9 +85,22 @@ function display.get_default_client_icon()
 end
 
 function display.center(widget)
-    local ctr = horizontal(nil, widget, nil)
+    local ctr = wibox.layout.align.horizontal(nil, widget, nil)
     ctr.expand = 'outside'
     return ctr
+end
+
+function display.vertical_bar(bar)
+    return wibox.widget {
+        {
+            bar,
+            forced_width = 6,
+            direction    = 'east',
+            layout       = wibox.container.rotate,
+        },
+        margins = 3,
+        layout  = wibox.container.margin,
+    }
 end
 
 -- Re-set wallpaper when a screen's geometry changes

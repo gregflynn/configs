@@ -16,7 +16,7 @@ require('awful.autofocus')
 require('sanity/errors')
 require('sanity/signals')
 
-awesome.set_preferred_icon_size(42)
+awesome.set_preferred_icon_size(22)
 naughty.config.padding = 30
 naughty.config.defaults.margin = 10
 naughty.config.presets.critical = {fg = colors.background, bg = colors.red, timeout = 0}
@@ -91,46 +91,35 @@ awful.screen.connect_for_each_screen(function(screen)
 
     -- Create the wibox
     screen.mywibar = awful.wibar {
-        position = 'left',
+        position = 'top',
         ontop    = true,
         screen   = screen,
-        width    = beautiful.bar_height,
+        height   = beautiful.bar_height,
         opacity  = beautiful.bar_opacity,
         bg       = '#00000000',
     }
 
     screen.mywibar:setup {
-        layout = wibox.layout.align.vertical,
-        expand = 'outside',
-        nil,
+        layout = wibox.layout.align.horizontal,
         {
-            widget = wibox.container.background,
-            bg     = colors.background,
-            shape  = function(cr, w, h)
-                gears.shape.partially_rounded_rect(cr, w, h, false, true, true, false, 5)
-            end,
-            {
-                widget = wibox.container.margin,
-                bottom = 5,
-                {
-                    layout = wibox.layout.fixed.vertical,
-                    screen.mytaglist,
-                    screen.mytasklist,
-                    require('sanity/widgets/cpu'),
-                    require('sanity/widgets/mem'),
-                    require('sanity/widgets/gpu'),
-                    require('sanity/widgets/storage'),
-                    require('sanity/widgets/net'),
-                    volume,
-                    require('sanity/widgets/screenlock'),
-                    require('sanity/widgets/redshift'),
-                    require('sanity/widgets/battery'),
-                    require('sanity/widgets/clock'),
-                    require('sanity/widgets/tray'),
-                }
-            }
+            layout = wibox.layout.fixed.horizontal,
+            screen.mytaglist,
         },
-        nil
+        display.center(screen.mytasklist),
+        {
+            layout = wibox.layout.fixed.horizontal,
+            require('sanity/widgets/tray'),
+            require('sanity/widgets/cpu'),
+            require('sanity/widgets/mem'),
+            require('sanity/widgets/storage'),
+            require('sanity/widgets/net'),
+            volume,
+            require('sanity/widgets/screenlock'),
+            require('sanity/widgets/redshift'),
+            require('sanity/widgets/battery'),
+            require('sanity/widgets/weather'),
+            require('sanity/widgets/clock'),
+        }
     }
 end)
 
@@ -274,11 +263,10 @@ local function create_tag_keys(idx, override)
         create_key(key, 'tag', 'View '..tag_name, function()
             local tag = awful.screen.focused().tags[idx]
             if tag then
-                if tag == awful.screen.focused().selected_tag then
-                    TagList.show_popup(idx)
-                else
+                if tag ~= awful.screen.focused().selected_tag then
                     tag:view_only()
                 end
+                TagList.show_popup(idx)
             end
         end),
         create_mod_key(shift, key, 'tag', 'Move client to '..tag_name, function()

@@ -18,7 +18,7 @@ local brightness_preset = {
     font     = beautiful.font_notif
 }
 
-local tick = '█'
+local tick = '='
 local tick_pre = '\u{e0b2}'
 local tick_post = '\u{e0b0}'
 local tick_none = ' '

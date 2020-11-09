@@ -25,10 +25,10 @@ local theme = {
     dotsan_home   = dotsan_home,
     lock_script   = lock_script,
     colors        = colors,
-    bar_height    = 50,
+    bar_height    = 28,
     bar_opacity   = 1.0,
     border_width  = 2,
-    widget_space  = 5,
+    widget_space  = 3,
     widget_line   = 3,
     font_name     = font_name,
     font          = font_name..' 10',
@@ -36,7 +36,7 @@ local theme = {
     font_icon     = font_name..' 28',
     wallpaper     = dstheme.wallpaper,
     border_shape  = function(cr, w, h)
-        gears.shape.rounded_rect(cr, w, h, 5)
+        gears.shape.rounded_rect(cr, w, h, 3)
     end,
 }
 
@@ -47,11 +47,11 @@ theme.bg_minimize   = colors.background
 theme.bg_systray    = colors.background
 
 theme.fg_normal     = colors.gray
-theme.fg_focus      = colors.yellow
+theme.fg_focus      = colors.white
 theme.fg_urgent     = colors.red
 theme.fg_minimize   = colors.purple
 
-theme.useless_gap   = 3
+theme.useless_gap   = 6
 theme.border_normal = colors.background
 theme.border_focus  = colors.background
 theme.border_marked = colors.red
@@ -72,22 +72,10 @@ theme.hotkeys_fg               = colors.white
 theme.hotkeys_modifiers_fg     = colors.blue
 
 --
--- Menus
---
-theme.menu_font         = font_name..' 12'
-theme.menu_height       = 24
-theme.menu_border_width = 2
-theme.menu_border_color = colors.yellow
-theme.menu_fg_focus     = colors.background
-theme.menu_bg_focus     = colors.yellow
-theme.menu_fg_normal    = colors.white
-theme.menu_bg_normal    = colors.background
-
---
 -- Notifications
 --
 theme.notification_font         = theme.font_notif
-theme.notification_fg           = colors.yellow
+theme.notification_fg           = colors.white
 theme.notification_border_width = 5
 theme.notification_border_color = colors.background
 theme.notification_shape        = theme.border_shape

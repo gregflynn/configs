@@ -189,7 +189,7 @@ function _M.cycle(dir)
     for idx=1, #_M.popup_icons do
         _M.popup_icons[idx]:update(
             display.get_icon_for_client(_M.altTabTable[idx].client) or display.get_default_client_icon(),
-            idx == _M.altTabIndex and colors.yellow or colors.gray
+            idx == _M.altTabIndex and colors.white or colors.gray
         )
     end
     _M.popup_text:set_markup(
@@ -197,7 +197,7 @@ function _M.cycle(dir)
 			'<span font="%s %d" color="%s">%s (%s)</span>',
 			beautiful.font_name,
 			20,
-			colors.yellow,
+			colors.white,
 			text.trunc(text.trim(current_client.name), 30, nil, true),
 			current_client.class
 		)

@@ -24,7 +24,7 @@ function factory(args)
     }
     pie_widget:set_children({icon_widget})
 
-    local pie_container = margin(pie_widget, 5, 4, 0, 0)
+    local pie_container = margin(pie_widget, 2, 2, 5, 5)
 
     function pie_container:update(value, color)
         local v = pie_widget.values

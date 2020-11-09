@@ -1,24 +1,27 @@
+local wibox     = require('wibox')
+local beautiful = require('beautiful')
+local vicious   = require('vicious')
 local Container = require('sanity/util/container')
-local DoubleWide = require('sanity/util/doublewide')
-local FontIcon   = require('sanity/util/fonticon')
-local Pie        = require('sanity/util/pie')
+local FontIcon  = require('sanity/util/fonticon')
+local display   = require('sanity/util/display')
 
-local util   = require('awful.util')
-local watch  = require('awful.widget.watch')
+local fs_bar = wibox.widget {
+    max_value        = 1,
+    value            = 0,
+    color            = colors.background,
+    background_color = colors.gray,
+    widget           = wibox.widget.progressbar,
+    shape            = beautiful.border_shape,
+}
 
-local color       = colors.purple
-local storage_cmd = "df -B1 | awk '{ print $6,$5 }' | grep '/ ' | tr -d '%' | tr -d '/ '"
-local storage_pie = Pie {color = color}
-
-watch({util.shell, '-c', storage_cmd}, 60, function(_, stdout)
-    storage_pie:update((tonumber(stdout) or 0) / 100)
-end)
+vicious.register(fs_bar, vicious.widgets.fs, "${/ used_p}", 60)
 
 return Container {
-    widget = DoubleWide {
-        left_widget = FontIcon {icon = '', color = color, small = true},
-        right_widget = storage_pie,
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        FontIcon {icon = '', color = colors.background},
+        display.vertical_bar(fs_bar),
     },
-    color   = color,
+    color   = colors.background,
     no_tooltip = true
 }

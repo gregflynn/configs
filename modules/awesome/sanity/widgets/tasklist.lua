@@ -12,9 +12,9 @@ local imagebox = require('wibox.widget.imagebox')
 local margin   = require('wibox.container.margin')
 
 local client_color           = colors.gray
-local client_focus_color     = colors.yellow
+local client_focus_color     = colors.background
 local client_minimized_color = colors.purple
-local client_unfocus_line    = colors.background
+local client_unfocus_line    = colors.gray
 
 local function client_button(c)
     if c == client.focus then
@@ -36,22 +36,22 @@ end
 local default_font_icon = display.get_default_client_icon()
 
 local function create_client_window_icon(c)
-    local icon_container  = fixed.vertical()
+    local icon_container  = fixed.horizontal()
     local client_icon     = imagebox()
-    local client_fonticon = FontIcon {large = true}
+    local client_fonticon = FontIcon {}
     local icon_override   = display.get_icon_for_client(c)
 
     local using_font_icon = icon_override or not c.icon
 
     local container = Container {
-        widget = display.center(icon_container),
+        widget = icon_container,
     }
 
     if using_font_icon then
         icon_container:add(client_fonticon)
         client_fonticon:update(icon_override or default_font_icon, client_color)
     else
-        icon_container:add(margin(client_icon, 5, 5, 0, 0))
+        icon_container:add(margin(client_icon, 0, 0, 3, 3))
         client_icon:set_image(c.icon)
     end
 
@@ -98,7 +98,7 @@ local function update_func(window_list, buttons, _, data, clients)
 
         container:set_icon_container_color(color, bg_color)
         container:set_tooltip_color(
-            string.format('%s (%s)', text.trim(c.name), c.class), nil, client_focus_color
+            string.format('%s (%s)', text.trim(c.name), c.class), nil, colors.white
         )
         window_list:add(container)
     end
@@ -115,7 +115,7 @@ local function factory(args)
         update_function = update_func,
         layout = {
             fill_space = false,
-            layout     = fixed.vertical
+            layout     = fixed.horizontal
         }
     }
 end

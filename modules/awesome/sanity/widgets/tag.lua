@@ -4,12 +4,8 @@ local awful      = require('awful')
 local beautiful  = require('beautiful')
 local wibox      = require('wibox')
 local gears      = require('gears')
-local display    = require('sanity/util/display')
 local FontIcon   = require('sanity/util/fonticon')
 local Container  = require('sanity/util/container')
-local timer      = require('sanity/util/timer')
-
-local fixed  = require('wibox.layout.fixed')
 
 local colors = beautiful.colors
 
@@ -33,10 +29,7 @@ for idx=1, #tags do
     )
 end
 
-local initial_load = true
-local last_tag_index
 local last_timer
-
 local tag_popup = awful.popup {
     widget = {
         {
@@ -66,75 +59,79 @@ function show_popup(tag_idx)
         tag_icons[idx]:update(tags[idx], c)
     end
 
-    tag_popup.visible = true
-    if last_timer then
-        last_timer:stop()
-    end
-    last_timer = timer.delay(function() tag_popup.visible = false end, 0.3)
+    gears.timer.delayed_call(function()
+        if last_timer then
+            last_timer:stop()
+        end
+
+        tag_popup.visible = true
+
+        last_timer = gears.timer.start_new(0.5, function()
+            tag_popup.visible = false
+            return false
+        end)
+    end)
 end
 
 local function create_screen_widgets(screen)
-    if not screen then
-        return
-    end
+    boxes[screen] = {}
 
-    local tag_name_font_icon = FontIcon {large = true}
-    local icon_container     = Container {
-        widget = display.center(tag_name_font_icon),
-        buttons = gears.table.join(
-            awful.button({}, 1, function() awful.tag.viewnext(screen) end),
-            awful.button({}, 3, function() awful.tag.viewprev(screen) end)
-        ),
-        no_tooltip = true
-    }
-    boxes[screen] = {
-        tnfi = tag_name_font_icon,
-        c    = icon_container
-    }
+    for tag_idx=1, #screen.tags do
+        local tag_name_font_icon = FontIcon {}
+        boxes[screen][tag_idx] = {
+            tnfi = tag_name_font_icon,
+            c    = Container {
+                widget = tag_name_font_icon,
+                buttons = gears.table.join(
+                    awful.button({}, 1, function() screen.tags[tag_idx]:view_only() end),
+                    awful.button({}, 3, function() screen.tags[tag_idx]:view_only() end)
+                ),
+                no_tooltip = true
+            }
+        }
+    end
 end
 
 local function update(screen, container)
     local focused_screen = awful.screen.focused()
     local selected_tag_name = focused_screen.selected_tag and focused_screen.selected_tag.name or ''
+    local new_screen = false
 
-    local cache = boxes[screen]
+    local cache = boxes[screen] or boxes[focused_screen]
     if not cache then
         create_screen_widgets(screen)
         cache = boxes[screen]
+        new_screen = true
+        container:reset()
     end
 
-    local tag_idx = focused_screen.selected_tag and focused_screen.selected_tag.index or 1
-    local tag = screen.tags[tag_idx]
-    local tag_name = tag.name
+    for tag_idx=1, #tags do
+        local tag_cache = cache[tag_idx]
+        local tag = screen.tags[tag_idx]
+        local tag_name = tag.name
 
-    local tag_name_font_icon = cache.tnfi
-    local icon_container   = cache.c
+        local tag_name_font_icon = tag_cache.tnfi
+        local icon_container   = tag_cache.c
 
-    local fg_color = colors.gray
-    local bg_color = colors.background
+        local fg_color = colors.gray
+        local bg_color = colors.gray
 
-    if tag_name == selected_tag_name then
-        fg_color = tag_colors[tag_idx]
-        bg_color = fg_color
+        if tag_name == selected_tag_name then
+            fg_color = colors.background
+            bg_color = fg_color
+        end
+
+        if tag.layout.name == 'floating' then
+            tag_name = floating_tags[tag_idx]
+        end
+
+        tag_name_font_icon:update(tag_name, fg_color)
+        icon_container:set_color(bg_color)
+
+        if new_screen then
+            container:add(icon_container)
+        end
     end
-
-    if tag.layout.name == 'floating' then
-        tag_name = floating_tags[tag_idx]
-    end
-
-    tag_name_font_icon:update(tag_name, fg_color)
-    icon_container:set_color(bg_color)
-
-    if container then
-        container:add(icon_container)
-    end
-
-    -- only show after tag index changes because this gets called when selected client changes
-    if not initial_load and tag_idx ~= last_tag_index then
-        show_popup(tag_idx)
-    end
-    last_tag_index = tag_idx
-    initial_load = false
 end
 
 local function get_screen(s)
@@ -143,12 +140,11 @@ end
 
 local function update_from_tag(t)
     local s = get_screen(t.screen)
-    if boxes[s] then
+    if s and boxes[s] then
         update(s)
     end
 end
 
-tag.connect_signal('property::selected', update_from_tag)
 tag.connect_signal('property::layout', update_from_tag)
 tag.connect_signal('property::screen', function()
     for s, _ in next, boxes do
@@ -164,11 +160,9 @@ local function factory(args)
     return awful.widget.taglist {
         screen = s,
         filter = awful.widget.taglist.filter.all,
-        update_function = function(tag_container)
-            tag_container:reset()
-            update(s, tag_container)
+        update_function = function(c)
+            update(s, c)
         end,
-        layout = fixed.vertical
     }
 end
 

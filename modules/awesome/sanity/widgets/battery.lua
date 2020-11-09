@@ -1,11 +1,10 @@
 local string = string
-
+local beautiful = require('beautiful')
+local wibox = require('wibox')
 local bat = require('lain.widget.bat')
-
-local Pie        = require('sanity/util/pie')
-local DoubleWide = require('sanity/util/doublewide')
 local FontIcon   = require('sanity/util/fonticon')
 local Container  = require('sanity/util/container')
+local display   = require('sanity/util/display')
 
 local battery_state_plug    = 'plug'
 local battery_state_full    = 'full'
@@ -32,20 +31,20 @@ local battery_colors = {
     [battery_state_empty]   = colors.red,
 }
 
-local battery = {
-    battery_enabled = false,
-    font_icon       = FontIcon {small = true},
-    pie             = Pie {
-        color     = battery_colors.plug,
-        icon      = battery_icons.plug,
-        max_value = 100,
-    }
+local bat_bar = wibox.widget {
+    max_value        = 1,
+    value            = 0,
+    color            = colors.background,
+    background_color = colors.gray,
+    widget           = wibox.widget.progressbar,
+    shape            = beautiful.border_shape,
 }
-
-battery.container = Container {
-    widget = DoubleWide {
-        left_widget  = battery.font_icon,
-        right_widget = battery.pie,
+local font_icon = FontIcon()
+local battery_container = Container {
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        font_icon,
+        display.vertical_bar(bat_bar),
     },
     color  = colors.yellow
 }
@@ -75,9 +74,9 @@ function battery_update()
     end
 
     if not status or status == bat_perc_na then
-        battery.container.visible = false
+        battery_container.visible = false
     else
-        battery.container.visible = true
+        battery_container.visible = true
     end
 
     local bs = battery_state_full
@@ -94,8 +93,8 @@ function battery_update()
 
     local color = battery_colors[bs]
 
-    battery.container:set_color(color)
-    battery.container:set_tooltip_color(
+    battery_container:set_color(color)
+    battery_container:set_tooltip_color(
         ' Battery ',
         string.format(
             ' %s%% \n %s%s ',
@@ -106,14 +105,15 @@ function battery_update()
         color
     )
 
-    battery.pie:update(bat_now.perc, color)
-    battery.font_icon:update(battery_icons[bs], color)
+    bat_bar:set_value(bat_now.perc)
+    bat_bar.color = color
+    font_icon:update(battery_icons[bs], color)
 end
 
-battery.lain_widget = bat {
+local lain_widget = bat {
     settings    = battery_update,
     timeout     = 5,
     full_notify = 'off',
 }
 
-return battery.container
+return battery_container

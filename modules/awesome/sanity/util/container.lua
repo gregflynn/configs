@@ -9,35 +9,24 @@ local margin     = require('wibox.container.margin')
 local align      = require('wibox.layout.align')
 local base       = require('wibox.widget.base')
 
-local horizontal   = align.horizontal
 local line_widget  = base.make_widget()
 local widget_space = beautiful.widget_space
 local widget_line  = beautiful.widget_line
 
 local default_color = colors.white
-local default_text  = ''
 local tooltip_fmt   = '%s \n\n%s'
 
 function factory(args)
     local widget     = args.widget
-    local is_bottom  = args.bottom
     local color      = args.color or default_color
-    local tt_text    = args.tooltip or default_text
+    local tt_text    = args.tooltip or ''
     local buttons    = args.buttons
     local no_tooltip = args.no_tooltip or false
 
-    local top = 0
-    local bottom = 0
-    if is_bottom then
-        bottom = widget_space
-    else
-        top = widget_space
-    end
-
     local ln = background(line_widget, color)
-    ln.forced_width = widget_line
+    ln.forced_height = widget_line
 
-    local Container = margin(horizontal(nil, margin(widget, 2, 2, 0, 0), ln), 0, 0, top, bottom)
+    local Container = margin(align.vertical(nil, margin(widget, 2, 2), ln), widget_space, widget_space)
 
     --
     -- Color

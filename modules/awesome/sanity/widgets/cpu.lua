@@ -1,33 +1,30 @@
-local math, string = math, string
-
+local beautiful = require('beautiful')
+local wibox     = require('wibox')
+local vicious   = require('vicious')
 local Container = require('sanity/util/container')
+local FontIcon  = require('sanity/util/fonticon')
 local display   = require('sanity/util/display')
 
-local watch  = require('awful.widget.watch')
-local markup = require('lain.util.markup')
-
-local color  = colors.red
-
-local cpu_container
-
-local cpu_temp_widget = watch('sensors', 5, function(w, stdout)
-    local temp = stdout:match('Package id 0:%s+%p(%d+%p%d)')
-    if not temp then
-        temp = stdout:match('Tdie:%s+%p(%d+%p%d)')
-    end
-
-    if not temp then
-        temp = '??'
-    end
-
-    w:set_markup(markup.fg.color(color, string.format('%s°C', math.floor(temp))))
-end)
-
-
-cpu_container = Container {
-    widget = display.center(cpu_temp_widget),
-    color = color,
+local font_icon = FontIcon {icon = '', color = colors.background}
+local cpu_bar = wibox.widget {
+    max_value        = 1,
+    value            = 0,
+    color            = colors.background,
+    background_color = colors.gray,
+    widget           = wibox.widget.progressbar,
+    shape            = beautiful.border_shape,
+}
+local cpu_container = Container {
+    widget = font_icon,
+    widget = wibox.widget {
+        layout = wibox.layout.fixed.horizontal,
+        font_icon,
+        display.vertical_bar(cpu_bar),
+    },
+    color = colors.background,
     no_tooltip = true,
 }
+
+vicious.register(cpu_bar, vicious.widgets.cpu, "$1", 1)
 
 return cpu_container
