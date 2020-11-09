@@ -32,7 +32,7 @@ local battery_colors = {
 }
 
 local bat_bar = wibox.widget {
-    max_value        = 1,
+    max_value        = 100,
     value            = 0,
     color            = colors.background,
     background_color = colors.gray,
@@ -94,8 +94,7 @@ function battery_update()
     local color = battery_colors[bs]
 
     battery_container:set_color(color)
-    battery_container:set_tooltip_color(
-        ' Battery ',
+    battery_container:set_markup(
         string.format(
             ' %s%% \n %s%s ',
             bat_now.perc,
