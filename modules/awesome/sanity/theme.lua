@@ -51,7 +51,7 @@ theme.fg_focus      = colors.white
 theme.fg_urgent     = colors.red
 theme.fg_minimize   = colors.purple
 
-theme.useless_gap   = 6
+theme.useless_gap   = 4
 theme.border_normal = colors.background
 theme.border_focus  = colors.background
 theme.border_marked = colors.red

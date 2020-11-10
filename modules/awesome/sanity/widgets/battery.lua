@@ -23,9 +23,9 @@ local battery_icons = {
 }
 
 local battery_colors = {
-    [battery_state_plug]    = colors.green,
-    [battery_state_full]    = colors.green,
-    [battery_state_good]    = colors.green,
+    [battery_state_plug]    = colors.background,
+    [battery_state_full]    = colors.background,
+    [battery_state_good]    = colors.background,
     [battery_state_low]     = colors.orange,
     [battery_state_caution] = colors.red,
     [battery_state_empty]   = colors.red,
