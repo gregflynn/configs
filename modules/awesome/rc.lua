@@ -104,8 +104,9 @@ awful.screen.connect_for_each_screen(function(screen)
         {
             layout = wibox.layout.fixed.horizontal,
             screen.mytaglist,
+            screen.mytasklist,
         },
-        display.center(screen.mytasklist),
+        nil,
         {
             layout = wibox.layout.fixed.horizontal,
             require('sanity/widgets/tray'),

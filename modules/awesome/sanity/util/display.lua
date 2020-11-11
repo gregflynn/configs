@@ -5,6 +5,7 @@ local wibox     = require('wibox')
 local display = {}
 local window_icon_overrides = {
     ['Blueberry.py']                     = '',
+    ['Cawbird']                          = '暑',
     ['Code']                             = '\u{e70c}',
     ['Google-chrome']                    = '\u{f268}',
     ['Evince']                           = '',
