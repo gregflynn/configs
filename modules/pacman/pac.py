@@ -410,6 +410,21 @@ def info(package_name):
     check_call(['pacman', '-Qi', package_name])
 
 
+@pac.command()
+def lost():
+    """List files on the filesystem not tracked by pacman
+    """
+    pkg_manager = PackageManager()
+    if not pkg_manager.is_installed('lostfiles'):
+        secho('lostfiles is not installed', fg='red')
+        return
+
+    try:
+        check_call(['sudo', 'lostfiles'])
+    except CalledProcessError:
+        sys.exit(1)
+
+
 #
 # Search
 #
