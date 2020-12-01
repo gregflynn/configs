@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if [[ "$DOTSAN_CONFIG_HOME" == "" ]]; then
     # default the configuration home
     DOTSAN_CONFIG_HOME="$HOME/.config/sanity"
