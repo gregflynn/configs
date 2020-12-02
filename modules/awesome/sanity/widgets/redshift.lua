@@ -33,6 +33,6 @@ redshift_container = Container {
     no_tooltip = true
 }
 
-redshift:attach(redshift_container, toggle_redshift)
+redshift.attach(redshift_container, toggle_redshift)
 
 return redshift_container
