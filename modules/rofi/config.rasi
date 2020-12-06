@@ -3,9 +3,9 @@ configuration {
 	width: 1400;
 	lines: 10;
 	columns: 2;
-	font: "Hack Nerd Font Mono 24";
+	font: "Ubuntu Mono 24";
 	location: 2;
-	yoffset: 200;
+	yoffset: 400;
 	show-icons: true;
 	parse-known-hosts: false;
 	hide-scrollbar: true;

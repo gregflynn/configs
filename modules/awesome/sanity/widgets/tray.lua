@@ -7,7 +7,7 @@ local gears   = require('gears')
 local Container = require('sanity/util/container')
 local FontIcon  = require('sanity/util/fonticon')
 
-local expanded = false
+local expanded = true
 local expanded_icon = ''
 local expanded_color = colors.gray
 local closed_color = colors.white
@@ -23,7 +23,7 @@ local toggle_container = Container {
 local container = {
     layout = fixed.horizontal,
     tray_margin,
-    toggle_container,
+--     toggle_container,
 }
 
 function toggle_tray()

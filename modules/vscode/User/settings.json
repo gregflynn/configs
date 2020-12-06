@@ -8,7 +8,7 @@
     /**
      * Editor
      */
-    "editor.fontFamily": "'Hack Nerd Font'",
+    "editor.fontFamily": "Ubuntu Mono",
     "window.zoomLevel": 0,
     "editor.renderIndentGuides": true,
     "editor.codeLens": false,

@@ -20,7 +20,7 @@ font:
     x: 0
     y: 0
   normal:
-    family: "Hack Nerd Font Mono"
+    family: "Ubuntu Nerd Font Mono"
     style: Regular
 
 cursor:

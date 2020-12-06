@@ -5,7 +5,7 @@ local home        = os.getenv('HOME')
 local dotsan_home = dstheme.home
 local lock_script = dstheme.lock
 local assets      = home..'/.config/awesome/sanity/assets'
-local font_name   = 'Hack Nerd Font Mono'
+local font_name   = 'Ubuntu Nerd Font Mono'
 
 local useless_gap = 3
 local colors = {
