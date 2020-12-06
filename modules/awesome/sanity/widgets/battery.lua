@@ -23,9 +23,9 @@ local battery_icons = {
 }
 
 local battery_colors = {
-    [battery_state_plug]    = colors.background,
-    [battery_state_full]    = colors.background,
-    [battery_state_good]    = colors.background,
+    [battery_state_plug]    = colors.white,
+    [battery_state_full]    = colors.white,
+    [battery_state_good]    = colors.white,
     [battery_state_low]     = colors.orange,
     [battery_state_caution] = colors.red,
     [battery_state_empty]   = colors.red,
@@ -34,7 +34,7 @@ local battery_colors = {
 local bat_bar = wibox.widget {
     max_value        = 100,
     value            = 0,
-    color            = colors.background,
+    color            = colors.white,
     background_color = colors.gray,
     widget           = wibox.widget.progressbar,
     shape            = beautiful.border_shape,
@@ -93,7 +93,6 @@ function battery_update()
 
     local color = battery_colors[bs]
 
-    battery_container:set_color(color)
     battery_container:set_markup(
         string.format(
             ' %s%% \n %s%s ',

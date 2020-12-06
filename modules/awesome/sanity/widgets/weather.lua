@@ -7,7 +7,7 @@ local weather = require('lain.widget.weather')
 
 local fonticon = FontIcon {}
 local city_id  = 4930956
-local color    = colors.background
+local color    = colors.white
 local hi_color = colors.red
 local lo_color = colors.blue
 

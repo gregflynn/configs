@@ -16,7 +16,7 @@ local textbox = require('wibox.widget.textbox')
 local date_fmt = '%a %m/%d %I:%M'
 local refresh  = 60
 
-local text_color = colors.background
+local text_color = colors.white
 
 local function calc_timeout()
     return refresh - os.time() % refresh

@@ -6,12 +6,11 @@ local Container  = require('sanity/util/container')
 local FontIcon   = require('sanity/util/fonticon')
 
 
-local color_on  = colors.background
+local color_on  = colors.white
 local color_off = colors.red
 
 local lock_icon     = ''
 
-local lock_container
 local lock_font_icon = FontIcon {
     small = true,
     icon  = lock_icon,
@@ -25,19 +24,17 @@ function toggle_screen_lock()
         spawn({'xautolock', '-disable'})
         spawn({'xset', 's', 'off'})
         spawn({'xset', '-dpms'})
-        lock_container:set_color(color_off)
         lock_font_icon:update(lock_icon, color_off)
     else
         spawn({'xautolock', '-enable'})
         spawn({'xset', 's', 'on'})
         spawn({'xset', '+dpms'})
-        lock_container:set_color(color_on)
         lock_font_icon:update(lock_icon, color_on)
     end
     screen_lock_on = not screen_lock_on
 end
 
-lock_container = Container {
+local lock_container = Container {
     color  = color_on,
     widget  = lock_font_icon,
     buttons = gears.table.join(

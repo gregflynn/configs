@@ -8,7 +8,7 @@ local display   = require('sanity/util/display')
 local fs_bar = wibox.widget {
     max_value        = 1,
     value            = 0,
-    color            = colors.background,
+    color            = colors.white,
     background_color = colors.gray,
     widget           = wibox.widget.progressbar,
     shape            = beautiful.border_shape,
@@ -19,7 +19,7 @@ vicious.register(fs_bar, vicious.widgets.fs, "${/ used_p}", 60)
 return Container {
     widget = wibox.widget {
         layout = wibox.layout.fixed.horizontal,
-        FontIcon {icon = '', color = colors.background},
+        FontIcon {icon = '', color = colors.white},
         display.vertical_bar(fs_bar),
     },
     color   = colors.background,

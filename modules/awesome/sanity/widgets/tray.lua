@@ -10,7 +10,7 @@ local FontIcon  = require('sanity/util/fonticon')
 local expanded = false
 local expanded_icon = ''
 local expanded_color = colors.gray
-local closed_color = colors.background
+local closed_color = colors.white
 local tray = systray()
 
 local tray_margin = margin(tray, 2, 2, 3, 3)
@@ -32,10 +32,8 @@ function toggle_tray()
 
     if expanded then
         toggle_font_icon:update(expanded_icon, expanded_color)
-        toggle_container:set_color(expanded_color)
     else
         toggle_font_icon:update(expanded_icon, closed_color)
-        toggle_container:set_color(closed_color)
     end
 end
 

@@ -15,7 +15,7 @@ local font_icon_low        = '\u{f026}'
 local font_icon_med        = '\u{f027}'
 local font_icon_high       = '\u{f028}'
 
-local fg_color = colors.background
+local fg_color = colors.white
 local al_color = colors.red
 
 local vol_icon = FontIcon {small = true, color = fg_color, icon = font_icon_mute}
@@ -96,7 +96,6 @@ function update_volume(volume_now)
         level = level / 100
     end
     vol_icon:update(level_icon, color)
-    volume_container:set_color(color)
     volume.bar.color = color
 end
 

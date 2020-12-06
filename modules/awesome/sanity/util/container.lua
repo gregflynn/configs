@@ -4,12 +4,8 @@ local beautiful = require('beautiful')
 
 local tooltip    = require('awful.tooltip')
 local markup     = require('lain.util.markup')
-local background = require('wibox.container.background')
 local margin     = require('wibox.container.margin')
-local align      = require('wibox.layout.align')
-local base       = require('wibox.widget.base')
 
-local line_widget  = base.make_widget()
 local widget_space = beautiful.widget_space
 local widget_line  = beautiful.widget_line
 
@@ -23,17 +19,7 @@ function factory(args)
     local buttons    = args.buttons
     local no_tooltip = args.no_tooltip or false
 
-    local ln = background(line_widget, color)
-    ln.forced_height = widget_line
-
-    local Container = margin(align.vertical(nil, margin(widget, 2, 2), ln), widget_space, widget_space)
-
-    --
-    -- Color
-    --
-    function Container:set_color(c)
-        ln.bg = c
-    end
+    local Container = margin(widget, widget_space, widget_space, 2, 2)
 
     --
     -- Tooltips

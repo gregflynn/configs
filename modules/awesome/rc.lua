@@ -103,23 +103,29 @@ awful.screen.connect_for_each_screen(function(screen)
         layout = wibox.layout.align.horizontal,
         {
             layout = wibox.layout.fixed.horizontal,
-            screen.mytaglist,
-            screen.mytasklist,
+            display.bubble(screen.mytaglist, false, true),
+            display.bubble(screen.mytasklist),
         },
         nil,
         {
             layout = wibox.layout.fixed.horizontal,
-            require('sanity/widgets/tray'),
-            require('sanity/widgets/cpu'),
-            require('sanity/widgets/mem'),
-            require('sanity/widgets/storage'),
-            require('sanity/widgets/net'),
-            volume,
-            require('sanity/widgets/screenlock'),
-            require('sanity/widgets/redshift'),
-            require('sanity/widgets/battery'),
-            require('sanity/widgets/weather'),
-            require('sanity/widgets/clock'),
+            display.bubble(wibox.widget {
+                layout = wibox.layout.fixed.horizontal,
+                require('sanity/widgets/tray'),
+                require('sanity/widgets/net'),
+                require('sanity/widgets/screenlock'),
+                require('sanity/widgets/redshift'),
+                require('sanity/widgets/battery'),
+                volume,
+            }),
+            display.bubble(wibox.widget {
+                layout = wibox.layout.fixed.horizontal,
+                require('sanity/widgets/cpu'),
+                require('sanity/widgets/mem'),
+                require('sanity/widgets/storage'),
+            }, true),
+            display.bubble(require('sanity/widgets/weather'), true),
+            display.bubble(require('sanity/widgets/clock'), true)
         }
     }
 end)
@@ -226,8 +232,14 @@ globalkeys = gears.table.join(
     --
     -- Tag Keys
     ---
-    create_key('Left', 'awesome', 'Previous Tag', awful.tag.viewprev),
-    create_key('Right', 'awesome', 'Next Tag', awful.tag.viewnext),
+    create_key('Left', 'awesome', 'Previous Tag', function()
+        awful.tag.viewprev()
+        TagList.show_popup(awful.screen.focused().selected_tag.index)
+    end),
+    create_key('Right', 'awesome', 'Next Tag', function()
+        awful.tag.viewnext()
+        TagList.show_popup(awful.screen.focused().selected_tag.index)
+    end),
 
     --
     -- Brightness Control

@@ -5,11 +5,11 @@ local Container = require('sanity/util/container')
 local FontIcon  = require('sanity/util/fonticon')
 local display   = require('sanity/util/display')
 
-local font_icon = FontIcon {icon = '', color = colors.background}
+local font_icon = FontIcon {icon = '', color = colors.white}
 local cpu_bar = wibox.widget {
     max_value        = 1,
     value            = 0,
-    color            = colors.background,
+    color            = colors.white,
     background_color = colors.gray,
     widget           = wibox.widget.progressbar,
     shape            = beautiful.border_shape,
@@ -21,7 +21,6 @@ local cpu_container = Container {
         font_icon,
         display.vertical_bar(cpu_bar),
     },
-    color = colors.background,
     no_tooltip = true,
 }
 

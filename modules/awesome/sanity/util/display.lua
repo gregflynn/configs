@@ -19,7 +19,6 @@ local window_icon_overrides = {
     ['kitty']                            = '',
     ['OpenSCAD']                         = '',
     ['Pavucontrol']                      = '墳',
-    ['plexmediaplayer']                  = '\u{fbb8}',
     ['Plexamp']                          = '',
     ['Prusa-slicer']                     = '浪',
     ['pulse-sms']                        = '',
@@ -99,9 +98,23 @@ function display.vertical_bar(bar)
             direction    = 'east',
             layout       = wibox.container.rotate,
         },
-        margins = 3,
+        margins = 4,
         layout  = wibox.container.margin,
     }
+end
+
+function display.bubble(layout, right_only, left_only)
+    -- no idea why 2x, it's what looked right
+    local padding = beautiful.useless_gap * 2
+    local margin = wibox.container.margin(
+        layout, beautiful.useless_gap, beautiful.useless_gap
+    )
+    local bg = wibox.container.background(
+        margin, colors.background, beautiful.border_shape
+    )
+    return wibox.container.margin(
+        bg, (not right_only) and padding or 0, (not left_only) and padding or 0, padding, 0
+    )
 end
 
 -- Re-set wallpaper when a screen's geometry changes

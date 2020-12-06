@@ -4,7 +4,7 @@ local FontIcon   = require('sanity/util/fonticon')
 local redshift = require('lain.widget.contrib.redshift')
 
 
-local color_on  = colors.background
+local color_on  = colors.white
 local color_off = colors.red
 local color     = redshift.active and color_on or color_off
 
@@ -19,10 +19,8 @@ local redshift_font_icon = FontIcon {
 
 function toggle_redshift()
     if redshift.active then
-        redshift_container:set_color(color_on)
         redshift_font_icon:update(redshift_icon, color_on)
     else
-        redshift_container:set_color(color_off)
         redshift_font_icon:update(redshift_icon, color_off)
     end
 end

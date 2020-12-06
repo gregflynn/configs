@@ -117,7 +117,7 @@ local function update(screen, container)
         local bg_color = colors.gray
 
         if tag_name == selected_tag_name then
-            fg_color = colors.background
+            fg_color = tag_colors[tag_idx]
             bg_color = fg_color
         end
 
@@ -126,7 +126,6 @@ local function update(screen, container)
         end
 
         tag_name_font_icon:update(tag_name, fg_color)
-        icon_container:set_color(bg_color)
 
         if new_screen then
             container:add(icon_container)

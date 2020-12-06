@@ -9,15 +9,15 @@ local fixed  = require('wibox.layout.fixed')
 local widget = require('wibox.widget')
 
 local disconnect_color = colors.red
-local color            = colors.background
+local color            = colors.white
 local no_connection    = '\u{f701}'
 local wifi_connected   = '\u{faa8}'
 local wired_connected  = '\u{f6ff}'
 local vpn_enabled      = '\u{f983}'
 local vpn_disabled     = ''
 
-local network_icon  = FontIcon {icon = no_connection, color = color, small = true}
-local vpn_icon      = FontIcon {icon = vpn_disabled,  color = color, small = true}
+local network_icon  = FontIcon {icon = no_connection, color = color}
+local vpn_icon      = FontIcon {icon = vpn_disabled,  color = color}
 
 local empty_str = ''
 
@@ -65,15 +65,12 @@ local function network_update()
 
         if wired then
             network_icon:update(wired_connected, color)
-            container:set_color(color)
         elseif wifi then
             network_icon:update(wifi_connected, color)
-            container:set_color(color)
         else
             -- no interfaces were connected
             network_icon:update(no_connection, disconnect_color)
             vpn_icon:update(vpn_disabled, disconnect_color)
-            container:set_color(disconnect_color)
         end
     end)
 end

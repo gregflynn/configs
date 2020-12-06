@@ -11,10 +11,14 @@ local fixed    = require('wibox.layout.fixed')
 local imagebox = require('wibox.widget.imagebox')
 local margin   = require('wibox.container.margin')
 
-local client_color           = colors.gray
-local client_focus_color     = colors.background
-local client_minimized_color = colors.purple
+local client_color           = colors.white
+local client_focus_color     = colors.yellow
+local client_minimized_color = colors.gray
 local client_unfocus_line    = colors.gray
+local no_icon = Container {
+    widget = FontIcon {icon = '', color = colors.gray},
+    tooltip = 'No Clients'
+}
 
 local function client_button(c)
     if c == client.focus then
@@ -56,7 +60,6 @@ local function create_client_window_icon(c)
     end
 
     function container:set_icon_container_color(color, container_color)
-        container:set_color(container_color)
         if using_font_icon then
             client_fonticon:update(icon_override or default_font_icon, color)
         end
@@ -69,6 +72,7 @@ local function update_func(window_list, buttons, _, data, clients)
     window_list:reset()
 
     if #clients == 0 then
+        window_list:add(no_icon)
         return
     end
 
