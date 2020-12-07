@@ -4,7 +4,13 @@ from sanity.initializer import BaseInitializer
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['rofi', 'rofi-calc', 'rofimoji', 'rofi-pass', 'networkmanager']
+        return [
+            'rofi',
+            'rofi-calc',
+            'rofimoji',
+            'rofi-pass',
+            ('networkmanager', 'network-manager')
+        ]
 
     def build(self):
         self.inject('rofi-theme.rasi')

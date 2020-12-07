@@ -6,8 +6,15 @@ from sanity.settings import module_path
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['awesome', 'flameshot', 'peek', 'redshift', 'rofi', 'vicious',
-                'xsel']
+        return [
+            'awesome',
+            'flameshot',
+            'peek',
+            'redshift',
+            'rofi',
+            ('vicious', 'awesome-extra'),
+            'xsel'
+        ]
 
     @property
     def user_groups(self):

@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-picom --config '{DS_HOME}/modules/x11/picom.conf' -b
+if command -v picom > /dev/null; then
+    picom --config '{DS_HOME}/modules/x11/picom.conf' -b
+fi
+
+if command -v compton > /dev/null; then
+    compton --config '{DS_HOME}/modules/x11/picom.conf' -b
+fi
 
 /usr/bin/start-pulseaudio-x11
 

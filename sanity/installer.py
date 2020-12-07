@@ -69,11 +69,15 @@ class Installer(object):
         Args:
             initializer (BaseInitializer):
         """
-        missing_requirements = {
-            requirement
-            for requirement in initializer.requirements
-            if not self._pkger.is_installed(requirement)
-        }
+        missing_requirements = set()
+
+        for requirement in initializer.requirements:
+            options = requirement if isinstance(requirement, tuple) else [requirement]
+            for option in options:
+                if self._pkger.is_installed(option):
+                    break
+            else:
+                missing_requirements.add(requirement)
 
         if missing_requirements:
             logger.warn(
@@ -92,6 +96,5 @@ class Installer(object):
                 User not in '{}' group(s).
                 $ sudo usermod -a -G GROUP {}
             """.format(missing_groups, self._user))
-            return False
 
         return True

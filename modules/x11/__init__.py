@@ -5,11 +5,10 @@ class Initializer(BaseInitializer):
     @property
     def requirements(self):
         return [
-            'xorg-server',
             'lightdm',
             'xautolock',
             'i3lock-color',
-            'picom'
+            ('picom', 'compton'),
         ]
 
     def build(self):

@@ -6,7 +6,7 @@ from sanity.initializer import BaseInitializer
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['visual-studio-code-bin']
+        return [('visual-studio-code-bin', 'code')]
 
     def install(self):
         path = '.config/Code/User/'

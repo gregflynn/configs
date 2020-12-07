@@ -4,7 +4,7 @@ from sanity.initializer import BaseInitializer
 class Initializer(BaseInitializer):
     @property
     def requirements(self):
-        return ['ipython']
+        return [('ipython', 'ipython3')]
 
     def build(self):
         self.inject('ipython_config.py')

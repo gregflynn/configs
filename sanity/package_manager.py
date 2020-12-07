@@ -1,3 +1,4 @@
+from pathlib import Path
 from subprocess import check_call, DEVNULL, CalledProcessError, PIPE, Popen
 
 
@@ -25,4 +26,8 @@ class PackageManager(object):
             query.wait()
             return True
         except CalledProcessError:
-            return False
+            pass
+
+        # if the package wasn't installed via package manager, check for it in the git
+        # dir for manual installs
+        return (Path.home() / 'git' / package).is_dir()
