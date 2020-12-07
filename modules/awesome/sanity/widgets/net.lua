@@ -10,14 +10,12 @@ local widget = require('wibox.widget')
 
 local disconnect_color = colors.red
 local color            = colors.white
-local no_connection    = '\u{f701}'
-local wifi_connected   = '\u{faa8}'
-local wired_connected  = '\u{f6ff}'
-local vpn_enabled      = '\u{f983}'
-local vpn_disabled     = ''
+local no_connection    = ''
+local wifi_connected   = '直'
+local wired_connected  = ''
 
 local network_icon  = FontIcon {icon = no_connection, color = color}
-local vpn_icon      = FontIcon {icon = vpn_disabled,  color = color}
+local vpn_icon      = FontIcon {icon = '旅', color = color}
 
 local empty_str = ''
 
@@ -54,14 +52,9 @@ local function network_update()
         end
     end
 
-    query_nmcli('VPN', function(stdout)
+    query_nmcli('tun0', function(stdout)
         local is_vpn_enabled = stdout ~= empty_str
-
-        if is_vpn_enabled then
-            vpn_icon:update(vpn_enabled, color)
-        else
-            vpn_icon:update(vpn_disabled, color)
-        end
+        vpn_icon.visible = is_vpn_enabled
 
         if wired then
             network_icon:update(wired_connected, color)
@@ -70,7 +63,6 @@ local function network_update()
         else
             -- no interfaces were connected
             network_icon:update(no_connection, disconnect_color)
-            vpn_icon:update(vpn_disabled, disconnect_color)
         end
     end)
 end

@@ -19,8 +19,8 @@ local brightness_preset = {
 }
 
 local tick = '='
-local tick_pre = '\u{e0b2}'
-local tick_post = '\u{e0b0}'
+local tick_pre = '['
+local tick_post = ']'
 local tick_none = ' '
 local step_amount = '10'
 local brightness_fmt = '%s%s%s%s'

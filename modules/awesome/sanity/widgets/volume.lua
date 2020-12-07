@@ -9,11 +9,11 @@ local text      = require('sanity/util/text')
 local pulsebar  = require('lain.widget.pulsebar')
 local display   = require('sanity/util/display')
 
-local font_icon_headphones = '\u{f7ca}'
-local font_icon_mute       = '\u{fc5d}'
-local font_icon_low        = '\u{f026}'
-local font_icon_med        = '\u{f027}'
-local font_icon_high       = '\u{f028}'
+local font_icon_headphones = ''
+local font_icon_mute       = 'ﱝ'
+local font_icon_low        = '墳'
+local font_icon_med        = '墳'
+local font_icon_high       = '墳'
 
 local fg_color = colors.white
 local al_color = colors.red
