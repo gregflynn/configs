@@ -15,10 +15,6 @@ local client_color           = colors.white
 local client_focus_color     = colors.yellow
 local client_minimized_color = colors.gray
 local client_unfocus_line    = colors.gray
-local no_icon = Container {
-    widget = FontIcon {icon = '', color = colors.gray},
-    tooltip = 'No Clients'
-}
 
 local function client_button(c)
     if c == client.focus then
@@ -41,7 +37,6 @@ local default_font_icon = display.get_default_client_icon()
 
 local function create_client_window_icon(c)
     local icon_container  = fixed.horizontal()
-    local client_icon     = imagebox()
     local client_fonticon = FontIcon {}
     local icon_override   = display.get_icon_for_client(c)
 
@@ -55,9 +50,13 @@ local function create_client_window_icon(c)
         icon_container:add(client_fonticon)
         client_fonticon:update(icon_override or default_font_icon, client_color)
     else
+        local client_icon = imagebox()
         icon_container:add(margin(client_icon, 0, 0, 3, 3))
         client_icon:set_image(c.icon)
     end
+
+    local bubble = display.bubble(container, false, true)
+    container.bubble = bubble
 
     function container:set_icon_container_color(color, container_color)
         if using_font_icon then
@@ -72,7 +71,6 @@ local function update_func(window_list, buttons, _, data, clients)
     window_list:reset()
 
     if #clients == 0 then
-        window_list:add(no_icon)
         return
     end
 
@@ -104,7 +102,7 @@ local function update_func(window_list, buttons, _, data, clients)
         container:set_tooltip_color(
             string.format('%s (%s)', text.trim(c.name), c.class), nil, colors.white
         )
-        window_list:add(container)
+        window_list:add(container.bubble)
     end
 end
 

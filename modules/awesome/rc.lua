@@ -104,7 +104,7 @@ awful.screen.connect_for_each_screen(function(screen)
         {
             layout = wibox.layout.fixed.horizontal,
             display.bubble(screen.mytaglist, false, true),
-            display.bubble(screen.mytasklist),
+            screen.mytasklist,
         },
         nil,
         {
