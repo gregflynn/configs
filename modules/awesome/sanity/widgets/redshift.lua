@@ -8,7 +8,7 @@ local color_on  = colors.white
 local color_off = colors.red
 local color     = redshift.active and color_on or color_off
 
-local redshift_icon     = '嗀'
+local redshift_icon     = '盛'
 
 local redshift_container
 local redshift_font_icon = FontIcon {
