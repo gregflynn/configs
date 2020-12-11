@@ -215,27 +215,14 @@ def _install_built_package(path: Path):
 
 
 def _aur_latest_version(path: Path):
-    def extract_version(line):
-        return line.split('=', maxsplit=1)[1].strip()\
-            .replace('"', '').replace("'", '')
-
-    with (path / 'PKGBUILD').open('r') as f:
-        pkgver = None
-        pkgrel = None
-        epoch = None
-
-        for line in f.readlines():
-            if line.startswith('pkgver='):
-                pkgver = extract_version(line)
-            elif line.startswith('pkgrel='):
-                pkgrel = extract_version(line)
-            elif line.startswith('epoch='):
-                epoch = extract_version(line)
-
-        if epoch:
-            return f'{epoch}:{pkgver}-{pkgrel}'
-        else:
-            return f'{pkgver}-{pkgrel}'
+    return check_output("""
+    . %s
+    if [[ "$epoch" == "" ]]; then
+        echo "${pkgver}-${pkgrel}"
+    else
+        echo "${epoch}:${pkgver}-${pkgrel}"
+    fi
+    """ % str(path / 'PKGBUILD'), shell=True).decode('utf8').strip()
 
 
 def _aur_installed_version(path: Path):
