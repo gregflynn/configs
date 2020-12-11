@@ -11,10 +11,9 @@ local fixed    = require('wibox.layout.fixed')
 local imagebox = require('wibox.widget.imagebox')
 local margin   = require('wibox.container.margin')
 
-local client_color           = colors.white
+local client_color           = colors.background
 local client_focus_color     = colors.yellow
-local client_minimized_color = colors.gray
-local client_unfocus_line    = colors.gray
+local client_minimized_color = colors.purple
 
 local function client_button(c)
     if c == client.focus then
@@ -58,10 +57,11 @@ local function create_client_window_icon(c)
     local bubble = display.bubble(container, false, true)
     container.bubble = bubble
 
-    function container:set_icon_container_color(color, container_color)
+    function container:set_color(fg, bg)
         if using_font_icon then
-            client_fonticon:update(icon_override or default_font_icon, color)
+            client_fonticon:update(icon_override or default_font_icon, fg)
         end
+        bubble.background_container.bg = bg
     end
 
     return container
@@ -81,14 +81,14 @@ local function update_func(window_list, buttons, _, data, clients)
     for idx=1, #clients do
         local c     = clients[idx]
         local color = client_color
-        local bg_color = client_unfocus_line
+        local fg_color = colors.white
 
         if c == client.focus then
             color = client_focus_color
-            bg_color = client_focus_color
+            fg_color = colors.background
         elseif c.minimized then
             color = client_minimized_color
-            bg_color = client_minimized_color
+            fg_color = colors.background
         end
 
         local container = data.client_icons[c]
@@ -98,7 +98,7 @@ local function update_func(window_list, buttons, _, data, clients)
             data.client_icons[c] = container
         end
 
-        container:set_icon_container_color(color, bg_color)
+        container:set_color(fg_color, color)
         container:set_tooltip_color(
             string.format('%s (%s)', text.trim(c.name), c.class), nil, colors.white
         )

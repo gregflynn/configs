@@ -38,15 +38,6 @@ shift  = 'Shift'
 
 terminal = 'kitty'
 
-function toggle_layout()
-    local l = awful.screen.focused().selected_tag.layout
-    if l.name == 'floating' then
-        awful.screen.focused().selected_tag.layout = machi.default_layout
-    else
-        awful.screen.focused().selected_tag.layout = awful.layout.suit.floating
-    end
-end
-
 function create_key(k, group, desc, f)
     return awful.key({modkey}, k, f, {description = desc, group = group})
 end
@@ -203,7 +194,21 @@ globalkeys = gears.table.join(
         end
     end),
     create_key('l', 'layout', 'Toggle Layout', function()
-        toggle_layout()
+        local l = awful.screen.focused().selected_tag.layout
+        if l.name == 'floating' then
+            awful.screen.focused().selected_tag.layout = machi.default_layout
+        else
+            awful.screen.focused().selected_tag.layout = awful.layout.suit.floating
+        end
+    end),
+    create_key('m', 'awesome', 'Maximize Tag', function()
+        local l = awful.screen.focused().selected_tag.layout
+        if l.name == 'max' then
+            awful.screen.focused().selected_tag.layout = awful.screen.focused().selected_tag._prev_layout
+        else
+            awful.screen.focused().selected_tag._prev_layout = l
+            awful.screen.focused().selected_tag.layout = awful.layout.suit.max
+        end
     end),
 
     --

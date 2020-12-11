@@ -112,9 +112,11 @@ function display.bubble(layout, right_only, left_only)
     local bg = wibox.container.background(
         margin, colors.background, beautiful.border_shape
     )
-    return wibox.container.margin(
+    local container = wibox.container.margin(
         bg, (not right_only) and padding or 0, (not left_only) and padding or 0, padding, 0
     )
+    container.background_container = bg
+    return container
 end
 
 -- Re-set wallpaper when a screen's geometry changes

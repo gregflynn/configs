@@ -52,7 +52,7 @@ local function network_update()
         end
     end
 
-    query_nmcli('tun0', function(stdout)
+    query_nmcli('-e tun0 -e VPN', function(stdout)
         local is_vpn_enabled = stdout ~= empty_str
         vpn_icon.visible = is_vpn_enabled
 
