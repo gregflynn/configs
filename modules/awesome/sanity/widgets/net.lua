@@ -15,7 +15,7 @@ local wifi_connected   = '直'
 local wired_connected  = ''
 
 local network_icon  = FontIcon {icon = no_connection, color = color}
-local vpn_icon      = FontIcon {icon = '旅', color = color}
+local vpn_icon      = FontIcon {icon = '', color = color}
 
 local empty_str = ''
 
