@@ -44,6 +44,17 @@ local client_keys = gears.table.join(
     end),
     create_key('n', 'client', 'Minimize client', function(c)
         c.minimized = true
+    end),
+    create_key('m', 'client', 'Maximize client', function(c)
+        c.maximized_vertical = false
+        c.maximized_horizontal = false
+        if not c.maximized then
+            awful.titlebar.hide(c)
+        elseif c.floating then
+            awful.titlebar.show(c)
+        end
+        c.maximized = not c.maximized
+        c:raise()
     end)
 )
 

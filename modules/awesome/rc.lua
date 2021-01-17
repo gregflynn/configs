@@ -201,15 +201,6 @@ globalkeys = gears.table.join(
             awful.screen.focused().selected_tag.layout = awful.layout.suit.floating
         end
     end),
-    create_key('m', 'awesome', 'Maximize Tag', function()
-        local l = awful.screen.focused().selected_tag.layout
-        if l.name == 'max' then
-            awful.screen.focused().selected_tag.layout = awful.screen.focused().selected_tag._prev_layout
-        else
-            awful.screen.focused().selected_tag._prev_layout = l
-            awful.screen.focused().selected_tag.layout = awful.layout.suit.max
-        end
-    end),
 
     --
     -- Screen
