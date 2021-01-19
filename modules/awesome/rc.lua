@@ -92,32 +92,24 @@ awful.screen.connect_for_each_screen(function(screen)
 
     screen.mywibar:setup {
         layout = wibox.layout.align.horizontal,
+        expand = "outside",
+        nil,
         {
             layout = wibox.layout.fixed.horizontal,
             display.bubble(screen.mytaglist, false, true),
             screen.mytasklist,
-        },
-        nil,
-        {
-            layout = wibox.layout.fixed.horizontal,
+            display.bubble(require('sanity/widgets/clock'), false, true),
             display.bubble(wibox.widget {
                 layout = wibox.layout.fixed.horizontal,
-                require('sanity/widgets/tray'),
                 require('sanity/widgets/net'),
                 require('sanity/widgets/screenlock'),
                 require('sanity/widgets/redshift'),
                 require('sanity/widgets/battery'),
+                require('sanity/widgets/tray'),
                 volume,
-            }),
-            display.bubble(wibox.widget {
-                layout = wibox.layout.fixed.horizontal,
-                require('sanity/widgets/cpu'),
-                require('sanity/widgets/mem'),
-                require('sanity/widgets/storage'),
-            }, true),
-            display.bubble(require('sanity/widgets/weather'), true),
-            display.bubble(require('sanity/widgets/clock'), true)
-        }
+            }, false, true)
+        },
+        nil
     }
 end)
 
