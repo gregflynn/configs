@@ -96,7 +96,7 @@ awful.screen.connect_for_each_screen(function(screen)
         nil,
         {
             layout = wibox.layout.fixed.horizontal,
-            display.bubble(screen.mytaglist, false, true),
+            screen.mytaglist,
             screen.mytasklist,
             display.bubble(require('sanity/widgets/clock'), false, true),
             display.bubble(wibox.widget {
@@ -105,8 +105,8 @@ awful.screen.connect_for_each_screen(function(screen)
                 require('sanity/widgets/screenlock'),
                 require('sanity/widgets/redshift'),
                 require('sanity/widgets/battery'),
-                require('sanity/widgets/tray'),
                 volume,
+                require('sanity/widgets/tray'),
             }, false, true)
         },
         nil

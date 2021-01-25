@@ -23,6 +23,7 @@ local window_icon_overrides = {
     ['Prusa-slicer']                     = '浪',
     ['pulse-sms']                        = '',
     ['Polari']                           = '\u{f869}',
+    ['privateinternetaccess']            = '旅',
     ['Seahorse']                         = '',
     ['Slack']                            = '\u{f198}',
     ['Steam']                            = '\u{f1b6}',

@@ -15,6 +15,7 @@ alias dict='sdcv'
 alias xmds="xmodmap $__dotsan__home/modules/x11/xmodmap"
 alias ds='dotsan'
 alias clip='xsel -i --clipboard'
+alias icat="kitty +kitten icat"
 
 bl() {
     $@

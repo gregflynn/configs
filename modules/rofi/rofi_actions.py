@@ -90,13 +90,13 @@ def actions():
             (('accessories-screenshot', 'Display Layouts')
              if DISPLAY_LAYOUTS_FOLDER.is_dir() else False),
             ('user-home', 'Home'),
-            ('system-reboot', 'Reboot'),
+            ('icon-computer-restart', 'Reboot'),
             ('system-shutdown', 'Shutdown'),
-            ('media-playback-pause', 'Sleep'),
+            ('gpm-suspend', 'Sleep'),
             ('audio-card', 'Volume'),
             ('network-vpn', 'VPN'),
             ('network-wireless', 'Wifi'),
-            ('weather-clear-symbolic', 'Weather'),
+            ('weather-clear', 'Weather'),
         ]
     )
 
@@ -106,6 +106,19 @@ def actions():
     action_map[output]()
 
 
+def calc():
+    check_call([
+        'rofi',
+        '-show', 'calc',
+        '-modi', 'calc',
+        '-no-show-match',
+        '-no-sort',
+        '-no-history',
+        '-theme-str', 'mainbox {children:[inputbar, message];}',
+        '-theme-str', 'configuration {font: "Ubuntu Mono 18";}',
+    ])
+
+
 def display_layouts():
     if DISPLAY_LAYOUTS_FOLDER.is_dir():
         names = DISPLAY_LAYOUTS_FOLDER.glob('*.sh')
@@ -113,6 +126,13 @@ def display_layouts():
         output = rofi('display layout', sorted(names))
 
         check_call(['bash', DISPLAY_LAYOUTS_FOLDER / output])
+
+
+def emoji():
+    check_call([
+        'rofimoji',
+        '--rofi-args', '-theme-str "configuration {show-icons: false;}" -columns 2 -width 910',
+    ])
 
 
 def project():
@@ -198,7 +218,9 @@ def _get_url(line):
 
 FUNC_MAP = {
     'actions': actions,
+    'calc': calc,
     'display': display_layouts,
+    'emoji': emoji,
     'project': project,
     'search': search,
 }

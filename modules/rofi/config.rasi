@@ -1,11 +1,7 @@
 configuration {
 	modi: "window,windowcd,drun";
-	width: 1400;
-	lines: 10;
-	columns: 2;
-	font: "Ubuntu Mono 24";
-	location: 2;
-	yoffset: 400;
+	font: "Ubuntu Mono 16";
+	width: 500;
 	show-icons: true;
 	parse-known-hosts: false;
 	hide-scrollbar: true;

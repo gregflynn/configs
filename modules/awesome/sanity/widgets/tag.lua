@@ -6,6 +6,7 @@ local wibox      = require('wibox')
 local gears      = require('gears')
 local FontIcon   = require('sanity/util/fonticon')
 local Container  = require('sanity/util/container')
+local display    = require('sanity/util/display')
 
 local colors = beautiful.colors
 
@@ -76,61 +77,48 @@ end
 local function create_screen_widgets(screen)
     boxes[screen] = {}
 
-    for tag_idx=1, #screen.tags do
-        local tag_name_font_icon = FontIcon {}
-        boxes[screen][tag_idx] = {
-            tnfi = tag_name_font_icon,
-            c    = Container {
-                widget = tag_name_font_icon,
-                buttons = gears.table.join(
-                    awful.button({}, 1, function() screen.tags[tag_idx]:view_only() end),
-                    awful.button({}, 3, function() screen.tags[tag_idx]:view_only() end)
-                ),
-                no_tooltip = true
-            }
-        }
-    end
+    local tag_name_font_icon = FontIcon {}
+    local container = Container {
+        widget = tag_name_font_icon,
+        buttons = gears.table.join(
+            awful.button({}, 1, function() awful.tag.viewnext(screen) end),
+            awful.button({}, 3, function() awful.tag.viewprev(screen) end)
+        ),
+        no_tooltip = true
+    }
+    boxes[screen] = {
+        tnfi   = tag_name_font_icon,
+        c      = container,
+        bubble = display.bubble(container, false, true)
+    }
 end
 
 local function update(screen, container)
     local focused_screen = awful.screen.focused()
-    local selected_tag_name = focused_screen.selected_tag and focused_screen.selected_tag.name or ''
-    local new_screen = false
 
     local cache = boxes[screen] or boxes[focused_screen]
     if not cache then
         create_screen_widgets(screen)
         cache = boxes[screen]
-        new_screen = true
-        container:reset()
-    end
 
-    for tag_idx=1, #tags do
-        local tag_cache = cache[tag_idx]
-        local tag = screen.tags[tag_idx]
-        local tag_name = tag.name
-
-        local tag_name_font_icon = tag_cache.tnfi
-        local icon_container   = tag_cache.c
-
-        local fg_color = colors.gray
-        local bg_color = colors.gray
-
-        if tag_name == selected_tag_name then
-            fg_color = tag_colors[tag_idx]
-            bg_color = fg_color
-        end
-
-        if tag.layout.name == 'floating' then
-            tag_name = floating_tags[tag_idx]
-        end
-
-        tag_name_font_icon:update(tag_name, fg_color)
-
-        if new_screen then
-            container:add(icon_container)
+        if container then
+            container:reset()
+            container:add(cache.bubble)
         end
     end
+
+    local tag_idx = focused_screen.selected_tag and focused_screen.selected_tag.index or 1
+    local tag_cache = cache
+    local tag = screen.tags[tag_idx]
+    local tag_name = tag.name
+
+    local tag_name_font_icon = tag_cache.tnfi
+
+    if tag.layout.name == 'floating' then
+        tag_name = floating_tags[tag_idx]
+    end
+
+    tag_name_font_icon:update(tag_name, tag_colors[tag_idx])
 end
 
 local function get_screen(s)

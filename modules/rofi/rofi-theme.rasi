@@ -11,47 +11,45 @@
 }
 
 window {
-    padding: 0;
+    background-color: @background;
+    text-color:       @white;
+    location:         center;
+    x-offset:         0;
+    y-offset:         -25%;
 }
 
 mainbox {
-    background-color: @background;
-    padding: 0;
-    border: 0px;
-    border-color: @yellow;
+    background-color:               @background;
+    children:                       [ inputbar, message, listview ];
 }
 
-//
-// TOP / Query
-//
 inputbar {
-    background-color: @background;
-    children: [prompt, textbox-prompt-colon, entry];
+	children:         [ textbox-prompt-colon, entry, prompt ];
+    background-color: @purple;
+    text-color:       @background;
+    padding:          20px 20px 23px 20px;
 }
 
 prompt {
-    background-color: @yellow;
-    text-color: @background;
-    padding: 20px;
+	background-color: @purple;
+	text-color:       @background;
 }
 
 entry {
-    background-color: @background;
-    text-color: @yellow;
-    padding: 20px 0 20px 0;
+    background-color: @purple;
+    text-color:       @background;
+    expand:           true;
+    padding:          2px 0 0 0;
 }
 
 textbox-prompt-colon {
-    background-color: @background;
-    expand:     false;
-    str:        "";
-    text-color: @yellow;
-    padding: 20px;
+    background-color: @purple;
+    expand:           false;
+    str:              "";
+    text-color:       @background;
+    padding:          0 10px 0 0;
 }
 
-//
-// Middle / Message
-//
 message {
     // Used to show result of rofi-calc queries
     background-color: @background;
@@ -62,57 +60,31 @@ message {
 textbox {
     // Actual text of the rofi-calc response
     background-color: @background;
-    text-color: @blue;
+    text-color: @purple;
 }
 
-//
-// Bottom / Results
-//
 listview {
-    // List of items to choose from, or history in rofi-calc
     background-color: @background;
-    text-color: @white;
-    fixed-height: false;
-    spacing: 4px;
-    padding: 10px 0 10px 0;
-    dynamic: true;
-    lines: 10;
+    fixed-height:     false;
+    dynamic:          true;
+    lines:            7;
 }
 
 element {
-    // A single item in the listview
-    border: 0 0 0 8px;
     background-color: @background;
-    padding: 10px 0 10px 15px;
+    text-color:       @white;
+    padding: 10px;
 }
 
 element-icon {
     size: 36;
 }
 
-element.normal.normal, element.alternate.normal {
-    text-color: @white;
+element-text {
+    vertical-align: 0.5;
 }
 
-element.selected.normal {
-    text-color: @yellow;
-    border-color: @yellow;
-}
-
-element.normal.active, element.alternate.active {
-    text-color: @green;
-}
-
-element.selected.active {
-    text-color: @green;
-    border-color:  @green;
-}
-
-element.normal.urgent, element.alternate.urgent {
-    text-color: @red;
-}
-
-element.selected.urgent {
-    text-color: @red;
-    border-color: @red;
+element.selected {
+    background-color: @yellow;
+    text-color:       @background;
 }
