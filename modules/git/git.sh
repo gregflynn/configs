@@ -54,7 +54,7 @@ alias gb="git branch --show-current | tr -d '[:space:]' | clip"
 squash() {
     local base_branch="${1:-master}"
     local current_branch=$(git branch --show-current)
-    local num_commits=$(git log ${base_branch}..${current_branch} | grep commit | wc -l)
+    local num_commits=$(git log ${base_branch}..${current_branch} | grep ^commit | wc -l)
     git rebase -i HEAD~$num_commits
 }
 

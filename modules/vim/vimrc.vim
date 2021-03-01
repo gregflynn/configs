@@ -130,3 +130,7 @@ hi Normal guibg=NONE ctermbg=NONE
 hi NonText guibg=NONE ctermbg=NONE
 hi LineNr guibg=NONE ctermbg=NONE
 hi SignColumn guibg=NONE ctermbg=NONE
+
+" make capital W write
+command! W write
+command! Q quit
