@@ -92,13 +92,14 @@ awful.screen.connect_for_each_screen(function(screen)
 
     screen.mywibar:setup {
         layout = wibox.layout.align.horizontal,
-        expand = "outside",
-        nil,
         {
             layout = wibox.layout.fixed.horizontal,
             screen.mytaglist,
             screen.mytasklist,
-            display.bubble(require('sanity/widgets/clock'), false, true),
+        },
+        nil,
+        {
+            layout = wibox.layout.fixed.horizontal,
             display.bubble(wibox.widget {
                 layout = wibox.layout.fixed.horizontal,
                 require('sanity/widgets/net'),
@@ -107,9 +108,9 @@ awful.screen.connect_for_each_screen(function(screen)
                 require('sanity/widgets/battery'),
                 volume,
                 require('sanity/widgets/tray'),
-            }, false, true)
-        },
-        nil
+            }, true),
+            display.bubble(require('sanity/widgets/clock'), true)
+        }
     }
 end)
 
