@@ -150,8 +150,11 @@ globalkeys = gears.table.join(
     create_key('i', 'awesome', 'Lock Screen', function()
         awful.spawn({'bash', beautiful.lock_script})
     end),
-    create_key('y', 'awesome', 'Toggle Side Bar', function()
+    create_key('y', 'awesome', 'Toggle Top Bar', function()
         awful.screen.focused().mywibar.visible = not awful.screen.focused().mywibar.visible
+    end),
+    create_key('d', 'awesome', 'Open Directory', function()
+        awful.spawn({'xdg-open', home})
     end),
 
 
